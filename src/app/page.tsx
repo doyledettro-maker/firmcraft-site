@@ -1,461 +1,380 @@
-import {
-  Bot,
-  Wrench,
-  TrendingDown,
-  MessageSquare,
-  Zap,
-  Shield,
-  Users,
-  Check,
-  X,
-  ArrowRight,
-} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { SiteHeader } from '@/components/SiteHeader'
+import { SiteFooter } from '@/components/SiteFooter'
+import { RotatingChatHero } from '@/components/RotatingChatHero'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-const painPoints = [
+// Pricing matches what's already locked across the site (capabilities, security,
+// playbooks, integrations, and was confirmed by Doyle on 2026-05-08). Setup
+// fee is flat $3,500 across tiers; the design reference shows a graduated
+// ramp ($1k / $2k / $3.5k) but Doyle has not greenlit changing pricing yet.
+const PLANS = [
   {
-    icon: Bot,
-    text: "You bought ChatGPT Plus. Three people use it. The rest haven't touched it.",
-  },
-  {
-    icon: Wrench,
-    text: "You paid for Copilot. It's fine. Nobody's sure what it's doing.",
-  },
-  {
-    icon: TrendingDown,
-    text: "The problem isn't the tools. It's that deploying AI across a real firm takes infrastructure nobody has time to build.",
-  },
-]
-
-const features = [
-  {
-    icon: MessageSquare,
-    title: 'Lives in Slack',
-    body: 'Your AI operator works where your team already works. No new app. No learning curve.',
-  },
-  {
-    icon: Zap,
-    title: 'Connected to your tools',
-    body: 'Google Workspace. Your CRM. Industry software. We handle all integrations.',
-  },
-  {
-    icon: Shield,
-    title: 'Flat monthly rate',
-    body: 'Operator, integrations, token costs, support — all included. No usage bills. Ever.',
-  },
-  {
-    icon: Users,
-    title: 'Running in a week',
-    body: "Not a six-month IT project. A one-week setup and you're live.",
-  },
-]
-
-const plans = [
-  {
-    name: 'Spark',
+    tier: 'Spark',
+    headline: 'Get started',
     price: '$399',
-    cadence: '/mo',
-    size: '1–3 people',
-    setup: '$3,500 setup',
-    highlight: false,
-    cta: 'Get Started',
-    ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Spark',
+    setup: '+ $3,500 one-time setup',
+    sub: 'A single workflow, fully run for you. For one-person shops and businesses validating the model.',
     features: [
-      'Single AI operator in Slack',
-      'Google Workspace + core integrations',
-      '45-min monthly strategy call',
-      'Multi-LLM access',
-      'All token costs included',
+      'One core workflow (e.g. contracts, intake, claims)',
+      'Up to 3 tool integrations',
+      'Lives in your team chat',
+      'Monthly review with your ops lead',
     ],
+    cta: 'Start with Spark',
+    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Spark',
+    feat: false,
   },
   {
-    name: 'Flow',
+    tier: 'Flow',
+    headline: 'Run the business',
     price: '$899',
-    cadence: '/mo',
-    size: '3–10 people',
-    setup: '$3,500 setup',
-    highlight: true,
-    badge: 'Most Popular',
-    cta: 'Get Started',
-    ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Flow',
+    setup: '+ $3,500 one-time setup',
+    sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.',
     features: [
-      'Everything in Spark',
-      'Multi-channel lead capture',
-      'Active marketing content generation',
-      'Industry-specific software integration',
-      'Weekly 60-min strategy session',
-      'Multi-user access',
+      'Up to 8 active workflows',
+      'Unlimited integrations',
+      'Custom playbooks per role',
+      'Weekly ops review + change requests',
+      'SOC 2 controls + audit log access',
     ],
+    cta: 'Choose Flow',
+    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Flow',
+    feat: true,
+    badge: 'Most popular',
   },
   {
-    name: 'Forge',
+    tier: 'Forge',
+    headline: 'Operate at scale',
     price: '$1,800+',
-    cadence: '/mo',
-    size: '10+ people',
-    setup: '$3,500 setup',
-    highlight: false,
-    cta: "Let's Talk",
-    ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Forge',
+    setup: '+ $3,500 one-time setup',
+    sub: 'Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.',
     features: [
-      'Everything in Flow',
-      'Custom integrations and MCP servers',
-      'Full org deployment',
-      'Semi-daily support and strategy',
-      'Custom RAG pipelines',
-      'White-labeled reporting',
+      'Unlimited workflows + custom builds',
+      'Multi-team / multi-location support',
+      'Dedicated operations lead',
+      'Quarterly executive review',
+      'Priority queue + change SLA',
     ],
+    cta: 'Talk to us',
+    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Forge',
+    feat: false,
   },
 ]
 
-const industries = [
-  'Accounting & CPA Firms',
-  'Law Practices',
-  'Consulting Firms',
-  'Financial Advisors',
-  'Real Estate & Title',
+const PROBLEMS = [
+  { num: 'A —', title: 'The seat-license trap', body: 'You bought the chatbot. It sits in a tab. The team opened it once and never came back.' },
+  { num: 'B —', title: 'The prompting tax', body: 'Every tool assumes someone has time to learn it and train the rest. They don\u2019t.' },
+  { num: 'C —', title: 'The integration desert', body: 'QuickBooks, Drive, Outlook, your booking tool — none of them talk. The AI doesn\u2019t either.' },
+  { num: 'D —', title: 'The pilot purgatory', body: 'Three vendor demos, six-figure SOWs, 90-day "discoveries." None shipped a workflow you use.' },
+  { num: 'E —', title: 'The hire-or-build problem', body: 'You\u2019d staff this if you could. The people who could build it aren\u2019t applying to your shop.' },
+  { num: 'F —', title: 'The "but client data" wall', body: 'Every interesting workflow stalls on compliance. Nobody wants to be the one who broke it.' },
 ]
 
-const comparisonRows = [
-  { label: 'Setup', them: 'You figure it out', us: 'Done in a week' },
-  { label: 'Integration', them: 'Copy-paste', us: 'Connected to your tools' },
-  { label: 'Firm context', them: 'None', us: 'Learns your clients & workflows' },
-  { label: 'Ongoing management', them: 'Your problem', us: 'Our job' },
-  { label: 'Cost structure', them: 'Per seat + manage it yourself', us: 'Flat monthly, all-in' },
-  { label: 'Support', them: 'Documentation', us: 'Weekly strategy calls' },
+const HOW = [
+  { glyph: 'a', step: '01 / WHERE', title: 'Lives in your team chat', body: 'Mention it like a teammate. No new dashboard, no second login, nothing nobody on staff opens.' },
+  { glyph: 'b', step: '02 / WHAT', title: 'Connected to your tools', body: 'QuickBooks, Microsoft 365, Google Workspace, Zoho, DocuSign, your practice management — read, write, audit-log.' },
+  { glyph: 'c', step: '03 / HOW MUCH', title: 'Flat monthly rate', body: 'One price. All seats. All integrations. No per-token bill, no AI overage. We absorb the model costs.' },
+  { glyph: 'd', step: '04 / WHEN', title: 'Running in a week', body: 'Intake Monday. Connectors live Wednesday. First production workflow by Friday. Days, not quarters.' },
 ]
 
-// ─── Components ──────────────────────────────────────────────────────────────
+// Industries — examples-led copy from the design reference. Each card pairs an
+// abstract category ("Healthcare practices") with a concrete shipped example
+// from real or representative customers. Keeps the page honest: we describe
+// what we've actually done, not aspirational verticals.
+const INDUSTRIES = [
+  {
+    num: '— 01', glyph: 'Hc', title: 'Healthcare practices',
+    body: 'e.g. our dental client uses Firmcraft to draft & submit insurance reimbursement claims.',
+  },
+  {
+    num: '— 02', glyph: 'Tr', title: 'Trades & field services',
+    body: 'e.g. our tree-removal client ships DocuSign contracts on-site — signed before he leaves the driveway.',
+  },
+  {
+    num: '— 03', glyph: 'B2', title: 'B2B services',
+    body: 'e.g. our payments client uses Firmcraft as a second pair of hands for an overworked one-person marketing team.',
+  },
+  {
+    num: '— 04', glyph: 'So', title: 'Solo & owner-operators',
+    body: 'e.g. our solo ERP consultant runs an entire practice on a single operator. The cheapest second hire she\u2019ll ever make.',
+  },
+  {
+    num: '— 05', glyph: 'Pf', title: 'Professional firms',
+    body: 'CPA, law, advisory, consulting. Doc requests, review prep, billable triage, client deliverables.',
+  },
+]
 
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="section-label">{children}</p>
-}
+// Comparison: Firmcraft vs the chatbots most prospects already pay for.
+// Three columns (us / ChatGPT Teams / Microsoft Copilot) keeps the framing
+// honest — we're an operator, they're a chatbot license; both can coexist.
+const COMPARE_ROWS = [
+  {
+    feat: 'What you\u2019re buying',
+    us: 'A managed operator + a real person at Firmcraft',
+    chatgpt: 'A per-seat chatbot license',
+    copilot: 'A per-seat chatbot license',
+  },
+  {
+    feat: 'Lives where the work lives',
+    us: 'Inside your team chat',
+    chatgpt: 'A separate app + browser tab',
+    copilot: 'Side panel inside Office',
+  },
+  {
+    feat: 'Speaks to QuickBooks, Zoho, niche tools',
+    us: 'Built and maintained for you',
+    chatgpt: 'DIY connectors, if any',
+    copilot: 'Microsoft stack only',
+  },
+  {
+    feat: 'Pricing',
+    us: 'Flat monthly, all seats',
+    chatgpt: 'Per seat, per month',
+    copilot: 'Per seat, per month',
+  },
+  {
+    feat: 'Time to first workflow',
+    us: '5 business days',
+    chatgpt: 'Whenever someone has time',
+    copilot: 'Whenever someone has time',
+  },
+  {
+    feat: 'Who builds the prompts',
+    us: 'We do.',
+    chatgpt: 'You do.',
+    copilot: 'You do.',
+  },
+]
 
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className="min-h-screen bg-[#0A2540]">
+    <>
+      <SiteHeader current="home" />
 
-      {/* ══ NAV ══════════════════════════════════════════════════════════════ */}
-      <nav className="fixed top-0 inset-x-0 z-50 bg-[#0A2540]/95 backdrop-blur-md border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-5 h-[60px] flex items-center justify-between">
-          {/* Wordmark */}
-          <span className="font-display font-bold text-white text-[1.125rem] tracking-tight">
-            firm<span className="text-[#00D4AA]">craft</span>
-          </span>
-
-          {/* Nav items */}
-          <div className="flex items-center gap-2 sm:gap-4">
-            <a
-              href="#pricing"
-              className="hidden sm:inline-flex items-center text-[0.8125rem] font-medium text-white/60 hover:text-white transition-colors px-3 py-1.5 rounded-full hover:bg-white/5"
-            >
-              Pricing
-            </a>
-            <a
-              href="mailto:hello@firmcraft.ai"
-              className="inline-flex items-center gap-1.5 bg-[#00D4AA] text-[#0A2540] font-bold text-[0.8125rem] px-4 py-2 rounded-full hover:brightness-105 transition-all shadow-[0_2px_12px_rgba(0,212,170,0.30)]"
-            >
-              Talk to Us
-            </a>
-          </div>
-        </div>
-      </nav>
-
-      {/* ══ HERO ═════════════════════════════════════════════════════════════ */}
-      <section className="relative hero-noise pt-[110px] pb-24 px-5 overflow-hidden">
-        {/* Glow blobs */}
-        <div
-          aria-hidden
-          className="glow-cyan w-[600px] h-[600px] -top-32 left-1/2 -translate-x-1/2"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute bottom-0 right-0 w-[300px] h-[300px] rounded-full bg-[#E8FF47]/4 blur-3xl"
-        />
-
-        <div className="relative z-10 max-w-4xl mx-auto">
-          {/* Eyebrow pill */}
-          <div className="mb-8">
-            <span className="inline-flex items-center gap-2 bg-white/5 border border-white/10 text-[#00D4AA] text-[0.6875rem] font-bold uppercase tracking-[0.12em] px-4 py-2 rounded-full">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00D4AA] animate-pulse" />
-              AI Operators for Professional Services Firms
-            </span>
-          </div>
-
-          {/* Headline */}
-          <h1 className="font-display font-extrabold text-white leading-[1.05] tracking-[-0.03em] mb-6
-            text-[2.625rem] sm:text-[3.5rem] md:text-[4.25rem]">
-            Your firm.{' '}
-            <span className="text-[#E8FF47]">An AI operator.</span>
-            <br />
-            Running by next week.
-          </h1>
-
-          {/* Subhead */}
-          <p className="text-white/55 text-[1rem] sm:text-[1.125rem] leading-[1.7] max-w-[36rem] mb-10">
-            Firmcraft deploys a dedicated AI operator into your firm&apos;s Slack —
-            connected to your tools, working alongside your people from day one.
-            Flat monthly rate. Everything included. No IT project. No surprise bills.
-          </p>
-
-          {/* Single CTA */}
-          <a
-            href="mailto:hello@firmcraft.ai?subject=Firmcraft Discovery Call"
-            className="inline-flex items-center gap-2.5 bg-[#00D4AA] text-[#0A2540] font-bold text-[0.9375rem] px-7 py-4 rounded-full hover:brightness-105 transition-all shadow-[0_4px_24px_rgba(0,212,170,0.35)]"
-          >
-            Book a 30-Minute Call
-            <ArrowRight size={16} strokeWidth={2.5} />
-          </a>
-
-          {/* Trust nudge */}
-          <p className="mt-5 text-white/30 text-[0.8125rem]">
-            Or <a href="#pricing" className="text-white/50 underline underline-offset-2 hover:text-white transition-colors">see plans ↓</a>
-          </p>
-        </div>
-      </section>
-
-      {/* ══ THE PROBLEM ══════════════════════════════════════════════════════ */}
-      <section className="py-20 px-5 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-4xl mx-auto">
-          <SectionLabel>The Problem</SectionLabel>
-          <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight mb-10 max-w-xl">
-            Your competitors are using AI.{' '}
-            <span className="text-white/40">
-              You bought the tools. Nobody&apos;s using them.
-            </span>
-          </h2>
-
-          <div className="grid gap-4 sm:grid-cols-3">
-            {painPoints.map(({ icon: Icon, text }) => (
-              <div
-                key={text}
-                className="card-hover bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-4"
-              >
-                <div className="w-10 h-10 rounded-xl bg-[#00D4AA]/10 border border-[#00D4AA]/20 flex items-center justify-center shrink-0">
-                  <Icon size={18} className="text-[#00D4AA]" />
-                </div>
-                <p className="text-white/65 text-[0.875rem] leading-relaxed">{text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ HOW IT WORKS ═════════════════════════════════════════════════════ */}
-      <section className="py-20 px-5">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-12">
-            <SectionLabel>How It Works</SectionLabel>
-            <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight">
-              One operator. Your entire firm.{' '}
-              <span className="text-[#00D4AA]">Week one.</span>
-            </h2>
-          </div>
-
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map(({ icon: Icon, title, body }, i) => (
-              <div
-                key={title}
-                className="card-hover relative bg-white/[0.04] border border-white/[0.07] rounded-2xl p-6 flex flex-col gap-4 overflow-hidden"
-              >
-                {/* Step number watermark */}
-                <span className="absolute -bottom-2 -right-1 font-display font-extrabold text-[4rem] text-white/[0.03] leading-none select-none">
-                  {i + 1}
-                </span>
-                <div className="w-10 h-10 rounded-xl bg-[#00D4AA]/10 border border-[#00D4AA]/20 flex items-center justify-center shrink-0">
-                  <Icon size={18} className="text-[#00D4AA]" />
-                </div>
-                <h3 className="font-display font-semibold text-white text-[0.9375rem]">{title}</h3>
-                <p className="text-white/50 text-[0.8125rem] leading-relaxed">{body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ PRICING ══════════════════════════════════════════════════════════ */}
-      <section id="pricing" className="py-20 px-5 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-5xl mx-auto">
-          <div className="mb-12">
-            <SectionLabel>Pricing</SectionLabel>
-            <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight mb-3">
-              Three plans. One decision.
-            </h2>
-            <p className="text-white/45 text-[0.9375rem] max-w-md">
-              All plans include your AI operator, all integrations, all token costs, and ongoing support.
-            </p>
-          </div>
-
-          <div className="grid gap-5 sm:grid-cols-3">
-            {plans.map((plan) => {
-              const isVolt = plan.highlight
-
-              return (
-                <div
-                  key={plan.name}
-                  className={[
-                    'relative rounded-2xl p-7 flex flex-col gap-6 card-hover',
-                    isVolt
-                      ? 'plan-volt shadow-[0_8px_40px_rgba(232,255,71,0.20)]'
-                      : 'bg-white/[0.04] border border-white/[0.08]',
-                  ].join(' ')}
-                >
-                  {/* Most Popular badge */}
-                  {plan.badge && (
-                    <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-[#0A2540] text-[#E8FF47] text-[0.6875rem] font-bold uppercase tracking-[0.1em] px-3.5 py-1 rounded-full whitespace-nowrap border border-[#E8FF47]/20">
-                      {plan.badge}
-                    </span>
-                  )}
-
-                  {/* Plan header */}
-                  <div>
-                    <h3 className={[
-                      'font-display font-bold text-[1rem] mb-2',
-                      isVolt ? 'text-[#0A2540]' : 'text-white',
-                    ].join(' ')}>
-                      {plan.name}
-                    </h3>
-                    <div className="flex items-baseline gap-1 mb-1">
-                      <span className={[
-                        'font-display font-extrabold text-[2.25rem] leading-none tracking-tight',
-                        isVolt ? 'text-[#0A2540]' : 'text-white',
-                      ].join(' ')}>
-                        {plan.price}
-                      </span>
-                      <span className={[
-                        'text-[0.8125rem] font-medium mb-0.5',
-                        isVolt ? 'text-[#0A2540]/60' : 'text-white/40',
-                      ].join(' ')}>
-                        {plan.cadence}
-                      </span>
-                    </div>
-                    <p className={[
-                      'text-[0.8125rem] font-semibold',
-                      isVolt ? 'text-[#0A2540]/70' : 'text-[#00D4AA]',
-                    ].join(' ')}>
-                      {plan.size}
-                    </p>
-                    <p className={[
-                      'text-[0.75rem] mt-0.5',
-                      isVolt ? 'text-[#0A2540]/50' : 'text-white/30',
-                    ].join(' ')}>
-                      {plan.setup}
-                    </p>
-                  </div>
-
-                  {/* Feature list */}
-                  <ul className="flex flex-col gap-3 flex-1">
-                    {plan.features.map((f) => (
-                      <li key={f} className="flex items-start gap-2.5 text-[0.8125rem]">
-                        <Check
-                          size={14}
-                          strokeWidth={2.5}
-                          className={[
-                            'mt-0.5 shrink-0',
-                            isVolt ? 'text-[#0A2540]' : 'text-[#00D4AA]',
-                          ].join(' ')}
-                        />
-                        <span className={isVolt ? 'text-[#0A2540]/80' : 'text-white/65'}>
-                          {f}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  {/* CTA */}
-                  <a
-                    href={plan.ctaHref}
-                    className={[
-                      'text-center font-bold text-[0.875rem] py-3.5 rounded-full transition-all',
-                      isVolt
-                        ? 'bg-[#0A2540] text-white hover:bg-[#0d2e4e] shadow-[0_2px_12px_rgba(10,37,64,0.40)]'
-                        : 'bg-white/8 border border-white/12 text-white hover:bg-white/12',
-                    ].join(' ')}
-                  >
-                    {plan.cta}
-                  </a>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ WHO IT'S FOR ═════════════════════════════════════════════════════ */}
-      <section className="py-20 px-5">
-        <div className="max-w-3xl mx-auto">
-          <SectionLabel>Who It&apos;s For</SectionLabel>
-          <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight mb-8">
-            Built for firms that run on expertise.
-          </h2>
-          <div className="flex flex-wrap gap-3">
-            {industries.map((name) => (
-              <span
-                key={name}
-                className="bg-white/[0.04] border border-white/[0.08] text-white/70 text-[0.875rem] font-medium px-5 py-2.5 rounded-full hover:border-[#00D4AA]/40 hover:text-[#00D4AA] transition-colors cursor-default"
-              >
-                {name}
+      {/* ══ HERO ════════════════════════════════════════════════════════════ */}
+      <section className="hero-warm">
+        <div className="warm-wrap">
+          <div className="hero-grid">
+            <div>
+              <span className="hero-tag">
+                <span className="dot" /> An AI operator for small business
               </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ WHY FIRMCRAFT – COMPARISON ═══════════════════════════════════════ */}
-      <section className="py-20 px-5 border-y border-white/5 bg-white/[0.02]">
-        <div className="max-w-3xl mx-auto">
-          <SectionLabel>Why Firmcraft</SectionLabel>
-          <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight mb-10">
-            Not just a tool. An operator.
-          </h2>
-
-          {/* Mobile-first card comparison — stacked rows */}
-          <div className="flex flex-col gap-3">
-            {/* Column header row (visible sm+) */}
-            <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1fr] gap-0 text-[0.75rem] font-bold uppercase tracking-[0.1em] mb-1 px-4">
-              <span className="text-white/30"></span>
-              <span className="text-white/40 text-center">ChatGPT / Copilot</span>
-              <span className="text-[#00D4AA] text-center">Firmcraft</span>
+              <h1 className="hero-title-warm">
+                A capable second set of hands.{' '}
+                <em>Running by next Friday.</em>
+              </h1>
+              <p className="hero-sub">
+                Firmcraft lives in your team chat, plugs into the tools you already
+                pay for — QuickBooks, Microsoft 365, Google Workspace, Zoho, your
+                practice management — and quietly does the work. Flat monthly rate.
+                Up and running in five business days.
+              </p>
+              <div className="hero-ctas">
+                <a
+                  className="btn btn-primary btn-lg"
+                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+                >
+                  Book a 20-min call →
+                </a>
+                <a className="btn btn-ghost btn-lg" href="#pricing">
+                  See plans
+                </a>
+              </div>
+              <div className="hero-meta">
+                <span><span className="check-dot" /> Live in 5 business days</span>
+                <span><span className="check-dot" /> Flat monthly rate</span>
+                <span><span className="check-dot" /> SOC 2 in progress</span>
+              </div>
             </div>
 
-            {comparisonRows.map((row, i) => (
-              <div
-                key={row.label}
-                className={[
-                  'rounded-xl overflow-hidden border',
-                  i % 2 === 0 ? 'border-white/[0.07] bg-white/[0.03]' : 'border-white/[0.05] bg-transparent',
-                ].join(' ')}
-              >
-                {/* Mobile layout: stacked */}
-                <div className="sm:hidden p-4 flex flex-col gap-2">
-                  <span className="text-[#00D4AA] text-[0.6875rem] font-bold uppercase tracking-[0.1em]">
-                    {row.label}
-                  </span>
-                  <div className="flex items-start gap-3">
-                    <div className="flex-1 flex items-start gap-1.5 text-white/35 text-[0.8125rem]">
-                      <X size={12} strokeWidth={2.5} className="mt-0.5 shrink-0 text-white/20" />
-                      {row.them}
-                    </div>
-                    <div className="flex-1 flex items-start gap-1.5 text-[#00D4AA] text-[0.8125rem] font-medium">
-                      <Check size={12} strokeWidth={2.5} className="mt-0.5 shrink-0" />
-                      {row.us}
-                    </div>
-                  </div>
-                </div>
+            <RotatingChatHero />
+          </div>
 
-                {/* Desktop layout: 3 columns */}
-                <div className="hidden sm:grid sm:grid-cols-[1fr_1fr_1fr] gap-0 px-4 py-3.5 items-center">
-                  <span className="text-white/70 text-[0.875rem] font-medium">{row.label}</span>
-                  <span className="text-white/35 text-[0.875rem] text-center flex items-center justify-center gap-1.5">
-                    <X size={12} strokeWidth={2} className="text-white/20 shrink-0" />
-                    {row.them}
-                  </span>
-                  <span className="text-[#00D4AA] text-[0.875rem] font-medium text-center flex items-center justify-center gap-1.5">
-                    <Check size={12} strokeWidth={2.5} className="shrink-0" />
-                    {row.us}
-                  </span>
+          {/* Proof strip — placeholder logo slots until the customer-logo
+              treatment component ships (see /opt/data/firmcraft-docs/customer-logos/README.md). */}
+          <div className="proof">
+            <div className="proof-in">
+              <div className="label">Already running for —</div>
+              <div className="logos">
+                <div className="logo-slot">DENTAL PRACTICE</div>
+                <div className="logo-slot">TREE-REMOVAL CO.</div>
+                <div className="logo-slot">SOLO ERP CONSULTANT</div>
+                <div className="logo-slot">PAYMENTS FIRM</div>
+                <div className="logo-slot">+ YOU?</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ══ PROBLEM ═════════════════════════════════════════════════════════ */}
+      <section className="warm-section">
+        <div className="warm-wrap">
+          <div className="sec-head">
+            <div>
+              <div className="eyebrow">01 / The honest version</div>
+              <h2>You don&apos;t need <em>another tool.</em> You need someone to actually do the thing.</h2>
+            </div>
+            <div className="right">
+              <p>
+                You&apos;ve already paid for ChatGPT or Copilot. Three people opened
+                it the first week, nobody opened it the second. Meanwhile the
+                contract still doesn&apos;t get sent until you&apos;re back at the
+                truck, the insurance claim still sits in someone&apos;s inbox, and
+                the marketing email still hasn&apos;t gone out — because the person
+                who&apos;d do it has client work.
+              </p>
+            </div>
+          </div>
+
+          <div className="problem-grid">
+            {PROBLEMS.map((p) => (
+              <div key={p.title} className="pcell">
+                <div className="num">{p.num}</div>
+                <h3>{p.title}</h3>
+                <p>{p.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ HOW IT WORKS ════════════════════════════════════════════════════ */}
+      <section className="how-section" id="how">
+        <div className="warm-wrap">
+          <div className="sec-head">
+            <div>
+              <div className="eyebrow">02 / How it works</div>
+              <h2>Four beats. <em>Then it&apos;s running.</em></h2>
+            </div>
+            <div className="right">
+              <p>
+                No SOW theatre. No 90-day &ldquo;discovery.&rdquo; We do the intake call
+                Monday, install across your stack by Wednesday, and you&apos;re routing
+                real work to the operator by Friday. There&apos;s a person at Firmcraft
+                you can text the whole way.
+              </p>
+            </div>
+          </div>
+
+          <div className="how-grid">
+            {HOW.map((h) => (
+              <div key={h.title} className="how-cell">
+                <div className="glyph">{h.glyph}</div>
+                <div className="step-n">{h.step}</div>
+                <h4>{h.title}</h4>
+                <p>{h.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ PRICING ═════════════════════════════════════════════════════════ */}
+      <section className="warm-section" id="pricing">
+        <div className="warm-wrap">
+          <div className="sec-head">
+            <div>
+              <div className="eyebrow">03 / Pricing</div>
+              <h2>One flat rate. <em>No per-seat math.</em></h2>
+            </div>
+            <div className="right">
+              <p>
+                Every plan includes onboarding, all integrations, all model costs,
+                and a real person at Firmcraft you can text. The only thing that
+                changes between tiers is how much of your team&apos;s recurring work
+                the operator absorbs.
+              </p>
+            </div>
+          </div>
+
+          <div className="price-grid">
+            {PLANS.map((plan) => (
+              <div
+                key={plan.tier}
+                className={`price-card${plan.feat ? ' feat' : ''}`}
+              >
+                {plan.badge && <span className="badge">{plan.badge}</span>}
+                <div className="tier">{plan.tier}</div>
+                <h3>{plan.headline}</h3>
+                <div className="price-amount">
+                  <span className="big">{plan.price}</span>
+                  <span className="per">/ month</span>
+                </div>
+                <div className="price-setup">{plan.setup}</div>
+                <p className="sub">{plan.sub}</p>
+                <div className="divider" />
+                <ul className="price-list">
+                  {plan.features.map((f) => (
+                    <li key={f}>{f}</li>
+                  ))}
+                </ul>
+                <a
+                  className={`btn ${plan.feat ? 'btn-primary' : 'btn-ghost'}`}
+                  href={plan.href}
+                >
+                  {plan.cta} →
+                </a>
+              </div>
+            ))}
+          </div>
+
+          <p style={{
+            textAlign: 'center',
+            marginTop: '24px',
+            color: 'var(--muted)',
+            fontSize: '14px',
+          }}>
+            Bigger than 50 seats or need a full build-out? We hand off to{' '}
+            <a
+              href="https://skillcalibrate.com"
+              style={{
+                color: 'var(--accent)',
+                textDecoration: 'underline',
+                textUnderlineOffset: '3px',
+              }}
+            >
+              SkillCalibrate.com
+            </a>{' '}
+            for full discovery.
+          </p>
+        </div>
+      </section>
+
+      {/* ══ INDUSTRIES ══════════════════════════════════════════════════════ */}
+      <section className="warm-section" id="industries">
+        <div className="warm-wrap">
+          <div className="sec-head">
+            <div>
+              <div className="eyebrow">04 / Who it&apos;s for</div>
+              <h2>Built for businesses doing <em>the actual work.</em></h2>
+            </div>
+            <div className="right">
+              <p>
+                Our first four customers — a dental practice, a one-person tree-removal
+                company, a solo ERP consultant, and an eight-person payments firm —
+                have nothing in common operationally. The throughline: recurring work,
+                tools that don&apos;t talk, and nobody on staff to wire it together.
+                If that&apos;s you, we&apos;re a fit.
+              </p>
+            </div>
+          </div>
+
+          <div className="ind-grid">
+            {INDUSTRIES.map((ind) => (
+              <div key={ind.title} className="ind">
+                <div>
+                  <div className="num">{ind.num}</div>
+                  <div className="glyph">{ind.glyph}</div>
+                </div>
+                <div>
+                  <h4>{ind.title}</h4>
+                  <p>{ind.body}</p>
                 </div>
               </div>
             ))}
@@ -463,61 +382,94 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ══ BOTTOM CTA ═══════════════════════════════════════════════════════ */}
-      <section className="relative py-24 px-5 overflow-hidden">
-        {/* Glow */}
-        <div
-          aria-hidden
-          className="glow-cyan w-[700px] h-[500px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-        />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-0 left-0 w-[200px] h-[200px] rounded-full bg-[#E8FF47]/5 blur-3xl"
-        />
+      {/* ══ COMPARE ═════════════════════════════════════════════════════════ */}
+      <section className="compare" id="compare">
+        <div className="warm-wrap">
+          <div className="sec-head">
+            <div>
+              <div className="eyebrow">05 / Comparison</div>
+              <h2>Firmcraft <em>vs.</em> the chatbot you already pay for.</h2>
+            </div>
+            <div className="right">
+              <p>
+                ChatGPT and Copilot are perfectly fine general-purpose tools. They
+                are not operators. Nothing in their pricing is aligned with whether
+                your business actually moves a deliverable forward — and nothing in
+                their setup process gets your team past the awkward first week.
+              </p>
+            </div>
+          </div>
 
-        <div className="relative z-10 max-w-2xl mx-auto text-center">
-          <p className="section-label text-[#E8FF47]">Limited Capacity</p>
-          <h2 className="font-display font-extrabold text-white leading-[1.1] tracking-[-0.03em] mb-5
-            text-[2.125rem] sm:text-[2.75rem] md:text-[3.25rem]">
-            Your firm could have an AI operator running by next week.
-          </h2>
-          <p className="text-white/45 text-[1rem] mb-10">
-            We have capacity for a limited number of new clients this month.
-          </p>
-          <a
-            href="mailto:hello@firmcraft.ai?subject=Firmcraft Discovery Call"
-            className="inline-flex items-center gap-2.5 bg-[#00D4AA] text-[#0A2540] font-bold text-[0.9375rem] px-8 py-4 rounded-full hover:brightness-105 transition-all shadow-[0_4px_32px_rgba(0,212,170,0.35)]"
-          >
-            Book a 30-Minute Call
-            <ArrowRight size={16} strokeWidth={2.5} />
-          </a>
+          <table className="ctable">
+            <thead>
+              <tr>
+                <th></th>
+                <th className="us">Firmcraft</th>
+                <th>ChatGPT Teams</th>
+                <th>Microsoft Copilot</th>
+              </tr>
+            </thead>
+            <tbody>
+              {COMPARE_ROWS.map((row) => (
+                <tr key={row.feat}>
+                  <td className="featc">{row.feat}</td>
+                  <td className="usc">{row.us}</td>
+                  <td className="themc">{row.chatgpt}</td>
+                  <td className="themc">{row.copilot}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </section>
 
-      {/* ══ FOOTER ═══════════════════════════════════════════════════════════ */}
-      <footer className="border-t border-white/[0.06] py-8 px-5">
-        <div className="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3 text-[0.8125rem]">
-          {/* Brand + contact */}
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-4 gap-y-1">
-            <span className="font-display font-bold text-white/90 text-[0.9375rem]">
-              firm<span className="text-[#00D4AA]">craft</span>
-            </span>
-            <span className="text-white/20 hidden sm:inline">·</span>
-            <a
-              href="mailto:hello@firmcraft.ai"
-              className="text-white/40 hover:text-white/70 transition-colors"
-            >
-              hello@firmcraft.ai
-            </a>
+      {/* ══ FINAL CTA ═══════════════════════════════════════════════════════ */}
+      <section className="final" id="cta">
+        <div className="warm-wrap">
+          <div className="final-grid">
+            <div>
+              <div className="eyebrow">06 / Get started</div>
+              <h2>Twenty minutes on a call. <em>Live by next Friday.</em></h2>
+              <p>
+                If we&apos;re a fit, we&apos;ll scope your first workflow on the call
+                and have your operator running by the end of week one. If we&apos;re
+                not — or you&apos;re better served by SkillCalibrate&apos;s
+                full-discovery offer — we&apos;ll tell you on the call.
+              </p>
+              <div className="hero-ctas">
+                <a
+                  className="btn btn-primary btn-lg"
+                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+                >
+                  Book a 20-min call →
+                </a>
+                <Link className="btn btn-ghost btn-lg" href="#pricing">
+                  See plans
+                </Link>
+              </div>
+            </div>
+            <div className="final-card">
+              <div className="photo">
+                <Image
+                  src="/founder/doyle.jpg"
+                  alt="Doyle Dettro, founder of Firmcraft"
+                  width={520}
+                  height={520}
+                  priority={false}
+                />
+              </div>
+              <div className="quote">
+                &ldquo;The reason small firms fall behind on AI isn&apos;t the
+                tooling — it&apos;s that nobody on staff has the time to wire
+                it up and run it. Firmcraft is that person, on retainer.&rdquo;
+              </div>
+              <div className="attr">— Doyle Dettro, founder</div>
+            </div>
           </div>
-
-          {/* Legal */}
-          <p className="text-white/25 text-[0.75rem]">
-            © 2026 Predictium LLC dba Firmcraft
-          </p>
         </div>
-      </footer>
+      </section>
 
-    </div>
+      <SiteFooter />
+    </>
   )
 }

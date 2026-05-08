@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firmcraft — Integrations. Every tool you already pay for.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF4EA;--paper-2:#F4E9D6;
+    --ink:#2D1F14;--ink-2:#5A4533;--muted:#8A7560;
+    --line:rgba(45,31,20,.12);--line-2:rgba(45,31,20,.22);
+    --accent:#D97757;--accent-2:#6B8E5A;--accent-3:#3F7A8C;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01"}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(251,244,234,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em}
+  .brand .mk{width:22px;height:22px;border-radius:50%;background:var(--accent);position:relative}
+  .brand .mk::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--paper)}
+  .nav-links{display:flex;gap:24px;font-size:14px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-links a.cur{color:var(--ink);font-weight:500}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .18s ease;line-height:1}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:var(--accent)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--ink);background:#fff}
+  .btn-lg{padding:15px 26px;font-size:15px}
+
+  /* Hero */
+  .hero{padding:80px 0 32px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-160px;right:-180px;width:520px;height:520px;background:radial-gradient(circle,#F4D9B7,transparent 60%);opacity:.55;pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-180px;left:-180px;width:480px;height:480px;background:radial-gradient(circle,#DEEAD2,transparent 60%);opacity:.5;pointer-events:none}
+  .crumb{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;position:relative}
+  .crumb a{color:var(--accent)}
+  .crumb a:hover{text-decoration:underline;text-underline-offset:3px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:end;position:relative}
+  h1{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(46px,5.6vw,80px);line-height:1.02;letter-spacing:-.024em;margin:0 0 18px;text-wrap:balance}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:540px;margin:0}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--line);padding-top:24px}
+  .stat .k{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .stat .v{font-family:"Source Serif 4",serif;font-size:42px;font-weight:500;letter-spacing:-.02em;line-height:1;margin-top:6px}
+  .stat .v em{font-style:italic;color:var(--accent)}
+  .stat .c{font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.4}
+
+  /* Filters */
+  .filters{position:sticky;top:64px;z-index:40;background:rgba(251,244,234,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-top:48px}
+  .filter-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13px;color:var(--ink-2);cursor:pointer;transition:all .15s ease;font-family:"Geist",sans-serif}
+  .chip:hover{border-color:var(--ink-2);color:var(--ink)}
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip .ct{font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--muted);background:var(--paper);padding:1px 6px;border-radius:999px}
+  .chip.active .ct{background:rgba(255,255,255,.15);color:#D5C5B0}
+  .search{position:relative}
+  .search input{font-family:"Geist",sans-serif;font-size:13.5px;padding:9px 14px 9px 36px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);width:260px;outline:none;transition:all .15s ease}
+  .search input:focus{border-color:var(--ink);width:300px}
+  .search::before{content:"⌕";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
+
+  /* Library */
+  .lib{padding:36px 0 24px}
+  .lib-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;font-family:"Geist Mono",monospace;font-size:11.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .lib-meta b{color:var(--ink);font-weight:500}
+  .empty{display:none;text-align:center;padding:60px 0;color:var(--muted);font-family:"Source Serif 4",serif;font-style:italic;font-size:22px}
+  .empty.show{display:block}
+
+  /* Category section */
+  .cat{margin-bottom:30px}
+  .cat-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:14px;border-bottom:1px solid var(--line);padding-bottom:10px}
+  .cat-head h3{font-family:"Source Serif 4",serif;font-weight:500;font-style:italic;font-size:24px;letter-spacing:-.01em;margin:0;color:var(--ink)}
+  .cat-head .cct{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .cat-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px}
+  .tool{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:6px;min-height:96px;transition:all .18s ease;position:relative}
+  .tool:hover{transform:translateY(-2px);box-shadow:0 12px 22px -16px rgba(45,31,20,.18);border-color:var(--line-2)}
+  .tool .lg{display:flex;align-items:center;justify-content:flex-start;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:18px;color:var(--ink);letter-spacing:-.005em;line-height:1.15}
+  .tool .lg::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--mk,var(--accent));margin-right:8px;flex:none}
+  .tool p{margin:0;font-size:11.5px;line-height:1.4;color:var(--muted);font-family:"Geist Mono",monospace;letter-spacing:0;text-transform:none}
+  .tool .badge{position:absolute;top:10px;right:10px;font-family:"Geist Mono",monospace;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;padding:2px 6px;border-radius:4px;font-weight:500}
+  .tool .badge.beta{background:rgba(180,90,58,.1);color:#B45A3A}
+  .tool .badge.new{background:rgba(107,142,90,.12);color:var(--accent-2)}
+  .tool .badge.driven{background:rgba(63,122,140,.12);color:var(--accent-3)}
+
+  /* Custom tile */
+  .tool.custom{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .tool.custom .lg{color:var(--paper)}
+  .tool.custom .lg::before{background:var(--accent)}
+  .tool.custom p{color:#D5C5B0}
+
+  /* Custom-build CTA */
+  .build{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:64px 0}
+  .build-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center}
+  .build h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(34px,3.8vw,52px);line-height:1.05;letter-spacing:-.022em;margin:8px 0 16px;text-wrap:balance}
+  .build h2 em{font-style:italic;color:var(--accent)}
+  .build p{font-size:17px;color:var(--ink-2);line-height:1.55;margin:0 0 14px}
+  .build p strong{color:var(--ink);font-weight:500}
+  .stages{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  .stage{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:14px}
+  .stage .d{font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;font-weight:500;margin-bottom:4px}
+  .stage h5{font-family:"Source Serif 4",serif;font-weight:500;font-size:15px;letter-spacing:-.005em;margin:0 0 4px}
+  .stage p{font-size:12.5px;color:var(--ink-2);line-height:1.4;margin:0}
+
+  /* Examples */
+  .ex{padding:80px 0;background:linear-gradient(180deg,var(--paper),var(--paper-2))}
+  .ex-head{text-align:center;margin-bottom:36px}
+  .ex h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(32px,3.6vw,48px);line-height:1.05;letter-spacing:-.02em;margin:8px 0 12px;text-wrap:balance}
+  .ex h2 em{font-style:italic;color:var(--accent)}
+  .ex .lede2{font-size:17px;color:var(--ink-2);line-height:1.55;max-width:640px;margin:0 auto}
+  .ex-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .ex-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:12px}
+  .ex-card .who{font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.12em;color:var(--accent);text-transform:uppercase;font-weight:500}
+  .ex-card h4{font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:18px;letter-spacing:-.005em;margin:0;line-height:1.3}
+  .ex-card p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+  .ex-card .stack{display:flex;gap:5px;flex-wrap:wrap;padding-top:8px;border-top:1px dashed var(--line)}
+  .ex-card .stack span{font-family:"Geist Mono",monospace;font-size:10px;letter-spacing:.04em;color:var(--ink);background:var(--paper);border:1px solid var(--line);padding:3px 7px;border-radius:5px}
+
+  /* CTA */
+  .cta{padding:88px 0;background:var(--paper);border-top:1px solid var(--line)}
+  .cta-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+  .cta h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(36px,4vw,56px);line-height:1.04;letter-spacing:-.022em;margin:8px 0 18px;text-wrap:balance}
+  .cta h2 em{font-style:italic;color:var(--accent)}
+  .cta p{font-size:18px;color:var(--ink-2);line-height:1.55;margin:0 0 24px;max-width:520px}
+
+  footer{padding:42px 0 28px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-cols{display:flex;gap:28px;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+
+  @media (max-width:1100px){.cat-grid{grid-template-columns:repeat(4,1fr)}}
+  @media (max-width:840px){
+    .hero-grid,.cta-grid,.build-grid{grid-template-columns:1fr;gap:24px}
+    .stats,.ex-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .cat-grid{grid-template-columns:repeat(2,1fr)}
+    .filter-row{flex-direction:column;align-items:flex-start}
+    .search input{width:100%}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="warm.html"><span class="mk"></span> Firmcraft</a>
+    <nav class="nav-links">
+      <a href="warm.html#how">How it works</a>
+      <a href="playbooks.html">Playbooks</a>
+      <a href="capabilities.html">Capabilities</a>
+      <a href="security.html">Security</a>
+      <a href="integrations.html" class="cur">Integrations</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="warm.html">Home</a>
+      <a class="btn btn-primary" href="warm.html#cta">Book a call →</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="crumb"><a href="warm.html">← Back to home</a> &nbsp;·&nbsp; Integrations</div>
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Vol. 01 · Spring 2026</div>
+        <h1>Every tool you <em>already pay for.</em></h1>
+        <p class="lede">A hundred-and-change integrations across the SaaS your firm uses today — accounting, practice management, CRM, comms, calendars, payments, marketing, e-sign, support. If yours isn't here, we wire it in during onboarding.</p>
+      </div>
+      <div>
+        <div class="stats">
+          <div class="stat"><div class="k">Native</div><div class="v"><em>112</em></div><div class="c">Live, supported, documented integrations.</div></div>
+          <div class="stat"><div class="k">Categories</div><div class="v"><em>14</em></div><div class="c">From accounting to field service to legal.</div></div>
+          <div class="stat"><div class="k">Custom</div><div class="v">Wk <em>1</em></div><div class="c">Don't see yours? We build it during onboarding.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters">
+  <div class="wrap filter-row">
+    <div class="chips" id="filter-chips">
+      <button class="chip active" data-filter="all">All <span class="ct">112</span></button>
+      <button class="chip" data-filter="accounting">Accounting</button>
+      <button class="chip" data-filter="medical">Medical &amp; dental PM</button>
+      <button class="chip" data-filter="legal">Legal PM</button>
+      <button class="chip" data-filter="crm">CRM &amp; sales</button>
+      <button class="chip" data-filter="comms">Comms</button>
+      <button class="chip" data-filter="docs">Docs &amp; storage</button>
+      <button class="chip" data-filter="payments">Payments</button>
+      <button class="chip" data-filter="calendar">Calendars</button>
+      <button class="chip" data-filter="marketing">Marketing</button>
+      <button class="chip" data-filter="esign">E-sign</button>
+      <button class="chip" data-filter="pm">Tasks &amp; PM</button>
+      <button class="chip" data-filter="forms">Forms &amp; intake</button>
+      <button class="chip" data-filter="support">Customer support</button>
+      <button class="chip" data-filter="field">Field service</button>
+    </div>
+    <div class="search"><input id="search" type="search" placeholder="Search 112 tools…" /></div>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<section class="lib">
+  <div class="wrap">
+    <div class="lib-meta"><span>Showing <b id="count">112</b> of <b>112</b> integrations</span><span><span style="color:var(--accent)">●</span> live  &nbsp; <span style="color:var(--accent-2)">●</span> recently added &nbsp; <span style="color:var(--accent-3)">●</span> browser-driven</span></div>
+    <div class="empty" id="empty">No integrations match. Try a broader filter — or ask us to build it.</div>
+
+    <!-- Accounting -->
+    <div class="cat" data-cat="accounting">
+      <div class="cat-head"><h3>Accounting &amp; bookkeeping</h3><span class="cct">9 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="quickbooks qbo intuit"><div class="lg">QuickBooks Online</div><p>Read · write · close · 1099s</p></div>
+        <div class="tool" data-search="xero accounting"><div class="lg">Xero</div><p>Read · write · reconcile</p></div>
+        <div class="tool" data-search="sage 100 50 intacct"><div class="lg">Sage Intacct</div><p>Read · write</p></div>
+        <div class="tool" data-search="netsuite oracle"><div class="lg">NetSuite</div><p>Read · write · saved searches</p></div>
+        <div class="tool" data-search="freshbooks"><div class="lg">FreshBooks</div><p>Read · write</p></div>
+        <div class="tool" data-search="wave"><div class="lg">Wave</div><p>Read · write</p></div>
+        <div class="tool" data-search="bill com bill.com"><div class="lg">Bill.com</div><p>AP · AR · approvals</p></div>
+        <div class="tool" data-search="ramp"><div class="lg">Ramp</div><span class="badge new">new</span><p>Spend · cards · close</p></div>
+        <div class="tool" data-search="brex"><div class="lg">Brex</div><span class="badge new">new</span><p>Spend · cards · expense</p></div>
+      </div>
+    </div>
+
+    <!-- Medical / dental practice management -->
+    <div class="cat" data-cat="medical">
+      <div class="cat-head"><h3>Medical &amp; dental practice management</h3><span class="cct">10 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="eaglesoft patterson dental"><div class="lg">Eaglesoft</div><span class="badge driven">driven</span><p>Charts · scheduling · billing</p></div>
+        <div class="tool" data-search="dentrix henry schein"><div class="lg">Dentrix</div><span class="badge driven">driven</span><p>Charts · scheduling · claims</p></div>
+        <div class="tool" data-search="open dental"><div class="lg">Open Dental</div><p>API + read · write</p></div>
+        <div class="tool" data-search="curve dental"><div class="lg">Curve Dental</div><p>Cloud-native · read · write</p></div>
+        <div class="tool" data-search="athenahealth athena"><div class="lg">athenahealth</div><p>EHR · billing · scheduling</p></div>
+        <div class="tool" data-search="epic mychart"><div class="lg">Epic</div><span class="badge beta">beta</span><p>FHIR · read</p></div>
+        <div class="tool" data-search="kareo tebra"><div class="lg">Tebra (Kareo)</div><p>EHR · billing</p></div>
+        <div class="tool" data-search="practice fusion"><div class="lg">Practice Fusion</div><p>EHR · read</p></div>
+        <div class="tool" data-search="simplepractice therapy"><div class="lg">SimplePractice</div><p>Notes · billing · scheduling</p></div>
+        <div class="tool" data-search="weave"><div class="lg">Weave</div><p>Comms · payments</p></div>
+      </div>
+    </div>
+
+    <!-- Legal PM -->
+    <div class="cat" data-cat="legal">
+      <div class="cat-head"><h3>Legal practice management</h3><span class="cct">7 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="clio law"><div class="lg">Clio</div><p>Matters · billing · docs</p></div>
+        <div class="tool" data-search="mycase"><div class="lg">MyCase</div><p>Matters · billing</p></div>
+        <div class="tool" data-search="practice panther"><div class="lg">PracticePanther</div><p>Matters · time · billing</p></div>
+        <div class="tool" data-search="smokeball"><div class="lg">Smokeball</div><span class="badge driven">driven</span><p>Matters · auto-time</p></div>
+        <div class="tool" data-search="filevine"><div class="lg">Filevine</div><p>Matters · workflow</p></div>
+        <div class="tool" data-search="rocket matter"><div class="lg">Rocket Matter</div><p>Matters · billing</p></div>
+        <div class="tool" data-search="caret legal"><div class="lg">CARET Legal</div><span class="badge new">new</span><p>Matters · billing</p></div>
+      </div>
+    </div>
+
+    <!-- CRM -->
+    <div class="cat" data-cat="crm">
+      <div class="cat-head"><h3>CRM &amp; sales</h3><span class="cct">10 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="hubspot"><div class="lg">HubSpot</div><p>Contacts · pipelines · marketing</p></div>
+        <div class="tool" data-search="salesforce sfdc"><div class="lg">Salesforce</div><p>Full object model</p></div>
+        <div class="tool" data-search="pipedrive"><div class="lg">Pipedrive</div><p>Pipelines · activities</p></div>
+        <div class="tool" data-search="close.com"><div class="lg">Close</div><p>Calls · sequences · pipelines</p></div>
+        <div class="tool" data-search="zoho crm"><div class="lg">Zoho CRM</div><p>Modules · workflows</p></div>
+        <div class="tool" data-search="attio"><div class="lg">Attio</div><span class="badge new">new</span><p>Contacts · objects · workspace</p></div>
+        <div class="tool" data-search="copper"><div class="lg">Copper</div><p>Pipelines · contacts</p></div>
+        <div class="tool" data-search="folk crm"><div class="lg">Folk</div><p>Lightweight CRM</p></div>
+        <div class="tool" data-search="apollo"><div class="lg">Apollo.io</div><p>Enrichment · sequences</p></div>
+        <div class="tool" data-search="gong"><div class="lg">Gong</div><p>Call recording · summaries</p></div>
+      </div>
+    </div>
+
+    <!-- Comms -->
+    <div class="cat" data-cat="comms">
+      <div class="cat-head"><h3>Communications</h3><span class="cct">11 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="slack"><div class="lg">Slack</div><p>Channels · DMs · slash · approvals</p></div>
+        <div class="tool" data-search="microsoft teams"><div class="lg">MS Teams</div><p>Channels · chats · approvals</p></div>
+        <div class="tool" data-search="discord"><div class="lg">Discord</div><p>Channels · DMs</p></div>
+        <div class="tool" data-search="telegram"><div class="lg">Telegram</div><p>Bot API · chats · channels</p></div>
+        <div class="tool" data-search="whatsapp business"><div class="lg">WhatsApp Business</div><p>Customer convos · templates</p></div>
+        <div class="tool" data-search="signal"><div class="lg">Signal</div><span class="badge beta">beta</span><p>Encrypted bridge</p></div>
+        <div class="tool" data-search="imessage apple"><div class="lg">iMessage</div><p>macOS bridge · per-firm</p></div>
+        <div class="tool" data-search="twilio sms"><div class="lg">Twilio SMS</div><p>Send · receive · MMS</p></div>
+        <div class="tool" data-search="email gmail outlook"><div class="lg">Gmail · Outlook</div><p>Read · draft · send · triage</p></div>
+        <div class="tool" data-search="zoom meeting"><div class="lg">Zoom</div><p>Recording · transcript</p></div>
+        <div class="tool" data-search="loom"><div class="lg">Loom</div><p>Recording · transcript</p></div>
+      </div>
+    </div>
+
+    <!-- Docs / storage -->
+    <div class="cat" data-cat="docs">
+      <div class="cat-head"><h3>Documents &amp; storage</h3><span class="cct">8 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="google drive workspace"><div class="lg">Google Drive</div><p>Read · write · search · permissions</p></div>
+        <div class="tool" data-search="microsoft 365 sharepoint onedrive"><div class="lg">Microsoft 365</div><p>OneDrive · SharePoint · Graph</p></div>
+        <div class="tool" data-search="dropbox"><div class="lg">Dropbox</div><p>Read · write</p></div>
+        <div class="tool" data-search="box"><div class="lg">Box</div><p>Enterprise content</p></div>
+        <div class="tool" data-search="notion"><div class="lg">Notion</div><p>Pages · databases · search</p></div>
+        <div class="tool" data-search="confluence atlassian"><div class="lg">Confluence</div><p>Spaces · pages</p></div>
+        <div class="tool" data-search="smartvault"><div class="lg">SmartVault</div><p>CPA / legal storage</p></div>
+        <div class="tool" data-search="onedrive"><div class="lg">OneDrive</div><p>Read · write</p></div>
+      </div>
+    </div>
+
+    <!-- Payments -->
+    <div class="cat" data-cat="payments">
+      <div class="cat-head"><h3>Payments &amp; billing</h3><span class="cct">8 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="stripe"><div class="lg">Stripe</div><p>Charges · subs · webhooks · refunds</p></div>
+        <div class="tool" data-search="square"><div class="lg">Square</div><p>POS · invoices</p></div>
+        <div class="tool" data-search="plaid"><div class="lg">Plaid</div><p>Bank linking · balances</p></div>
+        <div class="tool" data-search="mercury banking"><div class="lg">Mercury</div><p>Bank · cards · close</p></div>
+        <div class="tool" data-search="paypal"><div class="lg">PayPal</div><p>Charges · invoices</p></div>
+        <div class="tool" data-search="invoiced"><div class="lg">Invoiced</div><p>AR · dunning</p></div>
+        <div class="tool" data-search="chargebee"><div class="lg">Chargebee</div><p>Subs · billing</p></div>
+        <div class="tool" data-search="recurly"><div class="lg">Recurly</div><p>Subs · billing</p></div>
+      </div>
+    </div>
+
+    <!-- Calendars -->
+    <div class="cat" data-cat="calendar">
+      <div class="cat-head"><h3>Calendars &amp; scheduling</h3><span class="cct">6 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="google calendar"><div class="lg">Google Calendar</div><p>Read · write · holds · invitees</p></div>
+        <div class="tool" data-search="outlook calendar microsoft"><div class="lg">Outlook Calendar</div><p>Read · write · holds</p></div>
+        <div class="tool" data-search="calendly"><div class="lg">Calendly</div><p>Routing · embeds · webhooks</p></div>
+        <div class="tool" data-search="cal.com"><div class="lg">Cal.com</div><p>Open scheduling</p></div>
+        <div class="tool" data-search="acuity squarespace scheduling"><div class="lg">Acuity</div><p>Bookings · intake</p></div>
+        <div class="tool" data-search="savvycal"><div class="lg">SavvyCal</div><p>Routing · embeds</p></div>
+      </div>
+    </div>
+
+    <!-- Marketing -->
+    <div class="cat" data-cat="marketing">
+      <div class="cat-head"><h3>Marketing &amp; email</h3><span class="cct">8 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="mailchimp"><div class="lg">Mailchimp</div><p>Lists · sends · segments</p></div>
+        <div class="tool" data-search="klaviyo"><div class="lg">Klaviyo</div><p>Flows · segments</p></div>
+        <div class="tool" data-search="beehiiv"><div class="lg">Beehiiv</div><p>Newsletter · sends</p></div>
+        <div class="tool" data-search="active campaign"><div class="lg">ActiveCampaign</div><p>Automations · CRM</p></div>
+        <div class="tool" data-search="brevo sendinblue"><div class="lg">Brevo</div><p>Marketing · transactional</p></div>
+        <div class="tool" data-search="constant contact"><div class="lg">Constant Contact</div><p>SMB email</p></div>
+        <div class="tool" data-search="linkedin"><div class="lg">LinkedIn</div><span class="badge driven">driven</span><p>Posts · DMs · drafts</p></div>
+        <div class="tool" data-search="google business profile"><div class="lg">Google Business</div><p>Reviews · posts</p></div>
+      </div>
+    </div>
+
+    <!-- E-sign -->
+    <div class="cat" data-cat="esign">
+      <div class="cat-head"><h3>E-signature &amp; documents</h3><span class="cct">6 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="docusign"><div class="lg">DocuSign</div><p>Templates · envelopes · webhooks</p></div>
+        <div class="tool" data-search="dropbox sign hellosign"><div class="lg">Dropbox Sign</div><p>Templates · webhooks</p></div>
+        <div class="tool" data-search="pandadoc"><div class="lg">PandaDoc</div><p>Proposals · signing</p></div>
+        <div class="tool" data-search="adobe sign"><div class="lg">Adobe Sign</div><p>Templates · signing</p></div>
+        <div class="tool" data-search="signnow"><div class="lg">signNow</div><p>Templates · signing</p></div>
+        <div class="tool" data-search="ironclad"><div class="lg">Ironclad</div><span class="badge new">new</span><p>CLM · workflows</p></div>
+      </div>
+    </div>
+
+    <!-- Tasks / PM -->
+    <div class="cat" data-cat="pm">
+      <div class="cat-head"><h3>Tasks &amp; project management</h3><span class="cct">7 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="linear"><div class="lg">Linear</div><p>Issues · cycles · projects</p></div>
+        <div class="tool" data-search="asana"><div class="lg">Asana</div><p>Tasks · projects</p></div>
+        <div class="tool" data-search="clickup"><div class="lg">ClickUp</div><p>Tasks · docs · spaces</p></div>
+        <div class="tool" data-search="trello"><div class="lg">Trello</div><p>Boards · cards</p></div>
+        <div class="tool" data-search="monday.com"><div class="lg">Monday.com</div><p>Boards · automations</p></div>
+        <div class="tool" data-search="jira atlassian"><div class="lg">Jira</div><p>Issues · workflows</p></div>
+        <div class="tool" data-search="height app"><div class="lg">Height</div><span class="badge new">new</span><p>Tasks · AI workflows</p></div>
+      </div>
+    </div>
+
+    <!-- Forms -->
+    <div class="cat" data-cat="forms">
+      <div class="cat-head"><h3>Forms &amp; intake</h3><span class="cct">6 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="typeform"><div class="lg">Typeform</div><p>Submissions · webhooks</p></div>
+        <div class="tool" data-search="tally"><div class="lg">Tally</div><p>Submissions · webhooks</p></div>
+        <div class="tool" data-search="jotform"><div class="lg">Jotform</div><p>Submissions · HIPAA</p></div>
+        <div class="tool" data-search="google forms"><div class="lg">Google Forms</div><p>Submissions · sheets</p></div>
+        <div class="tool" data-search="fillout"><div class="lg">Fillout</div><p>Submissions · routing</p></div>
+        <div class="tool" data-search="formstack"><div class="lg">Formstack</div><p>Submissions · workflows</p></div>
+      </div>
+    </div>
+
+    <!-- Customer support -->
+    <div class="cat" data-cat="support">
+      <div class="cat-head"><h3>Customer support</h3><span class="cct">6 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="zendesk"><div class="lg">Zendesk</div><p>Tickets · macros · routing</p></div>
+        <div class="tool" data-search="intercom"><div class="lg">Intercom</div><p>Conversations · helpdesk</p></div>
+        <div class="tool" data-search="help scout"><div class="lg">Help Scout</div><p>Conversations · docs</p></div>
+        <div class="tool" data-search="front email"><div class="lg">Front</div><p>Shared inboxes</p></div>
+        <div class="tool" data-search="freshdesk"><div class="lg">Freshdesk</div><p>Tickets · automations</p></div>
+        <div class="tool" data-search="hubspot service"><div class="lg">HubSpot Service</div><p>Tickets · pipelines</p></div>
+      </div>
+    </div>
+
+    <!-- Field service -->
+    <div class="cat" data-cat="field">
+      <div class="cat-head"><h3>Field service &amp; trades</h3><span class="cct">10 tools</span></div>
+      <div class="cat-grid">
+        <div class="tool" data-search="jobber"><div class="lg">Jobber</div><p>Jobs · scheduling · invoicing</p></div>
+        <div class="tool" data-search="servicetitan"><div class="lg">ServiceTitan</div><p>Jobs · CRM · payroll</p></div>
+        <div class="tool" data-search="housecall pro"><div class="lg">Housecall Pro</div><p>Jobs · invoicing · payments</p></div>
+        <div class="tool" data-search="fieldedge"><div class="lg">FieldEdge</div><p>Jobs · dispatch</p></div>
+        <div class="tool" data-search="servicechannel"><div class="lg">ServiceChannel</div><p>FM · work orders</p></div>
+        <div class="tool" data-search="buildertrend"><div class="lg">Buildertrend</div><p>Construction PM</p></div>
+        <div class="tool" data-search="quickbase"><div class="lg">Quickbase</div><p>Custom apps · ops</p></div>
+        <div class="tool" data-search="gusto payroll"><div class="lg">Gusto</div><p>Payroll · HR · onboarding</p></div>
+        <div class="tool" data-search="adp paychex"><div class="lg">ADP / Paychex</div><span class="badge driven">driven</span><p>Payroll · HR · reports</p></div>
+        <div class="tool custom" data-search="any custom api browser portal"><div class="lg">Your weird tool</div><p>Custom connector · week 1</p></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- BUILD -->
+<section class="build">
+  <div class="wrap">
+    <div class="build-grid">
+      <div>
+        <div class="eyebrow">When the list isn't long enough</div>
+        <h2>If it has an <em>API</em>, a portal, or a webpage — we can drive it.</h2>
+        <p>About a third of our customers' workflows hit a tool that's not in this catalog. A regional carrier's claim portal. An in-house ERP your last consultant built. A government filing site that's older than half the team. None of it stops us.</p>
+        <p><strong>Three ways the operator can speak to a tool:</strong> a documented API (preferred), an undocumented but reachable HTTP endpoint, or a browser session driving the actual UI when there's no programmatic surface at all. Most "weird tool" connectors take 1–3 days.</p>
+      </div>
+      <div class="stages">
+        <div class="stage"><div class="d">Mon</div><h5>Intake call</h5><p>You name the tool, the workflow, and the gnarly edge cases.</p></div>
+        <div class="stage"><div class="d">Tue</div><h5>Connector wired</h5><p>API or browser-driven session. Test creds in your sandbox.</p></div>
+        <div class="stage"><div class="d">Wed</div><h5>Dry runs</h5><p>10 shadow runs. We compare to your spreadsheet of expected outputs.</p></div>
+        <div class="stage"><div class="d">Thu–Fri</div><h5>Live</h5><p>Operator runs it in production. We watch the first week.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLES -->
+<section class="ex">
+  <div class="wrap">
+    <div class="ex-head">
+      <div class="eyebrow">Real custom connectors</div>
+      <h2>The weirdest tools we've wired up <em>this quarter.</em></h2>
+      <p class="lede2">A representative slice from the actual onboarding queue — names changed, but the tool stacks are real.</p>
+    </div>
+    <div class="ex-grid">
+      <div class="ex-card">
+        <div class="who">Dental · Eaglesoft + Delta</div>
+        <h4>Drove an Eaglesoft client + a 2003-era carrier portal</h4>
+        <p>Eaglesoft has no public API. We run a sanctioned local agent on the front-desk machine that reads charts. Carrier portal driven via headless browser. Six claim types end-to-end.</p>
+        <div class="stack"><span>Eaglesoft</span><span>Delta Dental</span><span>Drive</span><span>Slack</span></div>
+      </div>
+      <div class="ex-card">
+        <div class="who">Tree co · Self-built scheduler</div>
+        <h4>An owner-built FileMaker app that runs the whole shop</h4>
+        <p>15-year-old FileMaker DB the owner built himself. We exposed it over a small REST shim, then ran the dispatch + Google reviews flywheel against it.</p>
+        <div class="stack"><span>FileMaker</span><span>Twilio</span><span>Google Business</span></div>
+      </div>
+      <div class="ex-card">
+        <div class="who">CPA firm · State filing portals</div>
+        <h4>Eight different state revenue-department portals</h4>
+        <p>Each state's portal is its own snowflake. We built a parameterized browser-driver template — adding a new state takes a day, not a sprint.</p>
+        <div class="stack"><span>State portals</span><span>QBO</span><span>SmartVault</span><span>Drive</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-grid">
+      <div>
+        <div class="eyebrow">Don't see your tool?</div>
+        <h2>Tell us what you use. We'll <em>tell you the truth.</em></h2>
+        <p>If we already integrate, we'll show you how on the call. If we don't, we'll either commit to a custom connector in week one — or honestly tell you it's not feasible and you should stay on Zapier. Both happen.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-lg" href="warm.html#cta">Book a 20-min call →</a>
+          <a class="btn btn-ghost btn-lg" href="playbooks.html">Browse 40 playbooks</a>
+        </div>
+      </div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px">
+        <div class="eyebrow" style="color:var(--ink-2)">A short tour</div>
+        <ul style="list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:14px;font-family:'Source Serif 4',serif;font-size:18px;line-height:1.45">
+          <li><a href="capabilities.html" style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px"><span>The six capabilities</span><span style="color:var(--accent);font-style:italic">→</span></a></li>
+          <li><a href="security.html" style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px"><span>Security &amp; trust</span><span style="color:var(--accent);font-style:italic">→</span></a></li>
+          <li><a href="playbooks.html" style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:14px"><span>The 40 playbooks library</span><span style="color:var(--accent);font-style:italic">→</span></a></li>
+          <li><a href="warm.html#pricing" style="display:flex;justify-content:space-between;align-items:center"><span>Pricing — flat, all-seats</span><span style="color:var(--accent);font-style:italic">→</span></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand"><span class="mk"></span> Firmcraft</span>
+    <div class="foot-cols">
+      <span>© 2026 SkillCalibrate Co.</span>
+      <span>SOC 2 In Progress</span>
+      <span>50+ seats? <a href="https://skillcalibrate.com" style="text-decoration:underline">SkillCalibrate.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const chips = document.querySelectorAll('#filter-chips .chip');
+  const cats = document.querySelectorAll('.lib .cat');
+  const tools = document.querySelectorAll('.tool');
+  const search = document.getElementById('search');
+  const empty = document.getElementById('empty');
+  const count = document.getElementById('count');
+  let active = 'all';
+
+  function apply(){
+    const q = (search.value||'').trim().toLowerCase();
+    let visible = 0;
+    cats.forEach(cat => {
+      const catKey = cat.dataset.cat;
+      const catMatch = active === 'all' || active === catKey;
+      let anyVisible = false;
+      cat.querySelectorAll('.tool').forEach(t => {
+        const hay = ((t.dataset.search||'') + ' ' + t.textContent).toLowerCase();
+        const qMatch = !q || hay.includes(q);
+        const show = catMatch && qMatch;
+        t.style.display = show ? '' : 'none';
+        if (show){ visible++; anyVisible = true; }
+      });
+      cat.style.display = anyVisible ? '' : 'none';
+    });
+    count.textContent = visible;
+    empty.classList.toggle('show', visible === 0);
+  }
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    active = c.dataset.filter;
+    apply();
+  }));
+  search.addEventListener('input', apply);
+})();
+</script>
+</body>
+</html>

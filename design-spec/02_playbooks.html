@@ -1,0 +1,622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firmcraft — The Playbooks Library</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF4EA;--paper-2:#F4E9D6;
+    --ink:#2D1F14;--ink-2:#5A4533;--muted:#8A7560;
+    --line:rgba(45,31,20,.12);--line-2:rgba(45,31,20,.22);
+    --accent:#D97757;--accent-2:#6B8E5A;
+    --hi:#F2D9A7;
+    --tr:#B45A3A;--hc:#3F7A8C;--so:#8C6B2C;--pf:#5A4A2A;--b2:#6B8E5A;--xa:#8A7560;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01"}
+  .serif{font-family:"Source Serif 4",Georgia,serif}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  /* Nav */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(251,244,234,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em}
+  .brand .mk{width:22px;height:22px;border-radius:50%;background:var(--accent);position:relative}
+  .brand .mk::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--paper)}
+  .nav-links{display:flex;gap:24px;font-size:14px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-links a.cur{color:var(--ink);font-weight:500}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .18s ease;line-height:1}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:var(--accent)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--ink);background:#fff}
+  .btn-lg{padding:15px 26px;font-size:15px}
+
+  /* Hero */
+  .hero{padding:80px 0 32px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-180px;right:-180px;width:520px;height:520px;background:radial-gradient(circle,#F4D9B7,transparent 60%);opacity:.55;pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-160px;left:-180px;width:480px;height:480px;background:radial-gradient(circle,#DEEAD2,transparent 60%);opacity:.5;pointer-events:none}
+  .hero-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:end;position:relative}
+  .crumb{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+  .crumb a{color:var(--accent)}
+  .crumb a:hover{text-decoration:underline;text-underline-offset:3px}
+  h1{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(46px,5.6vw,80px);line-height:1.02;letter-spacing:-.024em;margin:0 0 18px;text-wrap:balance}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:540px;margin:0 0 24px}
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;border-top:1px solid var(--line);padding-top:24px}
+  .stat .k{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .stat .v{font-family:"Source Serif 4",serif;font-size:42px;font-weight:500;letter-spacing:-.02em;line-height:1;margin-top:6px}
+  .stat .v em{font-style:italic;color:var(--accent)}
+  .stat .c{font-size:13px;color:var(--ink-2);margin-top:6px;line-height:1.4}
+
+  /* Filter strip */
+  .filters{position:sticky;top:64px;z-index:40;background:rgba(251,244,234,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:14px 0;margin-top:48px}
+  .filter-row{display:flex;align-items:center;gap:14px;flex-wrap:wrap;justify-content:space-between}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:13px;color:var(--ink-2);cursor:pointer;transition:all .15s ease;font-family:"Geist",sans-serif}
+  .chip:hover{border-color:var(--ink-2);color:var(--ink)}
+  .chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .chip .ct{font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--muted);background:var(--paper);padding:1px 6px;border-radius:999px}
+  .chip.active .ct{background:rgba(255,255,255,.15);color:#D5C5B0}
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:var(--mk,var(--muted))}
+  .search{position:relative}
+  .search input{font-family:"Geist",sans-serif;font-size:13.5px;padding:9px 14px 9px 36px;border-radius:999px;border:1px solid var(--line);background:#fff;color:var(--ink);width:260px;outline:none;transition:all .15s ease}
+  .search input:focus{border-color:var(--ink);width:300px}
+  .search::before{content:"⌕";position:absolute;left:14px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px}
+
+  /* Grid */
+  .lib{padding:36px 0 56px}
+  .lib-meta{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:18px;font-family:"Geist Mono",monospace;font-size:11.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
+  .lib-meta b{color:var(--ink);font-weight:500}
+  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .pb{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px;display:flex;flex-direction:column;gap:14px;transition:all .2s ease;position:relative;cursor:default}
+  .pb:hover{transform:translateY(-2px);box-shadow:0 16px 32px -16px rgba(45,31,20,.18);border-color:var(--line-2)}
+  .pb-head{display:flex;justify-content:space-between;align-items:center;font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .pb-pill{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;background:var(--paper);color:var(--ink-2);border:1px solid var(--line)}
+  .pb-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--mk)}
+  .pb h3{font-family:"Source Serif 4",serif;font-weight:500;font-size:21px;letter-spacing:-.01em;line-height:1.2;margin:0;text-wrap:balance}
+  .pb h3 em{font-style:italic;color:var(--accent)}
+  .pb p{margin:0;font-size:14px;line-height:1.5;color:var(--ink-2)}
+  .pb .row{display:flex;align-items:center;gap:8px;font-family:"Geist Mono",monospace;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding-top:10px;border-top:1px dashed var(--line);flex-wrap:wrap}
+  .pb .row .lbl{color:var(--muted);min-width:54px}
+  .tools{display:flex;gap:5px;flex-wrap:wrap}
+  .tool{display:inline-flex;align-items:center;padding:3px 8px;border-radius:6px;background:var(--paper);font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--ink);border:1px solid var(--line);text-transform:none;letter-spacing:0}
+  .trig{display:inline-flex;align-items:center;gap:6px;font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--ink-2);text-transform:uppercase;letter-spacing:.1em}
+  .trig.t-mention{color:var(--accent)}
+  .trig.t-cron{color:var(--accent-2)}
+  .trig.t-event{color:#3F7A8C}
+  .trig::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+
+  /* Industry color tags */
+  .pb[data-cat="trades"]{--mk:var(--tr)}
+  .pb[data-cat="health"]{--mk:var(--hc)}
+  .pb[data-cat="solo"]{--mk:var(--so)}
+  .pb[data-cat="prof"]{--mk:var(--pf)}
+  .pb[data-cat="b2b"]{--mk:var(--b2)}
+  .pb[data-cat="any"]{--mk:var(--xa)}
+
+  /* Empty state */
+  .empty{display:none;text-align:center;padding:60px 0;color:var(--muted);font-family:"Source Serif 4",serif;font-style:italic;font-size:22px}
+  .empty.show{display:block}
+
+  /* CTA section */
+  .cta{padding:88px 0;background:linear-gradient(180deg,var(--paper),var(--paper-2));border-top:1px solid var(--line)}
+  .cta-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+  .cta h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(36px,4vw,56px);line-height:1.04;letter-spacing:-.022em;margin:8px 0 18px;text-wrap:balance}
+  .cta h2 em{font-style:italic;color:var(--accent)}
+  .cta p{font-size:18px;color:var(--ink-2);line-height:1.55;margin:0 0 24px;max-width:520px}
+  .cta-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
+  .cta-card h4{font-family:"Source Serif 4",serif;font-weight:500;font-style:italic;font-size:21px;margin:0 0 6px;letter-spacing:-.005em}
+  .cta-card p{font-size:14.5px;margin:0 0 14px;color:var(--ink-2)}
+  .cta-card ul{list-style:none;padding:0;margin:0 0 6px;display:flex;flex-direction:column;gap:8px;font-size:13.5px;color:var(--ink)}
+  .cta-card li{display:flex;gap:10px;align-items:flex-start}
+  .cta-card li::before{content:"";width:13px;height:13px;border-radius:50%;background:var(--accent-2);margin-top:3px;flex:none;position:relative}
+
+  footer{padding:42px 0 28px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-cols{display:flex;gap:28px;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+
+  @media (max-width:960px){
+    .hero-grid,.cta-grid{grid-template-columns:1fr;gap:28px}
+    .grid{grid-template-columns:1fr 1fr}
+    .stats{grid-template-columns:1fr 1fr 1fr}
+    .nav-links{display:none}
+    .filter-row{flex-direction:column;align-items:flex-start}
+    .search input{width:100%}
+  }
+  @media (max-width:640px){
+    .grid{grid-template-columns:1fr}
+    .stats{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="warm.html"><span class="mk"></span> Firmcraft</a>
+    <nav class="nav-links">
+      <a href="warm.html#how">How it works</a>
+      <a href="warm.html#pricing">Pricing</a>
+      <a href="playbooks.html" class="cur">Playbooks</a>
+      <a href="warm.html#compare">vs ChatGPT</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="warm.html">Home</a>
+      <a class="btn btn-primary" href="warm.html#cta">Book a call →</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="crumb"><a href="warm.html">← Back to home</a> &nbsp;·&nbsp; The Playbooks Library</div>
+        <div class="eyebrow">Vol. 01 · Spring 2026</div>
+        <h1>The first <em>40 playbooks.</em><br>Pick yours.</h1>
+        <p class="lede">A playbook is a named, versioned piece of work the operator can run on its own — triggered by a mention, a schedule, or an event in your tools. Browse the full library by industry. Don't see yours? We build a custom one in week one.</p>
+      </div>
+      <div>
+        <div class="stats">
+          <div class="stat">
+            <div class="k">Live playbooks</div>
+            <div class="v"><em>40</em></div>
+            <div class="c">Across five customer types — and growing every week.</div>
+          </div>
+          <div class="stat">
+            <div class="k">Custom builds</div>
+            <div class="v">Wk <em>1</em></div>
+            <div class="c">If your workflow isn't here, we ship it during onboarding.</div>
+          </div>
+          <div class="stat">
+            <div class="k">Improves with use</div>
+            <div class="v"><em>∞</em></div>
+            <div class="c">Each playbook gets sharper every time the operator runs it.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters">
+  <div class="wrap filter-row">
+    <div class="chips" id="filter-chips">
+      <button class="chip active" data-filter="all">All <span class="ct" data-ct="all">40</span></button>
+      <button class="chip" data-filter="trades" style="--mk:var(--tr)"><span class="dot"></span>Trades &amp; field <span class="ct" data-ct="trades">8</span></button>
+      <button class="chip" data-filter="health" style="--mk:var(--hc)"><span class="dot"></span>Healthcare <span class="ct" data-ct="health">8</span></button>
+      <button class="chip" data-filter="solo" style="--mk:var(--so)"><span class="dot"></span>Solo &amp; owner-op <span class="ct" data-ct="solo">6</span></button>
+      <button class="chip" data-filter="prof" style="--mk:var(--pf)"><span class="dot"></span>Professional firms <span class="ct" data-ct="prof">8</span></button>
+      <button class="chip" data-filter="b2b" style="--mk:var(--b2)"><span class="dot"></span>B2B services <span class="ct" data-ct="b2b">8</span></button>
+      <button class="chip" data-filter="any" style="--mk:var(--xa)"><span class="dot"></span>Cross-industry <span class="ct" data-ct="any">2</span></button>
+    </div>
+    <div class="search">
+      <input id="search" type="search" placeholder="Search 40 playbooks…" />
+    </div>
+  </div>
+</div>
+
+<!-- LIBRARY -->
+<section class="lib">
+  <div class="wrap">
+    <div class="lib-meta"><span>Showing <b id="count">40</b> of <b>40</b> playbooks</span><span>Sorted by industry</span></div>
+    <div class="empty" id="empty">No playbooks match. Try a broader filter.</div>
+    <div class="grid" id="grid">
+
+      <!-- TRADES -->
+      <article class="pb" data-cat="trades" data-search="contract docusign on-site signature trades">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#001</span></div>
+        <h3>On-site contract <em>→ DocuSign</em></h3>
+        <p>Customer says yes in the driveway. Operator drafts contract from your standard rider, sends via DocuSign, and chases the signature before you pull off the property.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">DocuSign</span><span class="tool">Drive</span><span class="tool">SMS</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-mention">@mention</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="coi insurance certificate carrier portal">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#002</span></div>
+        <h3>Certificate of Insurance <em>on demand</em></h3>
+        <p>Property manager wants a COI before crew arrives. Operator pulls from carrier portal, fills the additional-insured details, sends the PDF — minutes, not days.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Carrier portal</span><span class="tool">Email</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-mention">@mention</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="google reviews flywheel reputation seo">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#003</span></div>
+        <h3>Google reviews <em>flywheel</em></h3>
+        <p>Job complete → text customer the review link. Got 5★? Ask for a photo, attach to the listing. Got 4★? Ask what to fix. Aggregated weekly recap to the owner.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Google Business</span><span class="tool">SMS</span><span class="tool">Sheets</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">job complete</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="dispatch crew booking arrival window">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#004</span></div>
+        <h3>Crew dispatch <em>from intake</em></h3>
+        <p>New booking lands in your scheduling tool. Operator assigns the right crew based on job type + load, texts the client an arrival window, sends a reminder the night before.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Jobber / ServiceTitan</span><span class="tool">SMS</span><span class="tool">Calendar</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">booking created</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="quote follow-up unsigned estimate chase">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#005</span></div>
+        <h3>Unsigned-quote <em>follow-up</em></h3>
+        <p>Quote sent and not signed in 24h, 72h, or 7 days? Operator sends a calibrated nudge in your voice. Auto-pauses the moment the signature lands.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">DocuSign</span><span class="tool">Email</span><span class="tool">CRM</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">scheduled</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="permit tracker city portal expiration">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#006</span></div>
+        <h3>Permit watcher</h3>
+        <p>Pulls active-permit status from county/city portals every Monday morning. Flags any approaching expiration, opens a renewal task with the right documents pre-attached.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Municipal portals</span><span class="tool">Drive</span><span class="tool">Tasks</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">Mon 7:00 AM</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="maintenance equipment truck inspection log">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#007</span></div>
+        <h3>Equipment maintenance <em>watcher</em></h3>
+        <p>Reads the daily truck-inspection log, flags overdue services, books the shop visit, blocks the truck on the schedule so you don't dispatch it by accident.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Forms</span><span class="tool">Calendar</span><span class="tool">Sheets</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">daily</span></div>
+      </article>
+
+      <article class="pb" data-cat="trades" data-search="invoice payment chase ar receivables collections">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Trades</span><span>#008</span></div>
+        <h3>Invoice → payment <em>chase</em></h3>
+        <p>Invoice sent on completion, follow-ups at 14 / 30 / 60 days, escalation to the partner past 60. Marks paid the moment QuickBooks sees the deposit.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Stripe</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">scheduled</span></div>
+      </article>
+
+      <!-- HEALTHCARE -->
+      <article class="pb" data-cat="health" data-search="dental insurance claim ada delta cigna submit">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#009</span></div>
+        <h3>Insurance claim <em>submission</em></h3>
+        <p>Pulls clinical notes, X-rays, and procedure codes from the practice management system, drafts the ADA / CMS-1500 form, submits to the carrier portal, tracks the EOB.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Eaglesoft / Open Dental</span><span class="tool">Carrier portals</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-mention">@mention</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="claim denial appeal eob underpayment">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#010</span></div>
+        <h3>Denial / underpayment <em>appeals</em></h3>
+        <p>EOB shows denied or underpaid? Operator drafts the appeal letter with chart documentation, narrative, and supporting CDT codes — partner reviews and signs.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">Carrier portals</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">EOB received</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="recall reactivation patient overdue cleaning">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#011</span></div>
+        <h3>Patient recall <em>reactivation</em></h3>
+        <p>Pulls every patient overdue for a cleaning. Drafts personalized texts referencing their last visit and last hygienist. Loads into the queue for front-desk approval.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">SMS</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">weekly</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="treatment plan follow-up unscheduled work">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#012</span></div>
+        <h3>Treatment-plan <em>follow-up</em></h3>
+        <p>Patient was presented work and didn't book. Three-touch sequence over 30 days — financing options, schedule offer, "still thinking?" check-in.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">SMS</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">scheduled</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="pre-authorization major procedure carrier">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#013</span></div>
+        <h3>Pre-authorization <em>requests</em></h3>
+        <p>For implants, crowns, ortho, and major surgical procedures: assembles the clinical packet, submits the pre-auth, tracks status, surfaces the result before the appointment.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">Carrier portals</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">procedure planned</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="intake new patient forms hipaa">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#014</span></div>
+        <h3>New-patient <em>intake</em></h3>
+        <p>Texts the new patient HIPAA-compliant intake forms, populates the chart on submit, flags incomplete fields the day before the appointment.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Forms</span><span class="tool">Practice mgmt</span><span class="tool">SMS</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">appt booked</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="end of day reconciliation collections deposit">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#015</span></div>
+        <h3>End-of-day <em>reconciliation</em></h3>
+        <p>Matches collections to scheduled procedures, flags any patient that left without a payment plan, drafts the doctor's nightly summary.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">Stripe</span><span class="tool">Sheets</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">daily 6 PM</span></div>
+      </article>
+
+      <article class="pb" data-cat="health" data-search="birthday recall campaign monthly">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Healthcare</span><span>#016</span></div>
+        <h3>Birthday + recall <em>campaign</em></h3>
+        <p>Once a month, drafts personalized birthday messages bundled with a recall offer for every patient with a birthday in the next 30 days. Front desk approves the batch.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">SMS</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">monthly</span></div>
+      </article>
+
+      <!-- SOLO -->
+      <article class="pb" data-cat="solo" data-search="lead qualification inbound research score">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#017</span></div>
+        <h3>Inbound lead <em>qualifier</em></h3>
+        <p>New form submission → operator researches LinkedIn + the company site, scores fit against your last closes, books the call if strong, sends a polite "not a fit" if not.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Forms</span><span class="tool">Calendly</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">form submitted</span></div>
+      </article>
+
+      <article class="pb" data-cat="solo" data-search="calendar protect deep work block">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#018</span></div>
+        <h3>Calendar <em>defender</em></h3>
+        <p>Guards your deep-work blocks. Politely declines or reroutes meeting requests that would land on protected time, offers your real availability instead.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Calendar</span><span class="tool">Calendly</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">meeting requested</span></div>
+      </article>
+
+      <article class="pb" data-cat="solo" data-search="invoice cash close consultant generate">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#019</span></div>
+        <h3>Invoice → <em>cash</em></h3>
+        <p>Project closed? Operator generates the invoice from the SOW, sends it, follows up on schedule, marks paid in QBO when the deposit lands. You stay billable.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Stripe</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">project closed</span></div>
+      </article>
+
+      <article class="pb" data-cat="solo" data-search="quarterly client review packets">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#020</span></div>
+        <h3>Quarterly client <em>review packs</em></h3>
+        <p>Once a quarter, pulls project status across every active client and drafts a one-page review packet — wins, blockers, next-quarter priorities — ready for your review.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Notion / Linear</span><span class="tool">Drive</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">quarterly</span></div>
+      </article>
+
+      <article class="pb" data-cat="solo" data-search="new business kickoff project folder">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#021</span></div>
+        <h3>New-engagement <em>kickoff</em></h3>
+        <p>Proposal accepted? Operator spins up the project folder, kickoff doc, calendar holds, kickoff email — every artifact your last engagement had, day one.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Drive</span><span class="tool">Calendar</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">proposal accepted</span></div>
+      </article>
+
+      <article class="pb" data-cat="solo" data-search="end of week recap friday summary priorities">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Solo</span><span>#022</span></div>
+        <h3>Friday <em>recap</em></h3>
+        <p>Every Friday at 4: wins this week, what's open, what's next week's three priorities. Lands in your inbox so the weekend starts clean.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Calendar</span><span class="tool">Tasks</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">Fri 4 PM</span></div>
+      </article>
+
+      <!-- PROFESSIONAL FIRMS -->
+      <article class="pb" data-cat="prof" data-search="tax extension 4868 cpa batch">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#023</span></div>
+        <h3>Tax extension <em>batch</em></h3>
+        <p>For every client with an extension due, drafts the 4868, ties out estimated liability against last year, routes for partner review in one consolidated thread.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Drive</span><span class="tool">Tax software</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">seasonal</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="1099 vendor prep nec batch">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#024</span></div>
+        <h3>1099 <em>prep season</em></h3>
+        <p>January batch: pulls vendor data from QBO, drafts the 1099-NECs, chases missing W-9s, queues the batch send to vendors and IRS.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Drive</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">January</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="document request reconcile chase client">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#025</span></div>
+        <h3>Client doc <em>chase</em></h3>
+        <p>Sequenced doc requests with auto-reconciliation — when the client uploads, operator names, files, and OCRs the document, then strikes it from the missing list.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">SmartVault / Drive</span><span class="tool">Email</span><span class="tool">Tasks</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">scheduled</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="conflict check legal new matter">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#026</span></div>
+        <h3>Conflict check <em>on intake</em></h3>
+        <p>New legal matter? Operator runs the conflict search across all parties, attaches the result to the engagement letter, flags any hit for partner review before the EL goes out.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">Drive</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">matter created</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="engagement letter docusign matter open">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#027</span></div>
+        <h3>Engagement letter <em>generation</em></h3>
+        <p>Intake form submitted → tailored engagement letter drafted from your standard template + scope of work → DocuSign → matter opened the moment it's signed.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">DocuSign</span><span class="tool">Practice mgmt</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">intake submitted</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="monthly close package qbo review">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#028</span></div>
+        <h3>Monthly close <em>package</em></h3>
+        <p>For each bookkeeping client: pulls QBO, reconciles the bank feeds, builds the partner review package, flags the three things that need a human eye.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Drive</span><span class="tool">Sheets</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">monthly</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="court filing case calendar prep">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#029</span></div>
+        <h3>Court filing <em>prep brief</em></h3>
+        <p>Seven days before each filing or hearing on the case calendar, operator assembles the materials, drafts a one-page prep brief, and books the partner-associate prep block.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Practice mgmt</span><span class="tool">Calendar</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">7 days out</span></div>
+      </article>
+
+      <article class="pb" data-cat="prof" data-search="advisory quarterly review ips rmd">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Pro firms</span><span>#030</span></div>
+        <h3>Quarterly advisory <em>review</em></h3>
+        <p>For each advisory client, drafts the quarterly review pack — performance, IPS check, RMD reminders, suitability notes — ready for the partner's call prep.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Custodian / Orion</span><span class="tool">Drive</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">quarterly</span></div>
+      </article>
+
+      <!-- B2B -->
+      <article class="pb" data-cat="b2b" data-search="marketing email linkedin content engine weekly">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#031</span></div>
+        <h3>Weekly content <em>engine</em></h3>
+        <p>Pulls last week's wins / case studies / product launches and drafts the weekly email + 3 LinkedIn variants in your house voice. Marketer reviews and ships.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">HubSpot</span><span class="tool">LinkedIn</span><span class="tool">Drive</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">Mon 9 AM</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="demo request qualification ae brief">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#032</span></div>
+        <h3>Demo-request <em>qualifier</em></h3>
+        <p>New demo request → enriches with LinkedIn + their site + your CRM history, scores the lead, routes to the right AE with a pre-call brief in hand.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">HubSpot</span><span class="tool">Calendly</span><span class="tool">Slack</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">demo requested</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="onboarding new customer 14 day signed">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#033</span></div>
+        <h3>Customer <em>onboarding</em></h3>
+        <p>New logo signed → kicks off the 14-day onboarding playbook, schedules the kickoff, sends the welcome series, hands off to CS on day 15 with a status memo.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">CRM</span><span class="tool">Email</span><span class="tool">Calendar</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">deal closed-won</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="dunning failed payment stripe recovery">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#034</span></div>
+        <h3>Failed-payment <em>recovery</em></h3>
+        <p>Stripe webhook fires on failure. Operator sends a personalized retry email referencing the customer's plan, retries the card, escalates to CS on day three.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Stripe</span><span class="tool">Email</span><span class="tool">CRM</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">payment failed</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="qbr quarterly business review usage data deck">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#035</span></div>
+        <h3>QBR <em>deck builder</em></h3>
+        <p>For each top-tier customer, pulls product usage, support history, and revenue data; assembles the QBR deck; flags the two risks for the AM to address on the call.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Product analytics</span><span class="tool">CRM</span><span class="tool">Slides</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">quarterly</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="pipeline hygiene stale deals re-engage">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#036</span></div>
+        <h3>Pipeline <em>hygiene</em></h3>
+        <p>Every Friday: flags every deal that's been stuck in stage for more than 14 days, drafts a re-engagement message in the AE's voice, queues for review.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">CRM</span><span class="tool">Email</span><span class="tool">Slack</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">Fri 2 PM</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="renewal automation 90 60 30 uplift">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#037</span></div>
+        <h3>Renewal <em>automation</em></h3>
+        <p>90 / 60 / 30 days before each renewal: usage check-in, uplift proposal, signature request. Auto-pauses if the customer has an open support escalation.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">CRM</span><span class="tool">DocuSign</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">scheduled</span></div>
+      </article>
+
+      <article class="pb" data-cat="b2b" data-search="win loss interview transcript synthesis knowledge">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>B2B</span><span>#038</span></div>
+        <h3>Win / loss <em>synthesis</em></h3>
+        <p>Records the win-loss call, transcribes, extracts the three deltas vs. the last ten outcomes, posts the takeaways into the sales channel for the team to learn from.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Zoom</span><span class="tool">Drive</span><span class="tool">Slack</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-event">call recorded</span></div>
+      </article>
+
+      <!-- ANY -->
+      <article class="pb" data-cat="any" data-search="inbox triage email priority">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Cross-industry</span><span>#039</span></div>
+        <h3>Inbox <em>triage</em></h3>
+        <p>Sorts the morning inbox into "needs you," "I drafted a reply," and "handled." You start the day with the actual five emails that mattered, not eighty.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">Gmail / Outlook</span><span class="tool">Drafts</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">daily 7 AM</span></div>
+      </article>
+
+      <article class="pb" data-cat="any" data-search="vendor saas renewal subscription tracker">
+        <div class="pb-head"><span class="pb-pill"><span class="dot"></span>Cross-industry</span><span>#040</span></div>
+        <h3>Vendor renewal <em>watcher</em></h3>
+        <p>Tracks every SaaS subscription you pay for. Surfaces upcoming auto-renewals 30 days out with usage data, so you cancel what nobody opens before it bills.</p>
+        <div class="row"><span class="lbl">Touches</span><div class="tools"><span class="tool">QuickBooks</span><span class="tool">Stripe</span><span class="tool">Email</span></div></div>
+        <div class="row"><span class="lbl">Trigger</span><span class="trig t-cron">monthly</span></div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-grid">
+      <div>
+        <div class="eyebrow">Don't see yours?</div>
+        <h2>We build a <em>custom playbook</em> in week one.</h2>
+        <p>About a third of our customers' best playbooks aren't in this library — they're bespoke to one firm, one workflow, one weird tool nobody else uses. The intake call scopes one. By Friday it's running.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-lg" href="warm.html#cta">Book a 20-min call →</a>
+          <a class="btn btn-ghost btn-lg" href="warm.html#pricing">See plans</a>
+        </div>
+      </div>
+      <div class="cta-card">
+        <div class="eyebrow" style="color:var(--ink-2)">How a custom playbook ships</div>
+        <h4>Intake → live, in five days.</h4>
+        <p>The same five-day arc that gets a stock playbook live, built around your specific work.</p>
+        <ul>
+          <li><b>Mon</b> — 30-min intake call. We scope one workflow.</li>
+          <li><b>Tue</b> — connectors live across your tools.</li>
+          <li><b>Wed</b> — playbook drafted, you review the test runs.</li>
+          <li><b>Thu</b> — production runs in shadow mode.</li>
+          <li><b>Fri</b> — live. The operator handles it from here.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand"><span class="mk"></span> Firmcraft</span>
+    <div class="foot-cols">
+      <span>© 2026 SkillCalibrate Co.</span>
+      <span>SOC 2 In Progress</span>
+      <span>50+ seats? <a href="https://skillcalibrate.com" style="text-decoration:underline">SkillCalibrate.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const chips = document.querySelectorAll('#filter-chips .chip');
+  const cards = document.querySelectorAll('#grid .pb');
+  const search = document.getElementById('search');
+  const empty = document.getElementById('empty');
+  const count = document.getElementById('count');
+  let activeFilter = 'all';
+
+  function apply(){
+    const q = (search.value || '').trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(c => {
+      const cat = c.dataset.cat;
+      const hay = (c.dataset.search || '') + ' ' + c.textContent.toLowerCase();
+      const matchCat = activeFilter === 'all' || cat === activeFilter;
+      const matchQ = !q || hay.toLowerCase().includes(q);
+      const show = matchCat && matchQ;
+      c.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    count.textContent = visible;
+    empty.classList.toggle('show', visible === 0);
+  }
+  chips.forEach(ch => ch.addEventListener('click', () => {
+    chips.forEach(c => c.classList.remove('active'));
+    ch.classList.add('active');
+    activeFilter = ch.dataset.filter;
+    apply();
+  }));
+  search.addEventListener('input', apply);
+})();
+</script>
+</body>
+</html>

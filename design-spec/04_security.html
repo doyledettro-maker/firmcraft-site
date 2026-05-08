@@ -1,0 +1,436 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firmcraft — Your data. Your environment. Your audit log.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF4EA;--paper-2:#F4E9D6;
+    --ink:#2D1F14;--ink-2:#5A4533;--muted:#8A7560;
+    --line:rgba(45,31,20,.12);--line-2:rgba(45,31,20,.22);
+    --accent:#D97757;--accent-2:#6B8E5A;--accent-3:#3F7A8C;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01"}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  /* Nav */
+  .nav{position:sticky;top:0;z-index:50;background:rgba(251,244,234,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em}
+  .brand .mk{width:22px;height:22px;border-radius:50%;background:var(--accent);position:relative}
+  .brand .mk::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--paper)}
+  .nav-links{display:flex;gap:24px;font-size:14px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-links a.cur{color:var(--ink);font-weight:500}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .18s ease;line-height:1}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:var(--accent)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--ink);background:#fff}
+  .btn-lg{padding:15px 26px;font-size:15px}
+
+  /* Hero */
+  .hero{padding:80px 0 60px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-180px;right:-200px;width:560px;height:560px;background:radial-gradient(circle,#DEEAD2,transparent 60%);opacity:.55;pointer-events:none}
+  .hero::after{content:"";position:absolute;bottom:-160px;left:-160px;width:420px;height:420px;background:radial-gradient(circle,#F4D9B7,transparent 60%);opacity:.45;pointer-events:none}
+  .crumb{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.16em;color:var(--muted);text-transform:uppercase;margin-bottom:14px;position:relative}
+  .crumb a{color:var(--accent)}
+  .crumb a:hover{text-decoration:underline;text-underline-offset:3px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:end;position:relative}
+  h1{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(46px,5.4vw,76px);line-height:1.04;letter-spacing:-.022em;margin:0 0 18px;text-wrap:balance}
+  h1 em{font-style:italic;color:var(--accent)}
+  .lede{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:560px;margin:0}
+  .badges{display:grid;grid-template-columns:1fr 1fr;gap:10px;border-top:1px solid var(--line);padding-top:24px}
+  .badge{background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:4px}
+  .badge .k{font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase}
+  .badge .v{font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:18px;color:var(--ink);letter-spacing:-.005em}
+  .badge .v em{color:var(--accent)}
+
+  /* Principles */
+  .pri{padding:64px 0;background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pri-head{margin-bottom:32px;display:grid;grid-template-columns:auto 1fr;gap:32px;align-items:end}
+  .pri-head h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(34px,3.6vw,48px);line-height:1.05;letter-spacing:-.02em;margin:8px 0 0;text-wrap:balance}
+  .pri-head h2 em{font-style:italic;color:var(--accent)}
+  .pri-head p{font-size:16px;color:var(--ink-2);line-height:1.5;margin:0;max-width:480px;justify-self:end;text-align:right}
+  .pri-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .principle{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:8px;position:relative}
+  .principle .pn{font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:34px;color:var(--accent);line-height:.9}
+  .principle h4{font-family:"Source Serif 4",serif;font-weight:500;font-size:18px;letter-spacing:-.01em;margin:0;line-height:1.25}
+  .principle h4 em{font-style:italic;color:var(--accent)}
+  .principle p{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+
+  /* Sections */
+  .sec{padding:80px 0;border-bottom:1px solid var(--line)}
+  .sec:nth-of-type(even){background:#fff}
+  .sec-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;align-items:start}
+  .sec-no{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:8px}
+  .sec h3{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(30px,3.4vw,44px);line-height:1.05;letter-spacing:-.018em;margin:0 0 16px;text-wrap:balance}
+  .sec h3 em{font-style:italic;color:var(--accent)}
+  .sec .body p{font-size:16.5px;line-height:1.55;color:var(--ink-2);margin:0 0 14px}
+  .sec .body p strong{color:var(--ink);font-weight:500}
+  .sec .quote{font-family:"Source Serif 4",serif;font-style:italic;font-size:19px;line-height:1.45;color:var(--ink);border-left:2px solid var(--accent);padding:6px 0 6px 18px;margin-top:20px}
+
+  /* Visuals per section */
+  .v-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px;display:flex;flex-direction:column;gap:14px}
+  .sec:nth-of-type(even) .v-card{background:var(--paper)}
+  .v-card h5{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.14em;color:var(--muted);text-transform:uppercase;font-weight:500;margin:0}
+  .v-row{display:grid;grid-template-columns:1fr auto;gap:14px;padding:10px 0;border-bottom:1px dashed var(--line);align-items:center;font-size:14px}
+  .v-row:last-child{border-bottom:none}
+  .v-row .lbl{color:var(--ink-2)}
+  .v-row .val{font-family:"Geist Mono",monospace;font-size:11.5px;color:var(--ink);background:var(--paper);padding:3px 8px;border-radius:5px;letter-spacing:.04em;border:1px solid var(--line)}
+  .sec:nth-of-type(even) .v-row .val{background:#fff}
+  .v-row .val.ok{color:var(--accent-2);background:rgba(107,142,90,.08);border-color:rgba(107,142,90,.3)}
+  .v-row .val.warn{color:#B45A3A;background:rgba(180,90,58,.08);border-color:rgba(180,90,58,.3)}
+
+  /* Audit log style */
+  .log{font-family:"Geist Mono",monospace;font-size:11.5px;line-height:1.65;color:var(--ink-2)}
+  .log-row{display:grid;grid-template-columns:80px 1fr;gap:14px;padding:6px 0;border-bottom:1px dashed var(--line);align-items:start}
+  .log-row:last-child{border-bottom:none}
+  .log-row .ts{color:var(--muted);font-size:10.5px;letter-spacing:.06em}
+  .log-row .what{color:var(--ink)}
+  .log-row .what em{font-style:normal;color:var(--accent)}
+  .log-row .what b{font-weight:500;color:var(--ink)}
+  .log-row.held .what em{color:#B45A3A}
+
+  /* RBAC matrix */
+  .rbac{width:100%;border-collapse:separate;border-spacing:0}
+  .rbac th,.rbac td{padding:10px 12px;text-align:left;font-size:13px;border-bottom:1px solid var(--line)}
+  .rbac th{font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;font-weight:500}
+  .rbac td:first-child{font-family:"Source Serif 4",serif;font-size:14px;color:var(--ink)}
+  .rbac td.y{color:var(--accent-2);font-weight:500}
+  .rbac td.n{color:var(--muted)}
+  .rbac td.a{color:var(--accent);font-weight:500;font-style:italic;font-family:"Source Serif 4",serif;font-size:13px}
+
+  /* Compliance grid */
+  .comp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .comp-tile{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:6px}
+  .sec:nth-of-type(even) .comp-tile{background:var(--paper)}
+  .comp-tile .stat{font-family:"Geist Mono",monospace;font-size:9.5px;letter-spacing:.14em;color:var(--accent);text-transform:uppercase;font-weight:500}
+  .comp-tile .nm{font-family:"Source Serif 4",serif;font-weight:500;font-size:16px;letter-spacing:-.005em}
+  .comp-tile p{font-size:12.5px;color:var(--muted);line-height:1.4;margin:0}
+
+  /* FAQ */
+  .faq{padding:88px 0}
+  .faq h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(34px,3.8vw,52px);line-height:1.05;letter-spacing:-.02em;margin:0 0 36px;text-wrap:balance;text-align:center}
+  .faq h2 em{font-style:italic;color:var(--accent)}
+  .qa{max-width:840px;margin:0 auto;display:flex;flex-direction:column;gap:0}
+  .qa details{border-bottom:1px solid var(--line);padding:20px 0}
+  .qa details:first-child{border-top:1px solid var(--line)}
+  .qa summary{display:flex;justify-content:space-between;align-items:center;font-family:"Source Serif 4",serif;font-weight:500;font-size:21px;line-height:1.3;letter-spacing:-.005em;cursor:pointer;list-style:none;color:var(--ink)}
+  .qa summary::-webkit-details-marker{display:none}
+  .qa summary em{font-style:italic;color:var(--accent)}
+  .qa summary::after{content:"+";font-family:"Source Serif 4",serif;font-style:italic;font-size:28px;color:var(--accent);transition:transform .25s ease;font-weight:400}
+  .qa details[open] summary::after{content:"−"}
+  .qa .ans{margin-top:14px;font-size:16px;line-height:1.6;color:var(--ink-2);max-width:720px}
+  .qa .ans p{margin:0 0 10px}
+
+  /* CTA */
+  .cta{padding:88px 0;background:linear-gradient(180deg,var(--paper),var(--paper-2));border-top:1px solid var(--line)}
+  .cta-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+  .cta h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(36px,4vw,56px);line-height:1.04;letter-spacing:-.022em;margin:8px 0 18px;text-wrap:balance}
+  .cta h2 em{font-style:italic;color:var(--accent)}
+  .cta p{font-size:18px;color:var(--ink-2);line-height:1.55;margin:0 0 24px;max-width:520px}
+  .cta-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:24px}
+  .cta-card h4{font-family:"Source Serif 4",serif;font-weight:500;font-style:italic;font-size:21px;margin:0 0 6px;letter-spacing:-.005em}
+  .cta-card ul{list-style:none;padding:0;margin:14px 0 0;display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--ink-2);line-height:1.5}
+  .cta-card li{display:flex;gap:10px;align-items:flex-start;border-bottom:1px dashed var(--line);padding-bottom:8px}
+  .cta-card li:last-child{border-bottom:none}
+  .cta-card li b{color:var(--ink);font-weight:500;min-width:80px;display:inline-block;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+
+  footer{padding:42px 0 28px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-cols{display:flex;gap:28px;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+
+  @media (max-width:960px){
+    .hero-grid,.cta-grid,.sec-grid,.pri-head{grid-template-columns:1fr;gap:24px}
+    .pri-head p{text-align:left;justify-self:start}
+    .pri-grid{grid-template-columns:1fr}
+    .nav-links{display:none}
+    .badges,.comp{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="warm.html"><span class="mk"></span> Firmcraft</a>
+    <nav class="nav-links">
+      <a href="warm.html#how">How it works</a>
+      <a href="warm.html#pricing">Pricing</a>
+      <a href="playbooks.html">Playbooks</a>
+      <a href="capabilities.html">Capabilities</a>
+      <a href="security.html" class="cur">Security</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="warm.html">Home</a>
+      <a class="btn btn-primary" href="warm.html#cta">Book a call →</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="crumb"><a href="warm.html">← Back to home</a> &nbsp;·&nbsp; Security &amp; trust</div>
+    <div class="hero-grid">
+      <div>
+        <div class="eyebrow">Security &amp; trust</div>
+        <h1>Your data. <em>Your environment.</em><br>Your audit log.</h1>
+        <p class="lede">Most "AI for business" tools route your client data through a multi-tenant cloud you don't control, with a "trust us" attached. We don't. Each firm gets a private deployment, every action is logged and reversible, and sensitive work waits for partner approval. The default posture is paranoid.</p>
+      </div>
+      <div>
+        <div class="badges">
+          <div class="badge"><span class="k">Deployment</span><span class="v"><em>Private</em> per firm</span></div>
+          <div class="badge"><span class="k">Audit log</span><span class="v"><em>Every</em> action recorded</span></div>
+          <div class="badge"><span class="k">Encryption</span><span class="v">At rest &amp; in transit</span></div>
+          <div class="badge"><span class="k">Compliance</span><span class="v"><em>SOC 2</em> in progress</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRINCIPLES -->
+<section class="pri">
+  <div class="wrap">
+    <div class="pri-head">
+      <div>
+        <div class="eyebrow">Three trust principles</div>
+        <h2>How we think about your data — <em>before</em> any feature decision.</h2>
+      </div>
+      <p>We've thrown out features that violated any of these. They're load-bearing, not aspirational.</p>
+    </div>
+    <div class="pri-grid">
+      <div class="principle">
+        <div class="pn">01</div>
+        <h4>Your data <em>doesn't</em> leave your boundary.</h4>
+        <p>The operator runs in a deployment dedicated to your firm. Your client records, chats, and documents stay in that boundary. No multi-tenant brain. No training on your data. No shared embeddings.</p>
+      </div>
+      <div class="principle">
+        <div class="pn">02</div>
+        <h4>Every action is <em>visible</em> and reversible.</h4>
+        <p>Every read, every write, every send is logged with who triggered it, what it touched, and why. Filterable, exportable, addressable by audit. If it shouldn't have happened, you can see it and undo it.</p>
+      </div>
+      <div class="principle">
+        <div class="pn">03</div>
+        <h4>The risky stuff <em>asks first.</em></h4>
+        <p>Money out, contracts going live, client sends, anything irreversible — partner approval required, by default. You configure which actions need a human and which just run. Nothing slips.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 01 — Where it runs -->
+<section class="sec" id="deployment">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="body">
+        <div class="sec-no">01 / Deployment</div>
+        <h3>Where your data <em>actually</em> lives.</h3>
+        <p>We deploy a dedicated environment for every firm. Your operator, your memory store, your connector credentials, your audit trail — all live in compute that belongs to your engagement and nobody else's.</p>
+        <p><strong>What that means in practice:</strong> if a vulnerability hit one customer's deployment, it does not reach yours. If a different customer corrupts their memory store, you don't see it. There is no shared brain.</p>
+        <p><strong>You choose where it sits.</strong> Default is our managed infrastructure (US-East or US-West). For firms with compliance constraints — HIPAA-leaning, regulated finance, public-sector — we deploy into your own AWS / GCP / Azure account or your on-prem hardware on the same five-day timeline.</p>
+        <div class="quote">"Multi-tenant SaaS is fine for a notes app. It is not fine for client charts and engagement letters."</div>
+      </div>
+      <div class="v-card">
+        <h5>Deployment posture</h5>
+        <div class="v-row"><span class="lbl">Per-firm isolation</span><span class="val ok">Dedicated</span></div>
+        <div class="v-row"><span class="lbl">Tenancy model</span><span class="val">single-tenant</span></div>
+        <div class="v-row"><span class="lbl">Default region</span><span class="val">US-East-1</span></div>
+        <div class="v-row"><span class="lbl">BYO cloud</span><span class="val ok">AWS · GCP · Azure</span></div>
+        <div class="v-row"><span class="lbl">On-prem</span><span class="val ok">Available</span></div>
+        <div class="v-row"><span class="lbl">Encryption at rest</span><span class="val ok">AES-256</span></div>
+        <div class="v-row"><span class="lbl">Encryption in transit</span><span class="val ok">TLS 1.3</span></div>
+        <div class="v-row"><span class="lbl">Customer data in training</span><span class="val warn">Never</span></div>
+        <div class="v-row"><span class="lbl">Sub-processors</span><span class="val">3 · listed</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 02 — Who can see what -->
+<section class="sec" id="rbac">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="body">
+        <div class="sec-no">02 / Access &amp; roles</div>
+        <h3>Who can see <em>what</em>, and what can run.</h3>
+        <p>The operator inherits your firm's hierarchy. Front desk doesn't see partner-only matters. Associates can't approve their own engagement letters. The intern can't trigger the "send to all clients" playbook.</p>
+        <p><strong>Per-channel scope.</strong> Each playbook is bound to specific channels and specific roles. A playbook in <code style="font-family:Geist Mono,monospace;font-size:13px;background:var(--paper);padding:1px 5px;border-radius:4px">#partners-only</code> never reads from <code style="font-family:Geist Mono,monospace;font-size:13px;background:var(--paper);padding:1px 5px;border-radius:4px">#general</code> and never writes into <code style="font-family:Geist Mono,monospace;font-size:13px;background:var(--paper);padding:1px 5px;border-radius:4px">#client-x</code>.</p>
+        <p><strong>Approval chains.</strong> Sensitive actions can require N-of-M approval — e.g. partner OR senior associate for engagement letters, two partners for any wire over $25k.</p>
+        <div class="quote">"I want my front desk to file the claim. I do not want my front desk to refund anyone."</div>
+      </div>
+      <div class="v-card">
+        <h5>Example: a 14-person dental practice</h5>
+        <table class="rbac">
+          <thead><tr><th>Action</th><th>Front desk</th><th>Hygienist</th><th>Doctor</th></tr></thead>
+          <tbody>
+            <tr><td>Read patient chart</td><td class="y">●</td><td class="y">●</td><td class="y">●</td></tr>
+            <tr><td>Submit insurance claim</td><td class="y">●</td><td class="n">—</td><td class="y">●</td></tr>
+            <tr><td>Submit appeal &gt; $1k</td><td class="a">approve</td><td class="n">—</td><td class="y">●</td></tr>
+            <tr><td>Refund a patient</td><td class="n">—</td><td class="n">—</td><td class="a">approve</td></tr>
+            <tr><td>Run recall campaign</td><td class="a">approve</td><td class="n">—</td><td class="y">●</td></tr>
+            <tr><td>Edit playbook config</td><td class="n">—</td><td class="n">—</td><td class="y">●</td></tr>
+            <tr><td>Export audit log</td><td class="n">—</td><td class="n">—</td><td class="y">●</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 03 — Audit -->
+<section class="sec" id="audit">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="body">
+        <div class="sec-no">03 / Audit log</div>
+        <h3>Every action <em>recorded.</em></h3>
+        <p>Read, write, send, fail, retry, approve, reject. Each entry carries who triggered it, what it touched, why it ran, and the resulting artifacts. Searchable in the dashboard. Exportable as CSV or JSON for your auditor.</p>
+        <p><strong>Reversible by default.</strong> If a draft email shouldn't have gone out, the log shows it, and any downstream action it kicked off can be unwound. The "are we sure" question always has a paper trail.</p>
+        <p><strong>Compliant retention.</strong> Logs retained for the period your industry requires — 7 years for tax practices, 10 for legal, indefinite if you tell us so. Stored in your environment, not ours.</p>
+      </div>
+      <div class="v-card">
+        <h5>Audit log · last 24 hours · #front-desk</h5>
+        <div class="log">
+          <div class="log-row"><span class="ts">09:18:02</span><span class="what"><b>Maya R.</b> mentioned operator · <em>claim_submission</em></span></div>
+          <div class="log-row"><span class="ts">09:18:14</span><span class="what">Operator read · <em>Eaglesoft / chart 4421</em></span></div>
+          <div class="log-row"><span class="ts">09:18:31</span><span class="what">Operator wrote · <em>claim_882041.pdf</em> → /Drive/Claims/</span></div>
+          <div class="log-row"><span class="ts">09:18:44</span><span class="what">Operator sent · POST <em>delta-dental.com/claims</em></span></div>
+          <div class="log-row"><span class="ts">11:42:08</span><span class="what">Inbound webhook · EOB received · <em>$710 paid</em></span></div>
+          <div class="log-row held"><span class="ts">11:42:12</span><span class="what">Action <em>held</em> · pending Dr. Chen approval</span></div>
+          <div class="log-row"><span class="ts">11:48:55</span><span class="what"><b>Dr. Chen</b> approved · patient text drafted</span></div>
+          <div class="log-row"><span class="ts">11:48:57</span><span class="what">Operator sent · SMS <em>+1 ••• ••• 4421</em></span></div>
+          <div class="log-row"><span class="ts">14:01:03</span><span class="what">Scheduled run · <em>recall_reactivation</em> · 38 drafts queued</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 04 — Compliance -->
+<section class="sec" id="compliance">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="body">
+        <div class="sec-no">04 / Compliance posture</div>
+        <h3>What we have, what's <em>in flight.</em></h3>
+        <p>We're a pre-Series-A company. We will not claim certifications we don't hold. Here's where everything actually stands, with target dates we'll keep updated.</p>
+        <p><strong>HIPAA posture.</strong> The architecture is HIPAA-ready: per-firm boundaries, encryption, audit logs, BAA-able sub-processors. We sign BAAs with dental and medical customers today. Full HIPAA attestation is on the SOC 2 Type II timeline.</p>
+        <p><strong>What we'll never claim.</strong> We are not "ISO 27001 certified," "FedRAMP authorized," or "SOC 2 Type II" until those audits are complete. If you need any of those today, talk to us — we'll either tell you when we'll have it or that you should pick someone else.</p>
+        <div class="quote">"I'd rather miss a deal than fake a certification."</div>
+      </div>
+      <div>
+        <div class="comp">
+          <div class="comp-tile"><span class="stat">In progress · Q3 '26</span><span class="nm">SOC 2 Type II</span><p>Auditor engaged. Type I report available under NDA.</p></div>
+          <div class="comp-tile"><span class="stat">In progress</span><span class="nm">HIPAA</span><p>BAA-able today. Full attestation on SOC 2 timeline.</p></div>
+          <div class="comp-tile"><span class="stat">Annual</span><span class="nm">Penetration testing</span><p>External pen test every 12 months · NDA required.</p></div>
+          <div class="comp-tile"><span class="stat">Live</span><span class="nm">DPA + sub-processor list</span><p>GDPR-aligned DPA on request. Three sub-processors.</p></div>
+          <div class="comp-tile"><span class="stat">Live</span><span class="nm">Vulnerability disclosure</span><p>security@firmcraft · 90-day fix SLA · public bounty soon.</p></div>
+          <div class="comp-tile"><span class="stat">Roadmap '27</span><span class="nm">ISO 27001</span><p>Pursued after SOC 2 Type II clears.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="wrap">
+    <h2>Questions partners ask <em>before</em> they sign.</h2>
+    <div class="qa">
+      <details>
+        <summary>Will my client data be used to train models?<em>&nbsp;</em></summary>
+        <div class="ans">
+          <p>No. Your firm's data — chats, documents, charts, audit logs — is never used for model training. Not by us, not by the model providers we route through. This is enforced contractually with our model providers and architecturally by the per-firm deployment.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Where is my data physically stored?</summary>
+        <div class="ans">
+          <p>By default, US-East-1 (Northern Virginia) for managed deployments. We can deploy to US-West, EU regions, or your own AWS / GCP / Azure account. On-prem deployment is available for firms with that requirement; we'll quote the engagement separately.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What happens to my data if we churn?</summary>
+        <div class="ans">
+          <p>You get a full export within 5 business days — every chat, document, audit log entry, and playbook configuration in open formats (CSV, JSON, Markdown, PDF). Your deployment is then destroyed and we hold a 30-day backup for emergency recovery, after which it's also destroyed. We notify you when the final destruction completes.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Who at Firmcraft can see my data?</summary>
+        <div class="ans">
+          <p>Three engineers, named in our DPA. Access is logged, scoped to the specific issue, and time-boxed. Routine support and onboarding don't require access to your data — they work from telemetry and your screen-share.</p>
+        </div>
+      </details>
+      <details>
+        <summary>What if a model provider has an outage or breach?</summary>
+        <div class="ans">
+          <p>The operator routes across multiple providers. Outage on one provider degrades but doesn't take you down. In the case of a security incident at a provider, we have contractual notification obligations and our own 24-hour incident SLA — we'd notify you, isolate any affected workflows, and switch routing.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Do you offer a BAA?</summary>
+        <div class="ans">
+          <p>Yes — for our dental, medical, and behavioral health customers. The BAA is signed during onboarding, before any patient data flows.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Can I see your SOC 2 Type I report or pen test?</summary>
+        <div class="ans">
+          <p>Yes, under NDA. Email security@firmcraft and we'll get it to you within one business day.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <div class="cta-grid">
+      <div>
+        <div class="eyebrow">For your CISO / compliance lead</div>
+        <h2>We'll send the <em>full security packet</em> by close of business.</h2>
+        <p>Architecture diagram, sub-processor list, DPA, BAA template, SOC 2 Type I, pen-test summary, incident-response runbook. One email.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <a class="btn btn-primary btn-lg" href="mailto:security@firmcraft.com?subject=Security%20packet%20request">Request the security packet →</a>
+          <a class="btn btn-ghost btn-lg" href="warm.html#cta">Or book a call</a>
+        </div>
+      </div>
+      <div class="cta-card">
+        <div class="eyebrow" style="color:var(--ink-2)">Direct lines</div>
+        <h4>Reach the right person.</h4>
+        <ul>
+          <li><b>Security</b><span>security@firmcraft.com · 24-hr response</span></li>
+          <li><b>Disclosure</b><span>vulns@firmcraft.com · 90-day fix SLA</span></li>
+          <li><b>DPA / BAA</b><span>legal@firmcraft.com</span></li>
+          <li><b>Incident</b><span>911@firmcraft.com · pages on-call</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand"><span class="mk"></span> Firmcraft</span>
+    <div class="foot-cols">
+      <span>© 2026 SkillCalibrate Co.</span>
+      <span>SOC 2 In Progress</span>
+      <span>50+ seats? <a href="https://skillcalibrate.com" style="text-decoration:underline">SkillCalibrate.com</a></span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

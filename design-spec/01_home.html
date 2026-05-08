@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Firmcraft — A capable second set of hands for your business</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400;1,8..60,500&family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FBF4EA;
+    --paper-2:#F4E9D6;
+    --ink:#2D1F14;
+    --ink-2:#5A4533;
+    --muted:#8A7560;
+    --line:rgba(45,31,20,.12);
+    --line-2:rgba(45,31,20,.22);
+    --accent:#D97757;     /* terracotta */
+    --accent-2:#6B8E5A;   /* sage */
+    --hi:#F2D9A7;          /* warm highlight */
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:"Geist",ui-sans-serif,system-ui,sans-serif;-webkit-font-smoothing:antialiased;font-feature-settings:"ss01"}
+  .serif{font-family:"Source Serif 4",Georgia,serif}
+  .mono{font-family:"Geist Mono",ui-monospace,monospace}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 32px}
+  .eyebrow{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:500}
+
+  .nav{position:sticky;top:0;z-index:50;background:rgba(251,244,234,.85);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:22px;letter-spacing:-.01em}
+  .brand .mk{width:22px;height:22px;border-radius:50%;background:var(--accent);display:inline-block;position:relative}
+  .brand .mk::after{content:"";position:absolute;inset:6px;border-radius:50%;background:var(--paper)}
+  .nav-links{display:flex;gap:24px;font-size:14px;color:var(--ink-2)}
+  .nav-links a:hover{color:var(--accent)}
+  .nav-cta{display:flex;gap:10px;align-items:center}
+
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-size:14px;font-weight:500;border:1px solid transparent;cursor:pointer;transition:all .18s ease;line-height:1}
+  .btn-primary{background:var(--ink);color:var(--paper)}
+  .btn-primary:hover{background:var(--accent);transform:translateY(-1px)}
+  .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line-2)}
+  .btn-ghost:hover{border-color:var(--ink);background:#fff}
+  .btn-lg{padding:15px 26px;font-size:15px}
+
+  /* HERO */
+  .hero{padding:72px 0 36px;position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,#F4D9B7,transparent 60%);pointer-events:none;opacity:.55}
+  .hero::after{content:"";position:absolute;bottom:-160px;left:-160px;width:520px;height:520px;background:radial-gradient(circle,#DEEAD2,transparent 60%);pointer-events:none;opacity:.5}
+  .hero-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:56px;align-items:center;position:relative}
+  .hero-tag{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;background:#fff;border:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+  .hero-tag .dot{width:7px;height:7px;border-radius:50%;background:var(--accent-2)}
+  h1.hero-title{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(46px,5.6vw,76px);line-height:1.04;letter-spacing:-.022em;margin:18px 0 20px;text-wrap:balance}
+  h1.hero-title em{font-style:italic;color:var(--accent)}
+  .hero-sub{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:520px;margin:0 0 28px}
+  .hero-ctas{display:flex;gap:12px;flex-wrap:wrap}
+  .hero-meta{display:flex;gap:20px;margin-top:26px;color:var(--muted);font-size:13px;flex-wrap:wrap}
+  .hero-meta span{display:flex;align-items:center;gap:8px}
+  .check{width:14px;height:14px;border-radius:50%;background:var(--accent-2);position:relative;flex:none}
+  .check::after{content:"";position:absolute;left:4px;top:2.5px;width:4px;height:7px;border:solid #fff;border-width:0 1.5px 1.5px 0;transform:rotate(45deg)}
+
+  /* CHAT — tree removal example */
+  .chat{background:#fff;border-radius:18px;border:1px solid var(--line);box-shadow:0 30px 60px -30px rgba(45,31,20,.25),0 12px 28px -16px rgba(45,31,20,.12);overflow:hidden}
+  .chat-bar{display:flex;align-items:center;gap:8px;padding:11px 16px;border-bottom:1px solid var(--line);background:var(--paper-2)}
+  .chat-bar .dots{display:flex;gap:6px}
+  .chat-bar .dots i{width:10px;height:10px;border-radius:50%;background:#D9C7A8;display:block}
+  .chat-bar .title{font-family:"Geist Mono",monospace;font-size:11.5px;color:var(--muted);margin-left:8px}
+  .chat-body{display:grid;grid-template-columns:190px 1fr}
+  .chat-side{background:#2D1F14;color:#D5C5B0;padding:14px 10px;font-size:13px}
+  .chat-side .ws{display:flex;align-items:center;gap:8px;padding:6px 8px;font-family:"Source Serif 4",serif;font-style:italic;color:#fff;font-size:17px}
+  .chat-side .ws-mark{width:14px;height:14px;border-radius:50%;background:var(--accent)}
+  .chat-side h6{font-size:10.5px;text-transform:uppercase;letter-spacing:.14em;color:#A89378;margin:18px 0 6px;padding:0 8px;font-weight:500;font-family:"Geist Mono",monospace}
+  .chat-side .ch{display:flex;align-items:center;gap:6px;padding:5px 8px;border-radius:6px;color:#B8A48C}
+  .chat-side .ch.active{background:#46321F;color:#fff}
+  .chat-side .ch .h{opacity:.55}
+  .chat-side .ch.bot::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent-2);box-shadow:0 0 0 3px rgba(107,142,90,.22)}
+  .chat-main{display:flex;flex-direction:column}
+  .chat-head{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .chat-head .ch-title{font-weight:600;display:flex;align-items:center;gap:8px}
+  .chat-head .ch-title .h{color:var(--muted);font-weight:400}
+  .chat-head .meta{font-size:12px;color:var(--muted)}
+  .chat-msgs{padding:14px 18px;display:flex;flex-direction:column;gap:14px}
+  .msg{display:grid;grid-template-columns:34px 1fr;gap:10px}
+  .av{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;font-size:13px;font-family:"Geist Mono",monospace}
+  .av.a1{background:var(--accent)}
+  .av.a2{background:var(--accent-2)}
+  .av.a3{background:#3A4A6B}
+  .msg .name{font-weight:600;font-size:13.5px}
+  .msg .ts{color:var(--muted);font-size:11.5px;margin-left:6px;font-family:"Geist Mono",monospace;font-weight:400}
+  .msg .body{font-size:14.5px;color:var(--ink);margin-top:2px;line-height:1.5}
+  .msg .body .men{color:var(--accent);font-weight:500;background:rgba(217,119,87,.1);padding:1px 5px;border-radius:4px}
+  .bot-status{margin-top:10px;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-family:"Geist Mono",monospace;font-size:12px}
+  .bot-status .step{display:flex;align-items:center;gap:8px;padding:3px 0}
+  .bot-status .step .ic{width:14px;height:14px;border-radius:50%;background:var(--accent-2);display:grid;place-items:center;color:#fff;font-size:9px;flex:none}
+  .bot-status .step.pending .ic{background:transparent;border:1.5px dashed var(--muted);color:var(--muted)}
+  .bot-status .step.pending{color:var(--muted)}
+  .bot-status .k{color:var(--muted)}
+  .bot-card{margin-top:10px;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:#fff}
+  .bot-card .head{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--paper-2);border-bottom:1px solid var(--line);font-size:13px}
+  .bot-card .head .ic{width:24px;height:24px;border-radius:6px;background:#fff;border:1px solid var(--line);display:grid;place-items:center;font-family:"Geist Mono",monospace;font-size:10px;font-weight:600;color:var(--accent)}
+  .bot-card .body2{padding:10px 12px;font-size:13px}
+  .bot-card .body2 .row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px dashed var(--line)}
+  .bot-card .body2 .row:last-child{border-bottom:0}
+  .bot-card .body2 .l{color:var(--muted);font-family:"Geist Mono",monospace;font-size:11.5px}
+  .chat-input{margin:6px 18px 16px;border:1px solid var(--line);border-radius:999px;padding:10px 16px;color:var(--muted);font-size:13px}
+
+  .proof{margin-top:48px;padding:18px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .proof-in{display:flex;align-items:center;gap:24px;justify-content:space-between;flex-wrap:wrap}
+  .proof .label{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .logos{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end;flex:1}
+  .logo-slot{height:38px;min-width:140px;border:1.5px dashed var(--line-2);border-radius:999px;display:grid;place-items:center;font-family:"Geist Mono",monospace;font-size:10.5px;color:var(--muted);letter-spacing:.1em}
+
+  section{padding:88px 0;position:relative}
+  .sec-head{display:grid;grid-template-columns:1fr 1.6fr;gap:40px;margin-bottom:48px;align-items:end}
+  .sec-head h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(34px,3.6vw,52px);line-height:1.05;letter-spacing:-.02em;margin:8px 0 0;text-wrap:balance}
+  .sec-head h2 em{font-style:italic;color:var(--accent)}
+  .sec-head .right p{font-size:18px;line-height:1.55;color:var(--ink-2);max-width:560px;margin:0}
+
+  /* Problem — soft cards */
+  .problem-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .pcell{background:#fff;border:1px solid var(--line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:8px}
+  .pcell .num{font-family:"Geist Mono",monospace;font-size:11px;color:var(--accent);letter-spacing:.14em}
+  .pcell h3{font-family:"Source Serif 4",serif;font-weight:500;font-size:21px;letter-spacing:-.01em;margin:0;line-height:1.2}
+  .pcell p{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.5}
+
+  /* How */
+  .how{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .how-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+  .how-cell{display:flex;flex-direction:column;gap:10px}
+  .how-cell .glyph{width:48px;height:48px;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;font-family:"Source Serif 4",serif;font-style:italic;font-size:22px;color:var(--accent);font-weight:500}
+  .how-cell .step-n{font-family:"Geist Mono",monospace;font-size:11px;color:var(--accent);letter-spacing:.14em}
+  .how-cell h4{font-family:"Source Serif 4",serif;font-weight:500;font-size:22px;letter-spacing:-.01em;margin:6px 0 4px;line-height:1.2}
+  .how-cell p{margin:0;color:var(--ink-2);font-size:14.5px;line-height:1.5}
+
+  /* Pricing */
+  .price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+  .price-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px;display:flex;flex-direction:column;gap:18px;position:relative}
+  .price-card.feat{background:var(--ink);color:var(--paper);border-color:var(--ink);transform:translateY(-8px);box-shadow:0 30px 60px -30px rgba(45,31,20,.4)}
+  .price-card.feat .sub,.price-card.feat .price-list li{color:#D5C5B0}
+  .price-card .badge{position:absolute;top:-12px;left:24px;background:var(--accent);color:#fff;font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;padding:5px 12px;border-radius:999px}
+  .tier{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .price-card.feat .tier{color:#A89378}
+  .price-card h3{font-family:"Source Serif 4",serif;font-weight:500;font-style:italic;font-size:32px;letter-spacing:-.01em;margin:4px 0 0;line-height:1}
+  .price-amount{display:flex;align-items:baseline;gap:6px;margin-top:6px}
+  .price-amount .big{font-family:"Source Serif 4",serif;font-size:46px;font-weight:500;letter-spacing:-.02em;line-height:1}
+  .price-amount .per{font-size:13px;color:var(--muted)}
+  .price-card.feat .price-amount .per{color:#A89378}
+  .price-setup{font-family:"Geist Mono",monospace;font-size:12.5px;color:var(--muted)}
+  .price-card.feat .price-setup{color:#A89378}
+  .sub{font-size:14.5px;color:var(--ink-2);line-height:1.45}
+  .divider{height:1px;background:var(--line);width:100%}
+  .price-card.feat .divider{background:rgba(255,255,255,.12)}
+  .price-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;font-size:14px}
+  .price-list li{display:flex;gap:10px;align-items:flex-start;color:var(--ink)}
+  .price-list li::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--accent-2);position:relative;flex:none;margin-top:3px}
+  .price-card.feat .price-list li::before{background:var(--accent)}
+  .price-card .btn{width:100%;justify-content:center}
+  .price-card.feat .btn-primary{background:var(--paper);color:var(--ink)}
+
+  /* Industries */
+  .ind-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+  .ind{background:#fff;border:1px solid var(--line);border-radius:18px;padding:22px;min-height:280px;display:flex;flex-direction:column;justify-content:space-between;transition:all .2s ease}
+  .ind:hover{transform:translateY(-3px);box-shadow:0 14px 30px -12px rgba(45,31,20,.18)}
+  .ind .num{font-family:"Geist Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.14em}
+  .ind .glyph{width:54px;height:54px;border-radius:50%;background:var(--paper-2);display:grid;place-items:center;font-family:"Source Serif 4",serif;font-style:italic;font-weight:500;font-size:24px;color:var(--accent);margin-top:14px}
+  .ind h4{font-family:"Source Serif 4",serif;font-weight:500;font-size:20px;letter-spacing:-.01em;margin:0;line-height:1.15}
+  .ind p{margin:6px 0 0;color:var(--ink-2);font-size:13.5px;line-height:1.45}
+
+  /* Compare */
+  .compare{background:#fff;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .ctable{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:1px solid var(--line);border-radius:18px;overflow:hidden}
+  .ctable th,.ctable td{padding:18px 22px;text-align:left;font-size:14.5px;border-bottom:1px solid var(--line);vertical-align:top}
+  .ctable thead th{font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:500;background:#fff}
+  .ctable thead th.us{background:var(--accent);color:#fff;font-family:"Source Serif 4",serif;font-style:italic;font-size:22px;letter-spacing:-.01em;text-transform:none;font-weight:500}
+  .ctable tbody tr:last-child td{border-bottom:0}
+  .ctable td.feat{font-family:"Source Serif 4",serif;font-size:17px;color:var(--ink);font-weight:500;width:32%}
+  .ctable td.us{background:rgba(217,119,87,.06);color:var(--ink);font-weight:500}
+  .ctable td.them{color:var(--muted)}
+
+  /* Final */
+  .final{background:linear-gradient(180deg,var(--paper),var(--paper-2));position:relative;overflow:hidden}
+  .final-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:48px;align-items:center}
+  .final h2{font-family:"Source Serif 4",serif;font-weight:500;font-size:clamp(40px,4.4vw,64px);line-height:1.04;letter-spacing:-.02em;margin:0 0 18px;text-wrap:balance}
+  .final h2 em{font-style:italic;color:var(--accent)}
+  .final p{color:var(--ink-2);font-size:18px;line-height:1.55;margin:0 0 28px;max-width:520px}
+  .final-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:28px}
+  .final-card .photo-slot{aspect-ratio:1/1;border:1.5px dashed var(--line-2);border-radius:14px;display:grid;place-items:center;color:var(--muted);font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.12em;margin-bottom:16px}
+  .final-card .quote{font-family:"Source Serif 4",serif;font-style:italic;font-size:19px;line-height:1.4;color:var(--ink-2)}
+  .final-card .attr{margin-top:12px;font-family:"Geist Mono",monospace;font-size:11px;color:var(--muted);letter-spacing:.1em;text-transform:uppercase}
+
+  footer{padding:42px 0 28px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}
+  .foot{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:18px}
+  .foot-cols{display:flex;gap:28px;font-family:"Geist Mono",monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase}
+
+  @media (max-width:960px){
+    .hero-grid,.sec-head,.final-grid{grid-template-columns:1fr;gap:28px}
+    .problem-grid,.how-grid,.price-grid,.ind-grid{grid-template-columns:1fr 1fr;gap:14px}
+    .ind-grid .ind:nth-child(5){grid-column:span 2}
+    .price-card.feat{transform:none}
+    .chat-body{grid-template-columns:1fr}
+    .chat-side{display:none}
+    .nav-links{display:none}
+  }
+</style>
+<style>
+  .scene-tabs{display:flex;gap:6px;padding:10px 14px;background:var(--paper);border-bottom:1px solid var(--line);position:relative;flex-wrap:wrap;align-items:center}
+  .scene-tab{padding:6px 12px;border-radius:999px;background:transparent;border:1px solid transparent;font-family:"Geist Mono",monospace;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);cursor:pointer;transition:all .18s ease;font-weight:500}
+  .scene-tab:hover{background:#fff;color:var(--ink)}
+  .scene-tab.active{background:var(--ink);color:var(--paper)}
+  .scene-rotator{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--accent);pointer-events:none}
+  .scene[hidden]{display:none}
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#"><span class="mk"></span> Firmcraft</a>
+    <nav class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="playbooks.html">Playbooks</a>
+      <a href="capabilities.html">Capabilities</a>
+      <a href="security.html">Security</a>
+      <a href="integrations.html">Integrations</a>
+      <a href="#industries">Who it's for</a>
+      <a href="#compare">vs ChatGPT</a>
+    </nav>
+    <div class="nav-cta">
+      <a class="btn btn-ghost" href="#">Sign in</a>
+      <a class="btn btn-primary" href="#cta">Book a call →</a>
+    </div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <span class="hero-tag"><span class="dot"></span> An AI operator for small business</span>
+        <h1 class="hero-title">A capable second set of hands. <em>Running by next Friday.</em></h1>
+        <p class="hero-sub">Firmcraft lives in your team chat, plugs into the tools you already pay for — QuickBooks, Microsoft 365, Google Workspace, Zoho, your practice management — and quietly does the work. Flat monthly rate. Up and running in five business days.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary btn-lg" href="#cta">Book a 20-min call</a>
+          <a class="btn btn-ghost btn-lg" href="#pricing">See plans</a>
+        </div>
+        <div class="hero-meta">
+          <span><span class="check"></span> Live in 5 business days</span>
+          <span><span class="check"></span> Flat monthly rate</span>
+          <span><span class="check"></span> SOC 2 in progress</span>
+        </div>
+      </div>
+
+      <!-- Rotating chat scenarios -->
+      <div class="chat" id="rotating-chat">
+        <div class="chat-bar">
+          <div class="dots"><i></i><i></i><i></i></div>
+          <span class="title" id="chat-title">canopy-tree-co · #field-ops · Tuesday 10:42 AM</span>
+        </div>
+        <div class="scene-tabs" role="tablist" aria-label="Industry scenarios">
+          <button class="scene-tab active" data-scene="0" type="button" role="tab">Trades</button>
+          <button class="scene-tab" data-scene="1" type="button" role="tab">Healthcare</button>
+          <button class="scene-tab" data-scene="2" type="button" role="tab">B2B</button>
+          <button class="scene-tab" data-scene="3" type="button" role="tab">Solo</button>
+          <span class="scene-rotator" id="rotator-bar" aria-hidden="true"></span>
+        </div>
+        <div class="scene" data-scene="0">
+        <div class="chat-body">
+          <aside class="chat-side">
+            <div class="ws"><span class="ws-mark"></span> Canopy Tree Co.</div>
+            <h6>Channels</h6>
+            <div class="ch"><span class="h">#</span> general</div>
+            <div class="ch active"><span class="h">#</span> field-ops</div>
+            <div class="ch"><span class="h">#</span> bookings</div>
+            <div class="ch"><span class="h">#</span> google-leads</div>
+            <h6>Operators</h6>
+            <div class="ch bot">firmcraft</div>
+          </aside>
+          <div class="chat-main">
+            <div class="chat-head">
+              <div class="ch-title"><span class="h">#</span> field-ops</div>
+              <div class="meta">2 members · 1 operator</div>
+            </div>
+            <div class="chat-msgs">
+              <div class="msg">
+                <div class="av a1">DR</div>
+                <div>
+                  <div><span class="name">Danny (on-site)</span><span class="ts">10:42 AM</span></div>
+                  <div class="body"><span class="men">@firmcraft</span> Mrs. Chen wants the oak removed and stump ground. Quoted $2,400 + $400 stump. She's good. Send the contract — she's standing here.</div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="av a2">FC</div>
+                <div>
+                  <div><span class="name">firmcraft</span> <span class="ts">10:42 AM · operator</span></div>
+                  <div class="body">Drafting the contract for 14 Oak Ridge Ln now. Pulling the property photos you took Monday and your standard liability terms.</div>
+                  <div class="bot-status">
+                    <div class="step"><span class="ic">✓</span><span class="k">[01]</span> Contract drafted — oak removal + stump grind, $2,800 total</div>
+                    <div class="step"><span class="ic">✓</span><span class="k">[02]</span> Insurance + liability terms attached (your standard rider)</div>
+                    <div class="step"><span class="ic">✓</span><span class="k">[03]</span> Sent via DocuSign to chen.linda@gmail.com</div>
+                    <div class="step pending"><span class="ic"></span><span class="k">[04]</span> Awaiting client signature</div>
+                  </div>
+                  <div class="bot-card">
+                    <div class="head"><span class="ic">PDF</span> <b>Contract_Chen_OakRemoval.pdf</b> · sent · awaiting signature</div>
+                    <div class="body2">
+                      <div class="row"><span class="l">Service</span><span>Oak removal + stump grind</span></div>
+                      <div class="row"><span class="l">Total</span><span>$2,800.00</span></div>
+                      <div class="row"><span class="l">Schedule window</span><span>Sat 5/10 — 7am–11am</span></div>
+                      <div class="row"><span class="l">Sent to</span><span>chen.linda@gmail.com</span></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="msg">
+                <div class="av a2">FC</div>
+                <div>
+                  <div><span class="name">firmcraft</span><span class="ts">10:46 AM · operator</span></div>
+                  <div class="body">✅ Signed by Linda Chen at 10:46 AM. Calendar invite sent to the crew for Saturday. I'll send her a "see you Saturday" text now and a reminder Friday evening.</div>
+                </div>
+              </div>
+            </div>
+            <div class="chat-input">Message #field-ops</div>
+          </div>
+        </div>
+        </div><!-- /scene 0 -->
+
+        <div class="scene" data-scene="1" hidden>
+          <div class="chat-body">
+            <aside class="chat-side">
+              <div class="ws"><span class="ws-mark"></span> Bright Smile Dental</div>
+              <h6>Channels</h6>
+              <div class="ch"><span class="h">#</span> general</div>
+              <div class="ch active"><span class="h">#</span> front-desk</div>
+              <div class="ch"><span class="h">#</span> insurance</div>
+              <div class="ch"><span class="h">#</span> recall</div>
+              <h6>Operators</h6>
+              <div class="ch bot">firmcraft</div>
+            </aside>
+            <div class="chat-main">
+              <div class="chat-head">
+                <div class="ch-title"><span class="h">#</span> front-desk</div>
+                <div class="meta">3 members · 1 operator</div>
+              </div>
+              <div class="chat-msgs">
+                <div class="msg">
+                  <div class="av a3">MR</div>
+                  <div>
+                    <div><span class="name">Maya (front desk)</span><span class="ts">9:18 AM</span></div>
+                    <div class="body"><span class="men">@firmcraft</span> Patel claim — porcelain crown, tooth #14, did Friday. Delta Dental. Can you submit?</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a2">FC</div>
+                  <div>
+                    <div><span class="name">firmcraft</span><span class="ts">9:18 AM · operator</span></div>
+                    <div class="body">Pulling Mr. Patel's chart from Eaglesoft. Drafting the D2750 now.</div>
+                    <div class="bot-status">
+                      <div class="step"><span class="ic">✓</span><span class="k">[01]</span> Pulled clinical notes + bitewings</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[02]</span> Verified Delta Dental — 50% major, deductible met</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[03]</span> Drafted ADA D2750 — porcelain crown, tooth 14</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[04]</span> Submitted via Delta provider portal</div>
+                      <div class="step pending"><span class="ic"></span><span class="k">[05]</span> Awaiting EOB</div>
+                    </div>
+                    <div class="bot-card">
+                      <div class="head"><span class="ic">Rx</span> <b>Claim_Patel_DD-882041.pdf</b> · submitted</div>
+                      <div class="body2">
+                        <div class="row"><span class="l">Patient</span><span>A. Patel</span></div>
+                        <div class="row"><span class="l">Procedure</span><span>D2750 · crown · tooth 14</span></div>
+                        <div class="row"><span class="l">Billed</span><span>$1,420.00</span></div>
+                        <div class="row"><span class="l">Carrier</span><span>Delta Dental of NJ</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a2">FC</div>
+                  <div>
+                    <div><span class="name">firmcraft</span><span class="ts">11:42 AM · operator</span></div>
+                    <div class="body">✅ Approved. Insurance pays $710, patient owes $284. Drafted the patient text with payment link — ready when you are.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input">Message #front-desk</div>
+            </div>
+          </div>
+        </div><!-- /scene 1 -->
+
+        <div class="scene" data-scene="2" hidden>
+          <div class="chat-body">
+            <aside class="chat-side">
+              <div class="ws"><span class="ws-mark"></span> Northwind Payments</div>
+              <h6>Channels</h6>
+              <div class="ch"><span class="h">#</span> general</div>
+              <div class="ch active"><span class="h">#</span> marketing</div>
+              <div class="ch"><span class="h">#</span> pipeline</div>
+              <div class="ch"><span class="h">#</span> weekly</div>
+              <h6>Operators</h6>
+              <div class="ch bot">firmcraft</div>
+            </aside>
+            <div class="chat-main">
+              <div class="chat-head">
+                <div class="ch-title"><span class="h">#</span> marketing</div>
+                <div class="meta">8 members · 1 operator</div>
+              </div>
+              <div class="chat-msgs">
+                <div class="msg">
+                  <div class="av a3">PR</div>
+                  <div>
+                    <div><span class="name">Priya (Marketing)</span><span class="ts">1:47 PM</span></div>
+                    <div class="body"><span class="men">@firmcraft</span> drowning. Need this week's restaurant-vertical email + LinkedIn post + a retargeting list of last week's signups. Thursday send.</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a2">FC</div>
+                  <div>
+                    <div><span class="name">firmcraft</span><span class="ts">1:47 PM · operator</span></div>
+                    <div class="body">On it. Pulling the Romeo's Pizza case study you closed Monday — strongest hook for the segment.</div>
+                    <div class="bot-status">
+                      <div class="step"><span class="ic">✓</span><span class="k">[01]</span> Drafted email — "How Romeo's cut chargebacks 41%"</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[02]</span> 3 LinkedIn variants in your voice</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[03]</span> Pulled 412 signups from HubSpot</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[04]</span> Built segment: restaurants, $2M+ GMV (147)</div>
+                    </div>
+                    <div class="bot-card">
+                      <div class="head"><span class="ic">Dr</span> <b>Drive › Marketing › Week 19</b> · 3 files</div>
+                      <div class="body2">
+                        <div class="row"><span class="l">Email_Restaurants_W19.draft</span><span>review</span></div>
+                        <div class="row"><span class="l">LinkedIn_3variants.md</span><span>review</span></div>
+                        <div class="row"><span class="l">HubSpot_segment_412.csv</span><span>ready</span></div>
+                        <div class="row"><span class="l">Send window</span><span>Thu 10:30 AM ET</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a1">PR</div>
+                  <div>
+                    <div><span class="name">Priya</span><span class="ts">1:51 PM</span></div>
+                    <div class="body">You're saving my week. Approve all three. Ship Thursday.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input">Message #marketing</div>
+            </div>
+          </div>
+        </div><!-- /scene 2 -->
+
+        <div class="scene" data-scene="3" hidden>
+          <div class="chat-body">
+            <aside class="chat-side">
+              <div class="ws"><span class="ws-mark"></span> Dvorak ERP Advisory</div>
+              <h6>Channels</h6>
+              <div class="ch"><span class="h">#</span> general</div>
+              <div class="ch active"><span class="h">#</span> intake</div>
+              <div class="ch"><span class="h">#</span> projects</div>
+              <div class="ch"><span class="h">#</span> invoices</div>
+              <h6>Operators</h6>
+              <div class="ch bot">firmcraft</div>
+            </aside>
+            <div class="chat-main">
+              <div class="chat-head">
+                <div class="ch-title"><span class="h">#</span> intake</div>
+                <div class="meta">1 member · 1 operator</div>
+              </div>
+              <div class="chat-msgs">
+                <div class="msg">
+                  <div class="av a1">HD</div>
+                  <div>
+                    <div><span class="name">Helena (you)</span><span class="ts">4:05 PM</span></div>
+                    <div class="body"><span class="men">@firmcraft</span> new lead from the contact form — Ridgewood Mfg, 80 seats, NetSuite migration. Qualify them and book me Tuesday if they're real.</div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a2">FC</div>
+                  <div>
+                    <div><span class="name">firmcraft</span><span class="ts">4:05 PM · operator</span></div>
+                    <div class="body">Looking up Ridgewood — cross-checking LinkedIn, their site, and your CRM for prior touches.</div>
+                    <div class="bot-status">
+                      <div class="step"><span class="ic">✓</span><span class="k">[01]</span> Verified: Ridgewood Mfg · Cleveland · ~$48M rev · 82 staff</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[02]</span> Currently on Sage 100 — confirmed via job posting</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[03]</span> Scored STRONG — matches your last 3 closes</div>
+                      <div class="step"><span class="ic">✓</span><span class="k">[04]</span> Sent qualification email + Calendly to Eric Larsen, COO</div>
+                      <div class="step pending"><span class="ic"></span><span class="k">[05]</span> Awaiting Eric to book</div>
+                    </div>
+                    <div class="bot-card">
+                      <div class="head"><span class="ic">PDF</span> <b>Ridgewood_Manufacturing_brief.pdf</b> · saved to Drive</div>
+                      <div class="body2">
+                        <div class="row"><span class="l">Fit score</span><span>Strong (matches Acme, Northstar, BWX)</span></div>
+                        <div class="row"><span class="l">Likely engagement</span><span>$140k–$180k · 14 wks</span></div>
+                        <div class="row"><span class="l">Decision-maker</span><span>Eric Larsen, COO</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="msg">
+                  <div class="av a2">FC</div>
+                  <div>
+                    <div><span class="name">firmcraft</span><span class="ts">4:38 PM · operator</span></div>
+                    <div class="body">✅ Eric booked Tue 5/13 11:00 AM. I'll prep your discovery questions + intro deck Tuesday morning.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="chat-input">Message #intake</div>
+            </div>
+          </div>
+        </div><!-- /scene 3 -->
+      </div>
+    </div>
+
+    <div class="proof">
+      <div class="proof-in">
+        <div class="label">Already running for —</div>
+        <div class="logos">
+          <div class="logo-slot">DENTAL PRACTICE</div>
+          <div class="logo-slot">TREE-REMOVAL CO.</div>
+          <div class="logo-slot">SOLO ERP CONSULTANT</div>
+          <div class="logo-slot">PAYMENTS FIRM</div>
+          <div class="logo-slot">+ YOU?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEM -->
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">01 / The honest version</div>
+        <h2>You don't need <em>another tool.</em> You need someone to actually do the thing.</h2>
+      </div>
+      <div class="right">
+        <p>You've already paid for ChatGPT or Copilot. Three people opened it the first week, nobody opened it the second. Meanwhile the contract still doesn't get sent until you're back at the truck, the insurance claim still sits in someone's inbox, and the marketing email still hasn't gone out — because the person who'd do it has client work.</p>
+      </div>
+    </div>
+
+    <div class="problem-grid">
+      <div class="pcell"><div class="num">A —</div><h3>The seat-license trap</h3><p>You bought the chatbot. It sits in a tab. The team opened it once and never came back.</p></div>
+      <div class="pcell"><div class="num">B —</div><h3>The prompting tax</h3><p>Every tool assumes someone has time to learn it and train the rest. They don't.</p></div>
+      <div class="pcell"><div class="num">C —</div><h3>The integration desert</h3><p>QuickBooks, Drive, Outlook, your booking tool — none of them talk. The AI doesn't either.</p></div>
+      <div class="pcell"><div class="num">D —</div><h3>The pilot purgatory</h3><p>Three vendor demos, six-figure SOWs, 90-day "discoveries." None shipped a workflow you use.</p></div>
+      <div class="pcell"><div class="num">E —</div><h3>The hire-or-build problem</h3><p>You'd staff this if you could. The people who could build it aren't applying to your shop.</p></div>
+      <div class="pcell"><div class="num">F —</div><h3>The "but client data" wall</h3><p>Every interesting workflow stalls on compliance. Nobody wants to be the one who broke it.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">02 / How it works</div>
+        <h2>Four beats. <em>Then it's running.</em></h2>
+      </div>
+      <div class="right">
+        <p>No SOW theatre. No 90-day "discovery." We do the intake call Monday, install across your stack by Wednesday, and you're routing real work to the operator by Friday. There's a person at Firmcraft you can text the whole way.</p>
+      </div>
+    </div>
+    <div class="how-grid">
+      <div class="how-cell">
+        <div class="glyph">a</div>
+        <div class="step-n">01 / WHERE</div>
+        <h4>Lives in your team chat</h4>
+        <p>Mention it like a teammate. No new dashboard, no second login, nothing nobody on staff opens.</p>
+      </div>
+      <div class="how-cell">
+        <div class="glyph">b</div>
+        <div class="step-n">02 / WHAT</div>
+        <h4>Connected to your tools</h4>
+        <p>QuickBooks, Microsoft 365, Google Workspace, Zoho, DocuSign, your practice management — read, write, audit-log.</p>
+      </div>
+      <div class="how-cell">
+        <div class="glyph">c</div>
+        <div class="step-n">03 / HOW MUCH</div>
+        <h4>Flat monthly rate</h4>
+        <p>One price. All seats. All integrations. No per-token bill, no AI overage. We absorb the model costs.</p>
+      </div>
+      <div class="how-cell">
+        <div class="glyph">d</div>
+        <div class="step-n">04 / WHEN</div>
+        <h4>Running in a week</h4>
+        <p>Intake Monday. Connectors live Wednesday. First production workflow by Friday. Days, not quarters.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">03 / Pricing</div>
+        <h2>One flat rate. <em>No per-seat math.</em></h2>
+      </div>
+      <div class="right">
+        <p>Every plan includes onboarding, all integrations, all model costs, and a real person at Firmcraft you can text. The only thing that changes between tiers is how much of your team's recurring work the operator absorbs.</p>
+      </div>
+    </div>
+
+    <div class="price-grid">
+      <div class="price-card">
+        <div class="tier">Spark</div>
+        <h3>Get started</h3>
+        <div class="price-amount"><span class="big">$399</span><span class="per">/ month</span></div>
+        <div class="price-setup">+ $1,000 one-time setup</div>
+        <p class="sub">A single workflow, fully run for you. For one-person shops and businesses validating the model.</p>
+        <div class="divider"></div>
+        <ul class="price-list">
+          <li>One core workflow (e.g. contracts, intake, claims)</li>
+          <li>Up to 3 tool integrations</li>
+          <li>Lives in your team chat</li>
+          <li>Monthly review with your ops lead</li>
+        </ul>
+        <a class="btn btn-ghost" href="#cta">Start with Spark →</a>
+      </div>
+
+      <div class="price-card feat">
+        <span class="badge">Most popular</span>
+        <div class="tier">Flow</div>
+        <h3>Run the business</h3>
+        <div class="price-amount"><span class="big">$799</span><span class="per">/ month</span></div>
+        <div class="price-setup">+ $2,000 one-time setup</div>
+        <p class="sub">The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.</p>
+        <div class="divider"></div>
+        <ul class="price-list">
+          <li>Up to 8 active workflows</li>
+          <li>Unlimited integrations</li>
+          <li>Custom playbooks per role</li>
+          <li>Weekly ops review + change requests</li>
+          <li>SOC 2 controls + audit log access</li>
+        </ul>
+        <a class="btn btn-primary" href="#cta">Choose Flow →</a>
+      </div>
+
+      <div class="price-card">
+        <div class="tier">Forge</div>
+        <h3>Operate at scale</h3>
+        <div class="price-amount"><span class="big">$1,499</span><span class="per">/ month</span></div>
+        <div class="price-setup">+ $3,500 one-time setup</div>
+        <p class="sub">Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.</p>
+        <div class="divider"></div>
+        <ul class="price-list">
+          <li>Unlimited workflows + custom builds</li>
+          <li>Multi-team / multi-location support</li>
+          <li>Dedicated operations lead</li>
+          <li>Quarterly executive review</li>
+          <li>Priority queue + change SLA</li>
+        </ul>
+        <a class="btn btn-ghost" href="#cta">Talk to us →</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:24px;color:var(--muted);font-size:14px">Bigger than 50 seats or need a full build-out? We hand off to <a href="https://skillcalibrate.com" style="color:var(--accent);text-decoration:underline;text-underline-offset:3px">SkillCalibrate.com</a> for full discovery.</p>
+  </div>
+</section>
+
+<!-- INDUSTRIES — examples-led -->
+<section id="industries">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">04 / Who it's for</div>
+        <h2>Built for businesses doing <em>the actual work.</em></h2>
+      </div>
+      <div class="right">
+        <p>Our first four customers — a dental practice, a one-person tree-removal company, a solo ERP consultant, and an eight-person payments firm — have nothing in common operationally. The throughline: recurring work, tools that don't talk, and nobody on staff to wire it together. If that's you, we're a fit.</p>
+      </div>
+    </div>
+
+    <div class="ind-grid">
+      <div class="ind">
+        <div><div class="num">— 01</div><div class="glyph">Hc</div></div>
+        <div><h4>Healthcare practices</h4><p>e.g. our dental client uses Firmcraft to draft &amp; submit insurance reimbursement claims.</p></div>
+      </div>
+      <div class="ind">
+        <div><div class="num">— 02</div><div class="glyph">Tr</div></div>
+        <div><h4>Trades &amp; field services</h4><p>e.g. our tree-removal client ships DocuSign contracts on-site — signed before he leaves the driveway.</p></div>
+      </div>
+      <div class="ind">
+        <div><div class="num">— 03</div><div class="glyph">B2</div></div>
+        <div><h4>B2B services</h4><p>e.g. our payments client uses Firmcraft as a second pair of hands for an overworked one-person marketing team.</p></div>
+      </div>
+      <div class="ind">
+        <div><div class="num">— 04</div><div class="glyph">So</div></div>
+        <div><h4>Solo &amp; owner-operators</h4><p>e.g. our solo ERP consultant runs an entire practice on a single operator. The cheapest second hire she'll ever make.</p></div>
+      </div>
+      <div class="ind">
+        <div><div class="num">— 05</div><div class="glyph">Pf</div></div>
+        <div><h4>Professional firms</h4><p>CPA, law, advisory, consulting. Doc requests, review prep, billable triage, client deliverables.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section class="compare" id="compare">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="eyebrow">05 / Comparison</div>
+        <h2>Firmcraft <em>vs.</em> the chatbot you already pay for.</h2>
+      </div>
+      <div class="right">
+        <p>ChatGPT and Copilot are perfectly fine general-purpose tools. They are not operators. Nothing in their pricing is aligned with whether your business actually moves a deliverable forward — and nothing in their setup process gets your team past the awkward first week.</p>
+      </div>
+    </div>
+
+    <table class="ctable">
+      <thead>
+        <tr><th></th><th class="us">Firmcraft</th><th>ChatGPT Teams</th><th>Microsoft Copilot</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="feat">What you're buying</td><td class="us">A managed operator + a real person at Firmcraft</td><td class="them">A per-seat chatbot license</td><td class="them">A per-seat chatbot license</td></tr>
+        <tr><td class="feat">Lives where the work lives</td><td class="us">Inside your team chat</td><td class="them">A separate app + browser tab</td><td class="them">Side panel inside Office</td></tr>
+        <tr><td class="feat">Speaks to QuickBooks, Zoho, niche tools</td><td class="us">Built and maintained for you</td><td class="them">DIY connectors, if any</td><td class="them">Microsoft stack only</td></tr>
+        <tr><td class="feat">Pricing</td><td class="us">Flat monthly, all seats</td><td class="them">Per seat, per month</td><td class="them">Per seat, per month</td></tr>
+        <tr><td class="feat">Time to first workflow</td><td class="us">5 business days</td><td class="them">Whenever someone has time</td><td class="them">Whenever someone has time</td></tr>
+        <tr><td class="feat">Who builds the prompts</td><td class="us">We do.</td><td class="them">You do.</td><td class="them">You do.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final" id="cta">
+  <div class="wrap">
+    <div class="final-grid">
+      <div>
+        <div class="eyebrow">06 / Get started</div>
+        <h2>Twenty minutes on a call. <em>Live by next Friday.</em></h2>
+        <p>If we're a fit, we'll scope your first workflow on the call and have your operator running by the end of week one. If we're not — or you're better served by SkillCalibrate's full-discovery offer — we'll tell you on the call.</p>
+        <div class="hero-ctas">
+          <a class="btn btn-primary btn-lg" href="#">Book a 20-min call →</a>
+          <a class="btn btn-ghost btn-lg" href="#pricing">See plans</a>
+        </div>
+      </div>
+      <div class="final-card">
+        <div class="photo-slot">FOUNDER PHOTO HERE</div>
+        <div class="quote">"FOUNDER PULL-QUOTE — TWO SENTENCES OF SHARP, EARNED OPINION ABOUT WHY YOU BUILT THIS. PLACEHOLDER."</div>
+        <div class="attr">— Founder name, Firmcraft</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <span class="brand"><span class="mk"></span> Firmcraft</span>
+    <div class="foot-cols">
+      <span>© 2026 SkillCalibrate Co.</span>
+      <span>SOC 2 In Progress</span>
+      <span>50+ seats? <a href="https://skillcalibrate.com" style="text-decoration:underline">SkillCalibrate.com</a></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const root=document.getElementById('rotating-chat');if(!root)return;
+  const titles=[
+    "canopy-tree-co · #field-ops · Tuesday 10:42 AM",
+    "bright-smile-dental · #front-desk · Monday 9:18 AM",
+    "northwind-payments · #marketing · Wednesday 1:47 PM",
+    "dvorak-erp · #intake · Thursday 4:05 PM"
+  ];
+  const titleEl=document.getElementById('chat-title');
+  const tabs=root.querySelectorAll('.scene-tab');
+  const scenes=root.querySelectorAll('.scene');
+  const bar=document.getElementById('rotator-bar');
+  let cur=0,timer=null,paused=false;const DUR=8000;
+  function show(i){scenes.forEach(s=>{s.hidden=Number(s.dataset.scene)!==i});tabs.forEach(t=>t.classList.toggle('active',Number(t.dataset.scene)===i));titleEl.textContent=titles[i];cur=i;}
+  function resetBar(){bar.style.transition='none';bar.style.width='0%';void bar.offsetWidth;bar.style.transition='width '+DUR+'ms linear';bar.style.width='100%';}
+  function tick(){if(paused)return;show((cur+1)%scenes.length);resetBar();}
+  function restart(){clearInterval(timer);resetBar();timer=setInterval(tick,DUR);}
+  tabs.forEach(t=>t.addEventListener('click',()=>{show(Number(t.dataset.scene));restart();}));
+  root.addEventListener('mouseenter',()=>{paused=true;bar.style.transition='none';});
+  root.addEventListener('mouseleave',()=>{paused=false;restart();});
+  restart();
+})();
+</script>
+</body>
+</html>

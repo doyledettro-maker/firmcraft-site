@@ -2,28 +2,159 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ── Base resets ─────────────────────────────────────────────────────────── */
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Firmcraft warm design tokens (cream + terracotta + sage)                */
+/* ──────────────────────────────────────────────────────────────────────── */
+:root {
+  --paper: #FBF4EA;
+  --paper-2: #F4E9D6;
+  --ink: #2D1F14;
+  --ink-2: #5A4533;
+  --muted: #8A7560;
+  --line: rgba(45, 31, 20, 0.12);
+  --line-2: rgba(45, 31, 20, 0.22);
+  --accent: #D97757;
+  --accent-2: #6B8E5A;
+  --accent-3: #3F7A8C;
+  --hi: #F2D9A7;
+  /* industry tokens (playbooks page) */
+  --tr: #B45A3A;
+  --hc: #3F7A8C;
+  --so: #8C6B2C;
+  --pf: #5A4A2A;
+  --b2: #6B8E5A;
+  --xa: #8A7560;
+}
+
+/* ── Base resets ──────────────────────────────────────────────────────── */
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background-color: #0A2540;
-  color: white;
-  font-family: var(--font-inter), system-ui, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: "Geist", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "ss01";
+  -webkit-font-smoothing: antialiased;
 }
 
-/* ── Heading font utility ────────────────────────────────────────────────── */
+/* ── Typography helpers ───────────────────────────────────────────────── */
+.font-serif-warm {
+  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
+}
+.font-mono-warm {
+  font-family: "Geist Mono", ui-monospace, monospace;
+}
+
+/* Eyebrow — small mono uppercase tag */
+.eyebrow {
+  font-family: "Geist Mono", monospace;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* Brand wordmark used in header / footer */
+.brand-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  position: relative;
+  display: inline-block;
+}
+.brand-mark::after {
+  content: "";
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  background: var(--paper);
+}
+
+/* Pill buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  line-height: 1;
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover {
+  background: var(--accent);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ink);
+  border-color: var(--line-2);
+}
+.btn-ghost:hover {
+  border-color: var(--ink);
+  background: #fff;
+}
+.btn-lg {
+  padding: 15px 26px;
+  font-size: 15px;
+}
+
+/* Sticky nav surface */
+.warm-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(251, 244, 234, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--line);
+}
+
+/* Headline italic-accent treatment */
+.serif-h em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+/* Card hover lift */
+.card-lift {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 22px -16px rgba(45, 31, 20, 0.18);
+  border-color: var(--line-2);
+}
+
+/* Focus rings — accessibility */
+*:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ──────────────────────────────────────────────────────────────────────── */
+/* Legacy home-page styles (page.tsx — navy/cyan)                           */
+/* ──────────────────────────────────────────────────────────────────────── */
 .font-display {
   font-family: var(--font-jakarta), var(--font-inter), system-ui, sans-serif;
 }
 
-/* ── Section label – small-caps cyan accent ──────────────────────────────── */
 .section-label {
   display: inline-block;
   font-family: var(--font-jakarta), sans-serif;
-  font-size: 0.6875rem;   /* 11px */
+  font-size: 0.6875rem;
   font-weight: 700;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -31,7 +162,6 @@ body {
   margin-bottom: 0.75rem;
 }
 
-/* ── Noise texture overlay for hero depth ────────────────────────────────── */
 .hero-noise::before {
   content: '';
   position: absolute;
@@ -42,30 +172,26 @@ body {
   z-index: 0;
 }
 
-/* ── Cyan radial glow (hero, bottom CTA) ─────────────────────────────────── */
 .glow-cyan {
   position: absolute;
   border-radius: 9999px;
-  background: radial-gradient(ellipse at center, rgba(0,212,170,0.12) 0%, transparent 70%);
+  background: radial-gradient(ellipse at center, rgba(0, 212, 170, 0.12) 0%, transparent 70%);
   pointer-events: none;
 }
 
-/* ── Volt plan card highlight ────────────────────────────────────────────── */
 .plan-volt {
   background: #E8FF47;
   color: #0A2540;
 }
 
-/* ── Smooth card hover lift ──────────────────────────────────────────────── */
 .card-hover {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 32px rgba(0,0,0,0.25);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25);
 }
 
-/* ── Scrollbar thin ──────────────────────────────────────────────────────── */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #0A2540; }
-::-webkit-scrollbar-thumb { background: #1e3a5a; border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--paper); }
+::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }

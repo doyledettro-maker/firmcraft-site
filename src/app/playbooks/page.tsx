@@ -587,8 +587,8 @@ export default function PlaybooksPage() {
                 We build a <em>custom playbook</em> in week one.
               </h2>
               <p className="text-[18px] text-ink-2 leading-[1.55] mb-6 max-w-[520px]">
-                About a third of our customers&apos; best playbooks aren&apos;t in this library —
-                they&apos;re bespoke to one firm, one workflow, one weird tool nobody else uses.
+                The most useful playbooks are usually the bespoke ones —
+                one firm, one workflow, one weird tool nobody else uses.
                 The intake call scopes one. By Friday it&apos;s running.
               </p>
               <div className="flex gap-3 flex-wrap">

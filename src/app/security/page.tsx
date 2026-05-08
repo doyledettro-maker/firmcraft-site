@@ -94,7 +94,7 @@ const FAQ: { q: React.ReactNode; a: string }[] = [
   },
   {
     q: <>Do you offer a BAA?</>,
-    a: "Yes — for our dental, medical, and behavioral health customers. The BAA is signed during onboarding, before any patient data flows.",
+    a: "Yes — BAAs are part of standard onboarding for healthcare deployments (dental, medical, behavioral health). Signed before any patient data flows.",
   },
   {
     q: <>Can I see your SOC 2 Type I report or pen test?</>,
@@ -477,7 +477,8 @@ export default function SecurityPage() {
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-3.5">
                 <strong className="text-ink font-medium">HIPAA posture.</strong> The architecture
                 is HIPAA-ready: per-firm boundaries, encryption, audit logs, BAA-able
-                sub-processors. We sign BAAs with dental and medical customers today. Full HIPAA
+                sub-processors. BAAs are signed at onboarding for any healthcare engagement —
+                dental, medical, behavioral health. Full HIPAA
                 attestation is on the SOC 2 Type II timeline.
               </p>
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-3.5">

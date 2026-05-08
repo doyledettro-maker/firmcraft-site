@@ -492,9 +492,9 @@ export default function IntegrationsPage() {
                 If it has an <em>API</em>, a portal, or a webpage — we can drive it.
               </h2>
               <p className="text-[17px] text-ink-2 leading-[1.55] m-0 mb-3.5">
-                About a third of our customers&apos; workflows hit a tool that&apos;s not in this
-                catalog. A regional carrier&apos;s claim portal. An in-house ERP your last
-                consultant built. A government filing site that&apos;s older than half the team.
+                Most firms hit at least one tool that&apos;s not in this catalog —
+                a regional carrier&apos;s claim portal, an in-house ERP your last
+                consultant built, a government filing site older than half the team.
                 None of it stops us.
               </p>
               <p className="text-[17px] text-ink-2 leading-[1.55] m-0">

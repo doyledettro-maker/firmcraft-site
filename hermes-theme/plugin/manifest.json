@@ -1,0 +1,27 @@
+{
+  "name": "firmcraft-brand",
+  "version": "1.0.0",
+  "description": "Firmcraft white-label branding for Hermes dashboard. Slot-only — no core patches.",
+  "author": "Firmcraft",
+  "homepage": "https://firmcraft.ai",
+  "license": "Proprietary",
+  "type": "dashboard-plugin",
+  "entry": "dashboard/index.js",
+  "styles": "dashboard/styles.css",
+  "slots": [
+    "header-left",
+    "footer-right",
+    "favicon"
+  ],
+  "permissions": [
+    "dom.observe",
+    "dom.replace",
+    "document.title",
+    "document.head"
+  ],
+  "dependencies": {},
+  "external": [],
+  "compatibility": {
+    "hermes": ">=2.0.0 <4.0.0"
+  }
+}

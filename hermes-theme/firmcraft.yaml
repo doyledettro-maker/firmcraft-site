@@ -1,0 +1,114 @@
+# Firmcraft theme for Hermes dashboard
+# Slot-only white-label — no fork, no patched core.
+# To swap branding for another client, copy this file and change the values.
+
+name: firmcraft
+display_name: Firmcraft
+version: 1.0.0
+
+# Force light mode. Dark variant deferred to Phase 2.
+mode: light
+allow_user_toggle: false
+
+page:
+  title: Firmcraft
+  meta_description: Firmcraft — pragmatic AI builds for service businesses.
+
+palette:
+  # Warm, founder-letter palette. Cream + terracotta + ink, with
+  # sage for success states and slate for info/links.
+  background:    "#FBF4EA"  # cream — page background
+  surface:       "#FFFFFF"  # white — cards / panels
+  surface_alt:   "#F4EADB"  # warm off-cream — sidebar, table stripes
+  border:        "#E8DCC6"  # warm border tone
+
+  text:          "#2D1F14"  # ink — body + headings
+  text_muted:    "#6B5A47"  # warm grey for secondary copy
+  text_inverse:  "#FBF4EA"  # cream on dark surfaces
+
+  primary:       "#D97757"  # terracotta — buttons, accents
+  primary_hover: "#C4623F"  # darker terracotta on hover
+  primary_text:  "#FFFFFF"  # text on primary buttons
+
+  accent:        "#D97757"  # terracotta — sidebar active item, focus rings
+  success:       "#6B8E5A"  # sage
+  info:          "#3F7A8C"  # slate — links, info banners
+  warning:       "#D9A157"  # warm amber
+  danger:        "#B5483B"  # darker terracotta for destructive
+
+  link:          "#3F7A8C"  # slate
+  link_hover:    "#2D1F14"  # ink on hover
+
+typography:
+  display:
+    family: "'Source Serif 4', Georgia, 'Times New Roman', serif"
+    weight: 500
+    style: italic
+    letter_spacing: "-0.01em"
+  body:
+    family: "'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    weight: 400
+    letter_spacing: "0"
+  mono:
+    family: "'Geist Mono', 'SF Mono', Menlo, Consolas, monospace"
+    weight: 400
+
+  scale:
+    h1: "2.25rem"
+    h2: "1.75rem"
+    h3: "1.375rem"
+    h4: "1.125rem"
+    body: "1rem"
+    small: "0.875rem"
+
+sidebar:
+  background: "#F4EADB"
+  text: "#2D1F14"
+  text_muted: "#6B5A47"
+  active_background: "#FBF4EA"
+  active_accent: "#D97757"   # left-edge stripe on active item
+  hover_background: "#EFE2CC"
+  border: "#E8DCC6"
+
+buttons:
+  primary:
+    background: "#D97757"
+    background_hover: "#C4623F"
+    text: "#FFFFFF"
+    border_radius: "8px"
+  secondary:
+    background: "transparent"
+    background_hover: "#F4EADB"
+    text: "#2D1F14"
+    border: "#2D1F14"
+    border_radius: "8px"
+  ghost:
+    background: "transparent"
+    background_hover: "#F4EADB"
+    text: "#2D1F14"
+
+links:
+  color: "#3F7A8C"
+  color_hover: "#2D1F14"
+  underline_offset: "2px"
+
+forms:
+  input_background: "#FFFFFF"
+  input_border: "#E8DCC6"
+  input_border_focus: "#D97757"
+  input_text: "#2D1F14"
+  placeholder: "#A89680"
+
+login:
+  background: "#FBF4EA"
+  card_background: "#FFFFFF"
+  card_border: "#E8DCC6"
+  logo_position: top-center
+  show_powered_by: true
+
+# Web fonts loaded from Google Fonts. CSP must allow fonts.googleapis.com
+# and fonts.gstatic.com — see README "Known risks" section.
+fonts:
+  sources:
+    - "https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@1,500&display=swap"
+    - "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap"

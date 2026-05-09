@@ -1,0 +1,340 @@
+/* ──────────────────────────────────────────────────────────────────────
+   firmcraft-brand — Hermes dashboard overrides
+   Slot-only white-label. All rules scoped under [data-firmcraft="true"]
+   so they only apply when the plugin is active.
+   ────────────────────────────────────────────────────────────────────── */
+
+@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,wght@1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400&display=swap');
+
+:root[data-firmcraft="true"] {
+  /* Palette — mirrors firmcraft.yaml */
+  --fc-cream:        #FBF4EA;
+  --fc-cream-warm:   #F4EADB;
+  --fc-border:       #E8DCC6;
+  --fc-surface:      #FFFFFF;
+  --fc-terracotta:   #D97757;
+  --fc-terracotta-hover: #C4623F;
+  --fc-ink:          #2D1F14;
+  --fc-ink-muted:    #6B5A47;
+  --fc-sage:         #6B8E5A;
+  --fc-slate:        #3F7A8C;
+  --fc-warning:      #D9A157;
+  --fc-danger:       #B5483B;
+
+  /* Override Hermes design tokens. The Hermes theme system reads these
+     custom-property names; if a release renames them, add aliases here. */
+  --color-bg:              var(--fc-cream);
+  --color-surface:         var(--fc-surface);
+  --color-surface-alt:     var(--fc-cream-warm);
+  --color-border:          var(--fc-border);
+  --color-text:            var(--fc-ink);
+  --color-text-muted:      var(--fc-ink-muted);
+  --color-primary:         var(--fc-terracotta);
+  --color-primary-hover:   var(--fc-terracotta-hover);
+  --color-primary-text:    #FFFFFF;
+  --color-accent:          var(--fc-terracotta);
+  --color-success:         var(--fc-sage);
+  --color-info:            var(--fc-slate);
+  --color-warning:         var(--fc-warning);
+  --color-danger:          var(--fc-danger);
+  --color-link:            var(--fc-slate);
+  --color-link-hover:      var(--fc-ink);
+
+  --font-display: 'Source Serif 4', Georgia, 'Times New Roman', serif;
+  --font-body:    'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-mono:    'Geist Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  color-scheme: light;
+}
+
+/* ─── Force light mode ─────────────────────────────────────────────── */
+:root[data-firmcraft="true"],
+:root[data-firmcraft="true"] body {
+  background: var(--fc-cream) !important;
+  color: var(--fc-ink) !important;
+  font-family: var(--font-body);
+}
+
+/* Defeat any inherited dark-mode rules. */
+:root[data-firmcraft="true"].dark,
+:root[data-firmcraft="true"][data-theme="dark"],
+:root[data-firmcraft="true"] .dark,
+:root[data-firmcraft="true"] [data-theme="dark"] {
+  background: var(--fc-cream) !important;
+  color: var(--fc-ink) !important;
+}
+
+/* ─── Typography ──────────────────────────────────────────────────── */
+[data-firmcraft="true"] h1,
+[data-firmcraft="true"] h2,
+[data-firmcraft="true"] h3,
+[data-firmcraft="true"] h4,
+[data-firmcraft="true"] .display,
+[data-firmcraft="true"] .heading {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--fc-ink);
+}
+
+[data-firmcraft="true"] code,
+[data-firmcraft="true"] pre,
+[data-firmcraft="true"] kbd,
+[data-firmcraft="true"] .mono {
+  font-family: var(--font-mono);
+}
+
+/* ─── Header / wordmark ───────────────────────────────────────────── */
+.firmcraft-header-left .firmcraft-brand-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: var(--fc-ink);
+}
+
+.firmcraft-header-left .firmcraft-mark {
+  display: inline-flex;
+  width: 32px;
+  height: 32px;
+}
+
+.firmcraft-header-left .firmcraft-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.firmcraft-header-left .firmcraft-wordmark {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 1.25rem;
+  letter-spacing: -0.01em;
+  color: var(--fc-ink);
+}
+
+/* ─── Footer credit ───────────────────────────────────────────────── */
+.firmcraft-footer-right .firmcraft-powered-by {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--fc-ink-muted);
+}
+
+.firmcraft-footer-right .firmcraft-powered-by a {
+  color: var(--fc-slate);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 120ms ease, color 120ms ease;
+}
+
+.firmcraft-footer-right .firmcraft-powered-by a:hover {
+  color: var(--fc-ink);
+  border-bottom-color: var(--fc-ink);
+}
+
+/* ─── Sidebar ─────────────────────────────────────────────────────── */
+[data-firmcraft="true"] [data-slot="sidebar"],
+[data-firmcraft="true"] aside.sidebar,
+[data-firmcraft="true"] nav.sidebar {
+  background: var(--fc-cream-warm) !important;
+  border-right: 1px solid var(--fc-border) !important;
+  color: var(--fc-ink);
+}
+
+[data-firmcraft="true"] aside.sidebar a,
+[data-firmcraft="true"] nav.sidebar a,
+[data-firmcraft="true"] [data-slot="sidebar"] a {
+  color: var(--fc-ink);
+  text-decoration: none;
+  border-left: 3px solid transparent;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+[data-firmcraft="true"] aside.sidebar a:hover,
+[data-firmcraft="true"] nav.sidebar a:hover,
+[data-firmcraft="true"] [data-slot="sidebar"] a:hover {
+  background: #EFE2CC;
+}
+
+[data-firmcraft="true"] aside.sidebar a.active,
+[data-firmcraft="true"] aside.sidebar a[aria-current="page"],
+[data-firmcraft="true"] nav.sidebar a.active,
+[data-firmcraft="true"] nav.sidebar a[aria-current="page"],
+[data-firmcraft="true"] [data-slot="sidebar"] a.active,
+[data-firmcraft="true"] [data-slot="sidebar"] a[aria-current="page"] {
+  background: var(--fc-cream) !important;
+  border-left-color: var(--fc-terracotta) !important;
+  color: var(--fc-ink) !important;
+  font-weight: 500;
+}
+
+/* ─── Buttons ─────────────────────────────────────────────────────── */
+[data-firmcraft="true"] button,
+[data-firmcraft="true"] .button,
+[data-firmcraft="true"] [role="button"] {
+  font-family: var(--font-body);
+  font-weight: 500;
+  border-radius: 8px;
+  transition: background 120ms ease, color 120ms ease, border-color 120ms ease;
+}
+
+[data-firmcraft="true"] button.primary,
+[data-firmcraft="true"] .button.primary,
+[data-firmcraft="true"] button[data-variant="primary"],
+[data-firmcraft="true"] [type="submit"] {
+  background: var(--fc-terracotta) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--fc-terracotta) !important;
+}
+
+[data-firmcraft="true"] button.primary:hover,
+[data-firmcraft="true"] .button.primary:hover,
+[data-firmcraft="true"] button[data-variant="primary"]:hover,
+[data-firmcraft="true"] [type="submit"]:hover {
+  background: var(--fc-terracotta-hover) !important;
+  border-color: var(--fc-terracotta-hover) !important;
+}
+
+[data-firmcraft="true"] button.secondary,
+[data-firmcraft="true"] .button.secondary,
+[data-firmcraft="true"] button[data-variant="secondary"] {
+  background: transparent !important;
+  color: var(--fc-ink) !important;
+  border: 1px solid var(--fc-ink) !important;
+}
+
+[data-firmcraft="true"] button.secondary:hover,
+[data-firmcraft="true"] .button.secondary:hover,
+[data-firmcraft="true"] button[data-variant="secondary"]:hover {
+  background: var(--fc-cream-warm) !important;
+}
+
+[data-firmcraft="true"] button.danger,
+[data-firmcraft="true"] button[data-variant="danger"] {
+  background: var(--fc-danger) !important;
+  color: #FFFFFF !important;
+  border: 1px solid var(--fc-danger) !important;
+}
+
+/* ─── Links ───────────────────────────────────────────────────────── */
+[data-firmcraft="true"] a {
+  color: var(--fc-slate);
+  text-decoration-color: rgba(63, 122, 140, 0.4);
+  text-underline-offset: 2px;
+  transition: color 120ms ease;
+}
+
+[data-firmcraft="true"] a:hover {
+  color: var(--fc-ink);
+  text-decoration-color: var(--fc-ink);
+}
+
+/* ─── Form inputs ─────────────────────────────────────────────────── */
+[data-firmcraft="true"] input,
+[data-firmcraft="true"] select,
+[data-firmcraft="true"] textarea {
+  background: var(--fc-surface);
+  border: 1px solid var(--fc-border);
+  color: var(--fc-ink);
+  border-radius: 8px;
+  font-family: var(--font-body);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
+[data-firmcraft="true"] input:focus,
+[data-firmcraft="true"] select:focus,
+[data-firmcraft="true"] textarea:focus {
+  outline: none;
+  border-color: var(--fc-terracotta);
+  box-shadow: 0 0 0 3px rgba(217, 119, 87, 0.18);
+}
+
+[data-firmcraft="true"] ::placeholder {
+  color: #A89680;
+}
+
+/* ─── Cards / panels ──────────────────────────────────────────────── */
+[data-firmcraft="true"] .card,
+[data-firmcraft="true"] [data-component="card"],
+[data-firmcraft="true"] section.panel {
+  background: var(--fc-surface);
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+}
+
+/* ─── Tables ──────────────────────────────────────────────────────── */
+[data-firmcraft="true"] table {
+  border-color: var(--fc-border);
+}
+[data-firmcraft="true"] thead {
+  background: var(--fc-cream-warm);
+  color: var(--fc-ink);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+}
+[data-firmcraft="true"] tbody tr:nth-child(even) {
+  background: rgba(244, 234, 219, 0.4);
+}
+
+/* ─── Login / landing page ────────────────────────────────────────── */
+[data-firmcraft="true"] .login-page,
+[data-firmcraft="true"] [data-page="login"],
+[data-firmcraft="true"] [data-page="signup"] {
+  background: var(--fc-cream);
+}
+
+[data-firmcraft="true"] .login-card,
+[data-firmcraft="true"] [data-page="login"] form,
+[data-firmcraft="true"] [data-page="signup"] form {
+  background: var(--fc-surface);
+  border: 1px solid var(--fc-border);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(45, 31, 20, 0.06);
+}
+
+[data-firmcraft="true"] .login-card h1,
+[data-firmcraft="true"] [data-page="login"] h1,
+[data-firmcraft="true"] [data-page="signup"] h1 {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--fc-ink);
+}
+
+/* ─── Status / badge colors ───────────────────────────────────────── */
+[data-firmcraft="true"] .badge-success,
+[data-firmcraft="true"] [data-status="success"] {
+  background: rgba(107, 142, 90, 0.15);
+  color: var(--fc-sage);
+  border: 1px solid rgba(107, 142, 90, 0.3);
+}
+
+[data-firmcraft="true"] .badge-info,
+[data-firmcraft="true"] [data-status="info"] {
+  background: rgba(63, 122, 140, 0.12);
+  color: var(--fc-slate);
+  border: 1px solid rgba(63, 122, 140, 0.3);
+}
+
+[data-firmcraft="true"] .badge-warning,
+[data-firmcraft="true"] [data-status="warning"] {
+  background: rgba(217, 161, 87, 0.15);
+  color: #8A5E1F;
+  border: 1px solid rgba(217, 161, 87, 0.4);
+}
+
+[data-firmcraft="true"] .badge-danger,
+[data-firmcraft="true"] [data-status="danger"] {
+  background: rgba(181, 72, 59, 0.12);
+  color: var(--fc-danger);
+  border: 1px solid rgba(181, 72, 59, 0.3);
+}
+
+/* ─── Hide elements the plugin marks ──────────────────────────────── */
+[data-firmcraft="true"] [data-firmcraft-hidden="1"] {
+  display: none !important;
+}

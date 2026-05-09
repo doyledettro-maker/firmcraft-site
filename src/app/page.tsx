@@ -15,6 +15,7 @@ const PLANS = [
     sub: 'A single workflow, fully run for you. For one-person shops and businesses validating the model.',
     features: [
       'One core workflow (e.g. contracts, intake, claims)',
+      '$100/mo AI token allowance included',
       'Up to 3 tool integrations',
       'Lives in your team chat',
       'Monthly review with your ops lead',
@@ -31,6 +32,7 @@ const PLANS = [
     sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.',
     features: [
       'Up to 8 active workflows',
+      '$200/mo AI token allowance included',
       'Unlimited integrations',
       'Custom playbooks per role',
       'Weekly ops review + change requests',
@@ -49,6 +51,7 @@ const PLANS = [
     sub: 'Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.',
     features: [
       'Unlimited workflows + custom builds',
+      '$300/mo AI token allowance included',
       'Multi-team / multi-location support',
       'Dedicated operations lead',
       'Quarterly executive review',
@@ -72,7 +75,7 @@ const PROBLEMS = [
 const HOW = [
   { glyph: 'a', step: '01 / WHERE', title: 'Lives in your team chat', body: 'Mention it like a teammate. No new dashboard, no second login, nothing nobody on staff opens.' },
   { glyph: 'b', step: '02 / WHAT', title: 'Connected to your tools', body: 'QuickBooks, Microsoft 365, Google Workspace, Zoho, DocuSign, your practice management — read, write, audit-log.' },
-  { glyph: 'c', step: '03 / HOW MUCH', title: 'Flat monthly rate', body: 'One price. All seats. All integrations. No per-token bill, no AI overage. We absorb the model costs.' },
+  { glyph: 'c', step: '03 / HOW MUCH', title: 'Flat monthly rate', body: 'One price. All seats. All integrations. Each tier includes a monthly AI token allowance — anything beyond is billed at published rates, tracked in real time.' },
   { glyph: 'd', step: '04 / WHEN', title: 'Running in a week', body: 'Intake Monday. Connectors live Wednesday. First production workflow by Friday. Days, not quarters.' },
 ]
 
@@ -281,10 +284,11 @@ export default function HomePage() {
             </div>
             <div className="right">
               <p>
-                Every plan includes onboarding, all integrations, all model costs,
-                and a real person at Firmcraft you can text. The only thing that
-                changes between tiers is how much of your team&apos;s recurring work
-                the operator absorbs.
+                Every plan includes onboarding, all integrations, a monthly AI
+                token allowance, and a real person at Firmcraft you can text.
+                Additional usage is billed at published rates, tracked in real
+                time. The only thing that changes between tiers is how much of
+                your team&apos;s recurring work the operator absorbs.
               </p>
             </div>
           </div>

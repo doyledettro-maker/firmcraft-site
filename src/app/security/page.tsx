@@ -567,7 +567,7 @@ export default function SecurityPage() {
               <div className="flex gap-3 flex-wrap">
                 <a
                   className="btn btn-primary btn-lg"
-                  href="mailto:security@firmcraft.com?subject=Security%20packet%20request"
+                  href="mailto:hello@firmcraft.ai?subject=Security%20packet%20request"
                 >
                   Request the security packet →
                 </a>
@@ -588,7 +588,7 @@ export default function SecurityPage() {
               </h4>
               <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-2 text-sm text-ink-2 leading-[1.5]">
                 {[
-                  ['Security', 'security@firmcraft.com · 24-hr response'],
+                  ['Security', 'hello@firmcraft.ai · 24-hr response'],
                   ['Disclosure', 'vulns@firmcraft.com · 90-day fix SLA'],
                   ['DPA / BAA', 'legal@firmcraft.com'],
                   ['Incident', '911@firmcraft.com · pages on-call'],

@@ -61,7 +61,7 @@ export function StatusBanner() {
         {info.label}
       </span>
       <span className="ml-auto font-mono-warm text-[11px] text-muted tracking-[0.06em]">
-        Manual check
+        Updated continuously
       </span>
     </div>
   )

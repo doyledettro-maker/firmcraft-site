@@ -56,54 +56,51 @@ const plans = [
     name: 'Spark',
     price: '$399',
     cadence: '/mo',
-    size: '1–3 people',
-    setup: '$3,500 setup',
+    tagline: '“Get started” — single workflow, fully run for you.',
+    setup: '$1,000 setup',
     highlight: false,
     cta: 'Get Started',
     ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Spark',
     features: [
-      'Single AI operator in Slack',
-      'Google Workspace + core integrations',
-      '45-min monthly strategy call',
-      'Multi-LLM access',
-      'All token costs included',
+      'One core workflow (contracts, intake, claims)',
+      'Up to 3 tool integrations',
+      'Lives in your team chat',
+      'Monthly review with ops lead',
     ],
   },
   {
     name: 'Flow',
-    price: '$899',
+    price: '$799',
     cadence: '/mo',
-    size: '3–10 people',
-    setup: '$3,500 setup',
+    tagline: '“Run the business” — operator handles recurring work.',
+    setup: '$2,000 setup',
     highlight: true,
     badge: 'Most Popular',
     cta: 'Get Started',
     ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Flow',
     features: [
-      'Everything in Spark',
-      'Multi-channel lead capture',
-      'Active marketing content generation',
-      'Industry-specific software integration',
-      'Weekly 60-min strategy session',
-      'Multi-user access',
+      'Up to 8 active workflows',
+      'Unlimited integrations',
+      'Custom playbooks per role',
+      'Weekly ops review + change requests',
+      'SOC 2 controls + audit log access',
     ],
   },
   {
     name: 'Forge',
-    price: '$1,800+',
+    price: '$1,499',
     cadence: '/mo',
-    size: '10+ people',
+    tagline: '“Operate at scale” — multi-team, multi-location.',
     setup: '$3,500 setup',
     highlight: false,
     cta: "Let's Talk",
     ctaHref: 'mailto:hello@firmcraft.ai?subject=Firmcraft Forge',
     features: [
-      'Everything in Flow',
-      'Custom integrations and MCP servers',
-      'Full org deployment',
-      'Semi-daily support and strategy',
-      'Custom RAG pipelines',
-      'White-labeled reporting',
+      'Unlimited workflows + custom builds',
+      'Multi-team / multi-location support',
+      'Dedicated operations lead',
+      'Quarterly executive review',
+      'Priority queue + change SLA',
     ],
   },
 ]
@@ -122,7 +119,7 @@ const comparisonRows = [
   { label: 'Firm context', them: 'None', us: 'Learns your clients & workflows' },
   { label: 'Ongoing management', them: 'Your problem', us: 'Our job' },
   { label: 'Cost structure', them: 'Per seat + manage it yourself', us: 'Flat monthly, all-in' },
-  { label: 'Support', them: 'Documentation', us: 'Weekly strategy calls' },
+  { label: 'Support', them: 'Documentation', us: 'A real person you can text' },
 ]
 
 // ─── Components ──────────────────────────────────────────────────────────────
@@ -281,14 +278,16 @@ export default function Home() {
           <div className="mb-12">
             <SectionLabel>Pricing</SectionLabel>
             <h2 className="font-display font-bold text-white text-[1.75rem] sm:text-[2.25rem] leading-tight tracking-tight mb-3">
-              Three plans. One decision.
+              One flat rate. No per-seat math.
             </h2>
-            <p className="text-white/45 text-[0.9375rem] max-w-md">
-              All plans include your AI operator, all integrations, all token costs, and ongoing support.
+            <p className="text-white/45 text-[0.9375rem] max-w-2xl leading-relaxed">
+              Every plan includes onboarding, all integrations, all model costs, and a real
+              person at Firmcraft you can text. The only thing that changes between tiers is
+              how much of your team&apos;s recurring work the operator absorbs.
             </p>
           </div>
 
-          <div className="grid gap-5 sm:grid-cols-3">
+          <div className="grid gap-5 sm:grid-cols-3 mb-8">
             {plans.map((plan) => {
               const isVolt = plan.highlight
 
@@ -335,7 +334,7 @@ export default function Home() {
                       'text-[0.8125rem] font-semibold',
                       isVolt ? 'text-[#0A2540]/70' : 'text-[#00D4AA]',
                     ].join(' ')}>
-                      {plan.size}
+                      {plan.tagline}
                     </p>
                     <p className={[
                       'text-[0.75rem] mt-0.5',
@@ -380,6 +379,17 @@ export default function Home() {
               )
             })}
           </div>
+
+          <p className="text-white/40 text-[0.875rem] text-center max-w-2xl mx-auto leading-relaxed">
+            Bigger than 50 seats or need a full build-out? We hand off to{' '}
+            <a
+              href="https://skillcalibrate.com"
+              className="text-[#00D4AA] hover:text-[#00D4AA]/80 underline underline-offset-2 transition-colors"
+            >
+              SkillCalibrate.com
+            </a>{' '}
+            for full discovery.
+          </p>
         </div>
       </section>
 

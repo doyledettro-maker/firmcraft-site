@@ -58,23 +58,6 @@ body {
   font-weight: 500;
 }
 
-/* Brand wordmark used in header / footer */
-.brand-mark {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: var(--accent);
-  position: relative;
-  display: inline-block;
-}
-.brand-mark::after {
-  content: "";
-  position: absolute;
-  inset: 6px;
-  border-radius: 50%;
-  background: var(--paper);
-}
-
 /* Pill buttons */
 .btn {
   display: inline-flex;

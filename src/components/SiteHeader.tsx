@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import { BrandMark } from './BrandMark'
 
 const NAV_ITEMS: { label: string; href: string }[] = [
   { label: 'How it works', href: '/#how' },
@@ -19,7 +20,7 @@ export function SiteHeader({ current }: { current?: Current }) {
           href="/"
           className="flex items-center gap-2.5 font-serif-warm italic font-medium text-[22px] tracking-[-0.01em] text-ink"
         >
-          <span className="brand-mark" /> Firmcraft
+          <BrandMark /> Firmcraft
         </Link>
 
         <nav className="hidden md:flex gap-6 text-sm text-ink-2">

@@ -443,10 +443,31 @@ export default function HomePage() {
                 >
                   Book a 20-min call →
                 </a>
-                <Link className="btn btn-ghost btn-lg" href="#pricing">
-                  See plans
+                <Link className="btn btn-ghost btn-lg" href="/onboard">
+                  Start onboarding →
                 </Link>
               </div>
+              <p
+                style={{
+                  marginTop: '14px',
+                  color: 'var(--muted)',
+                  fontSize: '13px',
+                  maxWidth: '440px',
+                }}
+              >
+                Already had a call, or rather just fill out the intake yourself? The{' '}
+                <Link
+                  href="/onboard"
+                  style={{
+                    color: 'var(--accent)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                  }}
+                >
+                  onboarding form
+                </Link>{' '}
+                takes about 10 minutes.
+              </p>
             </div>
             <div className="final-card">
               <div className="photo">

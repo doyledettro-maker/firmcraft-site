@@ -36,6 +36,7 @@ const DEPLOY_ROWS: { lbl: string; val: string; kind?: 'ok' | 'warn' }[] = [
   { lbl: 'Encryption at rest', val: 'AES-256', kind: 'ok' },
   { lbl: 'Encryption in transit', val: 'TLS 1.3', kind: 'ok' },
   { lbl: 'Customer data in training', val: 'Never', kind: 'warn' },
+  { lbl: 'Provider redundancy', val: '≥2 LLMs', kind: 'ok' },
   { lbl: 'Sub-processors', val: '3 · listed' },
 ]
 
@@ -90,7 +91,7 @@ const FAQ: { q: React.ReactNode; a: string }[] = [
   },
   {
     q: <>What if a model provider has an outage or breach?</>,
-    a: "The operator routes across multiple providers. Outage on one provider degrades but doesn't take you down. In the case of a security incident at a provider, we have contractual notification obligations and our own 24-hour incident SLA — we'd notify you, isolate any affected workflows, and switch routing.",
+    a: "The operator routes across 45+ supported LLM providers, with built-in automatic failover and credential pools that distribute load across keys. If Anthropic has an outage, we route to OpenAI, Bedrock, or Gemini without you noticing. In the case of a security incident at a provider, we have contractual notification obligations and our own 24-hour incident SLA — we'd notify you, isolate any affected workflows, and switch routing.",
   },
   {
     q: <>Do you offer a BAA?</>,
@@ -99,6 +100,10 @@ const FAQ: { q: React.ReactNode; a: string }[] = [
   {
     q: <>Can I see your SOC 2 Type I report or pen test?</>,
     a: "Yes, under NDA. Email security@firmcraft and we'll get it to you within one business day.",
+  },
+  {
+    q: <>What happens if Firmcraft goes out of business?</>,
+    a: "The operator runs on Hermes Agent, an MIT-licensed open-source platform maintained by Nous Research. Your skills, memory files, integrations, and audit logs are all stored in standard formats on infrastructure you can take with you. You — or another vendor — can pick them up and run a Hermes deployment elsewhere on day one. We don't own the runtime. We operate it for you. No lock-in, by design.",
   },
 ]
 
@@ -424,10 +429,14 @@ export default function SecurityPage() {
                 dashboard. Exportable as CSV or JSON for your auditor.
               </p>
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-3.5">
-                <strong className="text-ink font-medium">Reversible by default.</strong> If a
-                draft email shouldn&apos;t have gone out, the log shows it, and any downstream
-                action it kicked off can be unwound. The &quot;are we sure&quot; question always
-                has a paper trail.
+                <strong className="text-ink font-medium">Reversible by default.</strong> The
+                operator auto-snapshots its working state before every file change. Any individual
+                action can be undone with{' '}
+                <code className="font-mono-warm text-[13px] bg-paper px-1.5 py-px rounded">
+                  /rollback
+                </code>
+                . The full-text session index is the searchable layer underneath the dashboard.
+                None of this is bolted on — it&apos;s how the runtime works by default.
               </p>
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0">
                 <strong className="text-ink font-medium">Compliant retention.</strong> Logs

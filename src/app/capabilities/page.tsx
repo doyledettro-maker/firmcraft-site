@@ -274,14 +274,14 @@ const CAPS: {
     no: '01 · Multi-channel',
     title: <>Lives <em>wherever</em> your team already messages.</>,
     body: 'Same operator. Same memory. Same playbooks. Field crews on SMS, partners on Slack, clients on email — one consistent piece of work across every channel.',
-    bullets: ['Slack · Teams · Discord', 'SMS · Email · WhatsApp · Signal', 'Telegram · iMessage · WeCom'],
+    bullets: ['Slack · Teams · Discord · Mattermost · Matrix', 'SMS · Email · WhatsApp · Signal · Telegram · iMessage', 'Voice notes in, voice replies out — on every channel that carries audio'],
     demo: <Demo1Channels />,
   },
   {
     no: '02 · Scheduled work',
     title: <>Runs on its own <em>clock</em>, not yours.</>,
     body: 'Monday morning recaps, Friday billing chases, monthly closes, quarterly reviews — set up once, runs forever. The work that always slips because nobody had time? That.',
-    bullets: ['Cron-like scheduling', 'Pause / skip per holiday', 'Auto-reschedule on conflict'],
+    bullets: ['Cron + natural-language scheduling', 'Pause, resume, edit any job', 'Delivery to any of your messaging channels'],
     demo: <Demo2Schedule />,
   },
   {
@@ -309,7 +309,7 @@ const CAPS: {
     no: '06 · Approvals + audit',
     title: <>Asks <em>before</em> it sends, signs, or pays.</>,
     body: 'You set which actions need a human in the loop — money out, contracts going live, client-facing sends. Everything else just runs. Every action is logged, reversible, exportable for compliance.',
-    bullets: ['Per-action approval rules', 'Full audit log, exportable', 'SOC 2 in progress · HIPAA-ready posture'],
+    bullets: ['Per-action approval rules', 'Checkpoints + /rollback — undo any action', 'Searchable audit log, exportable as CSV / JSON', 'SOC 2 in progress · HIPAA-ready posture'],
     demo: <Demo6Approvals />,
   },
 ]

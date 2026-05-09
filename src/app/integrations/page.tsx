@@ -361,7 +361,7 @@ export default function IntegrationsPage() {
             <div>
               <div className="grid grid-cols-3 gap-5 border-t border-[var(--line)] pt-6">
                 {[
-                  { k: 'Native', v: <em>112</em>, c: 'Live, supported, documented integrations.' },
+                  { k: 'Catalog', v: <em>112</em>, c: 'Tools we connect to — across API, MCP, and browser automation.' },
                   { k: 'Categories', v: <em>14</em>, c: 'From accounting to field service to legal.' },
                   { k: 'Custom', v: <>Wk <em>1</em></>, c: "Don't see yours? We build it during onboarding." },
                 ].map((s) => (

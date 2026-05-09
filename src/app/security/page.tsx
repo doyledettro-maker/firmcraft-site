@@ -589,9 +589,9 @@ export default function SecurityPage() {
               <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-2 text-sm text-ink-2 leading-[1.5]">
                 {[
                   ['Security', 'hello@firmcraft.ai · 24-hr response'],
-                  ['Disclosure', 'vulns@firmcraft.com · 90-day fix SLA'],
-                  ['DPA / BAA', 'legal@firmcraft.com'],
-                  ['Incident', '911@firmcraft.com · pages on-call'],
+                  ['Disclosure', 'hello@firmcraft.ai · 90-day fix SLA'],
+                  ['DPA / BAA', 'hello@firmcraft.ai'],
+                  ['Incident', 'hello@firmcraft.ai · pages on-call'],
                 ].map(([k, v], i, arr) => (
                   <li
                     key={k}

@@ -132,6 +132,9 @@ export default function SupportPage() {
 
           {/* Section 1 — Status */}
           <StatusBanner />
+          <p className="mt-2.5 text-[12.5px] text-muted leading-[1.5]">
+            Status is updated manually. Automated monitoring coming soon.
+          </p>
         </div>
       </section>
 

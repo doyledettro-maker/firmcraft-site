@@ -28,10 +28,12 @@ const STATUS_MAP: Record<Status, StatusInfo> = {
   },
 }
 
-// When LiteLLM/Langfuse health endpoints are live, replace the literal below
-// with a fetch (server-side, with a short revalidate window) and map the
-// response to one of the keys in STATUS_MAP.
+// TODO: Wire to real health checks — currently hardcoded.
+// Ping LiteLLM /health and per-client Hermes instances, map response to
+// a STATUS_MAP key. Use a server-side fetch with a short revalidate window
+// (e.g. `next: { revalidate: 30 }`) so the banner reflects live state.
 export function StatusBanner() {
+  // TODO: replace this literal with the resolved status from the health check
   const status: Status = 'operational'
   const info = STATUS_MAP[status]
 
@@ -59,7 +61,7 @@ export function StatusBanner() {
         {info.label}
       </span>
       <span className="ml-auto font-mono-warm text-[11px] text-muted tracking-[0.06em]">
-        Updated continuously
+        Manual check
       </span>
     </div>
   )

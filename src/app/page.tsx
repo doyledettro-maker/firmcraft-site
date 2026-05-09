@@ -6,16 +6,12 @@ import { RotatingChatHero } from '@/components/RotatingChatHero'
 
 // ─── Data ────────────────────────────────────────────────────────────────────
 
-// Pricing matches what's already locked across the site (capabilities, security,
-// playbooks, integrations, and was confirmed by Doyle on 2026-05-08). Setup
-// fee is flat $3,500 across tiers; the design reference shows a graduated
-// ramp ($1k / $2k / $3.5k) but Doyle has not greenlit changing pricing yet.
 const PLANS = [
   {
     tier: 'Spark',
     headline: 'Get started',
     price: '$399',
-    setup: '+ $3,500 one-time setup',
+    setup: '+ $1,000 one-time setup',
     sub: 'A single workflow, fully run for you. For one-person shops and businesses validating the model.',
     features: [
       'One core workflow (e.g. contracts, intake, claims)',
@@ -30,8 +26,8 @@ const PLANS = [
   {
     tier: 'Flow',
     headline: 'Run the business',
-    price: '$899',
-    setup: '+ $3,500 one-time setup',
+    price: '$799',
+    setup: '+ $2,000 one-time setup',
     sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.',
     features: [
       'Up to 8 active workflows',
@@ -48,7 +44,7 @@ const PLANS = [
   {
     tier: 'Forge',
     headline: 'Operate at scale',
-    price: '$1,800+',
+    price: '$1,499',
     setup: '+ $3,500 one-time setup',
     sub: 'Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.',
     features: [

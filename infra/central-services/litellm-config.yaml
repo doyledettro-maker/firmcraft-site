@@ -1,0 +1,113 @@
+# LiteLLM proxy configuration — Firmcraft central services.
+#
+# Routing strategy: three logical aliases (firmcraft-fast / firmcraft-standard / firmcraft-deep)
+# that the rest of the platform calls. Underlying providers can swap without app changes.
+#
+# Real provider keys live in environment variables (see .env). Anything written CHANGEME here
+# is a placeholder you should NOT actually paste a key into — set it via env instead.
+
+model_list:
+  # ─── Fast tier: cheap, low-latency simple tasks (classification, routing, summaries) ────
+  - model_name: firmcraft-fast
+    litellm_params:
+      model: anthropic/claude-haiku-4-5
+      api_key: os.environ/ANTHROPIC_API_KEY
+      rpm: 200
+      tpm: 400000
+    model_info:
+      mode: chat
+      tier: fast
+
+  - model_name: firmcraft-fast
+    litellm_params:
+      model: openai/gpt-4o-mini
+      api_key: os.environ/OPENAI_API_KEY
+      rpm: 200
+      tpm: 400000
+    model_info:
+      mode: chat
+      tier: fast
+
+  # ─── Standard tier: workhorse for most agent runs ───────────────────────────────────────
+  - model_name: firmcraft-standard
+    litellm_params:
+      model: anthropic/claude-sonnet-4-6
+      api_key: os.environ/ANTHROPIC_API_KEY
+      rpm: 100
+      tpm: 200000
+    model_info:
+      mode: chat
+      tier: standard
+
+  - model_name: firmcraft-standard
+    litellm_params:
+      model: openai/gpt-4o
+      api_key: os.environ/OPENAI_API_KEY
+      rpm: 100
+      tpm: 200000
+    model_info:
+      mode: chat
+      tier: standard
+
+  # ─── Deep tier: hard reasoning, planning, code review ───────────────────────────────────
+  - model_name: firmcraft-deep
+    litellm_params:
+      model: anthropic/claude-opus-4-7
+      api_key: os.environ/ANTHROPIC_API_KEY
+      rpm: 30
+      tpm: 80000
+    model_info:
+      mode: chat
+      tier: deep
+
+  # ─── OpenRouter passthroughs (escape hatch for models we don't have direct contracts on) ─
+  - model_name: openrouter/*
+    litellm_params:
+      model: openrouter/*
+      api_key: os.environ/OPENROUTER_API_KEY
+
+router_settings:
+  routing_strategy: simple-shuffle
+  num_retries: 2
+  timeout: 90
+  allowed_fails: 3
+  cooldown_time: 30
+  redis_host: null  # in-memory rate limiting; CX22 doesn't run Redis
+  fallbacks:
+    - firmcraft-deep: ["firmcraft-standard"]
+    - firmcraft-standard: ["firmcraft-fast"]
+  context_window_fallbacks:
+    - firmcraft-standard: ["firmcraft-deep"]
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+  json_logs: true
+  request_timeout: 600
+  telemetry: false
+  success_callback: ["langfuse"]
+  failure_callback: ["langfuse"]
+  cache: false  # CX22: skip cache layer until we add Redis
+  max_budget: 1000.0       # global hard cap, USD
+  budget_duration: 30d
+
+general_settings:
+  master_key: os.environ/LITELLM_MASTER_KEY
+  database_url: os.environ/DATABASE_URL
+  store_model_in_db: true
+  disable_spend_logs: false
+  disable_master_key_return: true
+  alerting: ["slack"]
+  alerting_threshold: 300  # seconds — alert on slow requests
+  proxy_batch_write_at: 60
+
+# ─── Virtual key budget templates ─────────────────────────────────────────────────────────
+# These are seed examples — real keys are minted via the LiteLLM admin API or UI using
+# /key/generate, which writes to Postgres. Keep this section as documentation of intent.
+#
+# Example bodies for POST /key/generate:
+#
+#   dev:        { "models": ["firmcraft-fast","firmcraft-standard"], "max_budget": 25,  "budget_duration": "30d", "rpm_limit": 60,  "tpm_limit": 100000 }
+#   staging:    { "models": ["firmcraft-fast","firmcraft-standard","firmcraft-deep"], "max_budget": 100, "budget_duration": "30d", "rpm_limit": 120, "tpm_limit": 250000 }
+#   production: { "models": ["firmcraft-fast","firmcraft-standard","firmcraft-deep"], "max_budget": 500, "budget_duration": "30d", "rpm_limit": 300, "tpm_limit": 600000 }
+#   ci:         { "models": ["firmcraft-fast"], "max_budget": 5, "budget_duration": "7d", "rpm_limit": 30, "tpm_limit": 50000 }

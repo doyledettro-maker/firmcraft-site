@@ -32,4 +32,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# credentials
+firmcraft-credentials.md
+
 # trigger deploy via fresh webhook

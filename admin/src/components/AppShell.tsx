@@ -9,7 +9,7 @@ import { Logo } from './Logo'
 const NAV = [
   { href: '/', label: 'Dashboard', icon: LayoutGrid },
   { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/onboarding', label: 'Onboarding', icon: ClipboardList },
+  { href: '/onboarding', label: 'Submissions', icon: ClipboardList },
   { href: '/status', label: 'Status', icon: Activity },
   { href: '/support', label: 'Support', icon: LifeBuoy },
   { href: '/settings', label: 'Settings', icon: Settings },

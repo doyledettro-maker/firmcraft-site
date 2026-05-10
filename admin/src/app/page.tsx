@@ -34,7 +34,7 @@ export default function DashboardPage() {
           <Link href="/onboarding">
             <Button>
               <ClipboardList className="w-4 h-4" />
-              New onboarding
+              Review submissions
             </Button>
           </Link>
         </div>

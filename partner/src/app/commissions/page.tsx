@@ -12,8 +12,8 @@ import { PLAN_PRICING } from '@/lib/pricing'
 
 export const metadata = { title: 'Commissions · Firmcraft Partners' }
 
-export default function CommissionsPage() {
-  const partner = getSessionPartner()
+export default async function CommissionsPage() {
+  const partner = await getSessionPartner()
   if (!partner) redirect('/login')
 
   const rows = commissionRowsForPartner(partner.id)

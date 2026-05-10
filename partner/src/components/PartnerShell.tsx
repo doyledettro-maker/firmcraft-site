@@ -1,9 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { type ReactNode } from 'react'
 import { LayoutGrid, Users, DollarSign, FilePlus, LogOut } from 'lucide-react'
+import { SignOutButton } from '@clerk/nextjs'
 import { Logo } from './Logo'
 
 const NAV = [
@@ -15,13 +16,6 @@ const NAV = [
 
 export function PartnerShell({ children, partnerName }: { children: ReactNode; partnerName: string }) {
   const pathname = usePathname()
-  const router = useRouter()
-
-  async function logout() {
-    await fetch('/api/logout', { method: 'POST' })
-    router.push('/login')
-    router.refresh()
-  }
 
   const initials = partnerName
     .split(' ')
@@ -78,13 +72,14 @@ export function PartnerShell({ children, partnerName }: { children: ReactNode; p
             <div className="w-9 h-9 rounded-full bg-accent-2 grid place-items-center text-white font-mono-warm text-[12px]">
               {initials}
             </div>
-            <button
-              onClick={logout}
-              title="Sign out"
-              className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-ink text-ink-2 hover:text-ink transition-colors"
-            >
-              <LogOut className="w-4 h-4" />
-            </button>
+            <SignOutButton redirectUrl="/login">
+              <button
+                title="Sign out"
+                className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-ink text-ink-2 hover:text-ink transition-colors"
+              >
+                <LogOut className="w-4 h-4" />
+              </button>
+            </SignOutButton>
           </div>
         </header>
         <main className="flex-1 px-6 py-8">

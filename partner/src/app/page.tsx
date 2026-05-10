@@ -12,8 +12,8 @@ import {
 import { planMeta } from '@/lib/survey'
 import { formatCurrency } from '@/lib/format'
 
-export default function PartnerHome() {
-  const partner = getSessionPartner()
+export default async function PartnerHome() {
+  const partner = await getSessionPartner()
   if (!partner) redirect('/login')
 
   const clients = getClientsForPartner(partner.id)

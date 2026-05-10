@@ -5,8 +5,8 @@ import { SubmitClientForm } from './SubmitClientForm'
 
 export const metadata = { title: 'Submit client · Firmcraft Partners' }
 
-export default function SubmitPage() {
-  const partner = getSessionPartner()
+export default async function SubmitPage() {
+  const partner = await getSessionPartner()
   if (!partner) redirect('/login')
 
   return (

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getSessionPartner } from '@/lib/session'
 
 export async function POST(req: Request) {
-  const partner = getSessionPartner()
+  const partner = await getSessionPartner()
   if (!partner) {
     return NextResponse.json({ error: 'Not authenticated.' }, { status: 401 })
   }

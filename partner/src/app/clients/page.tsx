@@ -9,8 +9,8 @@ import { planMeta } from '@/lib/survey'
 
 export const metadata = { title: 'My clients · Firmcraft Partners' }
 
-export default function ClientsPage() {
-  const partner = getSessionPartner()
+export default async function ClientsPage() {
+  const partner = await getSessionPartner()
   if (!partner) redirect('/login')
 
   const clients = getClientsForPartner(partner.id)

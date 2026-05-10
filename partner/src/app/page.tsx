@@ -43,6 +43,7 @@ export default function PartnerHome() {
           label="This month"
           value={formatCurrency(totals.total)}
           sub="estimated commission"
+          tone="money"
         />
         <Stat
           label="Commission rate"
@@ -100,13 +101,36 @@ export default function PartnerHome() {
   )
 }
 
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
+function Stat({
+  label,
+  value,
+  sub,
+  tone,
+}: {
+  label: string
+  value: string
+  sub: string
+  tone?: 'money'
+}) {
+  const isMoney = tone === 'money'
   return (
-    <Card>
+    <Card className={isMoney ? 'bg-money-soft border-accent-2/30' : ''}>
       <CardBody className="px-5 py-5">
-        <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
-        <div className="font-serif-warm text-[28px] tracking-[-0.02em] mt-1.5 leading-none">{value}</div>
-        <div className="text-[12px] text-muted mt-2">{sub}</div>
+        <div
+          className={`font-mono-warm text-[11px] uppercase tracking-[0.14em] ${
+            isMoney ? 'text-accent-2' : 'text-muted'
+          }`}
+        >
+          {label}
+        </div>
+        <div
+          className={`font-serif-warm text-[28px] tracking-[-0.02em] mt-1.5 leading-none ${
+            isMoney ? 'text-money' : ''
+          }`}
+        >
+          {value}
+        </div>
+        <div className={`text-[12px] mt-2 ${isMoney ? 'text-accent-2' : 'text-muted'}`}>{sub}</div>
       </CardBody>
     </Card>
   )

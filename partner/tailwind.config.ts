@@ -15,9 +15,14 @@ const config: Config = {
         muted: '#8A7560',
         line: 'rgba(45, 31, 20, 0.12)',
         'line-2': 'rgba(45, 31, 20, 0.22)',
-        accent: '#D97757',
-        'accent-2': '#6B8E5A',
+        // Partner portal flips the warm palette to green: sage-as-primary
+        // (the brand's #6B8E5A) and a deeper forest for money emphasis.
+        // Marketing site and admin keep terracotta.
+        accent: '#6B8E5A',
+        'accent-2': '#3D5A2C',
         'accent-3': '#3F7A8C',
+        'money': '#2F4A22',
+        'money-soft': '#E5EFDC',
         hi: '#F2D9A7',
       },
       fontFamily: {

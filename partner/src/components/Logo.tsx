@@ -5,7 +5,7 @@ export function Logo({ className }: { className?: string }) {
         F
       </span>
       <span className="font-serif-warm text-[19px] tracking-[-0.01em]">
-        Firmcraft <span className="text-muted text-[14px] font-mono-warm uppercase tracking-[0.14em] ml-1">/admin</span>
+        Firmcraft <span className="text-muted text-[14px] font-mono-warm uppercase tracking-[0.14em] ml-1">/partners</span>
       </span>
     </span>
   )

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { SURVEY_SECTIONS } from '@/lib/survey'
+import { sendSubmissionEmail } from '@/lib/notify-submission'
 
 export const runtime = 'nodejs'
 
@@ -53,9 +54,12 @@ export async function POST(req: Request) {
     sections,
   }
 
-  // v1: log only. The admin dashboard will read these once the storage backend
-  // is wired (Resend → email + Postgres or D1 for the queue).
   console.log('[get-started] new survey submission', JSON.stringify(submission))
+
+  const result = await sendSubmissionEmail(submission)
+  if (!result.ok) {
+    console.error('[get-started] email send failed:', result.error)
+  }
 
   return NextResponse.json({ ok: true })
 }

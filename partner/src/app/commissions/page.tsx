@@ -38,7 +38,7 @@ export default function CommissionsPage() {
         <Stat label="Subscription" value={formatCurrency(totals.nonTokenCommission)} sub="net of inclusion" />
         <Stat label="Token margin" value={formatCurrency(totals.inclusionMarginCommission)} sub="unused inclusion" />
         <Stat label="Overage margin" value={formatCurrency(totals.overageMarginCommission)} sub="20% markup share" />
-        <Stat label="Total" value={formatCurrency(totals.total)} sub="this month, estimated" highlight />
+        <Stat label="Total" value={formatCurrency(totals.total)} sub="this month, estimated" tone="money" />
       </div>
 
       <Card className="mb-6">
@@ -80,7 +80,7 @@ export default function CommissionsPage() {
                       <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(breakdown.nonTokenCommission)}</td>
                       <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(breakdown.inclusionMarginCommission)}</td>
                       <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(breakdown.overageMarginCommission)}</td>
-                      <td className="px-4 py-3 border-t border-line text-right tabular-nums font-medium">{formatCurrency(breakdown.total)}</td>
+                      <td className="px-4 py-3 border-t border-line text-right tabular-nums font-medium text-money">{formatCurrency(breakdown.total)}</td>
                     </>
                   ) : (
                     <>
@@ -103,14 +103,14 @@ export default function CommissionsPage() {
             </tbody>
             {rows.length > 0 ? (
               <tfoot>
-                <tr className="bg-paper-2/60">
-                  <td colSpan={3} className="px-4 py-3 border-t border-line font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">
+                <tr className="bg-money-soft/60">
+                  <td colSpan={3} className="px-4 py-3 border-t border-line font-mono-warm text-[11px] uppercase tracking-[0.14em] text-accent-2">
                     Totals
                   </td>
                   <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(totals.nonTokenCommission)}</td>
                   <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(totals.inclusionMarginCommission)}</td>
                   <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(totals.overageMarginCommission)}</td>
-                  <td className="px-4 py-3 border-t border-line text-right tabular-nums font-medium">{formatCurrency(totals.total)}</td>
+                  <td className="px-4 py-3 border-t border-line text-right tabular-nums font-medium text-money">{formatCurrency(totals.total)}</td>
                 </tr>
               </tfoot>
             ) : null}
@@ -153,19 +153,32 @@ function Stat({
   label,
   value,
   sub,
-  highlight,
+  tone,
 }: {
   label: string
   value: string
   sub: string
-  highlight?: boolean
+  tone?: 'money'
 }) {
+  const isMoney = tone === 'money'
   return (
-    <Card className={highlight ? 'border-ink' : ''}>
+    <Card className={isMoney ? 'bg-money-soft border-accent-2/30' : ''}>
       <CardBody className="px-5 py-5">
-        <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
-        <div className="font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none">{value}</div>
-        <div className="text-[12px] text-muted mt-2">{sub}</div>
+        <div
+          className={`font-mono-warm text-[11px] uppercase tracking-[0.14em] ${
+            isMoney ? 'text-accent-2' : 'text-muted'
+          }`}
+        >
+          {label}
+        </div>
+        <div
+          className={`font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none ${
+            isMoney ? 'text-money' : ''
+          }`}
+        >
+          {value}
+        </div>
+        <div className={`text-[12px] mt-2 ${isMoney ? 'text-accent-2' : 'text-muted'}`}>{sub}</div>
       </CardBody>
     </Card>
   )

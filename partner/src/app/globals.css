@@ -10,9 +10,14 @@
   --muted: #8A7560;
   --line: rgba(45, 31, 20, 0.12);
   --line-2: rgba(45, 31, 20, 0.22);
-  --accent: #D97757;
-  --accent-2: #6B8E5A;
+  /* Partner portal: green-forward palette. Sage from the Firmcraft brand
+     (matching marketing-site --accent-2) is promoted to the primary accent;
+     a deeper forest is used for money emphasis. */
+  --accent: #6B8E5A;
+  --accent-2: #3D5A2C;
   --accent-3: #3F7A8C;
+  --money: #2F4A22;
+  --money-soft: #E5EFDC;
   --hi: #F2D9A7;
 }
 

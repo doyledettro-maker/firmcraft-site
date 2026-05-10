@@ -48,11 +48,11 @@ export function PartnerShell({ children, partnerName }: { children: ReactNode; p
                 href={href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] transition-colors ${
                   active
-                    ? 'bg-paper-2 text-ink font-medium'
+                    ? 'bg-paper-2 text-ink font-medium border-l-2 border-accent pl-[10px]'
                     : 'text-ink-2 hover:bg-paper-2 hover:text-ink'
                 }`}
               >
-                <Icon className="w-4 h-4" />
+                <Icon className={`w-4 h-4 ${active ? 'text-accent' : ''}`} />
                 {label}
               </Link>
             )

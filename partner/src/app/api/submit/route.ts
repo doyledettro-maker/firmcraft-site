@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server'
 import { getSessionPartner } from '@/lib/session'
+import { sendPartnerSubmissionEmail } from '@/lib/notify-submission'
+import type { SurveyData } from '@/lib/survey'
 
 export async function POST(req: Request) {
   const partner = await getSessionPartner()
@@ -20,15 +22,19 @@ export async function POST(req: Request) {
     id,
     partnerId: partner.id,
     partnerSlug: partner.slug,
+    partnerName: partner.name,
     submittedAt: new Date().toISOString(),
     status: 'pending' as const,
     partnerNote: typeof body.partnerNote === 'string' ? body.partnerNote : undefined,
-    survey: body,
+    survey: body as unknown as SurveyData,
   }
 
-  // Real backend wiring lands later — for now log so the admin team can see
-  // submissions in server logs alongside marketing-site /get-started entries.
   console.log('[partner-submit]', JSON.stringify(submission))
+
+  const result = await sendPartnerSubmissionEmail(submission)
+  if (!result.ok) {
+    console.error('[partner-submit] email send failed:', result.error)
+  }
 
   return NextResponse.json({ ok: true, id })
 }

@@ -1,10 +1,11 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft, Settings as SettingsIcon, ExternalLink } from 'lucide-react'
+import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
 import { getClient, mockClients } from '@/lib/mock-clients'
+import { getPartnerForClient } from '@/lib/mock-partners'
 import { planMeta } from '@/lib/survey'
 import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
 
@@ -20,6 +21,7 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   const usagePct = Math.round((client.usage.aiCallsThisMonth / client.usage.aiCallsLimit) * 100)
   const seatPct = Math.round((client.usage.activeUsers / client.usage.seats) * 100)
   const survey = client.survey
+  const partner = getPartnerForClient(client.id)
 
   return (
     <AppShell>
@@ -61,9 +63,30 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         <Stat label="Plan" value={plan.name} sub={plan.price} />
         <Stat label="MRR" value={formatCurrency(client.monthlyRevenue)} sub="recurring" />
+        <Stat
+          label="Partner"
+          value={partner ? partner.name : 'Direct'}
+          sub={partner ? `${Math.round(partner.commissionRate * 100)}% commission` : 'no partner attached'}
+          href={partner ? `/partners/${partner.id}` : undefined}
+        />
         <Stat label="Created" value={formatDate(client.createdAt)} sub={`tenant id: ${client.id}`} />
-        <Stat label="Integrations" value={String(client.usage.integrationsConnected)} sub="connected systems" />
       </div>
+
+      {partner ? (
+        <div className="mb-8">
+          <Link
+            href={`/partners/${partner.id}`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl border border-line bg-paper-2/50 hover:border-ink hover:bg-paper-2 transition-colors text-[13.5px]"
+          >
+            <Handshake className="w-4 h-4 text-accent-2" />
+            <span className="text-ink-2">
+              Sourced by{' '}
+              <span className="font-medium text-ink">{partner.name}</span> ·{' '}
+              <span className="text-muted">{partner.contactEmail}</span>
+            </span>
+          </Link>
+        </div>
+      ) : null}
 
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6">
         {/* Survey responses */}
@@ -189,16 +212,22 @@ export default function ClientDetailPage({ params }: { params: { id: string } })
   )
 }
 
-function Stat({ label, value, sub }: { label: string; value: string; sub: string }) {
-  return (
-    <Card>
-      <CardBody className="px-5 py-5">
-        <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
-        <div className="font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none">{value}</div>
-        <div className="text-[12px] text-muted mt-2 truncate">{sub}</div>
-      </CardBody>
-    </Card>
+function Stat({ label, value, sub, href }: { label: string; value: string; sub: string; href?: string }) {
+  const body = (
+    <CardBody className="px-5 py-5">
+      <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
+      <div className="font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none truncate">{value}</div>
+      <div className="text-[12px] text-muted mt-2 truncate">{sub}</div>
+    </CardBody>
   )
+  if (href) {
+    return (
+      <Card className="hover:border-ink transition-colors">
+        <Link href={href} className="block">{body}</Link>
+      </Card>
+    )
+  }
+  return <Card>{body}</Card>
 }
 
 function Section({ title, children, last }: { title: string; children: React.ReactNode; last?: boolean }) {

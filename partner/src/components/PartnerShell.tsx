@@ -1,27 +1,39 @@
 'use client'
 
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { type ReactNode } from 'react'
-import { LayoutGrid, Users, Settings, ClipboardList, Bell, LifeBuoy, Activity, Handshake } from 'lucide-react'
+import { LayoutGrid, Users, DollarSign, FilePlus, LogOut } from 'lucide-react'
 import { Logo } from './Logo'
 
 const NAV = [
-  { href: '/', label: 'Dashboard', icon: LayoutGrid },
-  { href: '/clients', label: 'Clients', icon: Users },
-  { href: '/partners', label: 'Partners', icon: Handshake },
-  { href: '/onboarding', label: 'Submissions', icon: ClipboardList },
-  { href: '/status', label: 'Status', icon: Activity },
-  { href: '/support', label: 'Support', icon: LifeBuoy },
-  { href: '/settings', label: 'Settings', icon: Settings },
+  { href: '/', label: 'Overview', icon: LayoutGrid },
+  { href: '/clients', label: 'My clients', icon: Users },
+  { href: '/commissions', label: 'Commissions', icon: DollarSign },
+  { href: '/submit', label: 'Submit client', icon: FilePlus },
 ]
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function PartnerShell({ children, partnerName }: { children: ReactNode; partnerName: string }) {
   const pathname = usePathname()
+  const router = useRouter()
+
+  async function logout() {
+    await fetch('/api/logout', { method: 'POST' })
+    router.push('/login')
+    router.refresh()
+  }
+
+  const initials = partnerName
+    .split(' ')
+    .map((s) => s[0])
+    .filter(Boolean)
+    .slice(0, 2)
+    .join('')
+    .toUpperCase()
+
   return (
     <div className="min-h-screen flex">
-      {/* Sidebar */}
-      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-[#0E0B08] sticky top-0 self-start h-screen">
+      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-paper sticky top-0 self-start h-screen">
         <div className="px-5 h-16 flex items-center border-b border-line">
           <Link href="/" className="no-underline">
             <Logo />
@@ -36,7 +48,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 href={href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] transition-colors ${
                   active
-                    ? 'bg-paper-2 text-ink font-medium border-l-2 border-accent pl-[10px]'
+                    ? 'bg-paper-2 text-ink font-medium'
                     : 'text-ink-2 hover:bg-paper-2 hover:text-ink'
                 }`}
               >
@@ -47,29 +59,32 @@ export function AppShell({ children }: { children: ReactNode }) {
           })}
         </nav>
         <div className="p-4 border-t border-line text-[12px] text-muted font-mono-warm">
-          firmcraft-admin · v0.1
+          firmcraft-partners · v0.1
         </div>
       </aside>
 
-      {/* Main */}
       <div className="flex-1 min-w-0 flex flex-col">
         <header className="h-16 border-b border-line bg-paper/85 backdrop-blur sticky top-0 z-30 flex items-center justify-between px-6">
-          {/* Mobile logo */}
           <div className="md:hidden">
             <Link href="/" className="no-underline">
               <Logo />
             </Link>
           </div>
           <div className="hidden md:block text-[13px] text-muted font-mono-warm uppercase tracking-[0.12em]">
-            admin.firmcraft.ai
+            partners.firmcraft.ai
           </div>
           <div className="flex items-center gap-3">
-            <button className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink transition-colors">
-              <Bell className="w-4 h-4" />
-            </button>
-            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-white font-mono-warm text-[12px]">
-              DD
+            <span className="hidden sm:block text-[13px] text-ink-2">{partnerName}</span>
+            <div className="w-9 h-9 rounded-full bg-accent-2 grid place-items-center text-white font-mono-warm text-[12px]">
+              {initials}
             </div>
+            <button
+              onClick={logout}
+              title="Sign out"
+              className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-ink text-ink-2 hover:text-ink transition-colors"
+            >
+              <LogOut className="w-4 h-4" />
+            </button>
           </div>
         </header>
         <main className="flex-1 px-6 py-8">

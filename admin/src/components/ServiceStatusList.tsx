@@ -73,7 +73,7 @@ export function ServiceStatusList({
           <button
             onClick={load}
             disabled={loading}
-            className="inline-flex items-center gap-2 text-[13px] text-ink-2 hover:text-ink disabled:opacity-50 px-3 py-1.5 rounded-full border border-line-2 hover:border-ink transition-colors"
+            className="inline-flex items-center gap-2 text-[13px] text-ink-2 hover:text-ink disabled:opacity-50 px-3 py-1.5 rounded-full border border-line-2 hover:border-accent transition-colors"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh
@@ -82,7 +82,7 @@ export function ServiceStatusList({
       ) : null}
 
       {error ? (
-        <div className="rounded-lg border border-[#8A2A12]/20 bg-[#F4D8CC]/40 px-4 py-3 text-[13.5px] text-[#8A2A12] mb-4">
+        <div className="rounded-lg border border-[#E8704F]/30 bg-[#2D1410] px-4 py-3 text-[13.5px] text-[#E8907B] mb-4">
           Couldn’t reach health API: {error}
         </div>
       ) : null}
@@ -91,7 +91,7 @@ export function ServiceStatusList({
         {(data?.services ?? placeholder()).map((s) => (
           <li
             key={s.id}
-            className="flex items-center justify-between gap-4 px-4 py-3.5 rounded-xl border border-line bg-white"
+            className="flex items-center justify-between gap-4 px-4 py-3.5 rounded-xl border border-line bg-paper"
           >
             <div className="flex items-center gap-3 min-w-0">
               <Dot status={s.status} />
@@ -116,10 +116,10 @@ export function ServiceStatusList({
 function Dot({ status }: { status: ServiceStatus }) {
   const cls =
     status === 'up'
-      ? 'bg-[#3D5A2C]'
+      ? 'bg-status-up shadow-[0_0_8px_rgba(127,184,112,0.5)]'
       : status === 'degraded'
-        ? 'bg-[#7A5215]'
-        : 'bg-[#8A2A12]'
+        ? 'bg-status-warn shadow-[0_0_8px_rgba(232,178,85,0.5)]'
+        : 'bg-status-down shadow-[0_0_8px_rgba(232,112,79,0.5)]'
   return <span className={`inline-block w-2.5 h-2.5 rounded-full ${cls}`} aria-hidden />
 }
 
@@ -129,10 +129,10 @@ function OverallDot({ status }: { status?: ServiceStatus }) {
   }
   const cls =
     status === 'up'
-      ? 'bg-[#3D5A2C]'
+      ? 'bg-status-up shadow-[0_0_10px_rgba(127,184,112,0.55)]'
       : status === 'degraded'
-        ? 'bg-[#7A5215]'
-        : 'bg-[#8A2A12]'
+        ? 'bg-status-warn shadow-[0_0_10px_rgba(232,178,85,0.55)]'
+        : 'bg-status-down shadow-[0_0_10px_rgba(232,112,79,0.55)]'
   return <span className={`inline-block w-3.5 h-3.5 rounded-full ${cls}`} aria-hidden />
 }
 

@@ -20,7 +20,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex">
       {/* Sidebar */}
-      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-paper sticky top-0 self-start h-screen">
+      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-[#0E0B08] sticky top-0 self-start h-screen">
         <div className="px-5 h-16 flex items-center border-b border-line">
           <Link href="/" className="no-underline">
             <Logo />
@@ -35,7 +35,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 href={href}
                 className={`flex items-center gap-3 px-3 py-2 rounded-lg text-[14px] transition-colors ${
                   active
-                    ? 'bg-paper-2 text-ink font-medium'
+                    ? 'bg-paper-2 text-ink font-medium border-l-2 border-accent pl-[10px]'
                     : 'text-ink-2 hover:bg-paper-2 hover:text-ink'
                 }`}
               >
@@ -63,7 +63,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             admin.firmcraft.ai
           </div>
           <div className="flex items-center gap-3">
-            <button className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-ink text-ink-2 hover:text-ink transition-colors">
+            <button className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink transition-colors">
               <Bell className="w-4 h-4" />
             </button>
             <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-white font-mono-warm text-[12px]">

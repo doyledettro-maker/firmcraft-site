@@ -39,8 +39,8 @@ export function SupportContactForm() {
 
   if (submitted) {
     return (
-      <div className="rounded-2xl border border-[#3D5A2C]/20 bg-[#E5EFDC]/40 px-6 py-8 text-center">
-        <CheckCircle2 className="w-8 h-8 text-[#3D5A2C] mx-auto mb-3" />
+      <div className="rounded-2xl border border-[#A8D08A]/25 bg-[#1A2D14] px-6 py-8 text-center">
+        <CheckCircle2 className="w-8 h-8 text-[#A8D08A] mx-auto mb-3" />
         <div className="font-serif-warm text-[24px] tracking-[-0.01em]">Message received</div>
         <p className="text-ink-2 mt-2 max-w-[440px] mx-auto">
           A Firmcraft operator will reach out at <span className="font-mono-warm">{email || 'your email'}</span> shortly.

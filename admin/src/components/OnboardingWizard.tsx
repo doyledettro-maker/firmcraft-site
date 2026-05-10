@@ -198,7 +198,7 @@ function ScaleField({
               type="button"
               onClick={() => onChange(n)}
               className={`h-12 rounded-lg border font-mono-warm text-[13px] transition-colors ${
-                active ? 'bg-ink text-paper border-ink' : 'bg-white border-line-2 hover:border-ink text-ink'
+                active ? 'bg-accent text-white border-accent' : 'bg-paper border-line-2 hover:border-accent text-ink'
               }`}
             >
               {n}
@@ -288,7 +288,7 @@ function S4Priorities({ data, update }: { data: SurveyData; update: Update }) {
         {data.useCasePriorities.map((item, i) => (
           <li
             key={item}
-            className="flex items-center gap-3 bg-white border border-line rounded-xl px-4 py-3"
+            className="flex items-center gap-3 bg-paper-2 border border-line rounded-xl px-4 py-3"
           >
             <span className="font-mono-warm text-[12px] text-accent w-6 text-center">
               {String(i + 1).padStart(2, '0')}
@@ -299,7 +299,7 @@ function S4Priorities({ data, update }: { data: SurveyData; update: Update }) {
                 type="button"
                 onClick={() => move(i, -1)}
                 disabled={i === 0}
-                className="w-8 h-8 grid place-items-center rounded-md border border-line-2 hover:border-ink disabled:opacity-30 disabled:hover:border-line-2"
+                className="w-8 h-8 grid place-items-center rounded-md border border-line-2 hover:border-accent disabled:opacity-30 disabled:hover:border-line-2"
                 aria-label="Move up"
               >
                 <ArrowUp className="w-4 h-4" />
@@ -308,7 +308,7 @@ function S4Priorities({ data, update }: { data: SurveyData; update: Update }) {
                 type="button"
                 onClick={() => move(i, 1)}
                 disabled={i === data.useCasePriorities.length - 1}
-                className="w-8 h-8 grid place-items-center rounded-md border border-line-2 hover:border-ink disabled:opacity-30 disabled:hover:border-line-2"
+                className="w-8 h-8 grid place-items-center rounded-md border border-line-2 hover:border-accent disabled:opacity-30 disabled:hover:border-line-2"
                 aria-label="Move down"
               >
                 <ArrowDown className="w-4 h-4" />
@@ -548,7 +548,7 @@ function ContactList({
             type="button"
             onClick={() => remove(i)}
             disabled={contacts.length === 1}
-            className="h-10 w-10 grid place-items-center rounded-md border border-line-2 text-muted hover:text-ink hover:border-ink disabled:opacity-30"
+            className="h-10 w-10 grid place-items-center rounded-md border border-line-2 text-muted hover:text-ink hover:border-accent disabled:opacity-30"
             aria-label="Remove"
           >
             <Trash2 className="w-4 h-4" />
@@ -661,20 +661,20 @@ function S8Budget({ data, update }: { data: SurveyData; update: Update }) {
               onClick={() => update('planTier', key)}
               className={`text-left rounded-2xl border p-6 transition-all ${
                 active
-                  ? 'bg-ink text-paper border-ink shadow-lift-lg'
-                  : 'bg-white border-line hover:border-ink'
+                  ? 'bg-accent text-white border-accent shadow-lift-lg'
+                  : 'bg-paper-2 border-line hover:border-accent'
               }`}
             >
-              <div className={`font-mono-warm text-[11px] uppercase tracking-[0.16em] ${active ? 'text-[#A89378]' : 'text-muted'}`}>
+              <div className={`font-mono-warm text-[11px] uppercase tracking-[0.16em] ${active ? 'text-white/70' : 'text-muted'}`}>
                 {key.toUpperCase()}
               </div>
               <div className="mt-1 font-serif-warm italic text-[28px] leading-none">{meta.name}</div>
               <div className="mt-2 font-serif-warm text-[34px] leading-none">{meta.price}</div>
-              <div className={`mt-1 text-[13.5px] ${active ? 'text-[#D5C5B0]' : 'text-ink-2'}`}>{meta.tagline}</div>
-              <ul className={`mt-4 grid gap-1.5 text-[13.5px] ${active ? 'text-[#D5C5B0]' : 'text-ink-2'}`}>
+              <div className={`mt-1 text-[13.5px] ${active ? 'text-white/85' : 'text-ink-2'}`}>{meta.tagline}</div>
+              <ul className={`mt-4 grid gap-1.5 text-[13.5px] ${active ? 'text-white/85' : 'text-ink-2'}`}>
                 {features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
-                    <Check className={`w-4 h-4 flex-none mt-0.5 ${active ? 'text-accent' : 'text-accent-2'}`} />
+                    <Check className={`w-4 h-4 flex-none mt-0.5 ${active ? 'text-white' : 'text-accent-2'}`} />
                     <span>{f}</span>
                   </li>
                 ))}

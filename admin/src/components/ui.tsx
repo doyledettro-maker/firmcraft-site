@@ -22,10 +22,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const sizing =
     size === 'sm' ? 'h-8 px-3 text-[13px]' : size === 'lg' ? 'h-12 px-6 text-[15px]' : 'h-10 px-5 text-sm'
   const variants: Record<NonNullable<ButtonProps['variant']>, string> = {
-    primary: 'bg-ink text-paper border-ink hover:bg-accent hover:border-accent',
-    ghost: 'bg-transparent text-ink border-line-2 hover:border-ink hover:bg-white',
-    danger: 'bg-white text-[#A23B1F] border-[#A23B1F]/40 hover:bg-[#A23B1F] hover:text-white hover:border-[#A23B1F]',
-    subtle: 'bg-paper-2 text-ink border-transparent hover:bg-white hover:border-line-2',
+    primary: 'bg-accent text-white border-accent hover:bg-[#C56546] hover:border-[#C56546]',
+    ghost: 'bg-transparent text-ink border-line-2 hover:border-ink hover:bg-paper-2',
+    danger: 'bg-transparent text-danger border-danger/60 hover:bg-danger hover:text-paper hover:border-danger',
+    subtle: 'bg-paper-2 text-ink border-transparent hover:border-line-2',
   }
   return <button ref={ref} className={cn(base, sizing, variants[variant], className)} {...rest} />
 })
@@ -35,7 +35,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 export function Card({ className, children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('bg-white border border-line rounded-2xl', className)}
+      className={cn('bg-paper-2 border border-line rounded-2xl', className)}
       {...rest}
     >
       {children}
@@ -85,7 +85,7 @@ export function Hint({ className, children }: { className?: string; children: Re
 }
 
 const inputBase =
-  'block w-full rounded-lg border border-line-2 bg-white px-3.5 py-2.5 text-[14.5px] text-ink placeholder:text-muted/70 focus:border-ink focus:outline-none focus:ring-0 transition-colors'
+  'block w-full rounded-lg border border-line-2 bg-paper px-3.5 py-2.5 text-[14.5px] text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-0 transition-colors'
 
 export const Input = forwardRef<HTMLInputElement, InputHTMLAttributes<HTMLInputElement>>(
   function Input({ className, ...rest }, ref) {
@@ -105,7 +105,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
       <select ref={ref} className={cn(inputBase, 'pr-9 appearance-none bg-no-repeat', className)}
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238A7560' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9BBA4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
           backgroundPosition: 'right 12px center',
           backgroundSize: '12px 8px',
         }}
@@ -125,8 +125,8 @@ export function Checkbox({
   ...rest
 }: InputHTMLAttributes<HTMLInputElement> & { label: ReactNode; description?: ReactNode }) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-line-2 px-3.5 py-3 bg-white hover:border-ink transition-colors has-[:checked]:border-ink has-[:checked]:bg-paper-2">
-      <input type="checkbox" className="mt-1 h-4 w-4 accent-ink" {...rest} />
+    <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-line-2 px-3.5 py-3 bg-paper hover:border-accent transition-colors has-[:checked]:border-accent has-[:checked]:bg-paper-2">
+      <input type="checkbox" className="mt-1 h-4 w-4 accent-accent" {...rest} />
       <div className="flex-1">
         <div className="text-[14px] font-medium text-ink leading-tight">{label}</div>
         {description ? <div className="text-[12.5px] text-muted mt-0.5">{description}</div> : null}
@@ -141,8 +141,8 @@ export function Radio({
   ...rest
 }: InputHTMLAttributes<HTMLInputElement> & { label: ReactNode; description?: ReactNode }) {
   return (
-    <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-line-2 px-3.5 py-3 bg-white hover:border-ink transition-colors has-[:checked]:border-ink has-[:checked]:bg-paper-2">
-      <input type="radio" className="mt-1 h-4 w-4 accent-ink" {...rest} />
+    <label className="flex items-start gap-3 cursor-pointer rounded-lg border border-line-2 px-3.5 py-3 bg-paper hover:border-accent transition-colors has-[:checked]:border-accent has-[:checked]:bg-paper-2">
+      <input type="radio" className="mt-1 h-4 w-4 accent-accent" {...rest} />
       <div className="flex-1">
         <div className="text-[14px] font-medium text-ink leading-tight">{label}</div>
         {description ? <div className="text-[12.5px] text-muted mt-0.5">{description}</div> : null}
@@ -163,11 +163,11 @@ export function Badge({
   className?: string
 }) {
   const tones: Record<string, string> = {
-    neutral: 'bg-paper-2 text-ink-2 border-line',
-    green: 'bg-[#E5EFDC] text-[#3D5A2C] border-[#3D5A2C]/15',
-    amber: 'bg-[#F8E7C9] text-[#7A5215] border-[#7A5215]/15',
-    red: 'bg-[#F4D8CC] text-[#8A2A12] border-[#8A2A12]/15',
-    blue: 'bg-[#D6E5EC] text-[#1F4754] border-[#1F4754]/15',
+    neutral: 'bg-paper text-ink-2 border-line-2',
+    green: 'bg-[#1A2D14] text-[#A8D08A] border-[#A8D08A]/25',
+    amber: 'bg-[#2D2010] text-[#E8C580] border-[#E8C580]/25',
+    red: 'bg-[#2D1410] text-[#E8907B] border-[#E8907B]/25',
+    blue: 'bg-[#10242D] text-[#7DC3D8] border-[#7DC3D8]/25',
   }
   return (
     <span
@@ -213,9 +213,9 @@ export function Stepper({
               <span
                 className={cn(
                   'flex-none grid place-items-center w-6 h-6 rounded-full font-mono-warm text-[11px] border',
-                  status === 'done' && 'bg-accent-2 border-accent-2 text-white',
-                  status === 'active' && 'bg-ink border-ink text-paper',
-                  status === 'pending' && 'bg-white border-line-2 text-muted',
+                  status === 'done' && 'bg-accent-2 border-accent-2 text-paper',
+                  status === 'active' && 'bg-accent border-accent text-white',
+                  status === 'pending' && 'bg-paper border-line-2 text-muted',
                 )}
               >
                 {status === 'done' ? '✓' : i + 1}

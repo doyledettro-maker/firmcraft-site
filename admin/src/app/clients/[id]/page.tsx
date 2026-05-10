@@ -230,7 +230,7 @@ function scaleLabel(n?: number) {
 }
 
 function UsageBar({ label, value, limit, pct }: { label: string; value: number; limit: number; pct: number }) {
-  const tone = pct > 85 ? 'bg-[#A23B1F]' : pct > 60 ? 'bg-accent' : 'bg-accent-2'
+  const tone = pct > 85 ? 'bg-status-down' : pct > 60 ? 'bg-accent' : 'bg-accent-2'
   return (
     <div>
       <div className="flex justify-between items-baseline">
@@ -239,7 +239,7 @@ function UsageBar({ label, value, limit, pct }: { label: string; value: number; 
           {formatNumber(value)} / {formatNumber(limit)} ({pct}%)
         </span>
       </div>
-      <div className="mt-2 h-2 bg-paper-2 rounded-full overflow-hidden">
+      <div className="mt-2 h-2 bg-paper rounded-full overflow-hidden border border-line">
         <div className={`h-full ${tone} transition-all`} style={{ width: `${Math.min(100, pct)}%` }} />
       </div>
     </div>

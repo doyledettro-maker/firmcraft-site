@@ -3,22 +3,24 @@
 @tailwind utilities;
 
 :root {
-  --paper: #FBF4EA;
-  --paper-2: #F4E9D6;
-  --ink: #2D1F14;
-  --ink-2: #5A4533;
+  color-scheme: dark;
+  --paper: #14110D;
+  --paper-2: #1F1A12;
+  --ink: #F4ECDD;
+  --ink-2: #C9BBA4;
   --muted: #8A7560;
-  --line: rgba(45, 31, 20, 0.12);
-  --line-2: rgba(45, 31, 20, 0.22);
+  --line: rgba(244, 236, 221, 0.10);
+  --line-2: rgba(244, 236, 221, 0.22);
   --accent: #D97757;
-  --accent-2: #6B8E5A;
-  --accent-3: #3F7A8C;
-  --hi: #F2D9A7;
+  --accent-2: #8FB17C;
+  --accent-3: #5DA6BA;
+  --hi: #3A2D1E;
 }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  background-color: var(--paper);
 }
 
 body {
@@ -46,7 +48,7 @@ body {
 }
 
 *:focus-visible {
-  outline: 2px solid var(--ink);
+  outline: 2px solid var(--accent);
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -60,4 +62,16 @@ body {
 .serif-h-warm em {
   font-style: italic;
   color: var(--accent);
+}
+
+/* Native form widgets adopt the dark palette where possible. */
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+select option {
+  background-color: var(--paper-2);
+  color: var(--ink);
 }

@@ -145,9 +145,9 @@ export default function ClientSettingsPage({ params }: { params: { id: string } 
           </div>
         </div>
 
-        <Card className="border-[#A23B1F]/30">
-          <div className="px-6 py-5 border-b border-[#A23B1F]/20">
-            <h3 className="font-serif-warm text-[20px] text-[#A23B1F] tracking-[-0.01em]">Danger zone</h3>
+        <Card className="border-danger/40">
+          <div className="px-6 py-5 border-b border-danger/30">
+            <h3 className="font-serif-warm text-[20px] text-danger tracking-[-0.01em]">Danger zone</h3>
             <p className="text-[13px] text-ink-2 mt-1">
               Irreversible actions. Confirmation will be required when wired up.
             </p>

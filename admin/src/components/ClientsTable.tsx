@@ -47,7 +47,7 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
               key={f.key}
               onClick={() => setFilter(f.key)}
               className={`px-3 py-1 rounded-full text-[12.5px] font-medium transition-colors ${
-                filter === f.key ? 'bg-ink text-paper' : 'text-ink-2 hover:text-ink'
+                filter === f.key ? 'bg-accent text-white' : 'text-ink-2 hover:text-ink'
               }`}
             >
               {f.label}

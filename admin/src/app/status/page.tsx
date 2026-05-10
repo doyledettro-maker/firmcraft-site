@@ -34,7 +34,7 @@ export default function StatusPage() {
             </p>
           </div>
 
-          <div className="bg-white border border-line rounded-2xl px-6 py-6">
+          <div className="bg-paper-2 border border-line rounded-2xl px-6 py-6">
             <ServiceStatusList intervalMs={60_000} />
           </div>
 

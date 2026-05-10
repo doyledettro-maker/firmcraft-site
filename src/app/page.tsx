@@ -443,7 +443,7 @@ export default function HomePage() {
                 >
                   Book a 20-min call →
                 </a>
-                <Link className="btn btn-ghost btn-lg" href="/onboard">
+                <Link className="btn btn-ghost btn-lg" href="/get-started">
                   Start onboarding →
                 </Link>
               </div>
@@ -457,16 +457,16 @@ export default function HomePage() {
               >
                 Already had a call, or rather just fill out the intake yourself? The{' '}
                 <Link
-                  href="/onboard"
+                  href="/get-started"
                   style={{
                     color: 'var(--accent)',
                     textDecoration: 'underline',
                     textUnderlineOffset: '3px',
                   }}
                 >
-                  onboarding form
+                  onboarding survey
                 </Link>{' '}
-                takes about 10 minutes.
+                takes about ten minutes — chat-style or markdown template, your call.
               </p>
             </div>
             <div className="final-card">

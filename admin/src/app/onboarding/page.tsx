@@ -1,9 +1,117 @@
-import { OnboardingWizard } from '@/components/OnboardingWizard'
+import Link from 'next/link'
+import { ExternalLink, Inbox, FileText, Eye } from 'lucide-react'
+import { AppShell } from '@/components/AppShell'
+import { Button, Card, CardBody } from '@/components/ui'
 
 export const metadata = {
-  title: 'Client onboarding · Firmcraft',
+  title: 'Submissions · Firmcraft Admin',
 }
 
-export default function OnboardingPage() {
-  return <OnboardingWizard />
+export default function SubmissionsPage() {
+  return (
+    <AppShell>
+      <div className="flex items-end justify-between gap-6 mb-7 flex-wrap">
+        <div>
+          <div className="eyebrow">Onboarding submissions</div>
+          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Review submitted <em className="text-accent italic">surveys</em>
+          </h1>
+          <p className="text-ink-2 mt-2 max-w-[640px] leading-relaxed">
+            Clients fill out the onboarding survey on the public site. Once the
+            backend wiring lands, every submission will appear in the queue
+            below for review.
+          </p>
+        </div>
+        <a
+          href="https://firmcraft.ai/get-started"
+          target="_blank"
+          rel="noreferrer"
+        >
+          <Button variant="ghost">
+            <ExternalLink className="w-4 h-4" />
+            Open client form
+          </Button>
+        </a>
+      </div>
+
+      <Card className="mb-6">
+        <CardBody className="p-6">
+          <div className="flex items-start gap-4">
+            <div className="w-10 h-10 rounded-full bg-paper-2 grid place-items-center flex-none">
+              <Inbox className="w-5 h-5 text-accent" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="font-serif-warm text-[20px] tracking-[-0.01em] m-0">
+                Inbox is empty.
+              </h3>
+              <p className="text-ink-2 text-[14px] leading-relaxed mt-1">
+                We&rsquo;re still wiring submissions into this dashboard.
+                Right now they land in the API server log only — grep{' '}
+                <code className="font-mono-warm text-[12.5px] bg-paper-2 px-1.5 py-0.5 rounded">
+                  [get-started]
+                </code>{' '}
+                in the marketing site logs to see them. Once the queue is
+                live, each row below will be a real submission you can
+                review and turn into a tenant.
+              </p>
+              <div className="flex gap-2 mt-3 flex-wrap">
+                <Link href="/clients">
+                  <Button variant="ghost" size="sm">All clients</Button>
+                </Link>
+                <a
+                  href="https://firmcraft.ai/get-started"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  <Button size="sm">
+                    <FileText className="w-4 h-4" />
+                    Open the client-facing form
+                  </Button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+
+      <Card>
+        <div className="px-6 py-5 border-b border-line flex items-center justify-between gap-3 flex-wrap">
+          <div>
+            <div className="eyebrow">Pending review</div>
+            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">
+              Submission queue
+            </h3>
+          </div>
+          <Link href="/onboarding/preview">
+            <Button variant="ghost" size="sm">
+              <Eye className="w-4 h-4" />
+              Preview review tool
+            </Button>
+          </Link>
+        </div>
+
+        <div className="px-6 py-12 text-center">
+          <div className="w-12 h-12 rounded-full bg-paper-2 grid place-items-center mx-auto mb-4">
+            <Inbox className="w-5 h-5 text-muted" />
+          </div>
+          <h4 className="font-serif-warm text-[20px] tracking-[-0.01em] m-0">
+            No submissions yet.
+          </h4>
+          <p className="text-ink-2 text-[13.5px] leading-relaxed max-w-[420px] mx-auto mt-2">
+            When a client finishes the survey at firmcraft.ai/get-started,
+            it&rsquo;ll show up here for review. Until the storage backend is
+            wired, watch the marketing site server logs.
+          </p>
+          <div className="mt-5 flex justify-center">
+            <Link href="/onboarding/preview">
+              <Button variant="ghost" size="sm">
+                <Eye className="w-4 h-4" />
+                See what a submission looks like
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </Card>
+    </AppShell>
+  )
 }

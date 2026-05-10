@@ -874,20 +874,20 @@ export function OnboardingWizard() {
               <Check className="w-7 h-7" />
             </div>
             <h1 className="font-serif-warm text-[34px] mt-5 tracking-[-0.02em]">
-              Thanks <em className="not-italic text-accent">—</em> we got it.
+              Marked <em className="not-italic text-accent">reviewed.</em>
             </h1>
             <p className="text-ink-2 mt-3 leading-relaxed">
-              Your onboarding survey is in. A Firmcraft engineer will reach out within one
-              business day to schedule kickoff. You&rsquo;ll get an email at{' '}
-              <span className="font-medium text-ink">{data.primaryContactEmail || 'your contact address'}</span>{' '}
-              with next steps.
+              In production this will move the submission to the &ldquo;reviewed&rdquo;
+              pile and trigger the kickoff scheduling email to{' '}
+              <span className="font-medium text-ink">{data.primaryContactEmail || 'the primary contact'}</span>.
+              For now this is just a UI preview.
             </p>
             <div className="flex gap-3 justify-center mt-7">
-              <Link href="/">
-                <Button variant="ghost">Back to admin</Button>
+              <Link href="/onboarding">
+                <Button variant="ghost">← Back to inbox</Button>
               </Link>
               <Button onClick={() => { setSubmitted(false); setStep(0); setData(emptySurvey) }}>
-                Start a new survey
+                Reset preview
               </Button>
             </div>
           </CardBody>
@@ -901,15 +901,18 @@ export function OnboardingWizard() {
       {/* Top bar */}
       <header className="sticky top-0 z-40 bg-paper/85 backdrop-blur border-b border-line">
         <div className="max-w-[1240px] mx-auto px-6 h-16 flex items-center justify-between">
-          <Link href="/" className="no-underline">
+          <Link href="/onboarding" className="no-underline">
             <Logo />
           </Link>
           <div className="flex items-center gap-4 text-[13px] text-muted">
-            <span className="hidden sm:inline">
-              Step <span className="text-ink font-medium">{step + 1}</span> of {SECTIONS.length}
+            <span className="hidden md:inline font-mono-warm text-[11px] uppercase tracking-[0.14em] text-accent">
+              Submission preview
             </span>
-            <Link href="/">
-              <Button variant="ghost" size="sm">Save &amp; exit</Button>
+            <span className="hidden sm:inline">
+              Section <span className="text-ink font-medium">{step + 1}</span> of {SECTIONS.length}
+            </span>
+            <Link href="/onboarding">
+              <Button variant="ghost" size="sm">← Back to inbox</Button>
             </Link>
           </div>
         </div>
@@ -951,12 +954,12 @@ export function OnboardingWizard() {
               </Button>
               {isLast ? (
                 <Button onClick={() => setSubmitted(true)}>
-                  Submit survey
+                  Mark reviewed
                   <Check className="w-4 h-4" />
                 </Button>
               ) : (
                 <Button onClick={() => setStep((s) => Math.min(SECTIONS.length - 1, s + 1))}>
-                  Continue
+                  Next section
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               )}

@@ -6,6 +6,7 @@ import { Search } from 'lucide-react'
 import { Input } from './ui'
 import { StatusBadge } from './StatusBadge'
 import type { Client, ClientStatus } from '@/lib/mock-clients'
+import { getPartnerForClient } from '@/lib/mock-partners'
 import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
 
 const FILTERS: Array<{ key: 'all' | ClientStatus; label: string }> = [
@@ -23,7 +24,11 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
     const q = query.trim().toLowerCase()
     return clients.filter((c) => {
       if (filter !== 'all' && c.status !== filter) return false
-      if (q && !`${c.name} ${c.industry} ${c.contactName} ${c.contactEmail}`.toLowerCase().includes(q)) return false
+      if (q) {
+        const partner = getPartnerForClient(c.id)
+        const haystack = `${c.name} ${c.industry} ${c.contactName} ${c.contactEmail} ${partner?.name ?? ''}`
+        if (!haystack.toLowerCase().includes(q)) return false
+      }
       return true
     })
   }, [clients, filter, query])
@@ -64,6 +69,7 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
               <Th>Client</Th>
               <Th>Status</Th>
               <Th>Plan</Th>
+              <Th>Partner</Th>
               <Th className="text-right">MRR</Th>
               <Th className="text-right">Users</Th>
               <Th className="text-right">AI calls / mo</Th>
@@ -71,31 +77,46 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
             </tr>
           </thead>
           <tbody>
-            {visible.map((c) => (
-              <tr key={c.id} className="hover:bg-paper-2 transition-colors">
-                <td className="px-4 py-3 border-t border-line">
-                  <Link href={`/clients/${c.id}`} className="block">
-                    <div className="font-medium text-ink">{c.name}</div>
-                    <div className="text-[12.5px] text-muted">{c.industry} · {c.contactEmail}</div>
-                  </Link>
-                </td>
-                <td className="px-4 py-3 border-t border-line">
-                  <StatusBadge status={c.status} />
-                </td>
-                <td className="px-4 py-3 border-t border-line font-mono-warm text-[12px] uppercase tracking-[0.12em] text-ink-2">
-                  {c.planTier}
-                </td>
-                <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(c.monthlyRevenue)}</td>
-                <td className="px-4 py-3 border-t border-line text-right tabular-nums">
-                  {c.usage.activeUsers}<span className="text-muted">/{c.usage.seats}</span>
-                </td>
-                <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatNumber(c.usage.aiCallsThisMonth)}</td>
-                <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2 whitespace-nowrap">{formatDate(c.createdAt)}</td>
-              </tr>
-            ))}
+            {visible.map((c) => {
+              const partner = getPartnerForClient(c.id)
+              return (
+                <tr key={c.id} className="hover:bg-paper-2 transition-colors">
+                  <td className="px-4 py-3 border-t border-line">
+                    <Link href={`/clients/${c.id}`} className="block">
+                      <div className="font-medium text-ink">{c.name}</div>
+                      <div className="text-[12.5px] text-muted">{c.industry} · {c.contactEmail}</div>
+                    </Link>
+                  </td>
+                  <td className="px-4 py-3 border-t border-line">
+                    <StatusBadge status={c.status} />
+                  </td>
+                  <td className="px-4 py-3 border-t border-line font-mono-warm text-[12px] uppercase tracking-[0.12em] text-ink-2">
+                    {c.planTier}
+                  </td>
+                  <td className="px-4 py-3 border-t border-line text-[13px]">
+                    {partner ? (
+                      <Link
+                        href={`/partners/${partner.id}`}
+                        className="text-accent-2 hover:underline underline-offset-2"
+                      >
+                        {partner.name}
+                      </Link>
+                    ) : (
+                      <span className="text-muted">Direct</span>
+                    )}
+                  </td>
+                  <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatCurrency(c.monthlyRevenue)}</td>
+                  <td className="px-4 py-3 border-t border-line text-right tabular-nums">
+                    {c.usage.activeUsers}<span className="text-muted">/{c.usage.seats}</span>
+                  </td>
+                  <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatNumber(c.usage.aiCallsThisMonth)}</td>
+                  <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2 whitespace-nowrap">{formatDate(c.createdAt)}</td>
+                </tr>
+              )
+            })}
             {visible.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-muted border-t border-line">
+                <td colSpan={8} className="px-4 py-10 text-center text-muted border-t border-line">
                   No clients match.
                 </td>
               </tr>

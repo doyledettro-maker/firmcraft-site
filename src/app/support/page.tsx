@@ -60,7 +60,7 @@ const FAQ: { q: React.ReactNode; a: React.ReactNode }[] = [
         includes a monthly AI token allowance; usage is tracked in real time and visible to you.
         Anything past the included allowance is billed at the published per-token rates — no
         markups, no surprise minimums. See the{' '}
-        <Link href="/#pricing" className="text-accent hover:underline underline-offset-[3px]">
+        <Link href="/pricing" className="text-accent hover:underline underline-offset-[3px]">
           pricing page
         </Link>{' '}
         for current rates.

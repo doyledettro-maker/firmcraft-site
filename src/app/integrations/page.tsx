@@ -630,7 +630,7 @@ export default function IntegrationsPage() {
                   { href: '/capabilities', label: 'The six capabilities' },
                   { href: '/security', label: 'Security & trust' },
                   { href: '/playbooks', label: 'The 40 playbooks library' },
-                  { href: '/#pricing', label: 'Pricing — flat, all-seats' },
+                  { href: '/pricing', label: 'Pricing — flat, all-seats' },
                 ].map((it, i, arr) => (
                   <li key={it.href}>
                     <Link

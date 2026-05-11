@@ -2,15 +2,15 @@ import Link from 'next/link'
 import { BrandMark } from './BrandMark'
 
 const NAV_ITEMS: { label: string; href: string }[] = [
-  { label: 'How it works', href: '/#how' },
-  { label: 'Pricing', href: '/#pricing' },
+  { label: 'How it works', href: '/how-it-works' },
+  { label: 'Pricing', href: '/pricing' },
   { label: 'Playbooks', href: '/playbooks' },
   { label: 'Capabilities', href: '/capabilities' },
   { label: 'Security', href: '/security' },
   { label: 'Integrations', href: '/integrations' },
 ]
 
-type Current = 'home' | 'playbooks' | 'capabilities' | 'security' | 'integrations'
+type Current = 'home' | 'playbooks' | 'capabilities' | 'security' | 'integrations' | 'pricing' | 'how-it-works'
 
 export function SiteHeader({ current }: { current?: Current }) {
   return (
@@ -29,7 +29,9 @@ export function SiteHeader({ current }: { current?: Current }) {
               (current === 'playbooks' && item.href === '/playbooks') ||
               (current === 'capabilities' && item.href === '/capabilities') ||
               (current === 'security' && item.href === '/security') ||
-              (current === 'integrations' && item.href === '/integrations')
+              (current === 'integrations' && item.href === '/integrations') ||
+              (current === 'pricing' && item.href === '/pricing') ||
+              (current === 'how-it-works' && item.href === '/how-it-works')
             return (
               <Link
                 key={item.href}

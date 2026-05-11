@@ -35,7 +35,7 @@ html {
 body {
   background-color: var(--paper);
   color: var(--ink);
-  font-family: "Geist", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
 }
@@ -45,12 +45,12 @@ body {
   font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
 }
 .font-mono-warm {
-  font-family: "Geist Mono", ui-monospace, monospace;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 /* Eyebrow — small mono uppercase tag */
 .eyebrow {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px;
   letter-spacing: 0.18em;
   text-transform: uppercase;
@@ -267,7 +267,7 @@ body {
   background: #D9C7A8; display: block;
 }
 .chat-bar .title {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11.5px; color: var(--muted); margin-left: 8px;
 }
 .chat-body { display: grid; grid-template-columns: 190px 1fr; }
@@ -290,7 +290,7 @@ body {
   letter-spacing: 0.14em; color: #A89378;
   margin: 18px 0 6px; padding: 0 8px;
   font-weight: 500;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
 }
 .chat-side .ch {
   display: flex; align-items: center; gap: 6px;
@@ -323,7 +323,7 @@ body {
   width: 34px; height: 34px; border-radius: 50%;
   display: grid; place-items: center;
   color: #fff; font-weight: 600; font-size: 13px;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
 }
 .av.a1 { background: var(--accent); }
 .av.a2 { background: var(--accent-2); }
@@ -331,7 +331,7 @@ body {
 .msg .name { font-weight: 600; font-size: 13.5px; }
 .msg .ts {
   color: var(--muted); font-size: 11.5px; margin-left: 6px;
-  font-family: "Geist Mono", monospace; font-weight: 400;
+  font-family: var(--font-geist-mono), monospace; font-weight: 400;
 }
 .msg .body {
   font-size: 14.5px; color: var(--ink); margin-top: 2px; line-height: 1.5;
@@ -345,7 +345,7 @@ body {
   margin-top: 10px; background: var(--paper);
   border: 1px solid var(--line); border-radius: 10px;
   padding: 10px 12px;
-  font-family: "Geist Mono", monospace; font-size: 12px;
+  font-family: var(--font-geist-mono), monospace; font-size: 12px;
 }
 .bot-status .step {
   display: flex; align-items: center; gap: 8px; padding: 3px 0;
@@ -377,7 +377,7 @@ body {
   width: 24px; height: 24px; border-radius: 6px;
   background: #fff; border: 1px solid var(--line);
   display: grid; place-items: center;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 10px; font-weight: 600; color: var(--accent);
 }
 .bot-card .body2 { padding: 10px 12px; font-size: 13px; }
@@ -388,7 +388,7 @@ body {
 .bot-card .body2 .row:last-child { border-bottom: 0; }
 .bot-card .body2 .l {
   color: var(--muted);
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11.5px;
 }
 .chat-input {
@@ -407,7 +407,7 @@ body {
 .scene-tab {
   padding: 6px 12px; border-radius: 999px;
   background: transparent; border: 1px solid transparent;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 10.5px; letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--ink-2); cursor: pointer;
@@ -432,7 +432,7 @@ body {
   justify-content: space-between; flex-wrap: wrap;
 }
 .proof .label {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--muted);
 }
@@ -444,7 +444,7 @@ body {
   height: 38px; min-width: 140px;
   border: 1.5px dashed var(--line-2);
   border-radius: 999px; display: grid; place-items: center;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 10.5px; color: var(--muted); letter-spacing: 0.1em;
   padding: 0 16px;
 }
@@ -477,7 +477,7 @@ body {
   display: flex; flex-direction: column; gap: 8px;
 }
 .pcell .num {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; color: var(--accent); letter-spacing: 0.14em;
 }
 .pcell h3 {
@@ -510,7 +510,7 @@ body {
   color: var(--accent); font-weight: 500;
 }
 .how-cell .step-n {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; color: var(--accent); letter-spacing: 0.14em;
 }
 .how-cell h4 {
@@ -544,13 +544,13 @@ body {
 .price-card .badge {
   position: absolute; top: -12px; left: 24px;
   background: var(--accent); color: #fff;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 10.5px; letter-spacing: 0.14em;
   text-transform: uppercase;
   padding: 5px 12px; border-radius: 999px;
 }
 .tier {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; letter-spacing: 0.16em;
   text-transform: uppercase; color: var(--muted);
 }
@@ -571,7 +571,7 @@ body {
 .price-amount .per { font-size: 13px; color: var(--muted); }
 .price-card.feat .price-amount .per { color: #A89378; }
 .price-setup {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 12.5px; color: var(--muted);
 }
 .price-card.feat .price-setup { color: #A89378; }
@@ -611,7 +611,7 @@ body {
   box-shadow: 0 14px 30px -12px rgba(45, 31, 20, 0.18);
 }
 .ind .num {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; color: var(--muted); letter-spacing: 0.14em;
 }
 .ind .glyph {
@@ -651,7 +651,7 @@ body {
   vertical-align: top;
 }
 .ctable thead th {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; letter-spacing: 0.14em;
   text-transform: uppercase; color: var(--muted);
   font-weight: 500; background: #fff;
@@ -713,7 +713,7 @@ body {
 }
 .final-card .attr {
   margin-top: 12px;
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-geist-mono), monospace;
   font-size: 11px; color: var(--muted);
   letter-spacing: 0.1em; text-transform: uppercase;
 }

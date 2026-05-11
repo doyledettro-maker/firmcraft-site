@@ -91,7 +91,7 @@ function Demo2Schedule() {
               r.now ? 'text-paper' : 'text-ink',
               'font-sans text-[12px] tracking-normal normal-case',
             ].join(' ')}
-            style={{ fontFamily: 'Geist, sans-serif' }}
+            style={{ fontFamily: 'var(--font-geist), sans-serif' }}
           >
             {r.nm}
           </span>
@@ -135,7 +135,7 @@ function Demo3Events() {
           </span>
           <span
             className="text-[12px] text-ink normal-case"
-            style={{ fontFamily: 'Geist, sans-serif' }}
+            style={{ fontFamily: 'var(--font-geist), sans-serif' }}
           >
             {e.desc}
           </span>
@@ -204,7 +204,7 @@ function Demo5Memory() {
         <div
           key={n.lab}
           className="bg-white border border-[var(--line)] rounded-lg px-[11px] py-2 text-[11.5px] leading-[1.4] text-ink-2"
-          style={{ fontFamily: 'Geist, sans-serif' }}
+          style={{ fontFamily: 'var(--font-geist), sans-serif' }}
         >
           <span className="font-mono-warm text-[9.5px] tracking-[0.1em] text-accent uppercase block mb-0.5 font-medium">
             {n.lab}
@@ -697,8 +697,8 @@ export default function CapabilitiesPage() {
               <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-3.5 font-serif-warm text-[18px] leading-[1.45]">
                 {[
                   { href: '/playbooks', label: 'The 40 playbooks library' },
-                  { href: '/#how', label: 'How a five-day onboarding goes' },
-                  { href: '/#pricing', label: 'Pricing — flat, all-seats, no math' },
+                  { href: '/how-it-works', label: 'How a five-day onboarding goes' },
+                  { href: '/pricing', label: 'Pricing — flat, all-seats, no math' },
                   { href: '/integrations', label: 'The full integrations wall' },
                 ].map((it, i, arr) => (
                   <li key={it.href}>

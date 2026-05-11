@@ -3,14 +3,19 @@
 import { useRef, useState } from 'react'
 import {
   buildMarkdownTemplate,
-  parseMarkdownAnswers,
+  reviewMarkdownImport,
   answersFilename,
+  type ImportReview,
 } from '@/lib/survey-markdown'
 import { SURVEY_SECTIONS, answerKey, type SurveyAnswers } from '@/lib/survey'
 
 type ParseError = {
   message: string
 }
+
+type Stage =
+  | { kind: 'idle' }
+  | { kind: 'preview'; review: ImportReview; hint: string }
 
 export function MarkdownForm({
   onCancel,
@@ -24,6 +29,7 @@ export function MarkdownForm({
   const [error, setError] = useState<ParseError | null>(null)
   const [busy, setBusy] = useState(false)
   const [pasted, setPasted] = useState('')
+  const [stage, setStage] = useState<Stage>({ kind: 'idle' })
 
   function handleDownload() {
     const template = buildMarkdownTemplate()
@@ -38,22 +44,20 @@ export function MarkdownForm({
     URL.revokeObjectURL(url)
   }
 
-  function processText(text: string, hint?: string) {
+  async function processText(text: string, hint?: string) {
     setError(null)
     try {
-      const parsed = parseMarkdownAnswers(text)
-      const answeredCount = Object.values(parsed).filter(
-        (v) => v.trim().length > 0,
-      ).length
-      if (answeredCount === 0) {
+      const review = await reviewMarkdownImport(text)
+      if (review.stats.answeredQuestions === 0) {
         setError({
           message:
             "We couldn't find any answers in that file. Make sure section headings start with '##' and question headings start with '###'.",
         })
         return
       }
-      const companyOverview = parsed[answerKey('company', 'overview')] || ''
-      onParsed(parsed, hint || extractHint(companyOverview))
+      const companyOverview = review.answers[answerKey('company', 'overview')] || ''
+      const inferred = hint || extractHint(companyOverview)
+      setStage({ kind: 'preview', review, hint: inferred })
     } catch (err) {
       setError({
         message:
@@ -66,7 +70,7 @@ export function MarkdownForm({
     setBusy(true)
     try {
       const text = await file.text()
-      processText(text, file.name.replace(/\.md$/i, '').replace(/[-_]/g, ' '))
+      await processText(text, file.name.replace(/\.md$/i, '').replace(/[-_]/g, ' '))
     } catch {
       setError({ message: 'Could not read that file.' })
     } finally {
@@ -91,6 +95,17 @@ export function MarkdownForm({
     void handleFile(first)
   }
 
+  if (stage.kind === 'preview') {
+    return (
+      <ImportPreview
+        review={stage.review}
+        hint={stage.hint}
+        onBack={() => setStage({ kind: 'idle' })}
+        onConfirm={() => onParsed(stage.review.answers, stage.hint)}
+      />
+    )
+  }
+
   return (
     <div className="grid lg:grid-cols-[1fr_1fr] gap-6">
       {/* Step 1: download */}
@@ -110,6 +125,11 @@ export function MarkdownForm({
           A plain markdown file with all 10 sections and the questions inside.
           Open it in any editor — VS Code, Obsidian, Typora, plain Notepad. Take
           your time. Share it with the team if you want a second opinion.
+        </p>
+        <p className="text-[12.5px] text-muted leading-[1.5] m-0">
+          The file includes instructions for AI agents, so you can also hand it
+          to Claude, ChatGPT, or any other model and have it draft the answers
+          for you.
         </p>
         <ul className="grid gap-1.5 text-[13px] text-muted m-0 p-0 list-none">
           {SURVEY_SECTIONS.map((s) => (
@@ -144,8 +164,8 @@ export function MarkdownForm({
           Drop your filled <em>.md</em> here.
         </h3>
         <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
-          We&apos;ll parse it, show you what we caught, and let you edit anything
-          before you submit.
+          We&apos;ll parse it, show you a preview with any issues we caught, and
+          let you confirm before anything is written.
         </p>
 
         <div
@@ -225,7 +245,7 @@ export function MarkdownForm({
             />
             <button
               type="button"
-              onClick={() => processText(pasted)}
+              onClick={() => void processText(pasted)}
               disabled={!pasted.trim()}
               className="btn btn-ghost self-start disabled:opacity-40 disabled:cursor-not-allowed"
             >
@@ -262,6 +282,159 @@ export function MarkdownForm({
           Empty sections and skipped questions are fine.
         </p>
       </div>
+    </div>
+  )
+}
+
+function ImportPreview({
+  review,
+  hint,
+  onBack,
+  onConfirm,
+}: {
+  review: ImportReview
+  hint: string
+  onBack: () => void
+  onConfirm: () => void
+}) {
+  const { stats, issues } = review
+  const warnings = issues.filter((i) => i.level === 'warning' || i.level === 'error')
+  const infos = issues.filter((i) => i.level === 'info')
+
+  return (
+    <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 max-w-[760px] mx-auto">
+      <div className="flex items-center justify-between">
+        <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+          Preview
+        </span>
+        <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+          Confirm to continue
+        </span>
+      </div>
+      <h3 className="font-serif-warm font-medium text-[26px] leading-[1.15] tracking-[-0.01em] m-0 serif-h">
+        Here&apos;s what we <em>parsed.</em>
+      </h3>
+
+      <div className="grid grid-cols-3 gap-3">
+        <Stat label="Total questions" value={stats.totalQuestions} />
+        <Stat label="Answered" value={stats.answeredQuestions} accent />
+        <Stat label="Empty" value={stats.emptyQuestions} muted={stats.emptyQuestions === 0} />
+      </div>
+
+      {hint && (
+        <p className="text-[13.5px] text-ink-2 m-0">
+          Company hint: <span className="font-mono-warm text-ink">{hint}</span>
+        </p>
+      )}
+
+      {warnings.length > 0 && (
+        <IssueList
+          title={`${warnings.length} issue${warnings.length === 1 ? '' : 's'} to look at`}
+          issues={warnings}
+          tone="warning"
+        />
+      )}
+
+      {infos.length > 0 && (
+        <details>
+          <summary className="cursor-pointer text-[12.5px] font-mono-warm tracking-[0.1em] uppercase text-muted hover:text-ink list-none">
+            <span className="mr-1.5">+</span>
+            {infos.length} skipped question{infos.length === 1 ? '' : 's'}
+          </summary>
+          <IssueList title="" issues={infos} tone="info" />
+        </details>
+      )}
+
+      <div className="flex items-center justify-between gap-3 flex-wrap pt-2 border-t border-[var(--line)]">
+        <button
+          type="button"
+          onClick={onBack}
+          className="btn btn-ghost"
+        >
+          ← Upload a different file
+        </button>
+        <button
+          type="button"
+          onClick={onConfirm}
+          className="btn btn-primary"
+        >
+          Continue to review →
+        </button>
+      </div>
+    </div>
+  )
+}
+
+function Stat({
+  label,
+  value,
+  accent,
+  muted,
+}: {
+  label: string
+  value: number
+  accent?: boolean
+  muted?: boolean
+}) {
+  return (
+    <div
+      className={[
+        'rounded-xl border p-4 flex flex-col gap-1',
+        accent ? 'border-accent/40 bg-paper/60' : 'border-[var(--line)] bg-paper/30',
+        muted ? 'opacity-60' : '',
+      ].join(' ')}
+    >
+      <span className="font-mono-warm text-[10.5px] tracking-[0.14em] uppercase text-muted">
+        {label}
+      </span>
+      <span
+        className={[
+          'font-serif-warm font-medium text-[28px] leading-[1] tracking-[-0.01em]',
+          accent ? 'text-accent' : 'text-ink',
+        ].join(' ')}
+      >
+        {value}
+      </span>
+    </div>
+  )
+}
+
+function IssueList({
+  title,
+  issues,
+  tone,
+}: {
+  title: string
+  issues: { level: string; message: string; questionKey?: string }[]
+  tone: 'warning' | 'info'
+}) {
+  const styles =
+    tone === 'warning'
+      ? {
+          color: '#B45A3A',
+          background: 'rgba(180,90,58,.06)',
+          borderColor: 'rgba(180,90,58,.25)',
+        }
+      : {
+          color: 'var(--ink-2)',
+          background: 'var(--paper)',
+          borderColor: 'var(--line)',
+        }
+  return (
+    <div
+      className="rounded-xl border p-4 flex flex-col gap-2"
+      style={styles}
+    >
+      {title && (
+        <div className="font-mono-warm text-[11px] tracking-[0.12em] uppercase font-medium">
+          {title}
+        </div>
+      )}
+      <ul className="m-0 p-0 list-none flex flex-col gap-1.5 text-[13.5px] leading-[1.5]">
+        {issues.map((issue, i) => (
+          <li key={`${issue.questionKey ?? 'i'}-${i}`}>· {issue.message}</li>
+        ))}
+      </ul>
     </div>
   )
 }

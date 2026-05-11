@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   Button,
@@ -15,6 +15,13 @@ import {
   Textarea,
 } from '@/components/ui'
 import { emptySurvey, planMeta, type SurveyData, type PlanTier } from '@/lib/survey'
+import {
+  buildPartnerMarkdownTemplate,
+  partnerAnswersFilename,
+  reviewPartnerMarkdownImport,
+  type PartnerImportReview,
+  type PartnerSurveyAnswers,
+} from '@/lib/survey-markdown'
 import { CheckCircle2 } from 'lucide-react'
 
 type Draft = Pick<
@@ -47,6 +54,97 @@ const initial: Draft = {
   specialNeeds: '',
   priorityFeatures: '',
   partnerNote: '',
+}
+
+// Map the flat freeform PartnerSurveyAnswers onto our typed Draft. Text fields
+// copy verbatim; dropdown enums use a small fuzzy match and fall through to
+// the current value (so re-import never blows away a manually-picked enum).
+function mergeAnswersIntoDraft(answers: PartnerSurveyAnswers, current: Draft): Draft {
+  const get = (k: string) => (answers[k] || '').trim()
+
+  const overview = get('company.overview')
+  const { companyName, industry } = splitCompanyOverview(overview, current)
+  const companySize = matchCompanySize(overview) ?? current.companySize
+  const planTier = matchPlanTier(get('plan.planTier')) ?? current.planTier
+  const implementationTimeline =
+    matchTimeline(get('plan.timeline')) ?? current.implementationTimeline
+
+  return {
+    companyName,
+    industry,
+    companySize,
+    website: get('company.website') || current.website,
+    primaryContactName: get('contact.name') || current.primaryContactName,
+    primaryContactEmail: get('contact.email') || current.primaryContactEmail,
+    primaryContactRole: get('contact.role') || current.primaryContactRole,
+    planTier,
+    implementationTimeline,
+    successMetrics: get('plan.successMetrics') || current.successMetrics,
+    specialNeeds: get('notes.complianceNeeds') || current.specialNeeds,
+    priorityFeatures: get('notes.priorityFeatures') || current.priorityFeatures,
+    partnerNote: get('notes.partnerNote') || current.partnerNote,
+  }
+}
+
+function splitCompanyOverview(
+  overview: string,
+  current: Draft,
+): { companyName: string; industry: string } {
+  if (!overview) {
+    return { companyName: current.companyName, industry: current.industry }
+  }
+  const firstLine = overview.split(/\r?\n/)[0]
+  const [head, ...rest] = firstLine.split(/\s+[—–-]\s+/)
+  const tail = rest.join(' — ').trim()
+  return {
+    companyName: head.trim().slice(0, 120) || current.companyName,
+    industry: tail.slice(0, 200) || current.industry,
+  }
+}
+
+function matchCompanySize(text: string): Draft['companySize'] | null {
+  const t = text.toLowerCase()
+  if (/\b(500\+|1000|10,?000|over 500|more than 500)\b/.test(t)) return '500+'
+  if (/\b(201[-\s]?500|300|400|450)\b/.test(t)) return '201-500'
+  if (/\b(51[-\s]?200|100|150|200)\b/.test(t)) return '51-200'
+  if (/\b(11[-\s]?50|20|30|40|50)\b/.test(t)) return '11-50'
+  if (/\b(1[-\s]?10|under 10|small|single[-\s]location|family|2 staff|5 staff)\b/.test(t)) return '1-10'
+  return null
+}
+
+function matchPlanTier(text: string): PlanTier | null {
+  const t = text.toLowerCase()
+  if (/forge|1,?499|enterprise/.test(t)) return 'forge'
+  if (/flow|799/.test(t)) return 'flow'
+  if (/spark|399/.test(t)) return 'spark'
+  return null
+}
+
+function matchTimeline(text: string): Draft['implementationTimeline'] | null {
+  const t = text.toLowerCase()
+  if (/asap|immediately|right away|this week|next week/.test(t)) return 'asap'
+  if (/30[-\s]?day|within a month|one month/.test(t)) return '30-days'
+  if (/60[-\s]?day|two months/.test(t)) return '60-days'
+  if (/90[-\s]?day|quarter|three months/.test(t)) return '90-days'
+  if (/flexible|no rush|when ready|tbd/.test(t)) return 'flexible'
+  return null
+}
+
+function draftToAnswers(draft: Draft): PartnerSurveyAnswers {
+  const overview = [draft.companyName, draft.industry].filter(Boolean).join(' — ')
+  return {
+    'company.overview': overview,
+    'company.website': draft.website,
+    'contact.name': draft.primaryContactName,
+    'contact.email': draft.primaryContactEmail,
+    'contact.role': draft.primaryContactRole,
+    'plan.planTier': draft.planTier ? planMeta[draft.planTier].name : '',
+    'plan.timeline': draft.implementationTimeline,
+    'plan.successMetrics': draft.successMetrics,
+    'notes.priorityFeatures': draft.priorityFeatures,
+    'notes.complianceNeeds': draft.specialNeeds,
+    'notes.partnerNote': draft.partnerNote,
+  }
 }
 
 export function SubmitClientForm({ partnerName }: { partnerName: string }) {
@@ -122,6 +220,11 @@ export function SubmitClientForm({ partnerName }: { partnerName: string }) {
 
   return (
     <form onSubmit={onSubmit} className="grid gap-6 max-w-[820px]">
+      <MarkdownImportCard
+        draft={draft}
+        onApply={(answers) => setDraft((d) => mergeAnswersIntoDraft(answers, d))}
+      />
+
       <Card>
         <div className="px-6 py-5 border-b border-line">
           <div className="eyebrow">Section 1 · Company profile</div>
@@ -328,5 +431,222 @@ export function SubmitClientForm({ partnerName }: { partnerName: string }) {
         </span>
       </div>
     </form>
+  )
+}
+
+// ---------------------------------------------------------------------------
+// Markdown import card
+// ---------------------------------------------------------------------------
+
+function MarkdownImportCard({
+  draft,
+  onApply,
+}: {
+  draft: Draft
+  onApply: (answers: PartnerSurveyAnswers) => void
+}) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [busy, setBusy] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const [preview, setPreview] = useState<PartnerImportReview | null>(null)
+
+  function handleDownload() {
+    const md = buildPartnerMarkdownTemplate(draftToAnswers(draft), {
+      companyHint: draft.companyName,
+    })
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = partnerAnswersFilename(draft.companyName)
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+    URL.revokeObjectURL(url)
+  }
+
+  async function handleFile(file: File) {
+    setBusy(true)
+    setError(null)
+    try {
+      const text = await file.text()
+      const review = await reviewPartnerMarkdownImport(text, draftToAnswers(draft))
+      if (review.stats.answeredQuestions === 0) {
+        setError(
+          "Couldn't find any answers in that file. Make sure section headings start with '##' and question headings start with '###'.",
+        )
+        return
+      }
+      setPreview(review)
+    } catch {
+      setError('Could not read that file.')
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  if (preview) {
+    return (
+      <Card>
+        <div className="px-6 py-5 border-b border-line">
+          <div className="eyebrow">Preview · confirm to apply</div>
+          <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+            Here&rsquo;s what we parsed.
+          </h3>
+        </div>
+        <CardBody className="flex flex-col gap-4">
+          <div className="grid grid-cols-3 gap-3">
+            <PreviewStat label="Total" value={preview.stats.totalQuestions} />
+            <PreviewStat label="Answered" value={preview.stats.answeredQuestions} accent />
+            <PreviewStat label="Empty" value={preview.stats.emptyQuestions} />
+          </div>
+          {preview.stats.changedQuestions > 0 && (
+            <p className="text-[13px] text-ink-2 m-0">
+              <strong className="font-medium text-ink">
+                {preview.stats.changedQuestions}
+              </strong>{' '}
+              answer{preview.stats.changedQuestions === 1 ? '' : 's'} will change the
+              current draft.
+            </p>
+          )}
+          {preview.issues.filter((i) => i.level !== 'info').length > 0 && (
+            <div
+              className="rounded-lg border px-3 py-2.5 text-[13px] flex flex-col gap-1.5"
+              style={{
+                color: '#A23B1F',
+                background: 'rgba(162,59,31,.05)',
+                borderColor: 'rgba(162,59,31,.25)',
+              }}
+            >
+              <div className="font-medium uppercase tracking-[0.1em] text-[11px]">
+                Heads up
+              </div>
+              <ul className="m-0 p-0 list-none flex flex-col gap-1">
+                {preview.issues
+                  .filter((i) => i.level !== 'info')
+                  .map((issue, i) => (
+                    <li key={i}>· {issue.message}</li>
+                  ))}
+              </ul>
+            </div>
+          )}
+          {preview.issues.filter((i) => i.level === 'info').length > 0 && (
+            <details>
+              <summary className="cursor-pointer text-[12px] uppercase tracking-[0.1em] text-muted hover:text-ink list-none">
+                + {preview.issues.filter((i) => i.level === 'info').length} skipped
+                question(s)
+              </summary>
+              <ul className="m-0 p-0 mt-2 list-none flex flex-col gap-1 text-[13px] text-ink-2">
+                {preview.issues
+                  .filter((i) => i.level === 'info')
+                  .map((issue, i) => (
+                    <li key={i}>· {issue.message}</li>
+                  ))}
+              </ul>
+            </details>
+          )}
+          <div className="flex items-center gap-2 pt-2 border-t border-line">
+            <Button
+              type="button"
+              onClick={() => {
+                onApply(preview.answers)
+                setPreview(null)
+              }}
+            >
+              Apply to form
+            </Button>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => setPreview(null)}
+            >
+              Cancel
+            </Button>
+          </div>
+        </CardBody>
+      </Card>
+    )
+  }
+
+  return (
+    <Card>
+      <div className="px-6 py-5 border-b border-line">
+        <div className="eyebrow">Optional · markdown template</div>
+        <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+          Prefer to draft offline?
+        </h3>
+      </div>
+      <CardBody className="flex flex-col gap-3">
+        <p className="text-[13.5px] text-ink-2 leading-snug m-0">
+          Download a markdown file with the four sections. Fill it in any editor —
+          or hand it to Claude/ChatGPT and let an AI agent draft answers. Drop
+          the filled file back here and we&rsquo;ll preview before pre-filling
+          the form.
+        </p>
+        <div className="flex items-center gap-2 flex-wrap">
+          <Button type="button" variant="ghost" size="sm" onClick={handleDownload}>
+            ↓ Download template (.md)
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            disabled={busy}
+            onClick={() => fileInputRef.current?.click()}
+          >
+            {busy ? 'Reading…' : '↑ Upload filled markdown'}
+          </Button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".md,text/markdown,text/plain"
+            className="sr-only"
+            onChange={(e) => {
+              const f = e.target.files?.[0]
+              if (f) void handleFile(f)
+              e.target.value = ''
+            }}
+          />
+        </div>
+        {error && (
+          <div
+            className="text-[13px] rounded-lg border px-3 py-2"
+            style={{
+              color: '#A23B1F',
+              background: 'rgba(162,59,31,.05)',
+              borderColor: 'rgba(162,59,31,.25)',
+            }}
+          >
+            {error}
+          </div>
+        )}
+      </CardBody>
+    </Card>
+  )
+}
+
+function PreviewStat({
+  label,
+  value,
+  accent,
+}: {
+  label: string
+  value: number
+  accent?: boolean
+}) {
+  return (
+    <div className="rounded-lg border border-line bg-paper/30 px-3 py-2.5 flex flex-col gap-0.5">
+      <span className="text-[10.5px] uppercase tracking-[0.12em] text-muted">
+        {label}
+      </span>
+      <span
+        className={[
+          'font-serif-warm text-[22px] leading-[1] tracking-[-0.01em]',
+          accent ? 'text-accent' : 'text-ink',
+        ].join(' ')}
+      >
+        {value}
+      </span>
+    </div>
   )
 }

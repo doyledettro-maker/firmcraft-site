@@ -44,7 +44,7 @@ const PLANS = [
     badge: 'Most popular',
   },
   {
-    tier: 'Forge',
+    tier: 'Scale',
     headline: 'Operate at scale',
     price: '$1,499',
     setup: '+ $3,500 one-time setup',
@@ -58,7 +58,7 @@ const PLANS = [
       'Priority queue + change SLA',
     ],
     cta: 'Talk to us',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Forge',
+    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Scale',
     feat: false,
   },
 ]

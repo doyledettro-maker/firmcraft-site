@@ -664,6 +664,35 @@ export default function CapabilitiesPage() {
         </div>
       </section>
 
+      {/* WORKFORCE TRAINING — adjacent offering */}
+      <section className="py-14 border-t border-[var(--line)] bg-white">
+        <div className="max-w-[1280px] mx-auto px-8">
+          <div className="grid lg:grid-cols-[1fr_2fr] gap-10 items-start">
+            <div>
+              <div className="eyebrow">Adjacent</div>
+              <h3 className="font-serif-warm font-medium text-[26px] tracking-[-0.012em] mt-2 mb-0 serif-h">
+                Workforce training
+              </h3>
+            </div>
+            <p className="text-[15.5px] leading-[1.6] text-ink-2 m-0 max-w-[640px]">
+              An operator that runs the work is one half of the equation — the other is a
+              team that can operate alongside it. When customers ask for formal AI
+              literacy, role-specific upskilling, or change-management to roll the
+              operator out cleanly across a larger org, we hand off to our sister program at{' '}
+              <a
+                href="https://skillcalibrate.com"
+                rel="noopener"
+                className="text-accent underline underline-offset-[3px] hover:text-ink transition-colors"
+              >
+                SkillCalibrate
+              </a>
+              . Same operator-language ethos, longer engagement, focused on people rather
+              than playbooks.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="py-[88px] bg-paper border-t border-[var(--line)]">
         <div className="max-w-[1280px] mx-auto px-8">

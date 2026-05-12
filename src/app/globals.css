@@ -35,7 +35,7 @@ html {
 body {
   background-color: var(--paper);
   color: var(--ink);
-  font-family: var(--font-geist), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-family: var(--font-geist-sans), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
 }

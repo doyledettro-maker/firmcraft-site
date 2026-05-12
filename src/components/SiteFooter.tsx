@@ -1,20 +1,101 @@
+import Link from 'next/link'
 import { BrandMark } from './BrandMark'
+
+type FooterLink = { label: string; href: string; external?: boolean }
+type FooterColumn = { heading: string; links: FooterLink[] }
+
+const COLUMNS: FooterColumn[] = [
+  {
+    heading: 'Product',
+    links: [
+      { label: 'How it works', href: '/how-it-works' },
+      { label: 'Capabilities', href: '/capabilities' },
+      { label: 'Integrations', href: '/integrations' },
+      { label: 'Pricing', href: '/pricing' },
+    ],
+  },
+  {
+    heading: 'Resources',
+    links: [
+      { label: 'Playbooks', href: '/playbooks' },
+      { label: 'Security', href: '/security' },
+      { label: 'Support', href: '/support' },
+    ],
+  },
+  {
+    heading: 'Get started',
+    links: [
+      { label: 'Start onboarding', href: '/get-started' },
+      { label: 'Book a call', href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call', external: true },
+      { label: 'SkillCalibrate', href: 'https://skillcalibrate.com', external: true },
+    ],
+  },
+]
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--line)] py-10 text-[13px] text-muted">
-      <div className="max-w-[1280px] mx-auto px-8 flex justify-between items-center flex-wrap gap-4">
-        <span className="flex items-center gap-2.5 font-serif-warm italic font-medium text-[22px] tracking-[-0.01em] text-ink">
-          <BrandMark /> Firmcraft
-        </span>
-        <div className="flex gap-7 font-mono-warm text-[11px] tracking-[0.08em] uppercase">
-          <span>© 2026 SkillCalibrate Co.</span>
-          <span>SOC 2 In Progress</span>
+    <footer className="border-t border-[var(--line)] bg-[var(--paper)] text-[13px] text-ink-2">
+      <div className="max-w-[1280px] mx-auto px-8 py-14">
+        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+          {/* Brand column */}
+          <div className="flex flex-col gap-3">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2.5 font-serif-warm italic font-medium text-[22px] tracking-[-0.01em] text-ink"
+            >
+              <BrandMark /> Firmcraft
+            </Link>
+            <p className="max-w-[260px] text-[13.5px] leading-[1.55] text-ink-2">
+              AI operations for growing professional-services firms.
+            </p>
+            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--line)] bg-white px-2.5 py-1 font-mono-warm text-[10.5px] uppercase tracking-[0.12em] text-muted">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent-2" />
+              SOC 2 In Progress
+            </span>
+          </div>
+
+          {/* Link columns */}
+          {COLUMNS.map((col) => (
+            <div key={col.heading} className="flex flex-col gap-3">
+              <h3 className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">
+                {col.heading}
+              </h3>
+              <ul className="flex flex-col gap-2.5">
+                {col.links.map((link) => (
+                  <li key={link.href}>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        className="text-ink-2 transition-colors hover:text-accent"
+                        target={link.href.startsWith('http') ? '_blank' : undefined}
+                        rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+                      >
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-ink-2 transition-colors hover:text-accent"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6 font-mono-warm text-[11px] uppercase tracking-[0.1em] text-muted">
+          <span>© 2026 Predictium LLC</span>
           <span>
             50+ seats?{' '}
             <a
               href="https://skillcalibrate.com"
-              className="underline hover:text-ink transition-colors"
+              className="underline transition-colors hover:text-ink"
+              target="_blank"
+              rel="noreferrer"
             >
               SkillCalibrate.com
             </a>

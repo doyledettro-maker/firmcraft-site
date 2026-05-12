@@ -338,3 +338,117 @@
 [data-firmcraft="true"] [data-firmcraft-hidden="1"] {
   display: none !important;
 }
+
+/* ─── Notice banners ──────────────────────────────────────────────── */
+/* Pinned to the very top of <body> by the plugin; sibling of the rest
+   of the Hermes app so banners survive SPA re-renders. */
+
+.firmcraft-banners {
+  position: relative;
+  z-index: 2147483000;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  font-family: var(--font-body, 'Geist', -apple-system, sans-serif);
+}
+
+.firmcraft-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 16px;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  border-bottom: 1px solid rgba(45, 31, 20, 0.12);
+  color: #2D1F14;
+  animation: firmcraft-banner-in 180ms ease-out;
+}
+
+@keyframes firmcraft-banner-in {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+
+.firmcraft-banner__body {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 12px;
+}
+
+.firmcraft-banner__title {
+  font-family: var(--font-display, 'Source Serif 4', Georgia, serif);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+
+.firmcraft-banner__msg {
+  font-weight: 400;
+}
+
+.firmcraft-banner__meta {
+  font-size: 0.8125rem;
+  opacity: 0.75;
+}
+
+.firmcraft-banner__close {
+  flex: 0 0 auto;
+  background: transparent;
+  border: 0;
+  font-size: 1.25rem;
+  line-height: 1;
+  color: inherit;
+  opacity: 0.6;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  transition: opacity 120ms ease, background 120ms ease;
+}
+.firmcraft-banner__close:hover {
+  opacity: 1;
+  background: rgba(45, 31, 20, 0.08);
+}
+.firmcraft-banner__close:focus-visible {
+  outline: 2px solid rgba(45, 31, 20, 0.5);
+  outline-offset: 1px;
+}
+
+/* Type variants — use Firmcraft palette tones derived from firmcraft.yaml */
+
+.firmcraft-banner--maintenance-scheduled {
+  background: #FBEED2;                                  /* warm amber tint */
+  border-bottom-color: rgba(217, 161, 87, 0.5);
+  color: #4A3414;
+}
+.firmcraft-banner--maintenance-scheduled .firmcraft-banner__title {
+  color: #8A5E1F;
+}
+
+.firmcraft-banner--maintenance-in-progress {
+  background: #F8D9C9;                                  /* terracotta tint */
+  border-bottom-color: rgba(217, 119, 87, 0.6);
+  color: #4A1F12;
+}
+.firmcraft-banner--maintenance-in-progress .firmcraft-banner__title {
+  color: #B5483B;
+}
+
+.firmcraft-banner--upgrade-complete {
+  background: #DCE7D2;                                  /* sage tint */
+  border-bottom-color: rgba(107, 142, 90, 0.5);
+  color: #2E3E22;
+}
+.firmcraft-banner--upgrade-complete .firmcraft-banner__title {
+  color: #4F6B40;
+}
+
+.firmcraft-banner--info {
+  background: #D9E6EC;                                  /* slate tint */
+  border-bottom-color: rgba(63, 122, 140, 0.5);
+  color: #1E3A45;
+}
+.firmcraft-banner--info .firmcraft-banner__title {
+  color: #2A5867;
+}

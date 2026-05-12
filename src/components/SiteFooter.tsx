@@ -27,7 +27,7 @@ const COLUMNS: FooterColumn[] = [
     links: [
       { label: 'Start onboarding', href: '/get-started' },
       { label: 'Book a call', href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call', external: true },
-      { label: 'SkillCalibrate', href: 'https://skillcalibrate.com', external: true },
+      { label: 'Workforce Training', href: 'https://skillcalibrate.com', external: true },
     ],
   },
 ]
@@ -67,8 +67,7 @@ export function SiteFooter() {
                       <a
                         href={link.href}
                         className="text-ink-2 transition-colors hover:text-accent"
-                        target={link.href.startsWith('http') ? '_blank' : undefined}
-                        rel={link.href.startsWith('http') ? 'noreferrer' : undefined}
+                        rel={link.href.startsWith('http') ? 'noopener' : undefined}
                       >
                         {link.label}
                       </a>
@@ -90,14 +89,13 @@ export function SiteFooter() {
         <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-6 font-mono-warm text-[11px] uppercase tracking-[0.1em] text-muted">
           <span>© 2026 Predictium LLC</span>
           <span>
-            50+ seats?{' '}
+            Need workforce training?{' '}
             <a
               href="https://skillcalibrate.com"
               className="underline transition-colors hover:text-ink"
-              target="_blank"
-              rel="noreferrer"
+              rel="noopener"
             >
-              SkillCalibrate.com
+              SkillCalibrate
             </a>
           </span>
         </div>

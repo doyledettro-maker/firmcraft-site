@@ -7,7 +7,7 @@ without forking the upstream codebase. Workstream 8 of the Firmcraft buildout.
 
 A theme YAML and a slot-only plugin. Together they replace the Hermes default
 chrome with Firmcraft's warm palette (cream / terracotta / ink), Source Serif 4
-italic display type, the forge-stamp logo, and a "Powered by Firmcraft" credit.
+italic display type, the brand mark, and a "Built by Firmcraft" credit.
 The plugin also force-pins light mode and hides the "Update" button.
 
 **Slot-only means:** every change happens through Hermes's published extension

@@ -261,7 +261,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
       {
         id: 'plan',
         prompt:
-          'Which plan tier feels right — Spark ($399/mo), Flow ($799/mo), or Forge ($1,499/mo)?',
+          'Which plan tier feels right — Spark ($399/mo), Flow ($799/mo), or Scale ($1,499/mo)?',
         guidance:
           "It's fine to say 'not sure yet' or describe what you'd want covered.",
         placeholder:

@@ -44,7 +44,7 @@ const PLANS = [
     badge: 'Most popular',
   },
   {
-    tier: 'Forge',
+    tier: 'Scale',
     headline: 'Operate at scale',
     price: '$1,499',
     setup: '+ $3,500 one-time setup',
@@ -58,7 +58,7 @@ const PLANS = [
       'Priority queue + change SLA',
     ],
     cta: 'Talk to us',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Forge',
+    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Scale',
     feat: false,
   },
 ]
@@ -330,18 +330,17 @@ export default function HomePage() {
             color: 'var(--muted)',
             fontSize: '14px',
           }}>
-            Bigger than 50 seats or need a full build-out? We hand off to{' '}
+            Bigger than 50 seats or need a full build-out?{' '}
             <a
-              href="https://skillcalibrate.com"
+              href="mailto:hello@firmcraft.ai?subject=Enterprise%20Inquiry"
               style={{
                 color: 'var(--accent)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',
               }}
             >
-              SkillCalibrate.com
-            </a>{' '}
-            for full discovery.
+              Let&apos;s talk.
+            </a>
           </p>
         </div>
       </section>
@@ -433,8 +432,7 @@ export default function HomePage() {
               <p>
                 If we&apos;re a fit, we&apos;ll scope your first workflow on the call
                 and have your operator running by the end of week one. If we&apos;re
-                not — or you&apos;re better served by SkillCalibrate&apos;s
-                full-discovery offer — we&apos;ll tell you on the call.
+                not a fit — we&apos;ll tell you on the call.
               </p>
               <div className="hero-ctas">
                 <a

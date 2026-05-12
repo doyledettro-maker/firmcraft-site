@@ -77,7 +77,7 @@ After reload, walk through these in order:
           has a terracotta left-edge stripe.
   [ ]  5. Login screen background is cream; card is white with warm
           border; heading uses Source Serif 4 italic.
-  [ ]  6. Footer-right shows "Powered by Firmcraft" with firmcraft.ai
+  [ ]  6. Footer-right shows "Built by Firmcraft" with firmcraft.ai
           link styled in slate.
   [ ]  7. Primary buttons render in terracotta with white text;
           hover deepens to #C4623F.

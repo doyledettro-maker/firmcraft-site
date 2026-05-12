@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { useEffect, useRef, useState } from 'react'
 
-type NavItem = { label: string; href: string }
+type NavItem = { label: string; href: string; external?: boolean }
 
 type Props = {
   items: NavItem[]
@@ -80,6 +80,19 @@ export function MobileMenu({ items, current }: Props) {
         <nav className="mx-auto flex max-w-[1280px] flex-col gap-1 px-8 py-5 text-[15px]">
           {items.map((item) => {
             const isCur = current && item.href === `/${current}`
+            if (item.external) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  rel="noopener"
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-white hover:text-ink"
+                >
+                  {item.label}
+                </a>
+              )
+            }
             return (
               <Link
                 key={item.href}

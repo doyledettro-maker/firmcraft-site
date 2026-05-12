@@ -112,7 +112,7 @@
     const credit = document.createElement('span');
     credit.className = 'firmcraft-powered-by';
     credit.innerHTML =
-      'Powered by <a href="https://firmcraft.ai" target="_blank" rel="noopener noreferrer">Firmcraft</a>';
+      'Built by <a href="https://firmcraft.ai" target="_blank" rel="noopener noreferrer">Firmcraft</a>';
 
     slot.appendChild(credit);
   }

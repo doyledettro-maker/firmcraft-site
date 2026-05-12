@@ -2,13 +2,14 @@ import Link from 'next/link'
 import { BrandMark } from './BrandMark'
 import { MobileMenu } from './MobileMenu'
 
-const NAV_ITEMS: { label: string; href: string }[] = [
+const NAV_ITEMS: { label: string; href: string; external?: boolean }[] = [
   { label: 'How it works', href: '/how-it-works' },
   { label: 'Capabilities', href: '/capabilities' },
   { label: 'Pricing', href: '/pricing' },
   { label: 'Playbooks', href: '/playbooks' },
   { label: 'Integrations', href: '/integrations' },
   { label: 'Security', href: '/security' },
+  { label: 'Workforce Training', href: 'https://skillcalibrate.com', external: true },
   { label: 'Support', href: '/support' },
 ]
 
@@ -36,6 +37,18 @@ export function SiteHeader({ current }: { current?: Current }) {
         <nav className="hidden md:flex items-center gap-6 text-sm text-ink-2">
           {NAV_ITEMS.map((item) => {
             const isCur = current && item.href === `/${current}`
+            if (item.external) {
+              return (
+                <a
+                  key={item.href}
+                  href={item.href}
+                  rel="noopener"
+                  className="hover:text-accent transition-colors"
+                >
+                  {item.label}
+                </a>
+              )
+            }
             return (
               <Link
                 key={item.href}

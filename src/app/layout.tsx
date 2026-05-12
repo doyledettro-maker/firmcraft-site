@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
-import { Inter, Plus_Jakarta_Sans, Source_Serif_4, Geist, Geist_Mono } from 'next/font/google'
+import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
+import { GeistMono } from 'geist/font/mono'
 import './globals.css'
 
 const inter = Inter({
@@ -21,18 +23,6 @@ const sourceSerif = Source_Serif_4({
   display: 'swap',
   weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
-})
-
-const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
-  display: 'swap',
-})
-
-const geistMono = Geist_Mono({
-  subsets: ['latin'],
-  variable: '--font-geist-mono',
-  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -65,7 +55,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${inter.variable} ${jakarta.variable} ${sourceSerif.variable} ${geist.variable} ${geistMono.variable}`}
+      className={`${inter.variable} ${jakarta.variable} ${sourceSerif.variable} ${GeistSans.variable} ${GeistMono.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">{children}</body>
     </html>

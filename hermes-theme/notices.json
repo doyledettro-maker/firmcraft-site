@@ -1,0 +1,5 @@
+{
+  "$schema": "Firmcraft dashboard notices — pushed to /root/.hermes/plugins/firmcraft-brand/notices.json by push-notice.sh",
+  "$comment": "Empty 'notices' array = no banners. Multiple notices stack top-to-bottom.",
+  "notices": []
+}

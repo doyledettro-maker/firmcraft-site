@@ -73,7 +73,7 @@ export function MobileMenu({ items, current }: Props) {
         role="dialog"
         aria-modal="false"
         aria-hidden={!open}
-        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--line)] bg-[rgba(251,244,234,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
+        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--line)] bg-[rgba(247,248,251,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
           open ? 'max-h-[640px] opacity-100' : 'pointer-events-none max-h-0 opacity-0'
         }`}
       >

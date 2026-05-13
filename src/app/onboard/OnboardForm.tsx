@@ -416,7 +416,7 @@ export function OnboardForm() {
     return (
       <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
         <div
-          className="font-serif-warm italic font-medium text-[44px] leading-[0.9]"
+          className="font-serif-warm font-medium text-[44px] leading-[0.9]"
           style={{ color: 'var(--accent-2)' }}
         >
           ✓
@@ -530,7 +530,7 @@ export function OnboardForm() {
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
+              color: '#FB7C50',
               background: 'rgba(180,90,58,.08)',
               borderColor: 'rgba(180,90,58,.3)',
             }}
@@ -1034,7 +1034,7 @@ function Step4({
           {form.topTasks.map((t, idx) => (
             <div key={idx} className="flex items-start gap-2.5">
               <span
-                className="font-serif-warm italic font-medium text-[24px] leading-[1] flex-none mt-2"
+                className="font-serif-warm font-medium text-[24px] leading-[1] flex-none mt-2"
                 style={{ color: 'var(--accent)' }}
                 aria-hidden
               >
@@ -1308,7 +1308,7 @@ function Step6({
         ].join(' ')}
       >
         <div
-          className="font-serif-warm italic font-medium text-[34px] leading-[1] mb-3"
+          className="font-serif-warm font-medium text-[34px] leading-[1] mb-3"
           style={{ color: 'var(--accent)' }}
           aria-hidden
         >

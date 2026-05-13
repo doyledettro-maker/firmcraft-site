@@ -45,14 +45,14 @@ function buildHtml(payload: SubmissionPayload): string {
         .map(
           (q) => `
             <div style="margin:0 0 14px;">
-              <div style="font-size:13px;color:#5A4533;font-weight:600;margin-bottom:4px;">${escapeHtml(q.prompt)}</div>
-              <div style="font-size:14px;color:#2D1F14;white-space:pre-wrap;background:#FBF7F2;border-left:3px solid #C9B89C;padding:10px 12px;border-radius:4px;">${escapeHtml(q.answer)}</div>
+              <div style="font-size:13px;color:#334155;font-weight:600;margin-bottom:4px;">${escapeHtml(q.prompt)}</div>
+              <div style="font-size:14px;color:#0F172A;white-space:pre-wrap;background:#F1F5FA;border-left:3px solid #CBD5E1;padding:10px 12px;border-radius:4px;">${escapeHtml(q.answer)}</div>
             </div>`,
         )
         .join('')
       return `
         <section style="margin:0 0 28px;">
-          <h3 style="margin:0 0 12px;font-size:16px;color:#2D1F14;border-bottom:1px solid #E5D9C7;padding-bottom:6px;">
+          <h3 style="margin:0 0 12px;font-size:16px;color:#0F172A;border-bottom:1px solid #E2E8F0;padding-bottom:6px;">
             ${section.number}. ${escapeHtml(section.title)}
           </h3>
           ${rows}
@@ -62,12 +62,12 @@ function buildHtml(payload: SubmissionPayload): string {
     .join('')
 
   return `
-    <div style="font-family:system-ui,-apple-system,sans-serif;max-width:640px;margin:0 auto;color:#2D1F14;padding:24px;">
+    <div style="font-family:system-ui,-apple-system,sans-serif;max-width:640px;margin:0 auto;color:#0F172A;padding:24px;">
       <h2 style="margin:0 0 6px;font-size:22px;">New onboarding submission</h2>
-      <p style="margin:0 0 24px;color:#8A7560;font-size:13px;">
+      <p style="margin:0 0 24px;color:#64748B;font-size:13px;">
         ${escapeHtml(payload.method)} flow · received ${escapeHtml(payload.receivedAt)}
       </p>
-      ${sectionsHtml || '<p style="color:#8A7560;">No answers provided.</p>'}
+      ${sectionsHtml || '<p style="color:#64748B;">No answers provided.</p>'}
     </div>
   `
 }

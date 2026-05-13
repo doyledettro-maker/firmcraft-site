@@ -16,13 +16,13 @@ const STATUS_MAP: Record<Status, StatusInfo> = {
   },
   degraded: {
     label: 'Degraded performance',
-    color: '#B45A3A',
+    color: '#FB7C50',
     bg: 'rgba(180,90,58,.08)',
     border: 'rgba(180,90,58,.3)',
   },
   down: {
     label: 'Service disruption',
-    color: '#B45A3A',
+    color: '#FB7C50',
     bg: 'rgba(180,90,58,.10)',
     border: 'rgba(180,90,58,.4)',
   },

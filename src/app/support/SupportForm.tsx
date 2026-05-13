@@ -97,7 +97,7 @@ export function SupportForm() {
     return (
       <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-10 flex flex-col gap-4">
         <div
-          className="font-serif-warm italic font-medium text-[34px] leading-[0.9]"
+          className="font-serif-warm font-medium text-[34px] leading-[0.9]"
           style={{ color: 'var(--accent-2)' }}
         >
           ✓
@@ -235,7 +235,7 @@ export function SupportForm() {
           role="alert"
           className="rounded-xl border px-4 py-3 text-[13.5px]"
           style={{
-            color: '#B45A3A',
+            color: '#FB7C50',
             background: 'rgba(180,90,58,.08)',
             borderColor: 'rgba(180,90,58,.3)',
           }}

@@ -106,12 +106,12 @@ export default function SupportPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -right-[200px] w-[560px] h-[560px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[160px] w-[420px] h-[420px] rounded-full pointer-events-none opacity-45"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1080px] mx-auto px-8">
@@ -159,7 +159,7 @@ export default function SupportPage() {
                 <summary className="flex justify-between items-center font-serif-warm font-medium text-[20px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden serif-h">
                   {item.q}
                   <span
-                    className="font-serif-warm italic text-[28px] text-accent ml-4 flex-none leading-none"
+                    className="font-serif-warm text-[28px] text-accent ml-4 flex-none leading-none"
                     aria-hidden
                   >
                     <span className="group-open:hidden">+</span>

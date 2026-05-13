@@ -252,7 +252,7 @@ const TOTAL = CATEGORIES.reduce((sum, c) => sum + c.tools.length, 0)
 
 const BADGE_STYLE: Record<Badge, { bg: string; color: string }> = {
   new: { bg: 'rgba(107,142,90,.12)', color: 'var(--accent-2)' },
-  beta: { bg: 'rgba(180,90,58,.1)', color: '#B45A3A' },
+  beta: { bg: 'rgba(251,124,80,0.10)', color: '#FB7C50' },
   driven: { bg: 'rgba(63,122,140,.12)', color: 'var(--accent-3)' },
 }
 
@@ -268,7 +268,7 @@ function ToolCard({ t }: { t: Tool }) {
     >
       <div
         className={[
-          'flex items-center font-serif-warm italic font-medium text-[18px] tracking-[-0.005em] leading-[1.15]',
+          'flex items-center font-serif-warm font-medium text-[18px] tracking-[-0.005em] leading-[1.15]',
           t.custom ? 'text-paper' : 'text-ink',
         ].join(' ')}
       >
@@ -281,7 +281,7 @@ function ToolCard({ t }: { t: Tool }) {
       <p
         className={[
           'm-0 text-[11.5px] leading-[1.4] font-mono-warm',
-          t.custom ? 'text-[#D5C5B0]' : 'text-muted',
+          t.custom ? 'text-[#C7D2E4]' : 'text-muted',
         ].join(' ')}
       >
         {t.desc}
@@ -331,12 +331,12 @@ export default function IntegrationsPage() {
         <div
           aria-hidden
           className="absolute -top-[160px] -right-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[180px] -left-[180px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
@@ -412,7 +412,7 @@ export default function IntegrationsPage() {
                       className={[
                         'font-mono-warm text-[10.5px] px-1.5 py-px rounded-full',
                         isActive
-                          ? 'bg-white/15 text-[#D5C5B0]'
+                          ? 'bg-white/15 text-[#C7D2E4]'
                           : 'bg-paper text-muted',
                       ].join(' ')}
                     >
@@ -457,14 +457,14 @@ export default function IntegrationsPage() {
           </div>
 
           {sections.length === 0 ? (
-            <div className="text-center py-16 text-muted font-serif-warm italic text-[22px]">
+            <div className="text-center py-16 text-muted font-serif-warm text-[22px]">
               No integrations match. Try a broader filter — or ask us to build it.
             </div>
           ) : (
             sections.map((cat) => (
               <div key={cat.key} className="mb-8">
                 <div className="flex items-baseline justify-between mb-3.5 border-b border-[var(--line)] pb-2.5">
-                  <h3 className="font-serif-warm font-medium italic text-2xl tracking-[-0.01em] m-0 text-ink">
+                  <h3 className="font-serif-warm font-medium text-2xl tracking-[-0.01em] m-0 text-ink">
                     {cat.label}
                   </h3>
                   <span className="font-mono-warm text-[11px] tracking-[0.1em] text-muted uppercase">
@@ -575,7 +575,7 @@ export default function IntegrationsPage() {
                 <div className="font-mono-warm text-[10.5px] tracking-[0.12em] text-accent uppercase font-medium">
                   {ex.who}
                 </div>
-                <h4 className="font-serif-warm italic font-medium text-[18px] tracking-[-0.005em] m-0 leading-[1.3]">
+                <h4 className="font-serif-warm font-medium text-[18px] tracking-[-0.005em] m-0 leading-[1.3]">
                   {ex.title}
                 </h4>
                 <p className="m-0 text-[13.5px] leading-[1.5] text-ink-2">{ex.body}</p>

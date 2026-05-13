@@ -369,7 +369,7 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
           <div className="font-mono-warm text-[10.5px] tracking-[0.16em] uppercase text-accent font-medium mb-1">
             {entry.eyebrow}
           </div>
-          <p className="text-[14.5px] leading-[1.55] text-ink-2 m-0 italic font-serif-warm">
+          <p className="text-[14.5px] leading-[1.55] text-ink-2 m-0 font-serif-warm">
             {entry.text}
           </p>
         </div>
@@ -411,7 +411,7 @@ function Avatar() {
   return (
     <div
       aria-hidden
-      className="w-8 h-8 rounded-full grid place-items-center font-serif-warm italic text-[15px] flex-none"
+      className="w-8 h-8 rounded-full grid place-items-center font-serif-warm text-[15px] flex-none"
       style={{ background: 'var(--accent)', color: '#fff' }}
     >
       F

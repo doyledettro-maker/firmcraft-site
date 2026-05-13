@@ -22,15 +22,15 @@ function Demo1Channels() {
         preserveAspectRatio="none"
         className="absolute inset-0 w-full h-full pointer-events-none opacity-[0.35]"
       >
-        <line x1="160" y1="100" x2="50" y2="42" stroke="#2D1F14" strokeWidth="1" />
-        <line x1="160" y1="100" x2="270" y2="42" stroke="#2D1F14" strokeWidth="1" />
-        <line x1="160" y1="100" x2="36" y2="100" stroke="#2D1F14" strokeWidth="1" />
-        <line x1="160" y1="100" x2="284" y2="100" stroke="#2D1F14" strokeWidth="1" />
-        <line x1="160" y1="100" x2="64" y2="158" stroke="#2D1F14" strokeWidth="1" />
-        <line x1="160" y1="100" x2="256" y2="158" stroke="#2D1F14" strokeWidth="1" />
+        <line x1="160" y1="100" x2="50" y2="42" stroke="#0F172A" strokeWidth="1" />
+        <line x1="160" y1="100" x2="270" y2="42" stroke="#0F172A" strokeWidth="1" />
+        <line x1="160" y1="100" x2="36" y2="100" stroke="#0F172A" strokeWidth="1" />
+        <line x1="160" y1="100" x2="284" y2="100" stroke="#0F172A" strokeWidth="1" />
+        <line x1="160" y1="100" x2="64" y2="158" stroke="#0F172A" strokeWidth="1" />
+        <line x1="160" y1="100" x2="256" y2="158" stroke="#0F172A" strokeWidth="1" />
       </svg>
       <div
-        className="relative z-[2] w-16 h-16 rounded-full bg-ink text-paper flex items-center justify-center font-serif-warm italic font-medium text-2xl"
+        className="relative z-[2] w-16 h-16 rounded-full bg-ink text-paper flex items-center justify-center font-serif-warm font-medium text-2xl"
         style={{ boxShadow: '0 8px 18px -8px rgba(45,31,20,.45)' }}
       >
         F
@@ -80,7 +80,7 @@ function Demo2Schedule() {
         >
           <span
             className={[
-              r.now ? 'text-[#D5C5B0]' : 'text-accent',
+              r.now ? 'text-[#C7D2E4]' : 'text-accent',
               'font-medium uppercase',
             ].join(' ')}
           >
@@ -97,7 +97,7 @@ function Demo2Schedule() {
           </span>
           <span
             className={[
-              r.now ? 'text-[#D5C5B0]' : 'text-muted',
+              r.now ? 'text-[#C7D2E4]' : 'text-muted',
               'text-[9.5px] tracking-[0.1em] uppercase',
             ].join(' ')}
           >
@@ -172,7 +172,7 @@ function Demo4Apis() {
         </div>
       ))}
       <div
-        className="py-2 px-1 rounded-lg bg-ink text-paper font-serif-warm italic text-[11px] flex items-center justify-center min-h-[30px]"
+        className="py-2 px-1 rounded-lg bg-ink text-paper font-serif-warm text-[11px] flex items-center justify-center min-h-[30px]"
         style={{ borderColor: 'var(--ink)' }}
       >
         + yours
@@ -195,7 +195,7 @@ function Demo5Memory() {
     >
       <span
         aria-hidden
-        className="absolute right-[18px] top-1/2 -translate-y-1/2 font-serif-warm italic font-medium text-[38px]"
+        className="absolute right-[18px] top-1/2 -translate-y-1/2 font-serif-warm font-medium text-[38px]"
         style={{ color: 'rgba(217,119,87,.18)' }}
       >
         ∞
@@ -416,12 +416,12 @@ export default function CapabilitiesPage() {
         <div
           aria-hidden
           className="absolute -top-[160px] -left-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[180px] -right-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
@@ -459,7 +459,7 @@ export default function CapabilitiesPage() {
             </div>
             <div>
               <p
-                className="font-serif-warm italic text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
+                className="font-serif-warm text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 If a tool can only do one of these, it&apos;s a chatbot.{' '}
@@ -627,7 +627,7 @@ export default function CapabilitiesPage() {
                 with.
               </p>
               <p
-                className="font-serif-warm italic text-[21px] text-ink leading-[1.4] pl-[18px] mt-6"
+                className="font-serif-warm text-[21px] text-ink leading-[1.4] pl-[18px] mt-6"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 &quot;Insurance claim submission&quot; looks like one thing. Behind it:{' '}
@@ -641,7 +641,7 @@ export default function CapabilitiesPage() {
                   className="bg-white border border-[var(--line)] rounded-[14px] px-5 py-4 grid grid-cols-[auto_1fr] gap-3.5 items-start"
                 >
                   <div
-                    className="font-serif-warm italic font-medium text-[34px] leading-[0.9] -mt-0.5"
+                    className="font-serif-warm font-medium text-[34px] leading-[0.9] -mt-0.5"
                     style={{ color: 'var(--accent)' }}
                   >
                     {s.num}

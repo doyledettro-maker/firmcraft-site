@@ -1,0 +1,54 @@
+/* ────────────────────────────────────────────────────────────────────────── */
+/* Firmcraft — Operator visual identity tokens                                */
+/*                                                                            */
+/* Cool slate palette. Signal blue primary, operator orange secondary.        */
+/* Geist for body + headlines. JetBrains Mono for technical labels.           */
+/* Source Serif 4 italic reserved exclusively for the wordmark.               */
+/* ────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Surfaces */
+  --paper: #F7F8FB;          /* primary background — cool surface */
+  --paper-2: #EEF2F7;        /* alt section background, gradient bottom */
+  --surface: #FFFFFF;        /* card background */
+  --console: #0F172A;        /* dark plate — brand ring, console panels */
+
+  /* Ink */
+  --ink: #0F172A;            /* primary text */
+  --ink-2: #334155;          /* secondary text */
+  --muted: #64748B;          /* tertiary text, captions, mono labels */
+
+  /* Lines */
+  --line: rgba(15, 23, 42, 0.10);
+  --line-2: rgba(15, 23, 42, 0.18);
+
+  /* Accents */
+  --signal: #2C6BF0;         /* primary accent — signal blue. CTAs, links, emphasis */
+  --signal-ink: #1E4FBC;     /* deeper signal — pressed state */
+  --orange: #FB7C50;         /* secondary accent — operator orange. Badges, "voice" highlights */
+  --positive: #10B981;       /* positive / success — emerald */
+
+  /* Legacy aliases — keep so existing class hooks stay live during the refresh. */
+  --accent: var(--signal);
+  --accent-2: var(--orange);
+  --accent-3: var(--positive);
+  --hi: #DCE7FB;             /* hero gradient blob (signal-tinted) */
+
+  /* Industry tokens (playbooks page) — recolored cool */
+  --tr: #2C6BF0;
+  --hc: #0EA5E9;
+  --so: #6366F1;
+  --pf: #334155;
+  --b2: #10B981;
+  --xa: #64748B;
+
+  /* Radii */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-pill: 999px;
+
+  /* Shadows */
+  --shadow-lift: 0 12px 22px -16px rgba(15, 23, 42, 0.18);
+  --shadow-lift-lg: 0 24px 48px -28px rgba(15, 23, 42, 0.22);
+}

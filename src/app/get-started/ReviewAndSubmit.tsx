@@ -180,7 +180,7 @@ export function ReviewAndSubmit({
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
+              color: '#FB7C50',
               background: 'rgba(180,90,58,.08)',
               borderColor: 'rgba(180,90,58,.3)',
             }}

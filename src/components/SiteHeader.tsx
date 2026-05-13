@@ -29,7 +29,7 @@ export function SiteHeader({ current }: { current?: Current }) {
       <div className="max-w-[1280px] mx-auto px-8 h-16 flex items-center justify-between gap-4">
         <Link
           href="/"
-          className="flex items-center gap-2.5 font-serif-warm italic font-medium text-[22px] tracking-[-0.01em] text-ink"
+          className="flex items-center gap-2.5 font-wordmark text-[22px] tracking-[-0.01em] text-ink"
         >
           <BrandMark /> Firmcraft
         </Link>
@@ -43,7 +43,7 @@ export function SiteHeader({ current }: { current?: Current }) {
                   key={item.href}
                   href={item.href}
                   rel="noopener"
-                  className="hover:text-accent transition-colors"
+                  className="hover:text-signal transition-colors"
                 >
                   {item.label}
                 </a>
@@ -57,7 +57,7 @@ export function SiteHeader({ current }: { current?: Current }) {
                 className={
                   isCur
                     ? 'text-ink font-medium'
-                    : 'hover:text-accent transition-colors'
+                    : 'hover:text-signal transition-colors'
                 }
               >
                 {item.label}

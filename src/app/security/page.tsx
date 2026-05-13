@@ -57,7 +57,7 @@ const LOG: { ts: string; what: React.ReactNode; held?: boolean }[] = [
   { ts: '09:18:31', what: <>Operator wrote · <em className="text-accent not-italic">claim_882041.pdf</em> → /Drive/Claims/</> },
   { ts: '09:18:44', what: <>Operator sent · POST <em className="text-accent not-italic">delta-dental.com/claims</em></> },
   { ts: '11:42:08', what: <>Inbound webhook · EOB received · <em className="text-accent not-italic">$710 paid</em></> },
-  { ts: '11:42:12', what: <>Action <em className="not-italic" style={{ color: '#B45A3A' }}>held</em> · pending Dr. Chen approval</>, held: true },
+  { ts: '11:42:12', what: <>Action <em className="not-italic" style={{ color: '#FB7C50' }}>held</em> · pending Dr. Chen approval</>, held: true },
   { ts: '11:48:55', what: <><b className="font-medium text-ink">Dr. Chen</b> approved · patient text drafted</> },
   { ts: '11:48:57', what: <>Operator sent · SMS <em className="text-accent not-italic">+1 ••• ••• 4421</em></> },
   { ts: '14:01:03', what: <>Scheduled run · <em className="text-accent not-italic">recall_reactivation</em> · 38 drafts queued</> },
@@ -125,7 +125,7 @@ function VRow({
     }
   } else if (kind === 'warn') {
     style = {
-      color: '#B45A3A',
+      color: '#FB7C50',
       background: 'rgba(180,90,58,.08)',
       borderColor: 'rgba(180,90,58,.3)',
     }
@@ -153,12 +153,12 @@ export default function SecurityPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -right-[200px] w-[560px] h-[560px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[160px] w-[420px] h-[420px] rounded-full pointer-events-none opacity-45"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
@@ -187,10 +187,10 @@ export default function SecurityPage() {
             <div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5 border-t border-[var(--line)] pt-6">
                 {[
-                  { k: 'Deployment', v: <><em className="text-accent not-italic font-serif-warm italic">Private</em> per firm</> },
-                  { k: 'Audit log', v: <><em className="text-accent not-italic font-serif-warm italic">Every</em> action recorded</> },
+                  { k: 'Deployment', v: <><em className="text-accent not-italic font-serif-warm">Private</em> per firm</> },
+                  { k: 'Audit log', v: <><em className="text-accent not-italic font-serif-warm">Every</em> action recorded</> },
                   { k: 'Encryption', v: <>At rest &amp; in transit</> },
-                  { k: 'Compliance', v: <><em className="text-accent not-italic font-serif-warm italic">SOC 2</em> in progress</> },
+                  { k: 'Compliance', v: <><em className="text-accent not-italic font-serif-warm">SOC 2</em> in progress</> },
                 ].map((b) => (
                   <div
                     key={b.k}
@@ -199,7 +199,7 @@ export default function SecurityPage() {
                     <span className="font-mono-warm text-[10.5px] tracking-[0.14em] text-muted uppercase">
                       {b.k}
                     </span>
-                    <span className="font-serif-warm italic font-medium text-[18px] text-ink tracking-[-0.005em]">
+                    <span className="font-serif-warm font-medium text-[18px] text-ink tracking-[-0.005em]">
                       {b.v}
                     </span>
                   </div>
@@ -232,7 +232,7 @@ export default function SecurityPage() {
                 className="bg-paper border border-[var(--line)] rounded-[14px] p-[22px] flex flex-col gap-2 relative"
               >
                 <div
-                  className="font-serif-warm italic font-medium text-[34px] leading-[0.9]"
+                  className="font-serif-warm font-medium text-[34px] leading-[0.9]"
                   style={{ color: 'var(--accent)' }}
                 >
                   {p.n}
@@ -277,7 +277,7 @@ export default function SecurityPage() {
                 same five-day timeline.
               </p>
               <div
-                className="font-serif-warm italic text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
+                className="font-serif-warm text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 &quot;Multi-tenant SaaS is fine for a notes app. It is not fine for client charts
@@ -336,7 +336,7 @@ export default function SecurityPage() {
                 engagement letters, two partners for any wire over $25k.
               </p>
               <div
-                className="font-serif-warm italic text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
+                className="font-serif-warm text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 &quot;I want my front desk to file the claim. I do not want my front desk to
@@ -378,7 +378,7 @@ export default function SecurityPage() {
                           cls = 'font-medium'
                           content = '●'
                         } else if (c.kind === 'a') {
-                          cls = 'font-serif-warm italic'
+                          cls = 'font-serif-warm'
                           content = 'approve'
                         } else {
                           cls = 'text-muted'
@@ -498,7 +498,7 @@ export default function SecurityPage() {
                 that you should pick someone else.
               </p>
               <div
-                className="font-serif-warm italic text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
+                className="font-serif-warm text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 &quot;I&apos;d rather miss a deal than fake a certification.&quot;
@@ -541,7 +541,7 @@ export default function SecurityPage() {
                 >
                   {item.q}
                   <span
-                    className="font-serif-warm italic text-[28px] text-accent ml-4 flex-none leading-none"
+                    className="font-serif-warm text-[28px] text-accent ml-4 flex-none leading-none"
                     aria-hidden
                   >
                     <span className="group-open:hidden">+</span>
@@ -592,7 +592,7 @@ export default function SecurityPage() {
               <div className="eyebrow" style={{ color: 'var(--ink-2)' }}>
                 Direct lines
               </div>
-              <h4 className="font-serif-warm font-medium italic text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
+              <h4 className="font-serif-warm font-medium text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
                 Reach the right person.
               </h4>
               <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-2 text-sm text-ink-2 leading-[1.5]">

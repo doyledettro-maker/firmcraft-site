@@ -196,7 +196,7 @@ export function MarkdownForm({
           ].join(' ')}
         >
           <div
-            className="font-serif-warm italic font-medium text-[34px] leading-[1] mb-3"
+            className="font-serif-warm font-medium text-[34px] leading-[1] mb-3"
             style={{ color: 'var(--accent)' }}
             aria-hidden
           >
@@ -259,7 +259,7 @@ export function MarkdownForm({
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
+              color: '#FB7C50',
               background: 'rgba(180,90,58,.08)',
               borderColor: 'rgba(180,90,58,.3)',
             }}
@@ -411,7 +411,7 @@ function IssueList({
   const styles =
     tone === 'warning'
       ? {
-          color: '#B45A3A',
+          color: '#FB7C50',
           background: 'rgba(180,90,58,.06)',
           borderColor: 'rgba(180,90,58,.25)',
         }

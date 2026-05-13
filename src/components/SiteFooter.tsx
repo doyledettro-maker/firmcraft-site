@@ -41,7 +41,7 @@ export function SiteFooter() {
           <div className="flex flex-col gap-3">
             <Link
               href="/"
-              className="inline-flex items-center gap-2.5 font-serif-warm italic font-medium text-[22px] tracking-[-0.01em] text-ink"
+              className="inline-flex items-center gap-2.5 font-wordmark text-[22px] tracking-[-0.01em] text-ink"
             >
               <BrandMark /> Firmcraft
             </Link>
@@ -49,7 +49,7 @@ export function SiteFooter() {
               AI operations for growing professional-services firms.
             </p>
             <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--line)] bg-white px-2.5 py-1 font-mono-warm text-[10.5px] uppercase tracking-[0.12em] text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent-2" />
+              <span className="h-1.5 w-1.5 rounded-full bg-positive" />
               SOC 2 In Progress
             </span>
           </div>
@@ -66,7 +66,7 @@ export function SiteFooter() {
                     {link.external ? (
                       <a
                         href={link.href}
-                        className="text-ink-2 transition-colors hover:text-accent"
+                        className="text-ink-2 transition-colors hover:text-signal"
                         rel={link.href.startsWith('http') ? 'noopener' : undefined}
                       >
                         {link.label}
@@ -74,7 +74,7 @@ export function SiteFooter() {
                     ) : (
                       <Link
                         href={link.href}
-                        className="text-ink-2 transition-colors hover:text-accent"
+                        className="text-ink-2 transition-colors hover:text-signal"
                       >
                         {link.label}
                       </Link>

@@ -83,12 +83,12 @@ export default function HowItWorksPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -left-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -right-[200px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
@@ -113,7 +113,7 @@ export default function HowItWorksPage() {
             </div>
             <div>
               <p
-                className="font-serif-warm italic text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
+                className="font-serif-warm text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
                 style={{ borderLeft: '2px solid var(--accent)' }}
               >
                 Intake Monday. Connectors Wednesday.{' '}
@@ -150,7 +150,7 @@ export default function HowItWorksPage() {
                   >
                     <div className="text-center">
                       <div
-                        className="font-serif-warm italic font-medium text-[48px] leading-none"
+                        className="font-serif-warm font-medium text-[48px] leading-none"
                         style={{ color: 'var(--accent)' }}
                       >
                         {step.n}

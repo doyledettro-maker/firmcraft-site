@@ -137,7 +137,7 @@ function SuccessCard() {
   return (
     <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
       <div
-        className="font-serif-warm italic font-medium text-[44px] leading-[0.9]"
+        className="font-serif-warm font-medium text-[44px] leading-[0.9]"
         style={{ color: 'var(--accent-2)' }}
       >
         ✓

@@ -416,12 +416,12 @@ export default function PlaybooksPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -right-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#C9D8FB,transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[180px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,#FBE3D7,transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
@@ -523,7 +523,7 @@ export default function PlaybooksPage() {
                   <span
                     className={[
                       'font-mono-warm text-[10.5px] px-1.5 py-px rounded-full',
-                      isActive ? 'bg-white/15 text-[#D5C5B0]' : 'bg-paper text-muted',
+                      isActive ? 'bg-white/15 text-[#C7D2E4]' : 'bg-paper text-muted',
                     ].join(' ')}
                   >
                     {ct}
@@ -561,7 +561,7 @@ export default function PlaybooksPage() {
             <span>Sorted by industry</span>
           </div>
           {visible.length === 0 ? (
-            <div className="text-center py-16 text-muted font-serif-warm italic text-[22px]">
+            <div className="text-center py-16 text-muted font-serif-warm text-[22px]">
               No playbooks match. Try a broader filter.
             </div>
           ) : (
@@ -607,7 +607,7 @@ export default function PlaybooksPage() {
               <div className="eyebrow" style={{ color: 'var(--ink-2)' }}>
                 How a custom playbook ships
               </div>
-              <h4 className="font-serif-warm font-medium italic text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
+              <h4 className="font-serif-warm font-medium text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
                 Intake → live, in five days.
               </h4>
               <p className="text-[14.5px] m-0 mb-3.5 text-ink-2">

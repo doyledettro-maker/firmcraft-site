@@ -65,11 +65,12 @@ const LOG: { ts: string; what: React.ReactNode; held?: boolean }[] = [
 
 const COMPLIANCE: { stat: string; nm: string; body: string }[] = [
   { stat: 'Readiness', nm: 'SOC 2 Type II', body: 'Building with SOC 2 controls from day one. Formal audit engagement when customer contracts require it.' },
-  { stat: 'In progress', nm: 'HIPAA', body: 'BAA-able today. Full attestation on SOC 2 timeline.' },
+  { stat: 'In progress', nm: 'HIPAA', body: 'BAA-able today. Full attestation follows SOC 2 certification.' },
   { stat: 'Annual', nm: 'Penetration testing', body: 'External pen test every 12 months · NDA required.' },
   { stat: 'Live', nm: 'DPA + sub-processor list', body: 'GDPR-aligned DPA on request. Three sub-processors.' },
   { stat: 'Live', nm: 'Vulnerability disclosure', body: 'security@firmcraft · 90-day fix SLA · public bounty soon.' },
-  { stat: "Roadmap '27", nm: 'ISO 27001', body: 'Pursued after SOC 2 Type II clears.' },
+  { stat: 'Certified', nm: 'ISO 27001 Infrastructure', body: 'Hosted on Hetzner infrastructure certified to ISO/IEC 27001:2022 with BSI C5 Type 2 attestation.' },
+  { stat: 'Future', nm: 'ISO 27001', body: 'On the roadmap once customer demand warrants formal certification.' },
 ]
 
 const FAQ: { q: React.ReactNode; a: string }[] = [

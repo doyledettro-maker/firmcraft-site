@@ -50,7 +50,7 @@ export function SiteFooter() {
             </p>
             <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-line)] bg-paper px-2.5 py-1 font-mono text-[10.5px] uppercase tracking-eyebrow text-muted">
               <span className="h-1.5 w-1.5 rounded-full bg-ok" />
-              AES-256 Encrypted
+              ISO 27001 Infrastructure
             </span>
           </div>
 

@@ -251,9 +251,9 @@ const CHIPS: { key: 'all' | Cat; label: string }[] = [
 const TOTAL = CATEGORIES.reduce((sum, c) => sum + c.tools.length, 0)
 
 const BADGE_STYLE: Record<Badge, { bg: string; color: string }> = {
-  new: { bg: 'rgba(107,142,90,.12)', color: 'var(--accent-2)' },
-  beta: { bg: 'rgba(180,90,58,.1)', color: '#B45A3A' },
-  driven: { bg: 'rgba(63,122,140,.12)', color: 'var(--accent-3)' },
+  new: { bg: 'rgba(16,185,129,.12)', color: 'var(--color-ok)' },
+  beta: { bg: 'rgba(251,124,80,.1)', color: 'var(--color-operator)' },
+  driven: { bg: 'rgba(44,107,240,.12)', color: 'var(--color-signal)' },
 }
 
 function ToolCard({ t }: { t: Tool }) {
@@ -263,32 +263,32 @@ function ToolCard({ t }: { t: Tool }) {
         'card-lift relative rounded-xl p-3.5 flex flex-col gap-1.5 min-h-[96px] border',
         t.custom
           ? 'bg-ink text-paper border-ink'
-          : 'bg-white border-[var(--line)]',
+          : 'bg-white border-[var(--color-line)]',
       ].join(' ')}
     >
       <div
         className={[
-          'flex items-center font-serif-warm italic font-medium text-[18px] tracking-[-0.005em] leading-[1.15]',
+          'flex items-center font-sans font-semibold text-[18px] tracking-[-0.005em] leading-[1.15]',
           t.custom ? 'text-paper' : 'text-ink',
         ].join(' ')}
       >
         <span
           className="inline-block w-2 h-2 rounded-full mr-2 flex-none"
-          style={{ background: 'var(--accent)' }}
+          style={{ background: 'var(--color-signal)' }}
         />
         {t.name}
       </div>
       <p
         className={[
-          'm-0 text-[11.5px] leading-[1.4] font-mono-warm',
-          t.custom ? 'text-[#D5C5B0]' : 'text-muted',
+          'm-0 text-[11.5px] leading-[1.4] font-mono',
+          t.custom ? 'text-[var(--color-inverse-2)]' : 'text-muted',
         ].join(' ')}
       >
         {t.desc}
       </p>
       {t.badge && (
         <span
-          className="absolute top-2.5 right-2.5 font-mono-warm text-[8.5px] tracking-[0.1em] uppercase px-1.5 py-px rounded font-medium"
+          className="absolute top-2.5 right-2.5 font-mono text-[8.5px] tracking-[0.1em] uppercase px-1.5 py-px rounded font-medium"
           style={{
             background: BADGE_STYLE[t.badge].bg,
             color: BADGE_STYLE[t.badge].color,
@@ -331,17 +331,17 @@ export default function IntegrationsPage() {
         <div
           aria-hidden
           className="absolute -top-[160px] -right-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[180px] -left-[180px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
-          <div className="font-mono-warm text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-            <Link href="/" className="text-accent hover:underline underline-offset-[3px]">
+          <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
+            <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
               ← Back to home
             </Link>
             &nbsp;·&nbsp; Integrations
@@ -349,7 +349,7 @@ export default function IntegrationsPage() {
           <div className="grid lg:grid-cols-[1.15fr_1fr] gap-14 items-end">
             <div>
               <div className="eyebrow">Vol. 01 · Spring 2026</div>
-              <h1 className="font-serif-warm font-medium text-[clamp(46px,5.6vw,80px)] leading-[1.02] tracking-[-0.024em] mt-4 mb-4 text-balance serif-h">
+              <h1 className="font-sans font-medium text-[clamp(46px,5.6vw,80px)] leading-[1.02] tracking-[-0.024em] mt-4 mb-4 text-balance ">
                 Every tool you <em>already pay for.</em>
               </h1>
               <p className="text-[19px] leading-[1.55] text-ink-2 max-w-[540px] m-0">
@@ -359,17 +359,17 @@ export default function IntegrationsPage() {
               </p>
             </div>
             <div>
-              <div className="grid grid-cols-3 gap-5 border-t border-[var(--line)] pt-6">
+              <div className="grid grid-cols-3 gap-5 border-t border-[var(--color-line)] pt-6">
                 {[
                   { k: 'Catalog', v: <em>112</em>, c: 'Tools we connect to — across API, MCP, and browser automation.' },
                   { k: 'Categories', v: <em>14</em>, c: 'From accounting to field service to legal.' },
                   { k: 'Custom', v: <>Wk <em>1</em></>, c: "Don't see yours? We build it during onboarding." },
                 ].map((s) => (
                   <div key={s.k}>
-                    <div className="font-mono-warm text-[11px] tracking-[0.14em] text-muted uppercase">
+                    <div className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
                       {s.k}
                     </div>
-                    <div className="font-serif-warm text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 serif-h">
+                    <div className="font-sans text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 ">
                       {s.v}
                     </div>
                     <div className="text-[13px] text-ink-2 mt-1.5 leading-[1.4]">{s.c}</div>
@@ -383,9 +383,9 @@ export default function IntegrationsPage() {
 
       {/* FILTERS */}
       <div
-        className="sticky top-16 z-40 border-y border-[var(--line)] py-3.5 mt-12"
+        className="sticky top-16 z-40 border-y border-[var(--color-line)] py-3.5 mt-12"
         style={{
-          background: 'rgba(251,244,234,0.92)',
+          background: 'rgba(244,246,250,0.92)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
         }}
@@ -403,16 +403,16 @@ export default function IntegrationsPage() {
                     'inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[13px] transition-colors border',
                     isActive
                       ? 'bg-ink text-paper border-ink'
-                      : 'bg-white text-ink-2 border-[var(--line)] hover:border-[var(--ink-2)] hover:text-ink',
+                      : 'bg-white text-ink-2 border-[var(--color-line)] hover:border-[var(--color-ink-2)] hover:text-ink',
                   ].join(' ')}
                 >
                   {chip.label}
                   {chip.key === 'all' && (
                     <span
                       className={[
-                        'font-mono-warm text-[10.5px] px-1.5 py-px rounded-full',
+                        'font-mono text-[10.5px] px-1.5 py-px rounded-full',
                         isActive
-                          ? 'bg-white/15 text-[#D5C5B0]'
+                          ? 'bg-white/15 text-[var(--color-inverse-2)]'
                           : 'bg-paper text-muted',
                       ].join(' ')}
                     >
@@ -435,7 +435,7 @@ export default function IntegrationsPage() {
               placeholder="Search 112 tools…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="font-sans text-[13.5px] py-2.5 pl-9 pr-3.5 rounded-full border border-[var(--line)] bg-white text-ink w-[260px] outline-none transition-all focus:border-ink focus:w-[300px]"
+              className="font-sans text-[13.5px] py-2.5 pl-9 pr-3.5 rounded-full border border-[var(--color-line)] bg-white text-ink w-[260px] outline-none transition-all focus:border-ink focus:w-[300px]"
             />
           </div>
         </div>
@@ -444,30 +444,30 @@ export default function IntegrationsPage() {
       {/* LIBRARY */}
       <section className="pt-9 pb-6">
         <div className="max-w-[1280px] mx-auto px-8">
-          <div className="flex justify-between items-baseline mb-4 font-mono-warm text-[11.5px] tracking-[0.1em] text-muted uppercase">
+          <div className="flex justify-between items-baseline mb-4 font-mono text-[11.5px] tracking-[0.1em] text-muted uppercase">
             <span>
               Showing <b className="text-ink font-medium">{visibleTotal}</b> of{' '}
               <b className="text-ink font-medium">{TOTAL}</b> integrations
             </span>
             <span>
-              <span style={{ color: 'var(--accent)' }}>●</span> live &nbsp;{' '}
-              <span style={{ color: 'var(--accent-2)' }}>●</span> recently added &nbsp;{' '}
-              <span style={{ color: 'var(--accent-3)' }}>●</span> browser-driven
+              <span style={{ color: 'var(--color-signal)' }}>●</span> live &nbsp;{' '}
+              <span style={{ color: 'var(--color-ok)' }}>●</span> recently added &nbsp;{' '}
+              <span style={{ color: 'var(--color-signal)' }}>●</span> browser-driven
             </span>
           </div>
 
           {sections.length === 0 ? (
-            <div className="text-center py-16 text-muted font-serif-warm italic text-[22px]">
+            <div className="text-center py-16 text-muted font-sans text-[22px]">
               No integrations match. Try a broader filter — or ask us to build it.
             </div>
           ) : (
             sections.map((cat) => (
               <div key={cat.key} className="mb-8">
-                <div className="flex items-baseline justify-between mb-3.5 border-b border-[var(--line)] pb-2.5">
-                  <h3 className="font-serif-warm font-medium italic text-2xl tracking-[-0.01em] m-0 text-ink">
+                <div className="flex items-baseline justify-between mb-3.5 border-b border-[var(--color-line)] pb-2.5">
+                  <h3 className="font-sans font-semibold text-2xl tracking-[-0.01em] m-0 text-ink">
                     {cat.label}
                   </h3>
-                  <span className="font-mono-warm text-[11px] tracking-[0.1em] text-muted uppercase">
+                  <span className="font-mono text-[11px] tracking-[0.1em] text-muted uppercase">
                     {cat.tools.length} tool{cat.tools.length === 1 ? '' : 's'}
                   </span>
                 </div>
@@ -483,12 +483,12 @@ export default function IntegrationsPage() {
       </section>
 
       {/* BUILD */}
-      <section className="bg-white border-y border-[var(--line)] py-16">
+      <section className="bg-white border-y border-[var(--color-line)] py-16">
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <div className="eyebrow">When the list isn&apos;t long enough</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.022em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.022em] mt-2 mb-4 text-balance ">
                 If it has an <em>API</em>, a portal, or a webpage — we can drive it.
               </h2>
               <p className="text-[17px] text-ink-2 leading-[1.55] m-0 mb-3.5">
@@ -515,12 +515,12 @@ export default function IntegrationsPage() {
               ].map(([d, h, body]) => (
                 <div
                   key={d}
-                  className="bg-paper border border-[var(--line)] rounded-xl p-3.5"
+                  className="bg-paper border border-[var(--color-line)] rounded-xl p-3.5"
                 >
-                  <div className="font-mono-warm text-[10.5px] tracking-[0.14em] text-accent uppercase font-medium mb-1">
+                  <div className="font-mono text-[10.5px] tracking-[0.14em] text-signal uppercase font-medium mb-1">
                     {d}
                   </div>
-                  <h5 className="font-serif-warm font-medium text-[15px] tracking-[-0.005em] m-0 mb-1 serif-h">
+                  <h5 className="font-sans font-medium text-[15px] tracking-[-0.005em] m-0 mb-1 ">
                     {h}
                   </h5>
                   <p className="text-[12.5px] text-ink-2 leading-[1.4] m-0">{body}</p>
@@ -534,12 +534,12 @@ export default function IntegrationsPage() {
       {/* EXAMPLES */}
       <section
         className="py-20"
-        style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="text-center mb-9">
             <div className="eyebrow">Real custom connectors</div>
-            <h2 className="font-serif-warm font-medium text-[clamp(32px,3.6vw,48px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-3 text-balance serif-h">
+            <h2 className="font-sans font-medium text-[clamp(32px,3.6vw,48px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-3 text-balance ">
               The weirdest tools we&apos;ve wired up <em>this quarter.</em>
             </h2>
             <p className="text-[17px] text-ink-2 leading-[1.55] max-w-[640px] mx-auto m-0">
@@ -570,20 +570,20 @@ export default function IntegrationsPage() {
             ].map((ex) => (
               <div
                 key={ex.title}
-                className="bg-white border border-[var(--line)] rounded-2xl p-[22px] flex flex-col gap-3"
+                className="bg-white border border-[var(--color-line)] rounded-2xl p-[22px] flex flex-col gap-3"
               >
-                <div className="font-mono-warm text-[10.5px] tracking-[0.12em] text-accent uppercase font-medium">
+                <div className="font-mono text-[10.5px] tracking-[0.12em] text-signal uppercase font-medium">
                   {ex.who}
                 </div>
-                <h4 className="font-serif-warm italic font-medium text-[18px] tracking-[-0.005em] m-0 leading-[1.3]">
+                <h4 className="font-sans font-semibold text-[18px] tracking-[-0.005em] m-0 leading-[1.3]">
                   {ex.title}
                 </h4>
                 <p className="m-0 text-[13.5px] leading-[1.5] text-ink-2">{ex.body}</p>
-                <div className="flex gap-1.5 flex-wrap pt-2 border-t border-dashed border-[var(--line)]">
+                <div className="flex gap-1.5 flex-wrap pt-2 border-t border-dashed border-[var(--color-line)]">
                   {ex.stack.map((s) => (
                     <span
                       key={s}
-                      className="font-mono-warm text-[10px] tracking-[0.04em] text-ink bg-paper border border-[var(--line)] px-[7px] py-[3px] rounded-[5px]"
+                      className="font-mono text-[10px] tracking-[0.04em] text-ink bg-paper border border-[var(--color-line)] px-[7px] py-[3px] rounded-[5px]"
                     >
                       {s}
                     </span>
@@ -596,12 +596,12 @@ export default function IntegrationsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-[88px] bg-paper border-t border-[var(--line)]">
+      <section className="py-[88px] bg-paper border-t border-[var(--color-line)]">
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
             <div>
               <div className="eyebrow">Don&apos;t see your tool?</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance ">
                 Tell us what you use. We&apos;ll <em>tell you the truth.</em>
               </h2>
               <p className="text-[18px] text-ink-2 leading-[1.55] m-0 mb-6 max-w-[520px]">
@@ -621,11 +621,11 @@ export default function IntegrationsPage() {
                 </Link>
               </div>
             </div>
-            <div className="bg-white border border-[var(--line)] rounded-[18px] p-6">
-              <div className="eyebrow" style={{ color: 'var(--ink-2)' }}>
+            <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6">
+              <div className="eyebrow" style={{ color: 'var(--color-ink-2)' }}>
                 A short tour
               </div>
-              <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-3.5 font-serif-warm text-[18px] leading-[1.45]">
+              <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-3.5 font-sans text-[18px] leading-[1.45]">
                 {[
                   { href: '/capabilities', label: 'The six capabilities' },
                   { href: '/security', label: 'Security & trust' },
@@ -638,11 +638,11 @@ export default function IntegrationsPage() {
                       className="flex justify-between items-center pb-3.5"
                       style={{
                         borderBottom:
-                          i === arr.length - 1 ? 'none' : '1px solid var(--line)',
+                          i === arr.length - 1 ? 'none' : '1px solid var(--color-line)',
                       }}
                     >
                       <span>{it.label}</span>
-                      <span className="text-accent italic">→</span>
+                      <span className="text-signal italic">→</span>
                     </Link>
                   </li>
                 ))}

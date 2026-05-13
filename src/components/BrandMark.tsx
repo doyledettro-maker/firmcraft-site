@@ -19,7 +19,7 @@ export function BrandMark({ size = 22, className }: BrandMarkProps) {
         cx="32"
         cy="32"
         r="29"
-        stroke="#2D1F14"
+        stroke="#0F172A"
         strokeWidth="2.5"
         fill="none"
       />
@@ -27,11 +27,11 @@ export function BrandMark({ size = 22, className }: BrandMarkProps) {
         x="32"
         y="44"
         textAnchor="middle"
-        fontFamily="var(--font-serif), 'Source Serif 4', Georgia, serif"
+        fontFamily="var(--font-display), 'Source Serif 4', Georgia, serif"
         fontStyle="italic"
         fontWeight={500}
         fontSize="36"
-        fill="#D97757"
+        fill="#2C6BF0"
         letterSpacing="-1"
       >
         F

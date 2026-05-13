@@ -113,17 +113,17 @@ export default function PricingPage() {
         <div
           aria-hidden
           className="absolute -top-[160px] -right-[200px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[180px] w-[420px] h-[420px] rounded-full pointer-events-none opacity-45"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
-          <div className="font-mono-warm text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-            <Link href="/" className="text-accent hover:underline underline-offset-[3px]">
+          <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
+            <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
               &larr; Back to home
             </Link>
             &nbsp;&middot;&nbsp; Pricing
@@ -131,7 +131,7 @@ export default function PricingPage() {
           <div className="grid lg:grid-cols-[1.1fr_1fr] gap-14 items-end">
             <div>
               <div className="eyebrow">Pricing</div>
-              <h1 className="font-serif-warm font-medium text-[clamp(46px,5.4vw,76px)] leading-[1.04] tracking-[-0.022em] mt-4 mb-4 text-balance serif-h">
+              <h1 className="font-sans font-medium text-[clamp(46px,5.4vw,76px)] leading-[1.04] tracking-[-0.022em] mt-4 mb-4 text-balance ">
                 One flat rate. <em>No per-seat math.</em>
               </h1>
               <p className="text-[19px] leading-[1.55] text-ink-2 max-w-[560px] m-0">
@@ -143,8 +143,8 @@ export default function PricingPage() {
             </div>
             <div>
               <p
-                className="font-serif-warm italic text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
-                style={{ borderLeft: '2px solid var(--accent)' }}
+                className="font-sans text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
+                style={{ borderLeft: '2px solid var(--color-signal)' }}
               >
                 Pick the tier that matches your team size.{' '}
                 <b className="not-italic font-medium text-ink">
@@ -166,36 +166,36 @@ export default function PricingPage() {
                 className={[
                   'bg-white border rounded-[20px] p-[28px] flex flex-col gap-4 relative',
                   plan.feat
-                    ? 'border-[var(--accent)] shadow-[0_0_0_1px_var(--accent)]'
-                    : 'border-[var(--line)]',
+                    ? 'border-[var(--color-signal)] shadow-[0_0_0_1px_var(--color-signal)]'
+                    : 'border-[var(--color-line)]',
                 ].join(' ')}
               >
                 {plan.badge && (
                   <span
-                    className="absolute -top-3 left-6 font-mono-warm text-[10.5px] tracking-[0.1em] uppercase font-medium text-white px-3 py-1 rounded-full"
-                    style={{ background: 'var(--accent)' }}
+                    className="absolute -top-3 left-6 font-mono text-[10.5px] tracking-[0.1em] uppercase font-medium text-white px-3 py-1 rounded-full"
+                    style={{ background: 'var(--color-signal)' }}
                   >
                     {plan.badge}
                   </span>
                 )}
-                <div className="font-mono-warm text-[11px] tracking-[0.16em] text-accent uppercase font-medium">
+                <div className="font-mono text-[11px] tracking-[0.16em] text-signal uppercase font-medium">
                   {plan.tier}
                 </div>
-                <h3 className="font-serif-warm font-medium text-[22px] tracking-[-0.01em] m-0 leading-[1.15] serif-h">
+                <h3 className="font-sans font-medium text-[22px] tracking-[-0.01em] m-0 leading-[1.15] ">
                   {plan.headline}
                 </h3>
                 <div className="flex items-baseline gap-1.5">
-                  <span className="font-serif-warm font-medium text-[42px] tracking-[-0.02em] text-ink leading-none">
+                  <span className="font-sans font-medium text-[42px] tracking-[-0.02em] text-ink leading-none">
                     {plan.price}
                   </span>
-                  <span className="font-mono-warm text-[12px] text-muted tracking-[0.06em]">
+                  <span className="font-mono text-[12px] text-muted tracking-[0.06em]">
                     {plan.per}
                   </span>
                 </div>
                 <p className="text-[14px] leading-[1.5] text-ink-2 m-0">{plan.sub}</p>
                 <div
                   className="h-px w-full"
-                  style={{ background: 'var(--line)' }}
+                  style={{ background: 'var(--color-line)' }}
                 />
                 <ul className="list-none p-0 m-0 flex flex-col gap-2.5 flex-1">
                   {plan.features.map((f) => (
@@ -205,7 +205,7 @@ export default function PricingPage() {
                     >
                       <span
                         className="w-[5px] h-[5px] rounded-full flex-none mt-[7px]"
-                        style={{ background: 'var(--accent-2)' }}
+                        style={{ background: 'var(--color-ok)' }}
                       />
                       {f}
                     </li>
@@ -225,7 +225,7 @@ export default function PricingPage() {
             Bigger than 15 seats or need a full build-out? We hand off to{' '}
             <a
               href="https://skillcalibrate.com"
-              className="text-accent underline underline-offset-[3px] hover:text-ink transition-colors"
+              className="text-signal underline underline-offset-[3px] hover:text-ink transition-colors"
             >
               SkillCalibrate.com
             </a>{' '}
@@ -235,21 +235,21 @@ export default function PricingPage() {
       </section>
 
       {/* FAQ */}
-      <section className="py-[88px] bg-white border-y border-[var(--line)]">
+      <section className="py-[88px] bg-white border-y border-[var(--color-line)]">
         <div className="max-w-[1280px] mx-auto px-8">
-          <h2 className="font-serif-warm font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.02em] m-0 mb-9 text-balance text-center serif-h">
+          <h2 className="font-sans font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.02em] m-0 mb-9 text-balance text-center ">
             Common pricing <em>questions.</em>
           </h2>
           <div className="max-w-[840px] mx-auto flex flex-col gap-0">
             {FAQ.map((item, i) => (
               <details
                 key={i}
-                className="border-b border-[var(--line)] py-5 first:border-t group"
+                className="border-b border-[var(--color-line)] py-5 first:border-t group"
               >
-                <summary className="flex justify-between items-center font-serif-warm font-medium text-[21px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden serif-h">
+                <summary className="flex justify-between items-center font-sans font-medium text-[21px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden ">
                   {item.q}
                   <span
-                    className="font-serif-warm italic text-[28px] text-accent ml-4 flex-none leading-none"
+                    className="font-mono text-[20px] text-signal ml-4 flex-none leading-none"
                     aria-hidden
                   >
                     <span className="group-open:hidden">+</span>
@@ -267,12 +267,12 @@ export default function PricingPage() {
 
       {/* CTA */}
       <section
-        className="py-[88px] border-t border-[var(--line)]"
-        style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+        className="py-[88px] border-t border-[var(--color-line)]"
+        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1280px] mx-auto px-8 text-center">
           <div className="eyebrow">Ready?</div>
-          <h2 className="font-serif-warm font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance serif-h">
+          <h2 className="font-sans font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance ">
             The 20-minute call <em>is the demo.</em>
           </h2>
           <p className="text-[18px] text-ink-2 leading-[1.55] m-0 mb-6 max-w-[520px] mx-auto">

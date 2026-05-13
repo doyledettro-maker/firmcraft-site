@@ -30,12 +30,12 @@ const FAQ: { q: React.ReactNode; a: React.ReactNode }[] = [
         Send us a note through this page or email{' '}
         <a
           href="mailto:hello@firmcraft.ai"
-          className="text-accent hover:underline underline-offset-[3px]"
+          className="text-signal hover:underline underline-offset-[3px]"
         >
           hello@firmcraft.ai
         </a>
         . We&apos;ll configure access, scope their role, write their{' '}
-        <code className="font-mono-warm text-[13px] bg-paper px-1.5 py-px rounded">USER.md</code>{' '}
+        <code className="font-mono text-[13px] bg-paper px-1.5 py-px rounded">USER.md</code>{' '}
         (the file that tells the operator who they are and what they can approve), and have them
         live within one business day.
       </>
@@ -60,7 +60,7 @@ const FAQ: { q: React.ReactNode; a: React.ReactNode }[] = [
         includes a monthly AI token allowance; usage is tracked in real time and visible to you.
         Anything past the included allowance is billed at the published per-token rates — no
         markups, no surprise minimums. See the{' '}
-        <Link href="/pricing" className="text-accent hover:underline underline-offset-[3px]">
+        <Link href="/pricing" className="text-signal hover:underline underline-offset-[3px]">
           pricing page
         </Link>{' '}
         for current rates.
@@ -87,7 +87,7 @@ const FAQ: { q: React.ReactNode; a: React.ReactNode }[] = [
         every read, write, and send. We never train models on your data, and the runtime is built
         on Hermes Agent — an MIT-licensed open-source platform — so you have no vendor lock-in. See
         our{' '}
-        <Link href="/security" className="text-accent hover:underline underline-offset-[3px]">
+        <Link href="/security" className="text-signal hover:underline underline-offset-[3px]">
           security page
         </Link>{' '}
         for the full posture.
@@ -106,23 +106,23 @@ export default function SupportPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -right-[200px] w-[560px] h-[560px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[160px] w-[420px] h-[420px] rounded-full pointer-events-none opacity-45"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
         />
 
         <div className="relative max-w-[1080px] mx-auto px-8">
-          <div className="font-mono-warm text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-            <Link href="/" className="text-accent hover:underline underline-offset-[3px]">
+          <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
+            <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
               ← Back to home
             </Link>
             &nbsp;·&nbsp; Support
           </div>
           <div className="eyebrow">Client support</div>
-          <h1 className="font-serif-warm font-medium text-[clamp(40px,4.6vw,64px)] leading-[1.04] tracking-[-0.022em] mt-3 mb-4 text-balance serif-h">
+          <h1 className="font-sans font-medium text-[clamp(40px,4.6vw,64px)] leading-[1.04] tracking-[-0.022em] mt-3 mb-4 text-balance ">
             We&apos;re <em>here.</em> Tell us what&apos;s going on.
           </h1>
           <p className="text-[18px] leading-[1.55] text-ink-2 max-w-[640px] m-0 mb-8">
@@ -136,12 +136,12 @@ export default function SupportPage() {
       </section>
 
       {/* Section 2 — FAQ */}
-      <section className="py-16 bg-white border-y border-[var(--line)]">
+      <section className="py-16 bg-white border-y border-[var(--color-line)]">
         <div className="max-w-[1080px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10 items-start mb-10">
             <div>
               <div className="eyebrow">Quick answers</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(30px,3.2vw,44px)] leading-[1.05] tracking-[-0.02em] mt-2 m-0 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(30px,3.2vw,44px)] leading-[1.05] tracking-[-0.02em] mt-2 m-0 text-balance ">
                 The things <em>most</em> clients ask first.
               </h2>
             </div>
@@ -154,12 +154,12 @@ export default function SupportPage() {
             {FAQ.map((item, i) => (
               <details
                 key={i}
-                className="border-b border-[var(--line)] py-5 first:border-t group"
+                className="border-b border-[var(--color-line)] py-5 first:border-t group"
               >
-                <summary className="flex justify-between items-center font-serif-warm font-medium text-[20px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden serif-h">
+                <summary className="flex justify-between items-center font-sans font-medium text-[20px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden ">
                   {item.q}
                   <span
-                    className="font-serif-warm italic text-[28px] text-accent ml-4 flex-none leading-none"
+                    className="font-mono text-[20px] text-signal ml-4 flex-none leading-none"
                     aria-hidden
                   >
                     <span className="group-open:hidden">+</span>
@@ -178,13 +178,13 @@ export default function SupportPage() {
       {/* Section 3 — Contact form */}
       <section
         className="py-20"
-        style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1080px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1fr_1.4fr] gap-10 items-start">
             <div>
               <div className="eyebrow">Reach a human</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(30px,3.2vw,44px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(30px,3.2vw,44px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-4 text-balance ">
                 Tell us what you <em>need.</em>
               </h2>
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-6 max-w-[440px]">
@@ -201,10 +201,10 @@ export default function SupportPage() {
                     key={k}
                     className="flex gap-2.5 items-start pb-2"
                     style={{
-                      borderBottom: i === arr.length - 1 ? 'none' : '1px dashed var(--line)',
+                      borderBottom: i === arr.length - 1 ? 'none' : '1px dashed var(--color-line)',
                     }}
                   >
-                    <b className="text-ink font-medium min-w-[90px] inline-block font-mono-warm text-[11px] tracking-[0.1em] uppercase">
+                    <b className="text-ink font-medium min-w-[90px] inline-block font-mono text-[11px] tracking-[0.1em] uppercase">
                       {k}
                     </b>
                     <span>{v}</span>

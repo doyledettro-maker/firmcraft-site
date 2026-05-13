@@ -40,7 +40,7 @@ export function MobileMenu({ items, current }: Props) {
         aria-expanded={open}
         aria-controls="mobile-menu-drawer"
         onClick={() => setOpen((v) => !v)}
-        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--line-2)] text-ink transition-colors hover:bg-white"
+        className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[var(--color-line-strong)] text-ink transition-colors hover:bg-paper"
       >
         <svg
           width="18"
@@ -73,7 +73,7 @@ export function MobileMenu({ items, current }: Props) {
         role="dialog"
         aria-modal="false"
         aria-hidden={!open}
-        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--line)] bg-[rgba(251,244,234,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
+        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--color-line)] bg-[rgba(244,246,250,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
           open ? 'max-h-[640px] opacity-100' : 'pointer-events-none max-h-0 opacity-0'
         }`}
       >
@@ -87,7 +87,7 @@ export function MobileMenu({ items, current }: Props) {
                   href={item.href}
                   rel="noopener"
                   onClick={() => setOpen(false)}
-                  className="rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-white hover:text-ink"
+                  className="rounded-lg px-3 py-2.5 text-ink-2 transition-colors hover:bg-paper hover:text-ink"
                 >
                   {item.label}
                 </a>
@@ -101,8 +101,8 @@ export function MobileMenu({ items, current }: Props) {
                 aria-current={isCur ? 'page' : undefined}
                 className={`rounded-lg px-3 py-2.5 transition-colors ${
                   isCur
-                    ? 'bg-white font-medium text-ink'
-                    : 'text-ink-2 hover:bg-white hover:text-ink'
+                    ? 'bg-paper font-medium text-ink'
+                    : 'text-ink-2 hover:bg-paper hover:text-ink'
                 }`}
               >
                 {item.label}

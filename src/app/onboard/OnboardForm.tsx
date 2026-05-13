@@ -414,14 +414,14 @@ export function OnboardForm() {
   // ─── Success view ──────────────────────────────────────────────────────────
   if (status === 'success') {
     return (
-      <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
         <div
-          className="font-serif-warm italic font-medium text-[44px] leading-[0.9]"
-          style={{ color: 'var(--accent-2)' }}
+          className="font-mono font-semibold text-[44px] leading-[0.9]"
+          style={{ color: 'var(--color-ok)' }}
         >
           ✓
         </div>
-        <h2 className="font-serif-warm font-medium text-[clamp(28px,3vw,40px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+        <h2 className="font-sans font-medium text-[clamp(28px,3vw,40px)] leading-[1.1] tracking-[-0.015em] m-0 ">
           Thanks, <em>{successCompany}.</em> We&apos;ve got it.
         </h2>
         <p className="text-[16.5px] leading-[1.6] text-ink-2 m-0">
@@ -431,7 +431,7 @@ export function OnboardForm() {
           then, email{' '}
           <a
             href="mailto:hello@firmcraft.ai"
-            className="text-accent hover:underline underline-offset-[3px]"
+            className="text-signal hover:underline underline-offset-[3px]"
           >
             hello@firmcraft.ai
           </a>{' '}
@@ -455,12 +455,12 @@ export function OnboardForm() {
       {/* Progress */}
       <ProgressBar step={step} total={totalSteps} titles={STEP_TITLES} />
 
-      <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-10 flex flex-col gap-7">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-10 flex flex-col gap-7">
         <div>
-          <div className="font-mono-warm text-[11px] tracking-[0.16em] uppercase text-muted mb-2">
+          <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-2">
             Step {step + 1} of {totalSteps}
           </div>
-          <h2 className="font-serif-warm font-medium text-[clamp(26px,3vw,38px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+          <h2 className="font-sans font-medium text-[clamp(26px,3vw,38px)] leading-[1.1] tracking-[-0.015em] m-0 ">
             {step === 0 && (
               <>
                 Tell us about your <em>business.</em>
@@ -530,16 +530,16 @@ export function OnboardForm() {
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
-              background: 'rgba(180,90,58,.08)',
-              borderColor: 'rgba(180,90,58,.3)',
+              color: 'var(--color-operator)',
+              background: 'rgba(251,124,80,.08)',
+              borderColor: 'rgba(251,124,80,.3)',
             }}
           >
             {errorMsg}
           </div>
         )}
 
-        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--line)]">
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-[var(--color-line)]">
           <button
             type="button"
             onClick={back}
@@ -588,16 +588,16 @@ function ProgressBar({
   return (
     <div className="mb-7">
       <div className="flex justify-between items-end mb-3 gap-3">
-        <div className="font-mono-warm text-[11px] tracking-[0.16em] uppercase text-muted">
+        <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted">
           {titles[step]}
         </div>
-        <div className="font-mono-warm text-[11px] tracking-[0.16em] uppercase text-muted">
+        <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted">
           {step + 1} / {total}
         </div>
       </div>
       <div
         className="h-1.5 w-full rounded-full overflow-hidden"
-        style={{ background: 'var(--line)' }}
+        style={{ background: 'var(--color-line)' }}
         role="progressbar"
         aria-valuenow={step + 1}
         aria-valuemin={1}
@@ -606,19 +606,19 @@ function ProgressBar({
       >
         <div
           className="h-full transition-all duration-300"
-          style={{ width: `${pct}%`, background: 'var(--accent)' }}
+          style={{ width: `${pct}%`, background: 'var(--color-signal)' }}
         />
       </div>
-      <ol className="mt-3 hidden md:flex items-center gap-1.5 text-[10.5px] font-mono-warm tracking-[0.1em] uppercase text-muted overflow-x-auto">
+      <ol className="mt-3 hidden md:flex items-center gap-1.5 text-[10.5px] font-mono tracking-[0.1em] uppercase text-muted overflow-x-auto">
         {titles.map((t, i) => (
           <li
             key={t}
             className={[
               'flex items-center gap-1.5 px-2 py-1 rounded-full whitespace-nowrap',
               i === step
-                ? 'text-ink bg-paper border border-[var(--line)]'
+                ? 'text-ink bg-paper border border-[var(--color-line)]'
                 : i < step
-                ? 'text-accent'
+                ? 'text-signal'
                 : '',
             ].join(' ')}
           >
@@ -628,10 +628,10 @@ function ProgressBar({
               style={{
                 background:
                   i === step
-                    ? 'var(--accent)'
+                    ? 'var(--color-signal)'
                     : i < step
-                    ? 'var(--accent-2)'
-                    : 'var(--line-2)',
+                    ? 'var(--color-ok)'
+                    : 'var(--color-line-strong)',
               }}
             />
             <span>{t}</span>
@@ -687,8 +687,8 @@ function Step1({
       </div>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
-          Team size <span className="text-accent">*</span>
+        <legend className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
+          Team size <span className="text-signal">*</span>
         </legend>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
           {TEAM_SIZES.map((size) => {
@@ -700,7 +700,7 @@ function Step1({
                   'cursor-pointer rounded-xl border px-4 py-3 flex items-center gap-2 transition-all',
                   selected
                     ? 'border-ink bg-paper'
-                    : 'border-[var(--line)] bg-white hover:border-[var(--line-2)]',
+                    : 'border-[var(--color-line)] bg-white hover:border-[var(--color-line-strong)]',
                 ].join(' ')}
               >
                 <input
@@ -715,14 +715,14 @@ function Step1({
                   aria-hidden
                   className={[
                     'inline-block w-3.5 h-3.5 rounded-full border-2 flex-none',
-                    selected ? 'border-ink' : 'border-[var(--line-2)]',
+                    selected ? 'border-ink' : 'border-[var(--color-line-strong)]',
                   ].join(' ')}
                   style={{
-                    background: selected ? 'var(--ink)' : 'transparent',
+                    background: selected ? 'var(--color-ink)' : 'transparent',
                     boxShadow: selected ? 'inset 0 0 0 2px #fff' : undefined,
                   }}
                 />
-                <span className="font-serif-warm font-medium text-[15.5px] tracking-[-0.005em] text-ink">
+                <span className="font-sans font-medium text-[15.5px] tracking-[-0.005em] text-ink">
                   {size}
                 </span>
               </label>
@@ -782,7 +782,7 @@ function Step2({
       <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
         Who will use the operator? Add one row per teammate. We&apos;ll use these to scope
         permissions and write each person&apos;s{' '}
-        <code className="font-mono-warm text-[12.5px] bg-paper px-1.5 py-px rounded">
+        <code className="font-mono text-[12.5px] bg-paper px-1.5 py-px rounded">
           USER.md
         </code>{' '}
         (the file that tells the operator who they are and what they can approve).
@@ -792,17 +792,17 @@ function Step2({
         {form.teamMembers.map((m, idx) => (
           <div
             key={m.id}
-            className="rounded-xl border border-[var(--line)] bg-paper/40 p-4 sm:p-5 flex flex-col gap-3"
+            className="rounded-xl border border-[var(--color-line)] bg-paper/40 p-4 sm:p-5 flex flex-col gap-3"
           >
             <div className="flex items-center justify-between gap-3">
-              <div className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+              <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
                 Teammate {idx + 1}
               </div>
               {form.teamMembers.length > 1 && (
                 <button
                   type="button"
                   onClick={() => removeMember(m.id)}
-                  className="text-[12px] font-mono-warm tracking-[0.1em] uppercase text-muted hover:text-accent transition-colors"
+                  className="text-[12px] font-mono tracking-[0.1em] uppercase text-muted hover:text-signal transition-colors"
                   aria-label={`Remove teammate ${idx + 1}`}
                 >
                   Remove
@@ -925,7 +925,7 @@ function Step3({
 
       {TOOL_CATEGORIES.map((cat) => (
         <div key={cat.name} className="flex flex-col gap-3">
-          <h3 className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium m-0">
+          <h3 className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium m-0">
             {cat.name}
           </h3>
           <div className="grid sm:grid-cols-2 gap-2.5">
@@ -938,7 +938,7 @@ function Step3({
                     'rounded-xl border transition-all',
                     sel.selected
                       ? 'border-ink bg-paper'
-                      : 'border-[var(--line)] bg-white hover:border-[var(--line-2)]',
+                      : 'border-[var(--color-line)] bg-white hover:border-[var(--color-line-strong)]',
                   ].join(' ')}
                 >
                   <label className="cursor-pointer flex items-center gap-3 p-3">
@@ -952,22 +952,22 @@ function Step3({
                       aria-hidden
                       className={[
                         'inline-grid place-items-center w-4 h-4 rounded-[4px] border-2 flex-none transition-all',
-                        sel.selected ? 'border-ink' : 'border-[var(--line-2)]',
+                        sel.selected ? 'border-ink' : 'border-[var(--color-line-strong)]',
                       ].join(' ')}
                       style={{
-                        background: sel.selected ? 'var(--ink)' : 'transparent',
+                        background: sel.selected ? 'var(--color-ink)' : 'transparent',
                       }}
                     >
                       {sel.selected && (
                         <span
                           className="text-[10px] leading-none"
-                          style={{ color: 'var(--paper)' }}
+                          style={{ color: 'var(--color-surface)' }}
                         >
                           ✓
                         </span>
                       )}
                     </span>
-                    <span className="font-serif-warm font-medium text-[15.5px] tracking-[-0.005em] text-ink">
+                    <span className="font-sans font-medium text-[15.5px] tracking-[-0.005em] text-ink">
                       {t.label}
                     </span>
                   </label>
@@ -1022,8 +1022,8 @@ function Step4({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3">
         <div>
-          <label className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium block mb-1">
-            Top 5 tasks you&apos;d like to automate <span className="text-accent">*</span>
+          <label className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium block mb-1">
+            Top 5 tasks you&apos;d like to automate <span className="text-signal">*</span>
           </label>
           <p className="text-[13px] text-muted m-0">
             Ranked 1–5, most important first. Plain English — &ldquo;send the weekly invoice
@@ -1034,8 +1034,8 @@ function Step4({
           {form.topTasks.map((t, idx) => (
             <div key={idx} className="flex items-start gap-2.5">
               <span
-                className="font-serif-warm italic font-medium text-[24px] leading-[1] flex-none mt-2"
-                style={{ color: 'var(--accent)' }}
+                className="font-mono font-semibold text-[24px] leading-[1] flex-none mt-2"
+                style={{ color: 'var(--color-signal)' }}
                 aria-hidden
               >
                 {idx + 1}
@@ -1100,8 +1100,8 @@ function Step5({
   return (
     <div className="flex flex-col gap-6">
       <fieldset className="flex flex-col gap-2">
-        <legend className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
-          Communication style <span className="text-accent">*</span>
+        <legend className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
+          Communication style <span className="text-signal">*</span>
         </legend>
         <div className="grid sm:grid-cols-3 gap-2.5">
           {COMM_STYLES.map((opt) => {
@@ -1113,7 +1113,7 @@ function Step5({
                   'cursor-pointer rounded-xl border p-4 flex flex-col gap-1 transition-all',
                   selected
                     ? 'border-ink bg-paper'
-                    : 'border-[var(--line)] bg-white hover:border-[var(--line-2)]',
+                    : 'border-[var(--color-line)] bg-white hover:border-[var(--color-line-strong)]',
                 ].join(' ')}
               >
                 <input
@@ -1129,14 +1129,14 @@ function Step5({
                     aria-hidden
                     className={[
                       'inline-block w-3.5 h-3.5 rounded-full border-2 flex-none',
-                      selected ? 'border-ink' : 'border-[var(--line-2)]',
+                      selected ? 'border-ink' : 'border-[var(--color-line-strong)]',
                     ].join(' ')}
                     style={{
-                      background: selected ? 'var(--ink)' : 'transparent',
+                      background: selected ? 'var(--color-ink)' : 'transparent',
                       boxShadow: selected ? 'inset 0 0 0 2px #fff' : undefined,
                     }}
                   />
-                  <span className="font-serif-warm font-medium text-[15.5px] tracking-[-0.005em] text-ink">
+                  <span className="font-sans font-medium text-[15.5px] tracking-[-0.005em] text-ink">
                     {opt.label}
                   </span>
                 </span>
@@ -1150,8 +1150,8 @@ function Step5({
       </fieldset>
 
       <fieldset className="flex flex-col gap-2">
-        <legend className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
-          Response time expectations <span className="text-accent">*</span>
+        <legend className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
+          Response time expectations <span className="text-signal">*</span>
         </legend>
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-2.5">
           {RESPONSE_TIMES.map((opt) => {
@@ -1163,7 +1163,7 @@ function Step5({
                   'cursor-pointer rounded-xl border p-4 flex flex-col gap-1 transition-all',
                   selected
                     ? 'border-ink bg-paper'
-                    : 'border-[var(--line)] bg-white hover:border-[var(--line-2)]',
+                    : 'border-[var(--color-line)] bg-white hover:border-[var(--color-line-strong)]',
                 ].join(' ')}
               >
                 <input
@@ -1179,14 +1179,14 @@ function Step5({
                     aria-hidden
                     className={[
                       'inline-block w-3.5 h-3.5 rounded-full border-2 flex-none',
-                      selected ? 'border-ink' : 'border-[var(--line-2)]',
+                      selected ? 'border-ink' : 'border-[var(--color-line-strong)]',
                     ].join(' ')}
                     style={{
-                      background: selected ? 'var(--ink)' : 'transparent',
+                      background: selected ? 'var(--color-ink)' : 'transparent',
                       boxShadow: selected ? 'inset 0 0 0 2px #fff' : undefined,
                     }}
                   />
-                  <span className="font-serif-warm font-medium text-[15px] tracking-[-0.005em] text-ink">
+                  <span className="font-sans font-medium text-[15px] tracking-[-0.005em] text-ink">
                     {opt.label}
                   </span>
                 </span>
@@ -1303,18 +1303,18 @@ function Step6({
         className={[
           'rounded-xl border-2 border-dashed p-8 sm:p-10 text-center transition-colors',
           dragActive
-            ? 'border-accent bg-paper'
-            : 'border-[var(--line-2)] bg-white hover:border-ink',
+            ? 'border-signal bg-paper'
+            : 'border-[var(--color-line-strong)] bg-white hover:border-ink',
         ].join(' ')}
       >
         <div
-          className="font-serif-warm italic font-medium text-[34px] leading-[1] mb-3"
-          style={{ color: 'var(--accent)' }}
+          className="font-sans font-semibold text-[34px] leading-[1] mb-3"
+          style={{ color: 'var(--color-signal)' }}
           aria-hidden
         >
           ↓
         </div>
-        <p className="font-serif-warm font-medium text-[20px] tracking-[-0.01em] m-0 mb-1">
+        <p className="font-sans font-medium text-[20px] tracking-[-0.01em] m-0 mb-1">
           Drop files here, <em>or click to browse.</em>
         </p>
         <p className="text-[13px] text-muted m-0 mb-4">
@@ -1346,10 +1346,10 @@ function Step6({
       {form.files.length > 0 && (
         <div className="flex flex-col gap-2">
           <div className="flex items-center justify-between">
-            <h4 className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium m-0">
+            <h4 className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium m-0">
               {form.files.length} file{form.files.length === 1 ? '' : 's'} attached
             </h4>
-            <span className="font-mono-warm text-[11px] text-muted">
+            <span className="font-mono text-[11px] text-muted">
               {formatBytes(totalSize)} total
             </span>
           </div>
@@ -1357,22 +1357,22 @@ function Step6({
             {form.files.map((f, idx) => (
               <li
                 key={`${f.name}-${idx}`}
-                className="flex items-center gap-3 bg-paper border border-[var(--line)] rounded-lg px-3 py-2 text-[13.5px]"
+                className="flex items-center gap-3 bg-paper border border-[var(--color-line)] rounded-lg px-3 py-2 text-[13.5px]"
               >
                 <span
                   aria-hidden
-                  className="font-mono-warm text-[10px] uppercase tracking-[0.1em] px-1.5 py-0.5 rounded bg-white border border-[var(--line)] text-muted"
+                  className="font-mono text-[10px] uppercase tracking-[0.1em] px-1.5 py-0.5 rounded bg-white border border-[var(--color-line)] text-muted"
                 >
                   {(f.name.split('.').pop() || '?').toUpperCase()}
                 </span>
                 <span className="flex-1 text-ink truncate">{f.name}</span>
-                <span className="font-mono-warm text-[11px] text-muted flex-none">
+                <span className="font-mono text-[11px] text-muted flex-none">
                   {formatBytes(f.size)}
                 </span>
                 <button
                   type="button"
                   onClick={() => removeFile(idx)}
-                  className="text-[11px] font-mono-warm tracking-[0.1em] uppercase text-muted hover:text-accent transition-colors"
+                  className="text-[11px] font-mono tracking-[0.1em] uppercase text-muted hover:text-signal transition-colors"
                   aria-label={`Remove ${f.name}`}
                 >
                   Remove
@@ -1394,7 +1394,7 @@ function Step6({
 // ─── Shared field + input ────────────────────────────────────────────────────
 
 const inputClass =
-  'w-full rounded-lg border border-[var(--line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors'
+  'w-full rounded-lg border border-[var(--color-line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors'
 
 function Field({
   label,
@@ -1413,10 +1413,10 @@ function Field({
     <div className={`flex flex-col ${compact ? 'gap-1' : 'gap-1.5'}`}>
       <label
         htmlFor={htmlFor}
-        className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium"
+        className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium"
       >
         {label}
-        {required && <span className="text-accent"> *</span>}
+        {required && <span className="text-signal"> *</span>}
       </label>
       {children}
     </div>

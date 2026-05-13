@@ -1,0 +1,113 @@
+/* ============================================================
+   Firmcraft — Visual identity refresh (Operator)
+   Design tokens · v0.1 · May 13, 2026
+   ------------------------------------------------------------
+   These tokens are the source of truth for the refreshed palette.
+   They map 1:1 to the Tailwind config in tailwind.config.js and
+   are intended to be loaded once at the root of the Next.js app
+   (e.g. `import "./styles/tokens.css"` in app/layout.tsx).
+   ============================================================ */
+
+:root {
+  /* ---------- Surfaces (light) ---------- */
+  --color-surface:        #F4F6FA; /* primary page background */
+  --color-surface-2:      #E9EDF4; /* alt section background */
+  --color-paper:          #FFFFFF; /* cards, modals */
+
+  /* ---------- Console (dark) ---------- */
+  /* The operator surface. Used for dashboards, hero accents,
+     code consoles, and the dark variant of every component. */
+  --color-console:        #0B1220; /* console primary */
+  --color-console-2:      #11192B; /* console raised (cards on console) */
+  --color-console-3:      #1B2440; /* console inset (inputs, hover) */
+
+  /* ---------- Ink (text) ---------- */
+  --color-ink:            #0F172A; /* primary text on light */
+  --color-ink-2:          #334155; /* secondary text on light */
+  --color-muted:          #64748B; /* tertiary / meta */
+  --color-inverse:        #F4F6FA; /* primary text on console */
+  --color-inverse-2:      #94A3B8; /* secondary text on console */
+
+  /* ---------- Borders / dividers ---------- */
+  --color-line:           rgba(15,23,42,0.10);
+  --color-line-strong:    rgba(15,23,42,0.18);
+  --color-line-console:   rgba(244,246,250,0.10);
+  --color-line-console-2: rgba(244,246,250,0.20);
+
+  /* ---------- Signal (primary brand action) ----------
+     The new "Firmcraft blue." Saturated, software-y,
+     reads as engineering credibility. */
+  --color-signal:         #2C6BF0;
+  --color-signal-hover:   #1E4FCF;
+  --color-signal-soft:    #E0EAFE;
+  --color-signal-ink:     #0B2A8B; /* signal text on signal-soft */
+
+  /* ---------- Operator (secondary accent) ----------
+     The warm bridge from the old palette. Use sparingly:
+     status pills, founder accents, the operator-at-work mark.
+     Never as a primary CTA color. */
+  --color-operator:       #FB7C50;
+  --color-operator-soft:  #FFE9DD;
+  --color-operator-ink:   #7A2D0E;
+
+  /* ---------- Semantic ---------- */
+  --color-ok:             #10B981;
+  --color-ok-soft:        #DCFCE7;
+  --color-warn:           #F59E0B;
+  --color-warn-soft:      #FEF3C7;
+  --color-err:            #DC2626;
+  --color-err-soft:       #FEE2E2;
+
+  /* ---------- Type ---------- */
+  --font-sans:    "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif; /* wordmark only */
+
+  /* ---------- Radii ---------- */
+  --radius-xs:  4px;
+  --radius-sm:  6px;
+  --radius-md:  10px;
+  --radius-lg:  14px;
+  --radius-xl:  18px;
+  --radius-2xl: 22px;
+  --radius-pill: 999px;
+
+  /* ---------- Elevation ----------
+     Operator-credible = restrained shadows. Never decorative. */
+  --shadow-card:    0 1px 0 rgba(15,23,42,0.04), 0 1px 2px rgba(15,23,42,0.06);
+  --shadow-lift:    0 14px 28px -16px rgba(44,107,240,0.18);
+  --shadow-console: 0 30px 60px -28px rgba(11,18,32,0.45), 0 12px 28px -16px rgba(11,18,32,0.25);
+
+  /* ---------- Focus ---------- */
+  --focus-ring: 0 0 0 2px var(--color-paper), 0 0 0 4px var(--color-signal);
+}
+
+/* ============================================================
+   Dark-mode mapping (optional)
+   If/when we ship a dark site, the same token names re-bind.
+   Components should always reference --color-* and never hex.
+   ============================================================ */
+@media (prefers-color-scheme: dark) {
+  :root[data-theme="auto"] {
+    --color-surface:    var(--color-console);
+    --color-surface-2:  var(--color-console-2);
+    --color-paper:      var(--color-console-2);
+    --color-ink:        var(--color-inverse);
+    --color-ink-2:      var(--color-inverse-2);
+    --color-muted:      var(--color-inverse-2);
+    --color-line:       var(--color-line-console);
+    --color-line-strong:var(--color-line-console-2);
+  }
+}
+
+/* Explicit dark theme (data-theme="dark" on <html>) — same mapping */
+:root[data-theme="dark"] {
+  --color-surface:    var(--color-console);
+  --color-surface-2:  var(--color-console-2);
+  --color-paper:      var(--color-console-2);
+  --color-ink:        var(--color-inverse);
+  --color-ink-2:      var(--color-inverse-2);
+  --color-muted:      var(--color-inverse-2);
+  --color-line:       var(--color-line-console);
+  --color-line-strong:var(--color-line-console-2);
+}

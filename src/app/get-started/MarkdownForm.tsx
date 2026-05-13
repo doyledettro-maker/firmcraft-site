@@ -109,16 +109,16 @@ export function MarkdownForm({
   return (
     <div className="grid lg:grid-cols-[1fr_1fr] gap-6">
       {/* Step 1: download */}
-      <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
             Step 1
           </span>
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
             Markdown
           </span>
         </div>
-        <h3 className="font-serif-warm font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0 serif-h">
+        <h3 className="font-sans font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0 ">
           Download the <em>template.</em>
         </h3>
         <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
@@ -134,7 +134,7 @@ export function MarkdownForm({
         <ul className="grid gap-1.5 text-[13px] text-muted m-0 p-0 list-none">
           {SURVEY_SECTIONS.map((s) => (
             <li key={s.id}>
-              <span className="font-mono-warm text-[11px] tracking-[0.08em] mr-2">
+              <span className="font-mono text-[11px] tracking-[0.08em] mr-2">
                 {String(s.number).padStart(2, '0')}
               </span>
               {s.title}
@@ -151,16 +151,16 @@ export function MarkdownForm({
       </div>
 
       {/* Step 2: upload */}
-      <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
             Step 2
           </span>
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
             Upload
           </span>
         </div>
-        <h3 className="font-serif-warm font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0 serif-h">
+        <h3 className="font-sans font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0 ">
           Drop your filled <em>.md</em> here.
         </h3>
         <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
@@ -191,18 +191,18 @@ export function MarkdownForm({
           className={[
             'rounded-xl border-2 border-dashed p-8 text-center transition-colors',
             dragActive
-              ? 'border-accent bg-paper'
-              : 'border-[var(--line-2)] bg-paper/40 hover:border-ink',
+              ? 'border-signal bg-paper'
+              : 'border-[var(--color-line-strong)] bg-paper/40 hover:border-ink',
           ].join(' ')}
         >
           <div
-            className="font-serif-warm italic font-medium text-[34px] leading-[1] mb-3"
-            style={{ color: 'var(--accent)' }}
+            className="font-sans font-semibold text-[34px] leading-[1] mb-3"
+            style={{ color: 'var(--color-signal)' }}
             aria-hidden
           >
             ↓
           </div>
-          <p className="font-serif-warm font-medium text-[18px] tracking-[-0.005em] m-0 mb-1">
+          <p className="font-sans font-medium text-[18px] tracking-[-0.005em] m-0 mb-1">
             Drop the file here, <em>or click to browse.</em>
           </p>
           <p className="text-[12.5px] text-muted m-0 mb-4">.md files only.</p>
@@ -231,7 +231,7 @@ export function MarkdownForm({
 
         {/* Or paste */}
         <details className="group">
-          <summary className="cursor-pointer text-[12.5px] font-mono-warm tracking-[0.1em] uppercase text-muted hover:text-ink transition-colors list-none">
+          <summary className="cursor-pointer text-[12.5px] font-mono tracking-[0.1em] uppercase text-muted hover:text-ink transition-colors list-none">
             <span className="mr-1.5">+</span>
             Or paste markdown directly
           </summary>
@@ -241,7 +241,7 @@ export function MarkdownForm({
               onChange={(e) => setPasted(e.target.value)}
               rows={8}
               placeholder="Paste your filled-out markdown here…"
-              className="w-full rounded-lg border border-[var(--line)] bg-paper px-3 py-2 text-[13.5px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white font-mono-warm resize-y min-h-[140px]"
+              className="w-full rounded-lg border border-[var(--color-line)] bg-paper px-3 py-2 text-[13.5px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white font-mono resize-y min-h-[140px]"
             />
             <button
               type="button"
@@ -259,9 +259,9 @@ export function MarkdownForm({
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
-              background: 'rgba(180,90,58,.08)',
-              borderColor: 'rgba(180,90,58,.3)',
+              color: 'var(--color-operator)',
+              background: 'rgba(251,124,80,.08)',
+              borderColor: 'rgba(251,124,80,.3)',
             }}
           >
             {error.message}
@@ -273,7 +273,7 @@ export function MarkdownForm({
         <button
           type="button"
           onClick={onCancel}
-          className="text-[12.5px] font-mono-warm tracking-[0.12em] uppercase text-muted hover:text-accent transition-colors"
+          className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors"
         >
           ← Switch method
         </button>
@@ -302,16 +302,16 @@ function ImportPreview({
   const infos = issues.filter((i) => i.level === 'info')
 
   return (
-    <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 max-w-[760px] mx-auto">
+    <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 max-w-[760px] mx-auto">
       <div className="flex items-center justify-between">
-        <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+        <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
           Preview
         </span>
-        <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+        <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
           Confirm to continue
         </span>
       </div>
-      <h3 className="font-serif-warm font-medium text-[26px] leading-[1.15] tracking-[-0.01em] m-0 serif-h">
+      <h3 className="font-sans font-medium text-[26px] leading-[1.15] tracking-[-0.01em] m-0 ">
         Here&apos;s what we <em>parsed.</em>
       </h3>
 
@@ -323,7 +323,7 @@ function ImportPreview({
 
       {hint && (
         <p className="text-[13.5px] text-ink-2 m-0">
-          Company hint: <span className="font-mono-warm text-ink">{hint}</span>
+          Company hint: <span className="font-mono text-ink">{hint}</span>
         </p>
       )}
 
@@ -337,7 +337,7 @@ function ImportPreview({
 
       {infos.length > 0 && (
         <details>
-          <summary className="cursor-pointer text-[12.5px] font-mono-warm tracking-[0.1em] uppercase text-muted hover:text-ink list-none">
+          <summary className="cursor-pointer text-[12.5px] font-mono tracking-[0.1em] uppercase text-muted hover:text-ink list-none">
             <span className="mr-1.5">+</span>
             {infos.length} skipped question{infos.length === 1 ? '' : 's'}
           </summary>
@@ -345,7 +345,7 @@ function ImportPreview({
         </details>
       )}
 
-      <div className="flex items-center justify-between gap-3 flex-wrap pt-2 border-t border-[var(--line)]">
+      <div className="flex items-center justify-between gap-3 flex-wrap pt-2 border-t border-[var(--color-line)]">
         <button
           type="button"
           onClick={onBack}
@@ -380,17 +380,17 @@ function Stat({
     <div
       className={[
         'rounded-xl border p-4 flex flex-col gap-1',
-        accent ? 'border-accent/40 bg-paper/60' : 'border-[var(--line)] bg-paper/30',
+        accent ? 'border-signal/40 bg-paper/60' : 'border-[var(--color-line)] bg-paper/30',
         muted ? 'opacity-60' : '',
       ].join(' ')}
     >
-      <span className="font-mono-warm text-[10.5px] tracking-[0.14em] uppercase text-muted">
+      <span className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-muted">
         {label}
       </span>
       <span
         className={[
-          'font-serif-warm font-medium text-[28px] leading-[1] tracking-[-0.01em]',
-          accent ? 'text-accent' : 'text-ink',
+          'font-sans font-medium text-[28px] leading-[1] tracking-[-0.01em]',
+          accent ? 'text-signal' : 'text-ink',
         ].join(' ')}
       >
         {value}
@@ -411,14 +411,14 @@ function IssueList({
   const styles =
     tone === 'warning'
       ? {
-          color: '#B45A3A',
-          background: 'rgba(180,90,58,.06)',
-          borderColor: 'rgba(180,90,58,.25)',
+          color: 'var(--color-operator)',
+          background: 'rgba(251,124,80,.06)',
+          borderColor: 'rgba(251,124,80,.25)',
         }
       : {
-          color: 'var(--ink-2)',
-          background: 'var(--paper)',
-          borderColor: 'var(--line)',
+          color: 'var(--color-ink-2)',
+          background: 'var(--color-surface)',
+          borderColor: 'var(--color-line)',
         }
   return (
     <div
@@ -426,7 +426,7 @@ function IssueList({
       style={styles}
     >
       {title && (
-        <div className="font-mono-warm text-[11px] tracking-[0.12em] uppercase font-medium">
+        <div className="font-mono text-[11px] tracking-[0.12em] uppercase font-medium">
           {title}
         </div>
       )}

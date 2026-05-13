@@ -327,14 +327,14 @@ export default function HomePage() {
           <p style={{
             textAlign: 'center',
             marginTop: '24px',
-            color: 'var(--muted)',
+            color: 'var(--color-muted)',
             fontSize: '14px',
           }}>
             Bigger than 50 seats or need a full build-out?{' '}
             <a
               href="mailto:hello@firmcraft.ai?subject=Enterprise%20Inquiry"
               style={{
-                color: 'var(--accent)',
+                color: 'var(--color-signal)',
                 textDecoration: 'underline',
                 textUnderlineOffset: '3px',
               }}
@@ -448,7 +448,7 @@ export default function HomePage() {
               <p
                 style={{
                   marginTop: '14px',
-                  color: 'var(--muted)',
+                  color: 'var(--color-muted)',
                   fontSize: '13px',
                   maxWidth: '440px',
                 }}
@@ -457,7 +457,7 @@ export default function HomePage() {
                 <Link
                   href="/get-started"
                   style={{
-                    color: 'var(--accent)',
+                    color: 'var(--color-signal)',
                     textDecoration: 'underline',
                     textUnderlineOffset: '3px',
                   }}

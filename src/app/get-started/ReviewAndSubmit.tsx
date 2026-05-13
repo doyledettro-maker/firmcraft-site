@@ -62,7 +62,7 @@ export function ReviewAndSubmit({
     <div className="grid lg:grid-cols-[260px_1fr] gap-6 lg:gap-8">
       {/* Sidebar */}
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="font-mono-warm text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
+        <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
           Review · {answeredCount(answers)} of {totalQ()} answered
         </div>
         <ol className="grid gap-1 m-0 p-0 list-none">
@@ -76,11 +76,11 @@ export function ReviewAndSubmit({
                   href={`#section-${s.id}`}
                   className="flex items-center gap-3 px-3 py-2 rounded-lg text-[13.5px] text-ink-2 hover:bg-paper hover:text-ink transition-colors"
                 >
-                  <span className="font-mono-warm text-[10.5px] tracking-[0.08em] text-muted w-6">
+                  <span className="font-mono text-[10.5px] tracking-[0.08em] text-muted w-6">
                     {String(s.number).padStart(2, '0')}
                   </span>
                   <span className="flex-1 truncate">{s.title}</span>
-                  <span className="font-mono-warm text-[10.5px] text-muted">
+                  <span className="font-mono text-[10.5px] text-muted">
                     {answered}/{s.questions.length}
                   </span>
                 </a>
@@ -88,11 +88,11 @@ export function ReviewAndSubmit({
             )
           })}
         </ol>
-        <div className="mt-5 pt-5 border-t border-[var(--line)] flex flex-col gap-2">
+        <div className="mt-5 pt-5 border-t border-[var(--color-line)] flex flex-col gap-2">
           <button
             type="button"
             onClick={onBack}
-            className="text-[12.5px] font-mono-warm tracking-[0.12em] uppercase text-muted hover:text-accent transition-colors text-left"
+            className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors text-left"
           >
             ← {method === 'conversational' ? 'Back to chat' : 'Re-upload file'}
           </button>
@@ -101,11 +101,11 @@ export function ReviewAndSubmit({
 
       {/* Review body */}
       <div className="flex flex-col gap-5">
-        <div className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-3">
-          <div className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+        <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-3">
+          <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
             Almost done
           </div>
-          <h2 className="font-serif-warm font-medium text-[clamp(26px,3vw,38px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+          <h2 className="font-sans font-medium text-[clamp(26px,3vw,38px)] leading-[1.1] tracking-[-0.015em] m-0 ">
             Review &amp; <em>submit.</em>
           </h2>
           <p className="text-[15px] text-ink-2 leading-[1.55] m-0">
@@ -114,7 +114,7 @@ export function ReviewAndSubmit({
             ready.
           </p>
           <label className="flex flex-col gap-1 mt-3 max-w-[420px]">
-            <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium">
+            <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium">
               Company name (for our records)
             </span>
             <input
@@ -122,7 +122,7 @@ export function ReviewAndSubmit({
               value={companyHint}
               onChange={(e) => onCompanyHintChange(e.target.value)}
               placeholder="Acme Co."
-              className="rounded-lg border border-[var(--line)] bg-paper px-3 py-2 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors"
+              className="rounded-lg border border-[var(--color-line)] bg-paper px-3 py-2 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors"
             />
           </label>
         </div>
@@ -131,18 +131,18 @@ export function ReviewAndSubmit({
           <section
             key={s.id}
             id={`section-${s.id}`}
-            className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 scroll-mt-20"
+            className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 scroll-mt-20"
           >
             <div className="flex items-baseline justify-between gap-4 flex-wrap">
               <div>
-                <div className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium mb-1">
+                <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium mb-1">
                   Section {s.number} of {SURVEY_SECTIONS.length}
                 </div>
-                <h3 className="font-serif-warm font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0">
+                <h3 className="font-sans font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0">
                   {s.title}
                 </h3>
               </div>
-              <span className="font-mono-warm text-[11px] tracking-[0.1em] uppercase text-muted">
+              <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted">
                 {s.questions.filter((q) => (answers[answerKey(s.id, q.id)] || '').trim().length > 0).length}{' '}
                 of {s.questions.length} answered
               </span>
@@ -155,7 +155,7 @@ export function ReviewAndSubmit({
                   <div key={q.id} className="flex flex-col gap-1.5">
                     <label
                       htmlFor={`a-${key}`}
-                      className="font-serif-warm font-medium text-[15.5px] leading-[1.4] tracking-[-0.005em] text-ink"
+                      className="font-sans font-medium text-[15.5px] leading-[1.4] tracking-[-0.005em] text-ink"
                     >
                       {q.prompt}
                     </label>
@@ -180,16 +180,16 @@ export function ReviewAndSubmit({
             role="alert"
             className="rounded-xl border px-4 py-3 text-[13.5px]"
             style={{
-              color: '#B45A3A',
-              background: 'rgba(180,90,58,.08)',
-              borderColor: 'rgba(180,90,58,.3)',
+              color: 'var(--color-operator)',
+              background: 'rgba(251,124,80,.08)',
+              borderColor: 'rgba(251,124,80,.3)',
             }}
           >
             {error}
           </div>
         )}
 
-        <div className="flex items-center justify-between gap-3 flex-wrap bg-white border border-[var(--line)] rounded-[18px] p-5">
+        <div className="flex items-center justify-between gap-3 flex-wrap bg-white border border-[var(--color-line)] rounded-[18px] p-5">
           <button
             type="button"
             onClick={onBack}
@@ -252,7 +252,7 @@ function AutoTextarea({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={3}
-      className="w-full rounded-lg border border-[var(--line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white resize-none transition-colors leading-[1.55]"
+      className="w-full rounded-lg border border-[var(--color-line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white resize-none transition-colors leading-[1.55]"
       style={{ minHeight: 84 }}
     />
   )

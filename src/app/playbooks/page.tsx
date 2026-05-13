@@ -329,18 +329,18 @@ const CAT_VAR: Record<Cat, string> = {
 }
 
 const TRIGGER_COLOR: Record<Trigger, string> = {
-  mention: 'var(--accent)',
-  cron: 'var(--accent-2)',
-  event: 'var(--accent-3)',
+  mention: 'var(--color-signal)',
+  cron: 'var(--color-ok)',
+  event: 'var(--color-signal)',
 }
 
 function PlaybookCard({ pb }: { pb: Playbook }) {
   const dotColor = CAT_VAR[pb.cat]
   const trigColor = TRIGGER_COLOR[pb.trigger]
   return (
-    <article className="card-lift bg-white border border-[var(--line)] rounded-2xl p-[22px] flex flex-col gap-[14px] relative">
-      <div className="flex justify-between items-center font-mono-warm text-[10.5px] tracking-[0.12em] uppercase text-muted">
-        <span className="inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full bg-paper text-ink-2 border border-[var(--line)]">
+    <article className="card-lift bg-white border border-[var(--color-line)] rounded-2xl p-[22px] flex flex-col gap-[14px] relative">
+      <div className="flex justify-between items-center font-mono text-[10.5px] tracking-[0.12em] uppercase text-muted">
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-[3px] rounded-full bg-paper text-ink-2 border border-[var(--color-line)]">
           <span
             className="w-[7px] h-[7px] rounded-full"
             style={{ background: dotColor }}
@@ -349,27 +349,27 @@ function PlaybookCard({ pb }: { pb: Playbook }) {
         </span>
         <span>{pb.id}</span>
       </div>
-      <h3 className="font-serif-warm font-medium text-[21px] tracking-[-0.01em] leading-[1.2] m-0 text-balance serif-h">
+      <h3 className="font-sans font-medium text-[21px] tracking-[-0.01em] leading-[1.2] m-0 text-balance ">
         {pb.title}
       </h3>
       <p className="m-0 text-[14px] leading-[1.5] text-ink-2">{pb.body}</p>
-      <div className="flex items-center gap-2 font-mono-warm text-[11px] text-muted uppercase tracking-[0.08em] pt-2.5 border-t border-dashed border-[var(--line)] flex-wrap">
+      <div className="flex items-center gap-2 font-mono text-[11px] text-muted uppercase tracking-[0.08em] pt-2.5 border-t border-dashed border-[var(--color-line)] flex-wrap">
         <span className="text-muted min-w-[54px]">Touches</span>
         <div className="flex gap-[5px] flex-wrap">
           {pb.touches.map((t) => (
             <span
               key={t}
-              className="inline-flex items-center px-2 py-[3px] rounded-md bg-paper font-mono-warm text-[10.5px] text-ink border border-[var(--line)] normal-case tracking-normal"
+              className="inline-flex items-center px-2 py-[3px] rounded-md bg-paper font-mono text-[10.5px] text-ink border border-[var(--color-line)] normal-case tracking-normal"
             >
               {t}
             </span>
           ))}
         </div>
       </div>
-      <div className="flex items-center gap-2 font-mono-warm text-[11px] uppercase tracking-[0.08em] pt-2.5 border-t border-dashed border-[var(--line)] flex-wrap">
+      <div className="flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.08em] pt-2.5 border-t border-dashed border-[var(--color-line)] flex-wrap">
         <span className="text-muted min-w-[54px]">Trigger</span>
         <span
-          className="inline-flex items-center gap-1.5 font-mono-warm text-[10.5px] uppercase tracking-[0.1em]"
+          className="inline-flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.1em]"
           style={{ color: trigColor }}
         >
           <span
@@ -416,25 +416,25 @@ export default function PlaybooksPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -right-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -left-[180px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1.1fr_1fr] gap-14 items-end">
             <div>
-              <div className="font-mono-warm text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-                <Link href="/" className="text-accent hover:underline underline-offset-[3px]">
+              <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
+                <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
                   ← Back to home
                 </Link>{' '}
                 &nbsp;·&nbsp; The Playbooks Library
               </div>
               <div className="eyebrow">Vol. 01 · Spring 2026</div>
-              <h1 className="font-serif-warm font-medium text-[clamp(46px,5.6vw,80px)] leading-[1.02] tracking-[-0.024em] mt-4 mb-4 text-balance serif-h">
+              <h1 className="font-sans font-medium text-[clamp(46px,5.6vw,80px)] leading-[1.02] tracking-[-0.024em] mt-4 mb-4 text-balance ">
                 The first <em>40 playbooks.</em>
                 <br />
                 Pick yours.
@@ -447,12 +447,12 @@ export default function PlaybooksPage() {
             </div>
 
             <div>
-              <div className="grid grid-cols-3 gap-5 border-t border-[var(--line)] pt-6">
+              <div className="grid grid-cols-3 gap-5 border-t border-[var(--color-line)] pt-6">
                 <div>
-                  <div className="font-mono-warm text-[11px] tracking-[0.14em] text-muted uppercase">
+                  <div className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
                     Live playbooks
                   </div>
-                  <div className="font-serif-warm text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 serif-h">
+                  <div className="font-sans text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 ">
                     <em>40</em>
                   </div>
                   <div className="text-[13px] text-ink-2 mt-1.5 leading-[1.4]">
@@ -460,10 +460,10 @@ export default function PlaybooksPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="font-mono-warm text-[11px] tracking-[0.14em] text-muted uppercase">
+                  <div className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
                     Custom builds
                   </div>
-                  <div className="font-serif-warm text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 serif-h">
+                  <div className="font-sans text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 ">
                     Wk <em>1</em>
                   </div>
                   <div className="text-[13px] text-ink-2 mt-1.5 leading-[1.4]">
@@ -471,10 +471,10 @@ export default function PlaybooksPage() {
                   </div>
                 </div>
                 <div>
-                  <div className="font-mono-warm text-[11px] tracking-[0.14em] text-muted uppercase">
+                  <div className="font-mono text-[11px] tracking-[0.14em] text-muted uppercase">
                     Improves with use
                   </div>
-                  <div className="font-serif-warm text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 serif-h">
+                  <div className="font-sans text-[42px] font-medium tracking-[-0.02em] leading-none mt-1.5 ">
                     <em>∞</em>
                   </div>
                   <div className="text-[13px] text-ink-2 mt-1.5 leading-[1.4]">
@@ -489,9 +489,9 @@ export default function PlaybooksPage() {
 
       {/* FILTERS */}
       <div
-        className="sticky top-16 z-40 border-y border-[var(--line)] py-3.5 mt-12"
+        className="sticky top-16 z-40 border-y border-[var(--color-line)] py-3.5 mt-12"
         style={{
-          background: 'rgba(251,244,234,0.92)',
+          background: 'rgba(244,246,250,0.92)',
           backdropFilter: 'blur(14px)',
           WebkitBackdropFilter: 'blur(14px)',
         }}
@@ -510,7 +510,7 @@ export default function PlaybooksPage() {
                     'inline-flex items-center gap-2 px-3.5 py-2 rounded-full text-[13px] transition-colors border',
                     isActive
                       ? 'bg-ink text-paper border-ink'
-                      : 'bg-white text-ink-2 border-[var(--line)] hover:border-[var(--ink-2)] hover:text-ink',
+                      : 'bg-white text-ink-2 border-[var(--color-line)] hover:border-[var(--color-ink-2)] hover:text-ink',
                   ].join(' ')}
                 >
                   {chip.mk && (
@@ -522,8 +522,8 @@ export default function PlaybooksPage() {
                   {chip.label}
                   <span
                     className={[
-                      'font-mono-warm text-[10.5px] px-1.5 py-px rounded-full',
-                      isActive ? 'bg-white/15 text-[#D5C5B0]' : 'bg-paper text-muted',
+                      'font-mono text-[10.5px] px-1.5 py-px rounded-full',
+                      isActive ? 'bg-white/15 text-[var(--color-inverse-2)]' : 'bg-paper text-muted',
                     ].join(' ')}
                   >
                     {ct}
@@ -544,7 +544,7 @@ export default function PlaybooksPage() {
               placeholder="Search 40 playbooks…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="font-sans text-[13.5px] py-2.5 pl-9 pr-3.5 rounded-full border border-[var(--line)] bg-white text-ink w-[260px] outline-none transition-all focus:border-ink focus:w-[300px]"
+              className="font-sans text-[13.5px] py-2.5 pl-9 pr-3.5 rounded-full border border-[var(--color-line)] bg-white text-ink w-[260px] outline-none transition-all focus:border-ink focus:w-[300px]"
             />
           </div>
         </div>
@@ -553,7 +553,7 @@ export default function PlaybooksPage() {
       {/* LIBRARY */}
       <section className="pt-9 pb-14">
         <div className="max-w-[1280px] mx-auto px-8">
-          <div className="flex justify-between items-baseline mb-4 font-mono-warm text-[11.5px] tracking-[0.1em] text-muted uppercase">
+          <div className="flex justify-between items-baseline mb-4 font-mono text-[11.5px] tracking-[0.1em] text-muted uppercase">
             <span>
               Showing <b className="text-ink font-medium">{visible.length}</b> of{' '}
               <b className="text-ink font-medium">{PLAYBOOKS.length}</b> playbooks
@@ -561,7 +561,7 @@ export default function PlaybooksPage() {
             <span>Sorted by industry</span>
           </div>
           {visible.length === 0 ? (
-            <div className="text-center py-16 text-muted font-serif-warm italic text-[22px]">
+            <div className="text-center py-16 text-muted font-sans text-[22px]">
               No playbooks match. Try a broader filter.
             </div>
           ) : (
@@ -576,14 +576,14 @@ export default function PlaybooksPage() {
 
       {/* CTA */}
       <section
-        className="py-[88px] border-t border-[var(--line)]"
-        style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+        className="py-[88px] border-t border-[var(--color-line)]"
+        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
             <div>
               <div className="eyebrow">Don&apos;t see yours?</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance ">
                 We build a <em>custom playbook</em> in week one.
               </h2>
               <p className="text-[18px] text-ink-2 leading-[1.55] mb-6 max-w-[520px]">
@@ -603,11 +603,11 @@ export default function PlaybooksPage() {
                 </Link>
               </div>
             </div>
-            <div className="bg-white border border-[var(--line)] rounded-[18px] p-6">
-              <div className="eyebrow" style={{ color: 'var(--ink-2)' }}>
+            <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6">
+              <div className="eyebrow" style={{ color: 'var(--color-ink-2)' }}>
                 How a custom playbook ships
               </div>
-              <h4 className="font-serif-warm font-medium italic text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
+              <h4 className="font-sans font-semibold text-[21px] m-0 mt-1.5 mb-1.5 tracking-[-0.005em]">
                 Intake → live, in five days.
               </h4>
               <p className="text-[14.5px] m-0 mb-3.5 text-ink-2">
@@ -625,7 +625,7 @@ export default function PlaybooksPage() {
                   <li key={d} className="flex gap-2.5 items-start">
                     <span
                       className="w-[13px] h-[13px] rounded-full flex-none mt-1"
-                      style={{ background: 'var(--accent-2)' }}
+                      style={{ background: 'var(--color-ok)' }}
                     />
                     <span>
                       <b className="font-medium">{d}</b> — {t}

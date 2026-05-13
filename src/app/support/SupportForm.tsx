@@ -95,14 +95,14 @@ export function SupportForm() {
 
   if (status === 'success' && successInfo) {
     return (
-      <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-10 flex flex-col gap-4">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-8 sm:p-10 flex flex-col gap-4">
         <div
-          className="font-serif-warm italic font-medium text-[34px] leading-[0.9]"
-          style={{ color: 'var(--accent-2)' }}
+          className="font-mono font-semibold text-[34px] leading-[0.9]"
+          style={{ color: 'var(--color-ok)' }}
         >
           ✓
         </div>
-        <h3 className="font-serif-warm font-medium text-[28px] leading-[1.15] tracking-[-0.01em] m-0 serif-h">
+        <h3 className="font-sans font-medium text-[28px] leading-[1.15] tracking-[-0.01em] m-0 ">
           We&apos;ve got it.
         </h3>
         <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0">
@@ -130,7 +130,7 @@ export function SupportForm() {
     <form
       onSubmit={handleSubmit}
       noValidate
-      className="bg-white border border-[var(--line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-6"
+      className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-6"
     >
       <div className="grid sm:grid-cols-2 gap-6">
         <Field label="Name" htmlFor="name" required>
@@ -175,7 +175,7 @@ export function SupportForm() {
       </Field>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
+        <legend className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium mb-1">
           Urgency
         </legend>
         <div className="grid sm:grid-cols-3 gap-2.5">
@@ -188,7 +188,7 @@ export function SupportForm() {
                   'cursor-pointer rounded-xl border p-4 flex flex-col gap-1 transition-all',
                   selected
                     ? 'border-ink bg-paper'
-                    : 'border-[var(--line)] bg-white hover:border-[var(--line-2)]',
+                    : 'border-[var(--color-line)] bg-white hover:border-[var(--color-line-strong)]',
                 ].join(' ')}
               >
                 <input
@@ -204,14 +204,14 @@ export function SupportForm() {
                     aria-hidden
                     className={[
                       'inline-block w-3.5 h-3.5 rounded-full border-2 flex-none',
-                      selected ? 'border-ink' : 'border-[var(--line-2)]',
+                      selected ? 'border-ink' : 'border-[var(--color-line-strong)]',
                     ].join(' ')}
                     style={{
-                      background: selected ? 'var(--ink)' : 'transparent',
+                      background: selected ? 'var(--color-ink)' : 'transparent',
                       boxShadow: selected ? 'inset 0 0 0 2px #fff' : undefined,
                     }}
                   />
-                  <span className="font-serif-warm font-medium text-[15.5px] tracking-[-0.005em] text-ink">
+                  <span className="font-sans font-medium text-[15.5px] tracking-[-0.005em] text-ink">
                     {opt.label}
                   </span>
                 </span>
@@ -219,8 +219,8 @@ export function SupportForm() {
                   {opt.description}
                 </span>
                 <span
-                  className="font-mono-warm text-[10.5px] tracking-[0.12em] uppercase pl-6 mt-1"
-                  style={{ color: selected ? 'var(--accent)' : 'var(--muted)' }}
+                  className="font-mono text-[10.5px] tracking-[0.12em] uppercase pl-6 mt-1"
+                  style={{ color: selected ? 'var(--color-signal)' : 'var(--color-muted)' }}
                 >
                   Reply within {opt.timeframe}
                 </span>
@@ -235,9 +235,9 @@ export function SupportForm() {
           role="alert"
           className="rounded-xl border px-4 py-3 text-[13.5px]"
           style={{
-            color: '#B45A3A',
-            background: 'rgba(180,90,58,.08)',
-            borderColor: 'rgba(180,90,58,.3)',
+            color: 'var(--color-operator)',
+            background: 'rgba(251,124,80,.08)',
+            borderColor: 'rgba(251,124,80,.3)',
           }}
         >
           {errorMsg}
@@ -256,7 +256,7 @@ export function SupportForm() {
           Or email{' '}
           <a
             href="mailto:hello@firmcraft.ai"
-            className="text-accent hover:underline underline-offset-[3px]"
+            className="text-signal hover:underline underline-offset-[3px]"
           >
             hello@firmcraft.ai
           </a>
@@ -268,7 +268,7 @@ export function SupportForm() {
 }
 
 const inputClass =
-  'w-full rounded-lg border border-[var(--line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors'
+  'w-full rounded-lg border border-[var(--color-line)] bg-paper px-3.5 py-2.5 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors'
 
 function Field({
   label,
@@ -285,10 +285,10 @@ function Field({
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={htmlFor}
-        className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted font-medium"
+        className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium"
       >
         {label}
-        {required && <span className="text-accent"> *</span>}
+        {required && <span className="text-signal"> *</span>}
       </label>
       {children}
     </div>

@@ -83,17 +83,17 @@ export default function HowItWorksPage() {
         <div
           aria-hidden
           className="absolute -top-[180px] -left-[180px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,#F4D9B7,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
         />
         <div
           aria-hidden
           className="absolute -bottom-[160px] -right-[200px] w-[480px] h-[480px] rounded-full pointer-events-none opacity-50"
-          style={{ background: 'radial-gradient(circle,#DEEAD2,transparent 60%)' }}
+          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
         />
 
         <div className="relative max-w-[1280px] mx-auto px-8">
-          <div className="font-mono-warm text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-            <Link href="/" className="text-accent hover:underline underline-offset-[3px]">
+          <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
+            <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
               &larr; Back to home
             </Link>
             &nbsp;&middot;&nbsp; How it works
@@ -101,7 +101,7 @@ export default function HowItWorksPage() {
           <div className="grid lg:grid-cols-[1.1fr_1fr] gap-14 items-end">
             <div>
               <div className="eyebrow">How it works</div>
-              <h1 className="font-serif-warm font-medium text-[clamp(46px,5.4vw,76px)] leading-[1.04] tracking-[-0.022em] mt-4 mb-4 text-balance serif-h">
+              <h1 className="font-sans font-medium text-[clamp(46px,5.4vw,76px)] leading-[1.04] tracking-[-0.022em] mt-4 mb-4 text-balance ">
                 Four steps. <em>Then it runs.</em>
               </h1>
               <p className="text-[19px] leading-[1.55] text-ink-2 max-w-[560px] m-0">
@@ -113,8 +113,8 @@ export default function HowItWorksPage() {
             </div>
             <div>
               <p
-                className="font-serif-warm italic text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
-                style={{ borderLeft: '2px solid var(--accent)' }}
+                className="font-sans text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
+                style={{ borderLeft: '2px solid var(--color-signal)' }}
               >
                 Intake Monday. Connectors Wednesday.{' '}
                 <b className="not-italic font-medium text-ink">
@@ -129,7 +129,7 @@ export default function HowItWorksPage() {
       {/* STEPS */}
       <section className="pt-6 pb-[88px]">
         <div className="max-w-[1280px] mx-auto px-8">
-          <div className="flex justify-between items-baseline mb-6 font-mono-warm text-[11.5px] tracking-[0.1em] text-muted uppercase border-t border-[var(--line)] pt-[18px]">
+          <div className="flex justify-between items-baseline mb-6 font-mono text-[11.5px] tracking-[0.1em] text-muted uppercase border-t border-[var(--color-line)] pt-[18px]">
             <span>
               <b className="text-ink font-medium">The four steps</b>
             </span>
@@ -140,22 +140,22 @@ export default function HowItWorksPage() {
             {STEPS.map((step) => (
               <div
                 key={step.n}
-                className="bg-white border border-[var(--line)] rounded-[20px] overflow-hidden"
+                className="bg-white border border-[var(--color-line)] rounded-[20px] overflow-hidden"
               >
                 <div className="grid lg:grid-cols-[auto_1fr_1.1fr] gap-0">
                   {/* Step number */}
                   <div
-                    className="flex items-center justify-center px-8 py-8 lg:border-r border-b lg:border-b-0 border-[var(--line)]"
-                    style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+                    className="flex items-center justify-center px-8 py-8 lg:border-r border-b lg:border-b-0 border-[var(--color-line)]"
+                    style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
                   >
                     <div className="text-center">
                       <div
-                        className="font-serif-warm italic font-medium text-[48px] leading-none"
-                        style={{ color: 'var(--accent)' }}
+                        className="font-mono font-semibold text-[48px] leading-none"
+                        style={{ color: 'var(--color-signal)' }}
                       >
                         {step.n}
                       </div>
-                      <div className="font-mono-warm text-[10px] tracking-[0.14em] text-muted uppercase mt-2">
+                      <div className="font-mono text-[10px] tracking-[0.14em] text-muted uppercase mt-2">
                         {step.timeline}
                       </div>
                     </div>
@@ -163,7 +163,7 @@ export default function HowItWorksPage() {
 
                   {/* Title + description */}
                   <div className="p-[28px] flex flex-col gap-3 justify-center">
-                    <h3 className="font-serif-warm font-medium text-[28px] tracking-[-0.012em] m-0 leading-[1.15] serif-h">
+                    <h3 className="font-sans font-medium text-[28px] tracking-[-0.012em] m-0 leading-[1.15] ">
                       {step.title}
                     </h3>
                     <p className="text-[15.5px] leading-[1.55] text-ink-2 m-0">
@@ -172,7 +172,7 @@ export default function HowItWorksPage() {
                   </div>
 
                   {/* Detail bullets */}
-                  <div className="p-[28px] lg:border-l border-t lg:border-t-0 border-[var(--line)] flex flex-col gap-2.5 justify-center">
+                  <div className="p-[28px] lg:border-l border-t lg:border-t-0 border-[var(--color-line)] flex flex-col gap-2.5 justify-center">
                     {step.details.map((d) => (
                       <div
                         key={d}
@@ -180,7 +180,7 @@ export default function HowItWorksPage() {
                       >
                         <span
                           className="w-[5px] h-[5px] rounded-full flex-none mt-[7px]"
-                          style={{ background: 'var(--accent-2)' }}
+                          style={{ background: 'var(--color-ok)' }}
                         />
                         {d}
                       </div>
@@ -194,12 +194,12 @@ export default function HowItWorksPage() {
       </section>
 
       {/* WHAT YOU GET */}
-      <section className="py-20 bg-white border-y border-[var(--line)]">
+      <section className="py-20 bg-white border-y border-[var(--color-line)]">
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1fr_1.2fr] gap-14 items-start">
             <div>
               <div className="eyebrow">What&apos;s included</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.02em] mt-2 mb-4 text-balance ">
                 Every engagement <em>includes.</em>
               </h2>
               <p className="text-[17px] text-ink-2 leading-[1.55] m-0">
@@ -212,9 +212,9 @@ export default function HowItWorksPage() {
               {WHAT_YOU_GET.map((item) => (
                 <div
                   key={item.label}
-                  className="bg-paper border border-[var(--line)] rounded-xl p-5 flex flex-col gap-2"
+                  className="bg-paper border border-[var(--color-line)] rounded-xl p-5 flex flex-col gap-2"
                 >
-                  <span className="font-mono-warm text-[10.5px] tracking-[0.14em] text-accent uppercase font-medium">
+                  <span className="font-mono text-[10.5px] tracking-[0.14em] text-signal uppercase font-medium">
                     {item.label}
                   </span>
                   <span className="text-[14.5px] leading-[1.5] text-ink-2">
@@ -229,14 +229,14 @@ export default function HowItWorksPage() {
 
       {/* CTA */}
       <section
-        className="py-[88px] border-t border-[var(--line)]"
-        style={{ background: 'linear-gradient(180deg,var(--paper),var(--paper-2))' }}
+        className="py-[88px] border-t border-[var(--color-line)]"
+        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1280px] mx-auto px-8">
           <div className="grid lg:grid-cols-[1.2fr_1fr] gap-12 items-center">
             <div>
               <div className="eyebrow">Ready to start?</div>
-              <h2 className="font-serif-warm font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance serif-h">
+              <h2 className="font-sans font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance ">
                 The 20-minute call <em>is the demo.</em>
               </h2>
               <p className="text-[18px] text-ink-2 leading-[1.55] m-0 mb-6 max-w-[520px]">
@@ -256,11 +256,11 @@ export default function HowItWorksPage() {
                 </Link>
               </div>
             </div>
-            <div className="bg-white border border-[var(--line)] rounded-[18px] p-6">
-              <div className="eyebrow" style={{ color: 'var(--ink-2)' }}>
+            <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6">
+              <div className="eyebrow" style={{ color: 'var(--color-ink-2)' }}>
                 Keep reading
               </div>
-              <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-3.5 font-serif-warm text-[18px] leading-[1.45]">
+              <ul className="list-none p-0 m-0 mt-3.5 flex flex-col gap-3.5 font-sans text-[18px] leading-[1.45]">
                 {[
                   { href: '/capabilities', label: 'The six capabilities' },
                   { href: '/playbooks', label: 'Browse 40+ playbooks' },
@@ -273,11 +273,11 @@ export default function HowItWorksPage() {
                       className="flex justify-between items-center pb-3.5"
                       style={{
                         borderBottom:
-                          i === arr.length - 1 ? 'none' : '1px solid var(--line)',
+                          i === arr.length - 1 ? 'none' : '1px solid var(--color-line)',
                       }}
                     >
                       <span>{it.label}</span>
-                      <span className="text-accent italic">&rarr;</span>
+                      <span className="text-signal italic">&rarr;</span>
                     </Link>
                   </li>
                 ))}

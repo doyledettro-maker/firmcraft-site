@@ -75,17 +75,17 @@ function ModePicker({ onPick }: { onPick: (m: 'chat' | 'markdown') => void }) {
       <button
         type="button"
         onClick={() => onPick('chat')}
-        className="text-left bg-white border border-[var(--line)] rounded-[18px] p-7 sm:p-8 transition-all hover:border-ink hover:shadow-[0_18px_36px_-22px_rgba(45,31,20,.18)] hover:-translate-y-[1px] flex flex-col gap-4"
+        className="text-left bg-white border border-[var(--color-line)] rounded-[18px] p-7 sm:p-8 transition-all hover:border-ink hover:shadow-[0_18px_36px_-22px_rgba(15,23,42,.18)] hover:-translate-y-[1px] flex flex-col gap-4"
       >
         <div className="flex items-center justify-between">
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
             Option A
           </span>
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
             ~10 min
           </span>
         </div>
-        <h2 className="font-serif-warm font-medium text-[clamp(24px,2.4vw,32px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+        <h2 className="font-sans font-medium text-[clamp(24px,2.4vw,32px)] leading-[1.1] tracking-[-0.015em] m-0 ">
           Walk me through it. <em>Conversation style.</em>
         </h2>
         <p className="text-[15px] text-ink-2 leading-[1.55] m-0">
@@ -104,17 +104,17 @@ function ModePicker({ onPick }: { onPick: (m: 'chat' | 'markdown') => void }) {
       <button
         type="button"
         onClick={() => onPick('markdown')}
-        className="text-left bg-white border border-[var(--line)] rounded-[18px] p-7 sm:p-8 transition-all hover:border-ink hover:shadow-[0_18px_36px_-22px_rgba(45,31,20,.18)] hover:-translate-y-[1px] flex flex-col gap-4"
+        className="text-left bg-white border border-[var(--color-line)] rounded-[18px] p-7 sm:p-8 transition-all hover:border-ink hover:shadow-[0_18px_36px_-22px_rgba(15,23,42,.18)] hover:-translate-y-[1px] flex flex-col gap-4"
       >
         <div className="flex items-center justify-between">
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-accent font-medium">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
             Option B
           </span>
-          <span className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+          <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
             offline OK
           </span>
         </div>
-        <h2 className="font-serif-warm font-medium text-[clamp(24px,2.4vw,32px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+        <h2 className="font-sans font-medium text-[clamp(24px,2.4vw,32px)] leading-[1.1] tracking-[-0.015em] m-0 ">
           Send me a template. <em>I&apos;ll fill it out.</em>
         </h2>
         <p className="text-[15px] text-ink-2 leading-[1.55] m-0">
@@ -135,14 +135,14 @@ function ModePicker({ onPick }: { onPick: (m: 'chat' | 'markdown') => void }) {
 
 function SuccessCard() {
   return (
-    <div className="bg-white border border-[var(--line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
+    <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-8 sm:p-12 flex flex-col gap-5 max-w-[720px] mx-auto">
       <div
-        className="font-serif-warm italic font-medium text-[44px] leading-[0.9]"
-        style={{ color: 'var(--accent-2)' }}
+        className="font-mono font-semibold text-[44px] leading-[0.9]"
+        style={{ color: 'var(--color-ok)' }}
       >
         ✓
       </div>
-      <h2 className="font-serif-warm font-medium text-[clamp(28px,3vw,40px)] leading-[1.1] tracking-[-0.015em] m-0 serif-h">
+      <h2 className="font-sans font-medium text-[clamp(28px,3vw,40px)] leading-[1.1] tracking-[-0.015em] m-0 ">
         Thanks. <em>We&apos;ve got it.</em>
       </h2>
       <p className="text-[16.5px] leading-[1.6] text-ink-2 m-0">
@@ -153,7 +153,7 @@ function SuccessCard() {
         anything urgent comes up before then, email{' '}
         <a
           href="mailto:hello@firmcraft.ai"
-          className="text-accent hover:underline underline-offset-[3px]"
+          className="text-signal hover:underline underline-offset-[3px]"
         >
           hello@firmcraft.ai
         </a>{' '}

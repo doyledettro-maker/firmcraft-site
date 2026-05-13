@@ -145,7 +145,7 @@ export function ConversationalForm({
     <div className="grid lg:grid-cols-[260px_1fr] gap-6 lg:gap-8">
       {/* Sidebar: section progress */}
       <aside className="lg:sticky lg:top-24 lg:self-start">
-        <div className="font-mono-warm text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
+        <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
           Sections — {progressLabel(stepIndex)} of {total}
         </div>
         <ol className="grid gap-1.5 m-0 p-0 list-none">
@@ -161,19 +161,19 @@ export function ConversationalForm({
                     status === 'current'
                       ? 'bg-paper border-ink'
                       : status === 'done'
-                      ? 'bg-white border-[var(--line)]'
-                      : 'bg-white/40 border-[var(--line)] hover:border-[var(--line-2)]',
+                      ? 'bg-white border-[var(--color-line)]'
+                      : 'bg-white/40 border-[var(--color-line)] hover:border-[var(--color-line-strong)]',
                   ].join(' ')}
                 >
                   <span
                     aria-hidden
                     className={[
-                      'inline-grid place-items-center w-6 h-6 rounded-full font-mono-warm text-[11px] flex-none mt-px',
+                      'inline-grid place-items-center w-6 h-6 rounded-full font-mono text-[11px] flex-none mt-px',
                       status === 'current'
                         ? 'bg-ink text-paper'
                         : status === 'done'
-                        ? 'bg-[var(--accent-2)] text-white'
-                        : 'bg-[var(--line)] text-muted',
+                        ? 'bg-[var(--color-ok)] text-white'
+                        : 'bg-[var(--color-line)] text-muted',
                     ].join(' ')}
                   >
                     {status === 'done' ? '✓' : String(s.number).padStart(2, '0')}
@@ -188,7 +188,7 @@ export function ConversationalForm({
                       {s.title}
                     </span>
                     {status === 'current' && (
-                      <span className="block text-[11.5px] text-muted mt-0.5 font-mono-warm tracking-[0.08em] uppercase">
+                      <span className="block text-[11.5px] text-muted mt-0.5 font-mono tracking-[0.08em] uppercase">
                         Question {step.questionIndex + 1} of {s.questions.length}
                       </span>
                     )}
@@ -199,11 +199,11 @@ export function ConversationalForm({
           })}
         </ol>
 
-        <div className="mt-5 pt-5 border-t border-[var(--line)] flex flex-col gap-2">
+        <div className="mt-5 pt-5 border-t border-[var(--color-line)] flex flex-col gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="text-[12.5px] font-mono-warm tracking-[0.12em] uppercase text-muted hover:text-accent transition-colors text-left"
+            className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors text-left"
           >
             ← Switch method
           </button>
@@ -214,20 +214,20 @@ export function ConversationalForm({
       </aside>
 
       {/* Chat */}
-      <div className="bg-white border border-[var(--line)] rounded-[18px] flex flex-col min-h-[560px]">
+      <div className="bg-white border border-[var(--color-line)] rounded-[18px] flex flex-col min-h-[560px]">
         {/* Progress */}
-        <div className="px-5 sm:px-7 pt-5 pb-3 border-b border-[var(--line)]">
+        <div className="px-5 sm:px-7 pt-5 pb-3 border-b border-[var(--color-line)]">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <div className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+            <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
               {section.title}
             </div>
-            <div className="font-mono-warm text-[11px] tracking-[0.14em] uppercase text-muted">
+            <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
               {stepIndex + 1} / {total}
             </div>
           </div>
           <div
             className="h-1 w-full rounded-full overflow-hidden"
-            style={{ background: 'var(--line)' }}
+            style={{ background: 'var(--color-line)' }}
             role="progressbar"
             aria-valuenow={stepIndex + 1}
             aria-valuemin={1}
@@ -237,7 +237,7 @@ export function ConversationalForm({
               className="h-full transition-all duration-300"
               style={{
                 width: `${((stepIndex + 1) / total) * 100}%`,
-                background: 'var(--accent)',
+                background: 'var(--color-signal)',
               }}
             />
           </div>
@@ -254,7 +254,7 @@ export function ConversationalForm({
         </div>
 
         {/* Composer */}
-        <div className="border-t border-[var(--line)] px-5 sm:px-7 pt-4 pb-5 flex flex-col gap-3 bg-paper/40 rounded-b-[18px]">
+        <div className="border-t border-[var(--color-line)] px-5 sm:px-7 pt-4 pb-5 flex flex-col gap-3 bg-paper/40 rounded-b-[18px]">
           <AutoTextarea
             value={draft}
             onChange={setDraft}
@@ -267,14 +267,14 @@ export function ConversationalForm({
                 type="button"
                 onClick={handleBack}
                 disabled={isFirst}
-                className="text-[12.5px] font-mono-warm tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ← Back
               </button>
               <button
                 type="button"
                 onClick={handleSkip}
-                className="text-[12.5px] font-mono-warm tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors"
+                className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors"
               >
                 Skip for now
               </button>
@@ -287,7 +287,7 @@ export function ConversationalForm({
               {isLast ? 'Review my answers →' : 'Send & continue →'}
             </button>
           </div>
-          <div className="text-[11.5px] text-muted font-mono-warm tracking-[0.08em]">
+          <div className="text-[11.5px] text-muted font-mono tracking-[0.08em]">
             <span aria-hidden>⌘ ↵</span>
             <span className="ml-1.5">to send · Shift+Enter for newline</span>
           </div>
@@ -350,7 +350,7 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
     return (
       <div className="flex items-start gap-3">
         <Avatar />
-        <div className="flex-1 bg-paper border border-[var(--line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
+        <div className="flex-1 bg-paper border border-[var(--color-line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
           <p className="text-[14.5px] leading-[1.55] text-ink m-0">
             Hey — I&apos;m going to walk us through ten quick sections so we can scope your
             operator. Take as long as you need on each answer. There are no
@@ -365,11 +365,11 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
     return (
       <div className="flex items-start gap-3 mt-2">
         <Avatar />
-        <div className="flex-1 bg-paper border border-[var(--line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
-          <div className="font-mono-warm text-[10.5px] tracking-[0.16em] uppercase text-accent font-medium mb-1">
+        <div className="flex-1 bg-paper border border-[var(--color-line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
+          <div className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-signal font-medium mb-1">
             {entry.eyebrow}
           </div>
-          <p className="text-[14.5px] leading-[1.55] text-ink-2 m-0 italic font-serif-warm">
+          <p className="text-[14.5px] leading-[1.55] text-ink-2 m-0 italic font-sans">
             {entry.text}
           </p>
         </div>
@@ -380,11 +380,11 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
     return (
       <div className="flex items-start gap-3">
         <Avatar />
-        <div className="flex-1 bg-white border border-[var(--line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
-          <div className="font-mono-warm text-[10.5px] tracking-[0.14em] uppercase text-muted mb-1">
+        <div className="flex-1 bg-white border border-[var(--color-line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
+          <div className="font-mono text-[10.5px] tracking-[0.14em] uppercase text-muted mb-1">
             {entry.eyebrow}
           </div>
-          <p className="font-serif-warm font-medium text-[16.5px] leading-[1.4] tracking-[-0.005em] text-ink m-0">
+          <p className="font-sans font-medium text-[16.5px] leading-[1.4] tracking-[-0.005em] text-ink m-0">
             {entry.text}
           </p>
           {entry.guidance && (
@@ -411,8 +411,8 @@ function Avatar() {
   return (
     <div
       aria-hidden
-      className="w-8 h-8 rounded-full grid place-items-center font-serif-warm italic text-[15px] flex-none"
-      style={{ background: 'var(--accent)', color: '#fff' }}
+      className="w-8 h-8 rounded-full grid place-items-center font-sans text-[15px] flex-none"
+      style={{ background: 'var(--color-signal)', color: '#fff' }}
     >
       F
     </div>
@@ -423,8 +423,8 @@ function UserAvatar() {
   return (
     <div
       aria-hidden
-      className="w-8 h-8 rounded-full grid place-items-center font-mono-warm text-[11px] tracking-[0.04em] flex-none border border-[var(--line-2)]"
-      style={{ background: 'var(--paper)', color: 'var(--ink)' }}
+      className="w-8 h-8 rounded-full grid place-items-center font-mono text-[11px] tracking-[0.04em] flex-none border border-[var(--color-line-strong)]"
+      style={{ background: 'var(--color-surface)', color: 'var(--color-ink)' }}
     >
       You
     </div>
@@ -466,7 +466,7 @@ function AutoTextarea({
       }}
       placeholder={placeholder}
       rows={3}
-      className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink resize-none transition-colors leading-[1.55]"
+      className="w-full rounded-xl border border-[var(--color-line)] bg-white px-4 py-3 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink resize-none transition-colors leading-[1.55]"
       style={{ minHeight: 80, maxHeight: 420 }}
     />
   )

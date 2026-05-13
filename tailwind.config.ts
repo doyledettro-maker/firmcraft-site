@@ -9,38 +9,82 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // Existing brand (home page legacy)
-        brand: {
-          bg: '#0A2540',
-          cyan: '#00D4AA',
-          volt: '#E8FF47',
+        // Surfaces
+        surface: 'var(--color-surface)',
+        'surface-2': 'var(--color-surface-2)',
+        paper: 'var(--color-paper)',
+
+        // Console (dark surface family)
+        console: 'var(--color-console)',
+        'console-2': 'var(--color-console-2)',
+        'console-3': 'var(--color-console-3)',
+
+        // Text
+        ink: 'var(--color-ink)',
+        'ink-2': 'var(--color-ink-2)',
+        muted: 'var(--color-muted)',
+        inverse: 'var(--color-inverse)',
+        'inverse-2': 'var(--color-inverse-2)',
+
+        // Borders
+        line: 'var(--color-line)',
+        'line-strong': 'var(--color-line-strong)',
+
+        // Brand — Signal (primary)
+        signal: {
+          DEFAULT: 'var(--color-signal)',
+          hover: 'var(--color-signal-hover)',
+          soft: 'var(--color-signal-soft)',
+          ink: 'var(--color-signal-ink)',
         },
-        // Firmcraft warm design system (design-spec)
-        paper: '#FBF4EA',
-        'paper-2': '#F4E9D6',
-        ink: '#2D1F14',
-        'ink-2': '#5A4533',
-        muted: '#8A7560',
-        accent: '#D97757',
-        'accent-2': '#6B8E5A',
-        'accent-3': '#3F7A8C',
+
+        // Brand — Operator (secondary accent, warm bridge)
+        operator: {
+          DEFAULT: 'var(--color-operator)',
+          soft: 'var(--color-operator-soft)',
+          ink: 'var(--color-operator-ink)',
+        },
+
+        // Semantic
+        ok: { DEFAULT: 'var(--color-ok)', soft: 'var(--color-ok-soft)' },
+        warn: { DEFAULT: 'var(--color-warn)', soft: 'var(--color-warn-soft)' },
+        err: { DEFAULT: 'var(--color-err)', soft: 'var(--color-err-soft)' },
+
+        // Legacy aliases (keep for inline references)
+        accent: 'var(--color-signal)',
+        'accent-2': 'var(--color-ok)',
+        'accent-3': 'var(--color-signal)',
       },
+
       fontFamily: {
-        sans: ['Geist', 'var(--font-inter)', 'system-ui', 'sans-serif'],
-        display: ['var(--font-jakarta)', 'var(--font-inter)', 'system-ui', 'sans-serif'],
-        serif: ['var(--font-serif)', 'Georgia', 'serif'],
-        mono: ['Geist Mono', 'ui-monospace', 'monospace'],
+        sans: ['var(--font-sans)'],
+        mono: ['var(--font-mono)'],
+        display: ['var(--font-display)'],
       },
-      letterSpacing: {
-        tightest: '-0.04em',
-        tighter: '-0.03em',
+
+      borderRadius: {
+        xs: 'var(--radius-xs)',
+        sm: 'var(--radius-sm)',
+        DEFAULT: 'var(--radius-md)',
+        md: 'var(--radius-md)',
+        lg: 'var(--radius-lg)',
+        xl: 'var(--radius-xl)',
+        '2xl': 'var(--radius-2xl)',
+        pill: 'var(--radius-pill)',
       },
+
       boxShadow: {
-        'cyan-glow': '0 0 40px rgba(0, 212, 170, 0.15)',
-        'volt-glow': '0 0 40px rgba(232, 255, 71, 0.20)',
-        'cyan-sm': '0 4px 20px rgba(0, 212, 170, 0.25)',
-        'lift': '0 12px 22px -16px rgba(45, 31, 20, 0.18)',
-        'lift-lg': '0 24px 48px -28px rgba(45, 31, 20, 0.22)',
+        card: 'var(--shadow-card)',
+        lift: 'var(--shadow-lift)',
+        console: 'var(--shadow-console)',
+        focus: 'var(--focus-ring)',
+      },
+
+      letterSpacing: {
+        tightest: '-0.028em',
+        tighter: '-0.024em',
+        tight: '-0.018em',
+        eyebrow: '0.14em',
       },
     },
   },

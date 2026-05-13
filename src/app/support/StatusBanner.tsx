@@ -10,21 +10,21 @@ type StatusInfo = {
 const STATUS_MAP: Record<Status, StatusInfo> = {
   operational: {
     label: 'All systems operational',
-    color: 'var(--accent-2)',
-    bg: 'rgba(107,142,90,.08)',
-    border: 'rgba(107,142,90,.3)',
+    color: 'var(--color-ok)',
+    bg: 'rgba(16,185,129,.08)',
+    border: 'rgba(16,185,129,.3)',
   },
   degraded: {
     label: 'Degraded performance',
-    color: '#B45A3A',
-    bg: 'rgba(180,90,58,.08)',
-    border: 'rgba(180,90,58,.3)',
+    color: 'var(--color-operator)',
+    bg: 'rgba(251,124,80,.08)',
+    border: 'rgba(251,124,80,.3)',
   },
   down: {
     label: 'Service disruption',
-    color: '#B45A3A',
-    bg: 'rgba(180,90,58,.10)',
-    border: 'rgba(180,90,58,.4)',
+    color: 'var(--color-operator)',
+    bg: 'rgba(251,124,80,.10)',
+    border: 'rgba(251,124,80,.4)',
   },
 }
 
@@ -55,12 +55,12 @@ export function StatusBanner() {
         />
       </span>
       <span
-        className="font-mono-warm text-[12px] uppercase tracking-[0.14em] font-medium"
+        className="font-mono text-[12px] uppercase tracking-[0.14em] font-medium"
         style={{ color: info.color }}
       >
         {info.label}
       </span>
-      <span className="ml-auto font-mono-warm text-[11px] text-muted tracking-[0.06em]">
+      <span className="ml-auto font-mono text-[11px] text-muted tracking-[0.06em]">
         Updated continuously
       </span>
     </div>

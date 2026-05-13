@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 export const metadata: Metadata = {
   title: 'Firmcraft — Your data. Your environment. Your audit log.',
   description:
-    'Per-firm deployment, full audit log, partner approvals on sensitive actions, SOC 2 Type II in progress. The default posture is paranoid.',
+    'Per-firm deployment, enterprise-grade encryption, full audit log, partner approvals on sensitive actions. The default posture is paranoid.',
 }
 
 const PRINCIPLES: { n: string; title: React.ReactNode; body: string }[] = [
@@ -64,7 +64,7 @@ const LOG: { ts: string; what: React.ReactNode; held?: boolean }[] = [
 ]
 
 const COMPLIANCE: { stat: string; nm: string; body: string }[] = [
-  { stat: "In progress · Q3 '26", nm: 'SOC 2 Type II', body: 'Auditor engaged. Type I report available under NDA.' },
+  { stat: 'Readiness', nm: 'SOC 2 Type II', body: 'Building with SOC 2 controls from day one. Formal audit engagement when customer contracts require it.' },
   { stat: 'In progress', nm: 'HIPAA', body: 'BAA-able today. Full attestation on SOC 2 timeline.' },
   { stat: 'Annual', nm: 'Penetration testing', body: 'External pen test every 12 months · NDA required.' },
   { stat: 'Live', nm: 'DPA + sub-processor list', body: 'GDPR-aligned DPA on request. Three sub-processors.' },
@@ -98,8 +98,8 @@ const FAQ: { q: React.ReactNode; a: string }[] = [
     a: "Yes — BAAs are part of standard onboarding for healthcare deployments (dental, medical, behavioral health). Signed before any patient data flows.",
   },
   {
-    q: <>Can I see your SOC 2 Type I report or pen test?</>,
-    a: "Yes, under NDA. Email security@firmcraft and we'll get it to you within one business day.",
+    q: <>Can I see your security documentation or pen test?</>,
+    a: "Yes, under NDA. Email security@firmcraft and we'll share our security architecture overview, controls documentation, and pen test summary within one business day.",
   },
   {
     q: <>What happens if Firmcraft goes out of business?</>,
@@ -190,7 +190,7 @@ export default function SecurityPage() {
                   { k: 'Deployment', v: <><em className="text-signal not-italic font-sans italic">Private</em> per firm</> },
                   { k: 'Audit log', v: <><em className="text-signal not-italic font-sans italic">Every</em> action recorded</> },
                   { k: 'Encryption', v: <>At rest &amp; in transit</> },
-                  { k: 'Compliance', v: <><em className="text-signal not-italic font-sans italic">SOC 2</em> in progress</> },
+                  { k: 'Compliance', v: <><em className="text-signal not-italic font-sans italic">SOC 2</em> readiness posture</> },
                 ].map((b) => (
                   <div
                     key={b.k}
@@ -488,14 +488,13 @@ export default function SecurityPage() {
                 is HIPAA-ready: per-firm boundaries, encryption, audit logs, BAA-able
                 sub-processors. BAAs are signed at onboarding for any healthcare engagement —
                 dental, medical, behavioral health. Full HIPAA
-                attestation is on the SOC 2 Type II timeline.
+                attestation will follow SOC 2 Type II certification.
               </p>
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-3.5">
                 <strong className="text-ink font-medium">What we&apos;ll never claim.</strong>{' '}
                 We are not &quot;ISO 27001 certified,&quot; &quot;FedRAMP authorized,&quot; or
-                &quot;SOC 2 Type II&quot; until those audits are complete. If you need any of
-                those today, talk to us — we&apos;ll either tell you when we&apos;ll have it or
-                that you should pick someone else.
+                &quot;SOC 2 Type II certified.&quot; We build with these controls in mind and
+                will pursue formal certification when our customer base requires it.
               </p>
               <div
                 className="font-sans text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"
@@ -570,7 +569,7 @@ export default function SecurityPage() {
                 We&apos;ll send the <em>full security packet</em> by close of business.
               </h2>
               <p className="text-[18px] text-ink-2 leading-[1.55] m-0 mb-6 max-w-[520px]">
-                Architecture diagram, sub-processor list, DPA, BAA template, SOC 2 Type I,
+                Architecture diagram, sub-processor list, DPA, BAA template, security architecture overview,
                 pen-test summary, incident-response runbook. One email.
               </p>
               <div className="flex gap-3 flex-wrap">

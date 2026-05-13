@@ -36,7 +36,7 @@ const PLANS = [
       'Unlimited integrations',
       'Custom playbooks per role',
       'Weekly ops review + change requests',
-      'SOC 2 controls + audit log access',
+      'Enterprise security controls + audit log access',
     ],
     cta: 'Choose Flow',
     href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Flow',
@@ -187,7 +187,7 @@ export default function HomePage() {
               <div className="hero-meta">
                 <span><span className="check-dot" /> Live in 5 business days</span>
                 <span><span className="check-dot" /> Flat monthly rate</span>
-                <span><span className="check-dot" /> SOC 2 in progress</span>
+                <span><span className="check-dot" /> End-to-end encrypted · full audit log</span>
               </div>
             </div>
 

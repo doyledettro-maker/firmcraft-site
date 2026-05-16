@@ -267,7 +267,7 @@ export default function ServicesPage() {
                   <span className="tool">+ Foundation</span>
                   <span className="tool">n8n</span>
                   <span className="tool">ERP integrations</span>
-                  <span className="tool">EAM / TAG</span>
+                  <span className="tool">Asset / maintenance modules</span>
                 </div>
                 <ul className="outcomes">
                   <li>Work-order drafting, dispatch, and follow-up</li>

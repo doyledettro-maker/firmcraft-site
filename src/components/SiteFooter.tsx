@@ -88,7 +88,7 @@ export function SiteFooter() {
         </div>
 
         <div className="legal">
-          <span>© 2026 Firmcraft · Built on Hermes · Sovereign by default</span>
+          <span>© 2026 Firmcraft · Sovereign by default</span>
           <span>
             <a href="/terms">Terms</a>
             {' · '}

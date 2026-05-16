@@ -115,6 +115,17 @@ export default function ManagedAIPage() {
                 </div>
               </div>
             </div>
+
+            <div className="proof">
+              <div className="lab">Engagements live or in flight —</div>
+              <div className="logos">
+                <div className="slot">DENTAL PRACTICE</div>
+                <div className="slot">TREE-REMOVAL CO.</div>
+                <div className="slot">SOLO ERP CONSULTANT</div>
+                <div className="slot">PAYMENTS FIRM</div>
+                <div className="slot">+ YOU?</div>
+              </div>
+            </div>
           </div>
         </section>
 

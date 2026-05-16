@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import './about.css'
@@ -43,9 +44,15 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="founder-card">
-                <div className="founder-photo" aria-label="Photo placeholder · Doyle Dettro">
-                  <span className="photo-tag">/founder/doyle.jpg</span>
-                  <div className="body-silhouette"></div>
+                <div className="founder-photo">
+                  <Image
+                    src="/founder/doyle.jpg"
+                    alt="Doyle Dettro"
+                    fill
+                    sizes="(max-width: 980px) 100vw, 480px"
+                    priority
+                    className="founder-img"
+                  />
                 </div>
                 <div className="founder-info">
                   <div className="nm">
@@ -54,7 +61,7 @@ export default function AboutPage() {
                   <div className="creds">
                     <span className="c">CPA</span>
                     <span className="c">MS BC Consultant</span>
-                    <span className="c">TAG · EAM · Verosoft</span>
+                    <span className="c">ERP Implementation</span>
                     <span className="c">Claude Code</span>
                     <span className="c">Bayesian · Monte Carlo</span>
                   </div>
@@ -156,10 +163,11 @@ export default function AboutPage() {
               <div className="tl-cell">
                 <span className="yr">2022 – Present</span>
                 <span className="ph">Phase 03</span>
-                <h4>BC Consulting · Verosoft</h4>
+                <h4>ERP Consulting</h4>
                 <p>
-                  Microsoft Business Central, TAG, EAM. Day job. Where the process-first reflex got
-                  sharpened on real engagements.
+                  Microsoft Business Central implementations across field service, manufacturing,
+                  and operations. Day job. Where the process-first reflex got sharpened on real
+                  engagements.
                 </p>
               </div>
               <div className="tl-cell">

@@ -13,9 +13,6 @@ export default function HomePage() {
           <div className="wrap">
             <div className="hero-grid">
               <div className="lhs">
-                <span className="status-pill">
-                  <span className="dot"></span> Booking Q3 2026 · 3 of 4 assessment slots open
-                </span>
                 <h1>
                   Big consulting firms <span className="neg">won&apos;t touch you.</span>
                   <br />
@@ -128,17 +125,6 @@ export default function HomePage() {
                   </div>
                 </div>
               </aside>
-            </div>
-
-            <div className="proof">
-              <div className="lab">Engagements live or in flight —</div>
-              <div className="logos">
-                <div className="slot">DENTAL PRACTICE</div>
-                <div className="slot">TREE-REMOVAL CO.</div>
-                <div className="slot">SOLO ERP CONSULTANT</div>
-                <div className="slot">PAYMENTS FIRM</div>
-                <div className="slot">+ YOU?</div>
-              </div>
             </div>
           </div>
         </section>
@@ -268,7 +254,7 @@ export default function HomePage() {
                   <p>
                     Doyle is a CPA and a working Microsoft Business Central consultant. He can debate revenue recognition with your controller, then go build the eval harness.
                   </p>
-                  <div className="meta">Verosoft · TAG · EAM · Business Central</div>
+                  <div className="meta">Business Central · NetSuite · Acumatica</div>
                 </div>
               </div>
 

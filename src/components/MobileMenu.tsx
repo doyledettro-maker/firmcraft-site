@@ -10,6 +10,12 @@ type Props = {
   current?: string
 }
 
+function normalizeCurrent(href: string, current?: string) {
+  if (!current) return false
+  if (current === 'home') return href === '/'
+  return href === `/${current}`
+}
+
 export function MobileMenu({ items, current }: Props) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -79,7 +85,7 @@ export function MobileMenu({ items, current }: Props) {
       >
         <nav className="mx-auto flex max-w-[1280px] flex-col gap-1 px-8 py-5 text-[15px]">
           {items.map((item) => {
-            const isCur = current && item.href === `/${current}`
+            const isCur = normalizeCurrent(item.href, current)
             if (item.external) {
               return (
                 <a
@@ -109,13 +115,13 @@ export function MobileMenu({ items, current }: Props) {
               </Link>
             )
           })}
-          <Link
-            href="/get-started"
+          <a
+            href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
             onClick={() => setOpen(false)}
-            className="btn btn-ghost mt-3 w-full justify-center"
+            className="btn primary mt-3 w-full justify-center"
           >
-            Get started
-          </Link>
+            Book a call
+          </a>
         </nav>
       </div>
     </div>

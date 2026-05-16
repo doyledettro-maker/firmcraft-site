@@ -1,297 +1,487 @@
-import Link from 'next/link'
 import type { Metadata } from 'next'
+import './pricing.css'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import {
+  ASSESSMENT,
+  BUILD_PACKAGES,
+  OPERATE_TIERS,
+  OPERATOR_PLANS,
+} from '@/lib/pricing'
 
 export const metadata: Metadata = {
-  title: 'Firmcraft — Pricing. Flat rate, no per-seat math.',
+  title: 'Pricing — Firmcraft',
   description:
-    'Three tiers. One flat monthly rate. All integrations included. Pick the plan that matches how much of your recurring work the operator absorbs.',
+    'Fixed-fee where it matters, transparent where it does not. Assessment + Build packages + Operate retainers + Spark/Flow/Scale operator plans.',
 }
-
-const PLANS: {
-  tier: string
-  headline: string
-  price: string
-  per: string
-  sub: string
-  features: string[]
-  cta: string
-  href: string
-  feat?: boolean
-  badge?: string
-}[] = [
-  {
-    tier: 'Starter',
-    headline: 'Get started',
-    price: '$399',
-    per: '/ month',
-    sub: 'One user, one operator, one workflow running end-to-end. For solo practitioners and businesses validating the model.',
-    features: [
-      '1 user seat',
-      'Up to 5 connected channels',
-      'Community support',
-      'Core playbook library',
-      'Audit log access',
-    ],
-    cta: 'Start with Starter',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Starter',
-  },
-  {
-    tier: 'Professional',
-    headline: 'Run the business',
-    price: '$799',
-    per: '/ month',
-    sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, reporting.',
-    features: [
-      'Up to 5 user seats',
-      'Up to 10 connected channels',
-      'Email support',
-      'Custom playbooks',
-      'Full audit log + export',
-      'Role-based access controls',
-    ],
-    cta: 'Choose Professional',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Professional',
-    feat: true,
-    badge: 'Most popular',
-  },
-  {
-    tier: 'Business',
-    headline: 'Operate at scale',
-    price: '$1,499',
-    per: '/ month',
-    sub: 'Multi-team, multi-location businesses. Custom integrations, dedicated support, priority queue.',
-    features: [
-      'Up to 15 user seats',
-      'Unlimited channels',
-      'Dedicated support',
-      'Custom integrations',
-      'Advanced playbook builder',
-      'Priority queue + SLA',
-      'Quarterly executive review',
-    ],
-    cta: 'Talk to us',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Business',
-  },
-]
-
-const FAQ: { q: React.ReactNode; a: string }[] = [
-  {
-    q: <>What counts as a &ldquo;channel&rdquo;?</>,
-    a: 'Any messaging surface the operator connects to — a Slack workspace, a Teams tenant, an SMS number, an email inbox, a WhatsApp Business line. Each one is a channel.',
-  },
-  {
-    q: <>Is there a per-seat charge?</>,
-    a: "No. Each plan includes a fixed number of seats. Everyone on your team can interact with the operator in any connected channel — there's no extra charge per person within your plan's seat limit.",
-  },
-  {
-    q: <>What happens if I go over my plan limits?</>,
-    a: "We'll let you know before you hit any ceiling. If you need more seats, channels, or integrations, upgrading is instant and prorated. We never throttle the operator mid-workflow.",
-  },
-  {
-    q: <>Can I switch plans later?</>,
-    a: 'Yes — upgrade or downgrade at any time. Changes take effect on your next billing cycle. No lock-in, no cancellation fees.',
-  },
-  {
-    q: <>Do you offer annual billing?</>,
-    a: 'Yes. Annual plans include two months free. Email us and we will send you the annual pricing.',
-  },
-  {
-    q: <>What if I need more than 15 seats?</>,
-    a: "We hand off to SkillCalibrate.com for a full discovery engagement. Same team, same platform, custom-scoped for your organization's size.",
-  },
-]
 
 export default function PricingPage() {
   return (
     <>
       <SiteHeader current="pricing" />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden pt-20 pb-16">
-        <div
-          aria-hidden
-          className="absolute -top-[160px] -right-[200px] w-[520px] h-[520px] rounded-full pointer-events-none opacity-55"
-          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.08),transparent 60%)' }}
-        />
-        <div
-          aria-hidden
-          className="absolute -bottom-[160px] -left-[180px] w-[420px] h-[420px] rounded-full pointer-events-none opacity-45"
-          style={{ background: 'radial-gradient(circle,rgba(44,107,240,0.05),transparent 60%)' }}
-        />
-
-        <div className="relative max-w-[1280px] mx-auto px-8">
-          <div className="font-mono text-[11px] tracking-[0.16em] text-muted uppercase mb-3.5">
-            <Link href="/" className="text-signal hover:underline underline-offset-[3px]">
-              &larr; Back to home
-            </Link>
-            &nbsp;&middot;&nbsp; Pricing
-          </div>
-          <div className="grid lg:grid-cols-[1.1fr_1fr] gap-14 items-end">
-            <div>
-              <div className="eyebrow">Pricing</div>
-              <h1 className="font-sans font-medium text-[clamp(46px,5.4vw,76px)] leading-[1.04] tracking-[-0.022em] mt-4 mb-4 text-balance ">
-                One flat rate. <em>No per-seat math.</em>
-              </h1>
-              <p className="text-[19px] leading-[1.55] text-ink-2 max-w-[560px] m-0">
-                Every plan includes onboarding, all core integrations, and a real
-                person at Firmcraft you can reach. The only thing that changes between
-                tiers is how much of your team&apos;s recurring work the operator
-                absorbs.
-              </p>
-            </div>
-            <div>
-              <p
-                className="font-sans text-[24px] leading-[1.4] text-ink-2 max-w-[440px] ml-auto pl-[22px] py-1.5 text-balance"
-                style={{ borderLeft: '2px solid var(--color-signal)' }}
-              >
-                Pick the tier that matches your team size.{' '}
-                <b className="not-italic font-medium text-ink">
-                  Upgrade any time, no lock-in.
-                </b>
-              </p>
+      <main>
+        {/* HERO */}
+        <section className="page-hero" data-screen-label="01 Pricing hero">
+          <div className="wrap">
+            <div className="eyebrow">Pricing</div>
+            <h1>
+              Fixed-fee where it matters.{' '}
+              <em>Transparent where it doesn&apos;t.</em>
+            </h1>
+            <p className="lede">
+              Four ways to engage Firmcraft — the Assessment as the front door,
+              four named Build packages, three Operate retainers, and self-serve
+              Managed Operator plans. Ranges are real; we publish them because
+              we&apos;ve validated them. The only soft number on this page is
+              the out-of-scope hourly rate.
+            </p>
+            <div className="price-toc">
+              <a href="#assess">→ Assessment</a>
+              <a href="#build">→ Build packages</a>
+              <a href="#operate">→ Operate retainers</a>
+              <a href="#operator">→ Managed Operator</a>
+              <a href="#extras">→ Hourly &amp; hosting</a>
+              <a href="#faq">→ FAQ</a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* PRICING CARDS */}
-      <section className="pt-6 pb-[88px]">
-        <div className="max-w-[1280px] mx-auto px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {PLANS.map((plan) => (
-              <div
-                key={plan.tier}
-                className={[
-                  'bg-white border rounded-[20px] p-[28px] flex flex-col gap-4 relative',
-                  plan.feat
-                    ? 'border-[var(--color-signal)] shadow-[0_0_0_1px_var(--color-signal)]'
-                    : 'border-[var(--color-line)]',
-                ].join(' ')}
-              >
-                {plan.badge && (
-                  <span
-                    className="absolute -top-3 left-6 font-mono text-[10.5px] tracking-[0.1em] uppercase font-medium text-white px-3 py-1 rounded-full"
-                    style={{ background: 'var(--color-signal)' }}
-                  >
-                    {plan.badge}
+        {/* ASSESSMENT */}
+        <section className="sec" id="assess" data-screen-label="02 Assessment">
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">01 · The front door</div>
+              <h2>
+                AI Readiness Assessment.{' '}
+                <em>Fixed-fee, refundable, scoped on the call.</em>
+              </h2>
+              <p>
+                Every Firmcraft engagement starts here. Two to three weeks, a
+                CPA-credentialed AI engineer embedded with your finance and ops
+                leads, and a board-ready plan at the end. Refundable against
+                any subsequent Build engagement.
+              </p>
+            </div>
+
+            <div className="ass-grid">
+              <div className="ass-main">
+                <h3>
+                  AI Readiness Assessment{' '}
+                  <span className="sub">
+                    Stakeholder interviews · system inventory · scorecard ·
+                    sovereignty audit · 12-mo roadmap + TCO
                   </span>
-                )}
-                <div className="font-mono text-[11px] tracking-[0.16em] text-signal uppercase font-medium">
-                  {plan.tier}
-                </div>
-                <h3 className="font-sans font-medium text-[22px] tracking-[-0.01em] m-0 leading-[1.15] ">
-                  {plan.headline}
                 </h3>
-                <div className="flex items-baseline gap-1.5">
-                  <span className="font-sans font-medium text-[42px] tracking-[-0.02em] text-ink leading-none">
-                    {plan.price}
-                  </span>
-                  <span className="font-mono text-[12px] text-muted tracking-[0.06em]">
-                    {plan.per}
-                  </span>
+                <div className="price-row">
+                  <span className="big">{ASSESSMENT.priceLow}</span>
+                  <span className="dash">—</span>
+                  <span className="big">{ASSESSMENT.priceHigh}</span>
+                  <span className="per">total · fixed-fee</span>
+                  <span className="tag">{ASSESSMENT.duration}</span>
                 </div>
-                <p className="text-[14px] leading-[1.5] text-ink-2 m-0">{plan.sub}</p>
-                <div
-                  className="h-px w-full"
-                  style={{ background: 'var(--color-line)' }}
-                />
-                <ul className="list-none p-0 m-0 flex flex-col gap-2.5 flex-1">
-                  {plan.features.map((f) => (
-                    <li
-                      key={f}
-                      className="text-[14px] leading-[1.5] text-ink flex gap-2 items-start"
-                    >
-                      <span
-                        className="w-[5px] h-[5px] rounded-full flex-none mt-[7px]"
-                        style={{ background: 'var(--color-ok)' }}
-                      />
-                      {f}
-                    </li>
-                  ))}
+                <ul>
+                  <li>
+                    Scope confirmed on the 20-minute discovery call before
+                    contract signature
+                  </li>
+                  <li>
+                    Single-PoC engagement — the AI engineer running it is the
+                    one who scoped it
+                  </li>
+                  <li>
+                    Output: a roadmap + TCO + vendor matrix you can actually
+                    take to your board
+                  </li>
+                  <li>Refunded against any Build engagement signed within 90 days</li>
+                  <li>
+                    If we don&apos;t think AI fits your business, we&apos;ll
+                    tell you on the call — and bill nothing
+                  </li>
                 </ul>
-                <a
-                  className={`btn ${plan.feat ? 'btn-primary' : 'btn-ghost'} w-full text-center justify-center mt-2`}
-                  href={plan.href}
-                >
-                  {plan.cta} &rarr;
-                </a>
-              </div>
-            ))}
-          </div>
-
-          <p className="text-center mt-6 text-muted text-sm">
-            Bigger than 15 seats or need a full build-out? We hand off to{' '}
-            <a
-              href="https://skillcalibrate.com"
-              className="text-signal underline underline-offset-[3px] hover:text-ink transition-colors"
-            >
-              SkillCalibrate.com
-            </a>{' '}
-            for full discovery.
-          </p>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="py-[88px] bg-white border-y border-[var(--color-line)]">
-        <div className="max-w-[1280px] mx-auto px-8">
-          <h2 className="font-sans font-medium text-[clamp(34px,3.8vw,52px)] leading-[1.05] tracking-[-0.02em] m-0 mb-9 text-balance text-center ">
-            Common pricing <em>questions.</em>
-          </h2>
-          <div className="max-w-[840px] mx-auto flex flex-col gap-0">
-            {FAQ.map((item, i) => (
-              <details
-                key={i}
-                className="border-b border-[var(--color-line)] py-5 first:border-t group"
-              >
-                <summary className="flex justify-between items-center font-sans font-medium text-[21px] leading-[1.3] tracking-[-0.005em] text-ink cursor-pointer list-none [&::-webkit-details-marker]:hidden ">
-                  {item.q}
-                  <span
-                    className="font-mono text-[20px] text-signal ml-4 flex-none leading-none"
-                    aria-hidden
+                <div className="footer-row">
+                  <span>Recommended next step · book the discovery call</span>
+                  <a
+                    className="btn primary sm"
+                    href="mailto:hello@firmcraft.ai?subject=Assessment"
                   >
-                    <span className="group-open:hidden">+</span>
-                    <span className="hidden group-open:inline">&minus;</span>
-                  </span>
-                </summary>
-                <div className="mt-3.5 text-base leading-[1.6] text-ink-2 max-w-[720px]">
-                  <p className="m-0">{item.a}</p>
+                    Book it <span className="arr">→</span>
+                  </a>
                 </div>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
+              </div>
 
-      {/* CTA */}
-      <section
-        className="py-[88px] border-t border-[var(--color-line)]"
-        style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
-      >
-        <div className="max-w-[1280px] mx-auto px-8 text-center">
-          <div className="eyebrow">Ready?</div>
-          <h2 className="font-sans font-medium text-[clamp(36px,4vw,56px)] leading-[1.04] tracking-[-0.022em] mt-2 mb-4 text-balance ">
-            The 20-minute call <em>is the demo.</em>
-          </h2>
-          <p className="text-[18px] text-ink-2 leading-[1.55] m-0 mb-6 max-w-[520px] mx-auto">
-            Bring one workflow. We&apos;ll scope a playbook, pick the right tier,
-            and tell you honestly if it&apos;s something you should pay us for.
-          </p>
-          <div className="flex gap-3 flex-wrap justify-center">
-            <a
-              className="btn btn-primary btn-lg"
-              href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
-            >
-              Book a 20-min call &rarr;
-            </a>
-            <Link className="btn btn-ghost btn-lg" href="/how-it-works">
-              See how it works
-            </Link>
+              <div className="ass-side">
+                <div className="ass-card-side">
+                  <div className="pq">Why the range</div>
+                  <h4>$4.5k → $8.5k</h4>
+                  <p>
+                    The variance is mostly headcount and ERP complexity. A
+                    60-person shop on a clean BC install lands at the bottom.
+                    A 400-person multi-entity NetSuite shop with three sidecar
+                    systems lands at the top. We quote inside the range after
+                    the discovery call.
+                  </p>
+                </div>
+                <div className="ass-card-side">
+                  <div className="pq">What it&apos;s not</div>
+                  <h4>Not a sales motion.</h4>
+                  <p>
+                    The Assessment is a real engagement, billed and delivered
+                    as such. We don&apos;t do &ldquo;free strategy
+                    sessions&rdquo; — they&apos;re priced to convert, and they
+                    show. Our pre-sale call is twenty minutes and unfussy.
+                  </p>
+                </div>
+                <div className="ass-card-side">
+                  <div className="pq">Refund mechanics</div>
+                  <h4>100% credited against Build.</h4>
+                  <p>
+                    If you sign any Build engagement within 90 days of
+                    receiving the Assessment, the full fee is credited against
+                    it. The roadmap is yours either way.
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* BUILD */}
+        <section className="sec surface-2" id="build" data-screen-label="03 Build">
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">02 · Implementation</div>
+              <h2>
+                Four named Build packages.{' '}
+                <em>Fixed-fee, fixed-scope, dated delivery.</em>
+              </h2>
+              <p>
+                Each package anchors on the Foundation — managed Hermes,
+                retrieval, the messaging gateway, observability, and team
+                training. The three vertical packages stack on top. Ranges
+                below are based on scope tier from the Assessment.
+              </p>
+            </div>
+
+            <div className="build-table">
+              <div className="row hd">
+                <div>Package</div>
+                <div>Duration</div>
+                <div>Fixed-fee range</div>
+                <div>Primary outcome</div>
+              </div>
+
+              {BUILD_PACKAGES.map((pkg) => (
+                <div className="row" key={pkg.key}>
+                  <div className="pkg">
+                    <div className="nm">
+                      {pkg.name}
+                      <em>{pkg.nameEm}</em>
+                    </div>
+                    <p>{pkg.blurb}</p>
+                  </div>
+                  <div className="dur">{pkg.duration}</div>
+                  <div className="pr">
+                    {pkg.priceLow}{' '}
+                    <span style={{ color: 'var(--color-muted)', fontWeight: 300 }}>
+                      –
+                    </span>{' '}
+                    {pkg.priceHigh}
+                    <span className="sm">
+                      {pkg.priceNote ?? 'Single-instance · 1 dept'}
+                    </span>
+                  </div>
+                  <div className="out">{pkg.outcome}</div>
+                </div>
+              ))}
+
+              <div className="row foot">
+                <div>Hermes hosting passed through at cost</div>
+                <div>$1.5k – $8k / mo</div>
+                <div>Hourly out-of-scope</div>
+                <div>$200 – $350 / hr (rolesheet on request)</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* OPERATE */}
+        <section className="sec" id="operate" data-screen-label="04 Operate">
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">03 · Ongoing operations</div>
+              <h2>
+                Managed AI retainers.{' '}
+                <em>Eval, regression, new workflows, embedded depth.</em>
+              </h2>
+              <p>
+                Three tiers, scoped by hours and embedded depth. Most Build
+                clients land on Standard. Embedded fractional AI lead at
+                Comprehensive.
+              </p>
+            </div>
+
+            <div className="op-tiers">
+              {OPERATE_TIERS.map((tier) => (
+                <article
+                  className={`op-tier${tier.featured ? ' feat' : ''}`}
+                  key={tier.tier}
+                >
+                  {tier.featured && (
+                    <span className="feat-badge">Most chosen</span>
+                  )}
+                  <div className="tier">{tier.tier}</div>
+                  <h3>{tier.name}</h3>
+                  <div className="pricing">
+                    <span className="big">{tier.priceLow}</span>
+                    <span className="dash">–</span>
+                    <span className="big">{tier.priceHigh}</span>
+                    <span className="per">/ month</span>
+                  </div>
+                  <div className="scope">{tier.scope}</div>
+                  <ul>
+                    {tier.features.map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* OPERATOR (self-serve) */}
+        <section
+          className="sec surface-2"
+          id="operator"
+          data-screen-label="05 Operator plans"
+        >
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">04 · Self-serve · Managed Operator</div>
+              <h2>
+                Spark, Flow, Scale.{' '}
+                <em>Sovereign AI in your team chat from $399/mo.</em>
+              </h2>
+              <p>
+                The self-serve front door. Every Build engagement ships with a
+                managed Hermes foundation by default — these plans are for
+                businesses that want to start with sovereign AI in their chat
+                and grow from there.{' '}
+                <a
+                  href="/managed-ai"
+                  style={{
+                    color: 'var(--color-signal)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                  }}
+                >
+                  Full Managed AI page →
+                </a>
+              </p>
+            </div>
+
+            <div className="plans-row">
+              {OPERATOR_PLANS.map((plan) => (
+                <article
+                  className={`plan-mini${plan.featured ? ' feat' : ''}`}
+                  key={plan.tier}
+                >
+                  {plan.featured && plan.badge && (
+                    <span className="feat-badge">{plan.badge}</span>
+                  )}
+                  <div className="tier">{plan.tier}</div>
+                  <h3>{plan.headline}</h3>
+                  <div className="price">
+                    <span className="big">{plan.price}</span>
+                    <span className="per">/ mo</span>
+                  </div>
+                  <div className="setup">{plan.setup}</div>
+                  <p className="sub">{plan.subShort}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* EXTRAS / line items */}
+        <section className="sec" id="extras" data-screen-label="06 Extras">
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">05 · Line items</div>
+              <h2>
+                The numbers most firms hide. <em>We just publish them.</em>
+              </h2>
+            </div>
+            <div className="extras-grid">
+              <div className="extra">
+                <div className="k">Out-of-scope</div>
+                <h4>
+                  Hourly rate<span className="pr">$200 – $350 / hr</span>
+                </h4>
+                <p>
+                  Rolesheet on request. Junior engineer at the bottom, founder
+                  rate at the top. Out-of-scope work is logged, capped per
+                  sprint, and approved before billed.
+                </p>
+              </div>
+              <div className="extra">
+                <div className="k">Infrastructure</div>
+                <h4>
+                  Hermes hosting<span className="pr">$1.5k – $8k / mo</span>
+                </h4>
+                <p>
+                  Passed through at cost. Range covers single-tenant VPC at
+                  the bottom up to multi-region high-availability at the top.
+                  We don&apos;t markup infrastructure.
+                </p>
+              </div>
+              <div className="extra">
+                <div className="k">Advisory</div>
+                <h4>
+                  Fractional AI lead<span className="pr">Custom retainer</span>
+                </h4>
+                <p>
+                  Pre-Build or post-Build engagement — strategy and oversight
+                  only, no implementation. Usually 2–4 days per month. Scoped
+                  on the call.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FAQ */}
+        <section className="sec surface-2" id="faq" data-screen-label="07 FAQ">
+          <div className="wrap">
+            <div className="block-head">
+              <div className="eyebrow">06 · Pricing FAQ</div>
+              <h2>
+                What buyers ask <em>before they sign.</em>
+              </h2>
+            </div>
+            <div className="faq">
+              <div className="q">
+                <h4>Why fixed-fee instead of T&amp;M?</h4>
+                <p>
+                  Time-and-materials makes the buyer the project manager.
+                  We&apos;re paid to estimate scope correctly, not to bill
+                  until we get it right. Fixed-fee aligns us with shipping.
+                </p>
+              </div>
+              <div className="q">
+                <h4>What if scope changes mid-Build?</h4>
+                <p>
+                  Change requests are scoped and quoted at the hourly rate
+                  before any work happens. We don&apos;t do quiet scope creep
+                  — and we don&apos;t burn through buffer at the end.
+                </p>
+              </div>
+              <div className="q">
+                <h4>Do you white-label / sub for other firms?</h4>
+                <p>
+                  Selectively. Usually for ERP or accounting firms whose
+                  clients are asking for AI and who don&apos;t want to staff
+                  it. Ask on the call.
+                </p>
+              </div>
+              <div className="q">
+                <h4>Is Hermes hosting required?</h4>
+                <p>
+                  For sovereign builds, yes — that&apos;s the whole point. For
+                  Voice + Support, some components can sit on frontier models
+                  with explicit data-handling terms. The Assessment maps which
+                  goes where.
+                </p>
+              </div>
+              <div className="q">
+                <h4>What about a Proof-of-Concept?</h4>
+                <p>
+                  The Assessment is the PoC. It&apos;s faster, cheaper, and
+                  produces a board-ready plan instead of a demo that dies in a
+                  quarter. We don&apos;t do free PoCs.
+                </p>
+              </div>
+              <div className="q">
+                <h4>Do you have minimums?</h4>
+                <p>
+                  The Build minimum is Foundation ($25k). Managed AI starts at
+                  $399/mo. The Assessment is the only &ldquo;small&rdquo;
+                  entry point — and it pays for itself when it kills the wrong
+                  project.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* FINAL CTA */}
+        <section
+          className="sec"
+          style={{ borderBottom: 'none' }}
+          data-screen-label="08 CTA"
+        >
+          <div className="wrap">
+            <div
+              style={{
+                background: 'var(--color-paper)',
+                border: '1px solid var(--color-line)',
+                borderRadius: '22px',
+                padding: '48px 56px',
+                display: 'grid',
+                gridTemplateColumns: '1fr auto',
+                gap: '32px',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                <div className="eyebrow">Start here</div>
+                <h2
+                  style={{
+                    margin: '10px 0 14px',
+                    fontWeight: 600,
+                    fontSize: 'clamp(24px,2.8vw,34px)',
+                    letterSpacing: '-.02em',
+                    lineHeight: 1.1,
+                    maxWidth: '560px',
+                  }}
+                >
+                  A twenty-minute call, a quoted Assessment,{' '}
+                  <em
+                    style={{
+                      fontFamily: 'var(--font-display)',
+                      fontStyle: 'italic',
+                      fontWeight: 500,
+                      color: 'var(--color-signal)',
+                      letterSpacing: '-.018em',
+                    }}
+                  >
+                    and a funded plan in three weeks.
+                  </em>
+                </h2>
+                <p
+                  style={{
+                    margin: 0,
+                    fontSize: '14.5px',
+                    color: 'var(--color-ink-2)',
+                    lineHeight: 1.6,
+                    maxWidth: '560px',
+                  }}
+                >
+                  If we&apos;re not a fit, we&apos;ll tell you on the call and
+                  bill nothing.
+                </p>
+              </div>
+              <a
+                className="btn primary lg"
+                href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+              >
+                Book the call <span className="arr">→</span>
+              </a>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <SiteFooter />
     </>

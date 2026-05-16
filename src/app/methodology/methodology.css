@@ -1,0 +1,117 @@
+/* ===== Methodology page ===== */
+.page-hero{padding:80px 0 64px;background:linear-gradient(180deg,var(--color-surface) 0%,var(--color-paper) 100%);border-bottom:1px solid var(--color-line)}
+.page-hero h1{font-weight:600;font-size:clamp(34px,4.4vw,56px);letter-spacing:-.026em;line-height:1.04;margin:14px 0 22px;text-wrap:balance;max-width:920px}
+.page-hero h1 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--color-signal);letter-spacing:-.018em}
+.page-hero .lede{font-size:17px;line-height:1.6;color:var(--color-ink-2);margin:0;max-width:720px}
+
+/* Step nav */
+.step-nav{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:42px;background:var(--color-paper);border:1px solid var(--color-line);border-radius:14px;overflow:hidden}
+.step-nav a{padding:18px 20px;border-right:1px solid var(--color-line);display:flex;flex-direction:column;gap:5px;text-decoration:none;color:inherit;position:relative;transition:background .15s ease}
+.step-nav a:last-child{border-right:none}
+.step-nav a:hover{background:var(--color-surface)}
+.step-nav a .num{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--color-signal);font-weight:500}
+.step-nav a .name{font-weight:600;font-size:14.5px;letter-spacing:-.008em;color:var(--color-ink)}
+.step-nav a::after{content:"→";position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--color-muted);font-family:var(--font-mono);font-size:14px}
+.step-nav a:last-child::after{display:none}
+
+/* Step block */
+.step-block{display:grid;grid-template-columns:1fr 1.1fr;gap:64px;align-items:start;padding:20px 0}
+.step-block.alt{grid-template-columns:1.1fr 1fr}
+.step-block.alt .vis-side{order:-1}
+.step-info .ix{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;color:var(--color-signal);text-transform:uppercase;font-weight:500;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.step-info .ix .duration{color:var(--color-muted);font-weight:400}
+.step-info h2{font-weight:600;font-size:clamp(28px,3.4vw,42px);letter-spacing:-.024em;line-height:1.05;margin:0 0 18px;text-wrap:balance}
+.step-info h2 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--color-signal);letter-spacing:-.018em}
+.step-info p.intro{font-size:15.5px;line-height:1.65;color:var(--color-ink-2);margin:0 0 20px}
+.step-info .what{display:flex;flex-direction:column;gap:14px;margin-top:24px}
+.step-info .what .row{display:grid;grid-template-columns:140px 1fr;gap:18px;padding:14px 0;border-top:1px dashed var(--color-line);align-items:baseline}
+.step-info .what .row:first-child{border-top:none;padding-top:0}
+.step-info .what .row .k{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;color:var(--color-muted);text-transform:uppercase}
+.step-info .what .row .v{font-size:14px;color:var(--color-ink);line-height:1.55}
+.step-info .what .row .v .pill{display:inline-block;font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;background:var(--color-surface-2);color:var(--color-ink-2);padding:3px 8px;border-radius:5px;margin-right:5px;text-transform:uppercase;font-weight:500}
+
+/* Visual side — step-specific visuals */
+.vis-side{position:sticky;top:88px}
+.vis-card{background:var(--color-paper);border:1px solid var(--color-line);border-radius:18px;overflow:hidden;box-shadow:var(--shadow-card)}
+.vis-card .head{padding:14px 18px;border-bottom:1px solid var(--color-line);display:flex;justify-content:space-between;align-items:center;background:var(--color-surface-2)}
+.vis-card .head .ttl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--color-ink-2);text-transform:uppercase}
+.vis-card .head .ttl b{color:var(--color-ink);font-weight:500}
+.vis-card .head .stamp{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;color:var(--color-signal);text-transform:uppercase}
+.vis-card .body{padding:22px}
+
+/* Discovery visual — interview cards */
+.interview-list{display:flex;flex-direction:column;gap:10px}
+.interview-list .iv{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:12px;background:var(--color-surface);border:1px solid var(--color-line);border-radius:10px;align-items:center}
+.interview-list .iv .av{width:34px;height:34px;border-radius:9px;background:var(--color-signal-soft);color:var(--color-signal-ink);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.04em}
+.interview-list .iv .info .nm{font-weight:600;font-size:13.5px;letter-spacing:-.005em;line-height:1.2}
+.interview-list .iv .info .role{font-family:var(--font-mono);font-size:10.5px;color:var(--color-muted);letter-spacing:.04em;margin-top:2px}
+.interview-list .iv .pill{font-family:var(--font-mono);font-size:10px;background:var(--color-ok-soft);color:#065F46;padding:3px 8px;border-radius:5px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.interview-list .iv .pill.sched{background:var(--color-operator-soft);color:var(--color-operator-ink)}
+
+/* Fit-gap visual — gap matrix */
+.gap-matrix{display:flex;flex-direction:column;gap:1px;background:var(--color-line);border-radius:10px;overflow:hidden;border:1px solid var(--color-line)}
+.gap-matrix .row{display:grid;grid-template-columns:1.5fr .8fr .8fr .8fr;background:var(--color-paper);align-items:center}
+.gap-matrix .row.hd{background:var(--color-surface-2)}
+.gap-matrix .row > div{padding:10px 14px;font-size:12.5px}
+.gap-matrix .row.hd > div{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;color:var(--color-muted);text-transform:uppercase}
+.gap-matrix .row .nm{font-weight:500;color:var(--color-ink);letter-spacing:-.003em;font-size:13px}
+.gap-matrix .row .nm .sub{display:block;font-size:11px;color:var(--color-muted);font-weight:400;margin-top:1px}
+.gap-matrix .row .cell{text-align:center}
+.gap-matrix .row .dot{display:inline-block;width:10px;height:10px;border-radius:50%}
+.gap-matrix .row .dot.fit{background:var(--color-ok)}
+.gap-matrix .row .dot.gap{background:var(--color-operator)}
+.gap-matrix .row .dot.miss{background:var(--color-err);opacity:.7}
+
+/* Configure visual — workflow graph */
+.wf-graph{padding:20px 8px}
+.wf-graph svg{width:100%;height:auto;display:block}
+
+/* Train visual — eval card */
+.eval-card{padding:0}
+.eval-card .scores{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px}
+.eval-card .scores .s{padding:14px;background:var(--color-surface-2);border-radius:10px}
+.eval-card .scores .s .k{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.12em;color:var(--color-muted);text-transform:uppercase}
+.eval-card .scores .s .v{font-weight:600;font-size:24px;color:var(--color-ink);letter-spacing:-.022em;margin-top:3px;font-feature-settings:"tnum"}
+.eval-card .scores .s .v .unit{font-family:var(--font-mono);font-size:12px;color:var(--color-muted);font-weight:400;margin-left:2px}
+.eval-card .scores .s .v.green{color:#0E8C5D}
+.eval-card .scores .s .v.amber{color:#B07000}
+.eval-card .test-list{display:flex;flex-direction:column;gap:6px}
+.eval-card .test{display:grid;grid-template-columns:1fr auto auto;gap:12px;padding:9px 12px;background:var(--color-surface);border:1px solid var(--color-line);border-radius:8px;align-items:center;font-family:var(--font-mono);font-size:11.5px;color:var(--color-ink-2)}
+.eval-card .test .nm{color:var(--color-ink);font-family:var(--font-sans);font-size:13px;letter-spacing:-.003em;font-weight:500}
+.eval-card .test .ms{color:var(--color-muted);font-size:10.5px}
+.eval-card .test .pill{padding:3px 8px;border-radius:5px;font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:500}
+.eval-card .test .pill.pass{background:var(--color-ok-soft);color:#065F46}
+.eval-card .test .pill.warn{background:var(--color-warn-soft);color:#92400E}
+
+/* Hypercare visual — runbook checklist */
+.runbook{display:flex;flex-direction:column;gap:8px}
+.runbook .rb{display:grid;grid-template-columns:auto 1fr auto;gap:12px;padding:11px 14px;background:var(--color-surface);border:1px solid var(--color-line);border-radius:10px;align-items:center}
+.runbook .rb .chk{width:18px;height:18px;border-radius:5px;background:var(--color-ok-soft);background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%23065F46' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'><path d='M4 8.5L7 11.5L12.5 5'/></svg>");background-repeat:no-repeat;background-position:center;flex:0 0 18px}
+.runbook .rb.todo .chk{background:var(--color-surface-2);background-image:none;border:1px solid var(--color-line-strong)}
+.runbook .rb .nm{font-size:13px;color:var(--color-ink);letter-spacing:-.003em;line-height:1.4}
+.runbook .rb .nm .sub{display:block;font-family:var(--font-mono);font-size:10.5px;color:var(--color-muted);letter-spacing:.04em;margin-top:2px}
+.runbook .rb .ts{font-family:var(--font-mono);font-size:10.5px;color:var(--color-muted);letter-spacing:.04em}
+.runbook .rb.live .ts{color:var(--color-ok)}
+
+/* Step separators */
+.step-sep{padding:24px 0;display:flex;align-items:center;gap:18px}
+.step-sep::before,.step-sep::after{content:"";flex:1;height:1px;background:var(--color-line)}
+.step-sep .lab{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;color:var(--color-muted);text-transform:uppercase}
+
+/* What we don't do */
+.nono-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.nono{background:var(--color-paper);border:1px solid var(--color-line);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:8px;position:relative}
+.nono .glyph{font-family:var(--font-mono);font-size:18px;color:var(--color-err);font-weight:500;line-height:1;letter-spacing:-.02em;margin-bottom:6px}
+.nono h3{margin:0;font-weight:600;font-size:17px;letter-spacing:-.012em}
+.nono p{margin:0;font-size:13.5px;line-height:1.55;color:var(--color-ink-2)}
+
+@media (max-width:980px){
+  .page-hero h1{font-size:36px}
+  .step-nav{grid-template-columns:1fr 1fr}
+  .step-nav a{border-right:none;border-bottom:1px solid var(--color-line)}
+  .step-nav a::after{display:none}
+  .step-block,.step-block.alt{grid-template-columns:1fr;gap:32px}
+  .step-block.alt .vis-side{order:0}
+  .vis-side{position:static}
+  .nono-grid{grid-template-columns:1fr}
+}

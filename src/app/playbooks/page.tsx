@@ -409,7 +409,7 @@ export default function PlaybooksPage() {
 
   return (
     <>
-      <SiteHeader current="playbooks" />
+      <SiteHeader />
 
       {/* HERO */}
       <section className="relative overflow-hidden pt-20 pb-8">

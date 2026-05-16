@@ -8,6 +8,16 @@ const nextConfig = {
         destination: '/get-started',
         permanent: true,
       },
+      {
+        source: '/how-it-works',
+        destination: '/methodology',
+        permanent: true,
+      },
+      {
+        source: '/capabilities',
+        destination: '/services',
+        permanent: true,
+      },
     ]
   },
 }

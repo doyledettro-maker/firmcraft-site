@@ -146,7 +146,7 @@ function VRow({
 export default function SecurityPage() {
   return (
     <>
-      <SiteHeader current="security" />
+      <SiteHeader />
 
       {/* HERO */}
       <section className="relative overflow-hidden pt-20 pb-16">

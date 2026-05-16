@@ -19,7 +19,7 @@ export function BrandMark({ size = 22, className }: BrandMarkProps) {
         cx="32"
         cy="32"
         r="29"
-        stroke="#0F172A"
+        stroke="currentColor"
         strokeWidth="2.5"
         fill="none"
       />

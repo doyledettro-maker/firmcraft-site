@@ -1,0 +1,467 @@
+/* ===== Managed AI page ===== */
+.mai-hero {
+  padding: 64px 0 88px;
+  background: linear-gradient(180deg, var(--color-surface) 0%, var(--color-paper) 65%, var(--color-surface) 100%);
+  position: relative;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-line);
+}
+.mai-hero .wrap { position: relative; z-index: 1; }
+.mai-hero-grid {
+  display: grid;
+  grid-template-columns: 1.05fr 1fr;
+  gap: 56px;
+  align-items: center;
+}
+.mai-hero h1 {
+  font-weight: 600;
+  font-size: clamp(38px, 4.8vw, 60px);
+  letter-spacing: -.028em;
+  line-height: 1.02;
+  margin: 18px 0 22px;
+  text-wrap: balance;
+}
+.mai-hero h1 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-signal);
+  letter-spacing: -.02em;
+}
+.mai-hero .lede { margin-bottom: 28px; }
+.mai-hero .signals {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 24px;
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-muted);
+  letter-spacing: .06em;
+}
+.mai-hero .signals span { display: inline-flex; align-items: center; gap: 7px; }
+.mai-hero .signals span::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-signal);
+}
+
+/* Chat hero — Operator-in-chat */
+.chat-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.chat-card .chrome {
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--color-line);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-surface);
+}
+.chat-card .chrome .channel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-ink-2);
+  letter-spacing: .04em;
+}
+.chat-card .chrome .channel b {
+  color: var(--color-ink);
+  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 13px;
+  letter-spacing: -.003em;
+}
+.chat-card .chrome .live {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .1em;
+  color: var(--color-ok);
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.chat-card .chrome .live::before {
+  content: "";
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-ok);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, .16);
+}
+.chat-card .stream {
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 380px;
+}
+.msg { display: grid; grid-template-columns: 34px 1fr; gap: 12px; }
+.msg .av {
+  width: 30px;
+  height: 30px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--color-signal);
+  letter-spacing: .04em;
+}
+.msg .av.op { background: var(--color-console); position: relative; }
+.msg .av.op::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--color-operator);
+  border: 2px solid var(--color-paper);
+}
+.msg .av.h { background: var(--color-surface-2); color: var(--color-ink-2); }
+.msg .body { display: flex; flex-direction: column; gap: 5px; }
+.msg .meta {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-muted);
+  letter-spacing: .04em;
+}
+.msg .meta b {
+  color: var(--color-ink);
+  font-weight: 600;
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  letter-spacing: -.003em;
+  margin-right: 8px;
+}
+.msg .text {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--color-ink);
+  max-width: 520px;
+}
+.msg .text em { font-style: normal; color: var(--color-signal); font-weight: 500; }
+.msg .text .mono-inline {
+  font-family: var(--font-mono);
+  background: var(--color-surface);
+  padding: 1px 6px;
+  border-radius: 4px;
+  font-size: 12.5px;
+  letter-spacing: .02em;
+}
+.msg.op .text {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  padding: 11px 14px;
+  border-radius: 10px 10px 10px 4px;
+  font-size: 13.5px;
+}
+.msg.op .actions { display: flex; gap: 6px; margin-top: 6px; flex-wrap: wrap; }
+.msg.op .actions .a {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  background: var(--color-signal-soft);
+  color: var(--color-signal-ink);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.msg.op .actions .a.ok { background: var(--color-ok-soft); color: #065F46; }
+.msg.op .actions .a.warm { background: var(--color-operator-soft); color: var(--color-operator-ink); }
+
+/* ====== PROBLEM grid ====== */
+.prob-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.pcell {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 24px;
+}
+.pcell .num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--color-signal);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.pcell h3 {
+  margin: 0 0 8px;
+  font-weight: 600;
+  font-size: 17px;
+  letter-spacing: -.012em;
+}
+.pcell p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+}
+
+/* ====== HOW it works ====== */
+.how-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+.how-cell {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.how-cell .glyph {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  background: var(--color-signal-soft);
+  color: var(--color-signal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 22px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+.how-cell .step-n {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+}
+.how-cell h4 {
+  margin: 0;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -.01em;
+}
+.how-cell p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+}
+
+/* ====== PRICING ====== */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.plan {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 18px;
+  padding: 32px 30px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  position: relative;
+}
+.plan.feat {
+  border-color: rgba(44, 107, 240, .4);
+  box-shadow: 0 0 0 1px rgba(44, 107, 240, .08);
+  background: linear-gradient(180deg, var(--color-paper) 0%, #FAFBFE 100%);
+}
+.plan .badge {
+  position: absolute;
+  top: -10px;
+  left: 24px;
+  background: var(--color-signal);
+  color: #fff;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  padding: 5px 9px;
+  border-radius: 5px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.plan .tier {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.plan h3 {
+  margin: 2px 0 0;
+  font-weight: 600;
+  font-size: 22px;
+  letter-spacing: -.018em;
+}
+.plan .price {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin-top: 8px;
+}
+.plan .price .big {
+  font-weight: 600;
+  font-size: 38px;
+  letter-spacing: -.026em;
+  color: var(--color-ink);
+  line-height: 1;
+}
+.plan .price .per { color: var(--color-muted); font-size: 14px; }
+.plan .setup {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: var(--color-muted);
+  letter-spacing: .04em;
+}
+.plan p.sub {
+  margin: 6px 0 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+}
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  border-top: 1px dashed var(--color-line);
+  padding-top: 14px;
+}
+.plan ul li {
+  font-size: 13.5px;
+  color: var(--color-ink-2);
+  line-height: 1.5;
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+}
+.plan ul li::before {
+  content: "";
+  flex: 0 0 5px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  margin-top: 8px;
+}
+.plan .cta { margin-top: auto; padding-top: 18px; }
+
+/* ====== COMPARE table ====== */
+.ctable {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  overflow: hidden;
+}
+.ctable th,
+.ctable td {
+  padding: 16px 20px;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 13.5px;
+  line-height: 1.45;
+}
+.ctable thead th {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  font-weight: 500;
+  background: var(--color-surface);
+}
+.ctable thead th.us { color: var(--color-signal); }
+.ctable .featc { font-weight: 500; color: var(--color-ink); width: 30%; }
+.ctable .usc { color: var(--color-ink); font-weight: 500; background: rgba(44, 107, 240, .04); }
+.ctable .themc { color: var(--color-muted); }
+.ctable tbody tr:last-child td { border-bottom: none; }
+
+/* ====== INDUSTRIES ====== */
+.ind-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.ind {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 14px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.ind .glyph {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--color-surface-2);
+  color: var(--color-signal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+.ind .num {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.ind h4 {
+  margin: 0 0 6px;
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -.01em;
+}
+.ind p {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: var(--color-ink-2);
+}
+
+@media (max-width: 980px) {
+  .mai-hero-grid,
+  .prob-grid,
+  .how-grid,
+  .plans,
+  .ind-grid { grid-template-columns: 1fr; }
+  .how-grid { grid-template-columns: 1fr 1fr; }
+}

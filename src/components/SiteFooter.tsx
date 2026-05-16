@@ -6,78 +6,79 @@ type FooterColumn = { heading: string; links: FooterLink[] }
 
 const COLUMNS: FooterColumn[] = [
   {
-    heading: 'Product',
+    heading: 'Services',
     links: [
-      { label: 'How it works', href: '/how-it-works' },
-      { label: 'Capabilities', href: '/capabilities' },
-      { label: 'Integrations', href: '/integrations' },
+      { label: 'AI Readiness Assessment', href: '/services#assess' },
+      { label: 'Implementation', href: '/services#build' },
+      { label: 'Managed Operations', href: '/services#operate' },
+      { label: 'Fractional Advisory', href: '/services#advisory' },
+    ],
+  },
+  {
+    heading: 'Practice',
+    links: [
+      { label: 'Managed AI', href: '/managed-ai' },
       { label: 'Pricing', href: '/pricing' },
+      { label: 'Methodology', href: '/methodology' },
+      { label: 'About', href: '/about' },
     ],
   },
   {
     heading: 'Resources',
     links: [
       { label: 'Playbooks', href: '/playbooks' },
-      { label: 'Security', href: '/security' },
-      { label: 'Support', href: '/support' },
+      { label: 'Integrations', href: '/integrations' },
+      { label: 'Security & sovereignty', href: '/security' },
+      { label: 'Workforce training ↗', href: 'https://skillcalibrate.com', external: true },
     ],
   },
   {
-    heading: 'Get started',
+    heading: 'Contact',
     links: [
-      { label: 'Start onboarding', href: '/get-started' },
-      { label: 'Book a call', href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call', external: true },
-      { label: 'Workforce Training', href: 'https://skillcalibrate.com', external: true },
+      { label: 'hello@firmcraft.ai', href: 'mailto:hello@firmcraft.ai', external: true },
+      {
+        label: 'Book a call',
+        href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call',
+        external: true,
+      },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/firmcraft-ai/', external: true },
     ],
   },
 ]
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-[var(--color-line)] bg-[var(--color-paper)] text-[13px] text-ink-2">
-      <div className="max-w-[1280px] mx-auto px-8 py-14">
-        <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Brand column */}
-          <div className="flex flex-col gap-3">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2.5 font-display italic font-medium text-[22px] tracking-[-0.01em] text-ink"
-            >
-              <BrandMark /> Firmcraft
+    <footer className="site-footer">
+      <div className="wrap">
+        <div className="footer-grid">
+          <div className="brand">
+            <Link href="/" aria-label="Firmcraft home" className="wm-mark" style={{ color: '#fff' }}>
+              <BrandMark size={26} className="brand-mark" />
+              <span className="wm" style={{ color: '#fff' }}>
+                Firmcraft
+              </span>
             </Link>
-            <p className="max-w-[260px] text-[13.5px] leading-[1.55] text-ink-2">
-              AI operations for growing professional-services firms.
+            <p>
+              An AI implementation, integration, and enablement firm for finance- and
+              operations-driven SMBs running ERPs.
             </p>
-            <span className="mt-2 inline-flex w-fit items-center gap-2 rounded-full border border-[var(--color-line)] bg-paper px-2.5 py-1 font-mono text-[10.5px] uppercase tracking-eyebrow text-muted">
-              <span className="h-1.5 w-1.5 rounded-full bg-ok" />
-              SOC 2 In Progress
-            </span>
           </div>
 
-          {/* Link columns */}
           {COLUMNS.map((col) => (
-            <div key={col.heading} className="flex flex-col gap-3">
-              <h3 className="font-mono text-[11px] uppercase tracking-eyebrow text-muted">
-                {col.heading}
-              </h3>
-              <ul className="flex flex-col gap-2.5">
+            <div key={col.heading} className="col">
+              <h5>{col.heading}</h5>
+              <ul>
                 {col.links.map((link) => (
-                  <li key={link.href}>
+                  <li key={`${col.heading}-${link.href}-${link.label}`}>
                     {link.external ? (
                       <a
                         href={link.href}
-                        className="text-ink-2 transition-colors hover:text-signal"
                         rel={link.href.startsWith('http') ? 'noopener' : undefined}
                       >
                         {link.label}
                       </a>
                     ) : (
-                      <Link
-                        href={link.href}
-                        className="text-ink-2 transition-colors hover:text-signal"
-                      >
-                        {link.label}
-                      </Link>
+                      <Link href={link.href}>{link.label}</Link>
                     )}
                   </li>
                 ))}
@@ -86,17 +87,14 @@ export function SiteFooter() {
           ))}
         </div>
 
-        <div className="mt-12 flex flex-wrap items-center justify-between gap-3 border-t border-[var(--color-line)] pt-6 font-mono text-[11px] uppercase tracking-eyebrow text-muted">
-          <span>&copy; 2026 Predictium LLC</span>
+        <div className="legal">
+          <span>© 2026 Firmcraft · Built on Hermes · Sovereign by default</span>
           <span>
-            Need workforce training?{' '}
-            <a
-              href="https://skillcalibrate.com"
-              className="underline transition-colors hover:text-ink"
-              rel="noopener"
-            >
-              SkillCalibrate
-            </a>
+            <a href="/terms">Terms</a>
+            {' · '}
+            <a href="/privacy">Privacy</a>
+            {' · '}
+            <a href="/trust">Trust</a>
           </span>
         </div>
       </div>

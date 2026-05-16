@@ -2,63 +2,40 @@ import Link from 'next/link'
 import { BrandMark } from './BrandMark'
 import { MobileMenu } from './MobileMenu'
 
-const NAV_ITEMS: { label: string; href: string; external?: boolean }[] = [
-  { label: 'How it works', href: '/how-it-works' },
-  { label: 'Capabilities', href: '/capabilities' },
-  { label: 'Pricing', href: '/pricing' },
-  { label: 'Playbooks', href: '/playbooks' },
-  { label: 'Integrations', href: '/integrations' },
-  { label: 'Security', href: '/security' },
-  { label: 'Workforce Training', href: 'https://skillcalibrate.com', external: true },
-  { label: 'Support', href: '/support' },
+const NAV_ITEMS: { label: string; href: string; key: string }[] = [
+  { label: 'Services', href: '/services', key: 'services' },
+  { label: 'Managed AI', href: '/managed-ai', key: 'managed-ai' },
+  { label: 'Pricing', href: '/pricing', key: 'pricing' },
+  { label: 'Methodology', href: '/methodology', key: 'methodology' },
+  { label: 'About', href: '/about', key: 'about' },
 ]
 
-type Current =
+export type SiteHeaderCurrent =
   | 'home'
-  | 'how-it-works'
-  | 'capabilities'
+  | 'services'
+  | 'managed-ai'
   | 'pricing'
-  | 'playbooks'
-  | 'integrations'
-  | 'security'
-  | 'support'
+  | 'methodology'
+  | 'about'
 
-export function SiteHeader({ current }: { current?: Current }) {
+export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
   return (
-    <header className="warm-nav relative">
-      <div className="max-w-[1280px] mx-auto px-8 h-16 flex items-center justify-between gap-4">
-        <Link
-          href="/"
-          className="flex items-center gap-2.5 font-display italic font-medium text-[22px] tracking-[-0.01em] text-ink"
-        >
-          <BrandMark /> Firmcraft
+    <header className="site-header">
+      <div className="wrap row">
+        <Link href="/" aria-label="Firmcraft home" className="wm-mark" style={{ color: 'var(--color-ink)' }}>
+          <BrandMark size={26} />
+          <span className="wm">Firmcraft</span>
         </Link>
 
-        <nav className="hidden md:flex items-center gap-6 text-sm text-ink-2">
+        <nav className="primary-nav" aria-label="Primary">
           {NAV_ITEMS.map((item) => {
-            const isCur = current && item.href === `/${current}`
-            if (item.external) {
-              return (
-                <a
-                  key={item.href}
-                  href={item.href}
-                  rel="noopener"
-                  className="hover:text-signal transition-colors"
-                >
-                  {item.label}
-                </a>
-              )
-            }
+            const isCur = current === item.key
             return (
               <Link
                 key={item.href}
                 href={item.href}
                 aria-current={isCur ? 'page' : undefined}
-                className={
-                  isCur
-                    ? 'text-ink font-medium'
-                    : 'hover:text-signal transition-colors'
-                }
+                className={`link${isCur ? ' current' : ''}`}
               >
                 {item.label}
               </Link>
@@ -66,17 +43,20 @@ export function SiteHeader({ current }: { current?: Current }) {
           })}
         </nav>
 
-        <div className="flex gap-2.5 items-center">
-          <Link href="/get-started" className="btn btn-ghost hidden md:inline-flex">
-            Get started
+        <div className="right">
+          <Link href="/pricing" className="btn ghost sm hidden md:inline-flex">
+            Pricing
           </Link>
           <a
             href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
-            className="btn btn-primary"
+            className="btn primary sm"
           >
-            Book a call
+            Book a call <span className="arr">→</span>
           </a>
-          <MobileMenu items={NAV_ITEMS} current={current} />
+          <MobileMenu
+            items={NAV_ITEMS.map((n) => ({ label: n.label, href: n.href }))}
+            current={current}
+          />
         </div>
       </div>
     </header>

@@ -1,492 +1,515 @@
-import Image from 'next/image'
-import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import { RotatingChatHero } from '@/components/RotatingChatHero'
-
-// ─── Data ────────────────────────────────────────────────────────────────────
-
-const PLANS = [
-  {
-    tier: 'Spark',
-    headline: 'Get started',
-    price: '$399',
-    setup: '+ $1,000 one-time setup',
-    sub: 'A single workflow, fully run for you. For one-person shops and businesses validating the model.',
-    features: [
-      'One core workflow (e.g. contracts, intake, claims)',
-      '$100/mo AI token allowance included',
-      'Up to 3 tool integrations',
-      'Lives in your team chat',
-      'Monthly review with your ops lead',
-    ],
-    cta: 'Start with Spark',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Spark',
-    feat: false,
-  },
-  {
-    tier: 'Flow',
-    headline: 'Run the business',
-    price: '$799',
-    setup: '+ $2,000 one-time setup',
-    sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.',
-    features: [
-      'Up to 8 active workflows',
-      '$200/mo AI token allowance included',
-      'Unlimited integrations',
-      'Custom playbooks per role',
-      'Weekly ops review + change requests',
-      'SOC 2 controls + audit log access',
-    ],
-    cta: 'Choose Flow',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Flow',
-    feat: true,
-    badge: 'Most popular',
-  },
-  {
-    tier: 'Scale',
-    headline: 'Operate at scale',
-    price: '$1,499',
-    setup: '+ $3,500 one-time setup',
-    sub: 'Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.',
-    features: [
-      'Unlimited workflows + custom builds',
-      '$300/mo AI token allowance included',
-      'Multi-team / multi-location support',
-      'Dedicated operations lead',
-      'Quarterly executive review',
-      'Priority queue + change SLA',
-    ],
-    cta: 'Talk to us',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Scale',
-    feat: false,
-  },
-]
-
-const PROBLEMS = [
-  { num: 'A —', title: 'The seat-license trap', body: 'You bought the chatbot. It sits in a tab. The team opened it once and never came back.' },
-  { num: 'B —', title: 'The prompting tax', body: 'Every tool assumes someone has time to learn it and train the rest. They don\u2019t.' },
-  { num: 'C —', title: 'The integration desert', body: 'QuickBooks, Drive, Outlook, your booking tool — none of them talk. The AI doesn\u2019t either.' },
-  { num: 'D —', title: 'The pilot purgatory', body: 'Three vendor demos, six-figure SOWs, 90-day "discoveries." None shipped a workflow you use.' },
-  { num: 'E —', title: 'The hire-or-build problem', body: 'You\u2019d staff this if you could. The people who could build it aren\u2019t applying to your shop.' },
-  { num: 'F —', title: 'The "but client data" wall', body: 'Every interesting workflow stalls on compliance. Nobody wants to be the one who broke it.' },
-]
-
-const HOW = [
-  { glyph: 'a', step: '01 / WHERE', title: 'Lives in your team chat', body: 'Mention it like a teammate. No new dashboard, no second login, nothing nobody on staff opens.' },
-  { glyph: 'b', step: '02 / WHAT', title: 'Connected to your tools', body: 'QuickBooks, Microsoft 365, Google Workspace, Zoho, DocuSign, your practice management — read, write, audit-log.' },
-  { glyph: 'c', step: '03 / HOW MUCH', title: 'Flat monthly rate', body: 'One price. All seats. All integrations. Each tier includes a monthly AI token allowance — anything beyond is billed at published rates, tracked in real time.' },
-  { glyph: 'd', step: '04 / WHEN', title: 'Running in a week', body: 'Intake Monday. Connectors live Wednesday. First production workflow by Friday. Days, not quarters.' },
-]
-
-// Industries — examples-led copy from the design reference. Each card pairs an
-// abstract category ("Healthcare practices") with a concrete shipped example
-// from real or representative customers. Keeps the page honest: we describe
-// what we've actually done, not aspirational verticals.
-const INDUSTRIES = [
-  {
-    num: '— 01', glyph: 'Hc', title: 'Healthcare practices',
-    body: 'e.g. our dental client uses Firmcraft to draft & submit insurance reimbursement claims.',
-  },
-  {
-    num: '— 02', glyph: 'Tr', title: 'Trades & field services',
-    body: 'e.g. our tree-removal client ships DocuSign contracts on-site — signed before he leaves the driveway.',
-  },
-  {
-    num: '— 03', glyph: 'B2', title: 'B2B services',
-    body: 'e.g. our payments client uses Firmcraft as a second pair of hands for an overworked one-person marketing team.',
-  },
-  {
-    num: '— 04', glyph: 'So', title: 'Solo & owner-operators',
-    body: 'e.g. our solo ERP consultant runs an entire practice on a single operator. The cheapest second hire she\u2019ll ever make.',
-  },
-  {
-    num: '— 05', glyph: 'Pf', title: 'Professional firms',
-    body: 'CPA, law, advisory, consulting. Doc requests, review prep, billable triage, client deliverables.',
-  },
-]
-
-// Comparison: Firmcraft vs the chatbots most prospects already pay for.
-// Three columns (us / ChatGPT Teams / Microsoft Copilot) keeps the framing
-// honest — we're an operator, they're a chatbot license; both can coexist.
-const COMPARE_ROWS = [
-  {
-    feat: 'What you\u2019re buying',
-    us: 'A managed operator + a real person at Firmcraft',
-    chatgpt: 'A per-seat chatbot license',
-    copilot: 'A per-seat chatbot license',
-  },
-  {
-    feat: 'Lives where the work lives',
-    us: 'Inside your team chat',
-    chatgpt: 'A separate app + browser tab',
-    copilot: 'Side panel inside Office',
-  },
-  {
-    feat: 'Speaks to QuickBooks, Zoho, niche tools',
-    us: 'Built and maintained for you',
-    chatgpt: 'DIY connectors, if any',
-    copilot: 'Microsoft stack only',
-  },
-  {
-    feat: 'Pricing',
-    us: 'Flat monthly, all seats',
-    chatgpt: 'Per seat, per month',
-    copilot: 'Per seat, per month',
-  },
-  {
-    feat: 'Time to first workflow',
-    us: '5 business days',
-    chatgpt: 'Whenever someone has time',
-    copilot: 'Whenever someone has time',
-  },
-  {
-    feat: 'Who builds the prompts',
-    us: 'We do.',
-    chatgpt: 'You do.',
-    copilot: 'You do.',
-  },
-]
-
-// ─── Page ─────────────────────────────────────────────────────────────────────
+import './home.css'
 
 export default function HomePage() {
   return (
     <>
       <SiteHeader current="home" />
 
-      {/* ══ HERO ════════════════════════════════════════════════════════════ */}
-      <section className="hero-warm">
-        <div className="warm-wrap">
-          <div className="hero-grid">
-            <div>
-              <span className="hero-tag">
-                <span className="dot" /> An AI operator for small business
-              </span>
-              <h1 className="hero-title-warm">
-                A capable second set of hands.{' '}
-                <em>Running by next Friday.</em>
-              </h1>
-              <p className="hero-sub">
-                Firmcraft lives in your team chat, plugs into the tools you already
-                pay for — QuickBooks, Microsoft 365, Google Workspace, Zoho, your
-                practice management — and quietly does the work. Flat monthly rate.
-                Up and running in five business days.
-              </p>
-              <div className="hero-ctas">
-                <a
-                  className="btn btn-primary btn-lg"
-                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
-                >
-                  Book a 20-min call →
-                </a>
-                <a className="btn btn-ghost btn-lg" href="#pricing">
-                  See plans
-                </a>
+      <main>
+        {/* ============ HERO ============ */}
+        <section className="home-hero" data-screen-label="01 Hero">
+          <div className="wrap">
+            <div className="hero-grid">
+              <div className="lhs">
+                <span className="status-pill">
+                  <span className="dot"></span> Booking Q3 2026 · 3 of 4 assessment slots open
+                </span>
+                <h1>
+                  Big consulting firms <span className="neg">won&apos;t touch you.</span>
+                  <br />
+                  AI agencies <span className="neg">can&apos;t read your chart&nbsp;of&nbsp;accounts.</span>
+                  <br />
+                  <em>You need both.</em>
+                </h1>
+                <p className="lede">
+                  Firmcraft is an AI implementation, integration, and enablement firm for finance- and operations-driven SMBs running ERPs — built on a sovereign, open-source LLM foundation so your data never leaves your walls.
+                </p>
+                <div className="hero-ctas">
+                  <a className="btn primary lg" href="/pricing#assess">
+                    Book an Assessment <span className="arr">→</span>
+                  </a>
+                  <a className="btn ghost lg" href="/services">
+                    See services
+                  </a>
+                </div>
+                <div className="hero-signals">
+                  <span>CPA-credentialed</span>
+                  <span>Microsoft BC · NetSuite · Acumatica</span>
+                  <span>Sovereign by default</span>
+                  <span>Process-first, not tool-first</span>
+                </div>
               </div>
-              <div className="hero-meta">
-                <span><span className="check-dot" /> Live in 5 business days</span>
-                <span><span className="check-dot" /> Flat monthly rate</span>
-                <span><span className="check-dot" /> SOC 2 in progress</span>
-              </div>
+
+              {/* HERO RHS: assessment scorecard */}
+              <aside className="scorecard" aria-label="Sample AI readiness scorecard">
+                <div className="sc-bar">
+                  <span className="lab">
+                    Engagement <b>FC-A-2614 · Midwest Mfg.</b>
+                  </span>
+                  <span className="stamp">Assessment · wk 2</span>
+                </div>
+                <div className="sc-body">
+                  <div className="sc-summary">
+                    <div className="m">
+                      <div className="k">Use cases</div>
+                      <div className="v">
+                        18<span className="unit">scored</span>
+                      </div>
+                    </div>
+                    <div className="m">
+                      <div className="k">Greenlit</div>
+                      <div className="v signal">7</div>
+                    </div>
+                    <div className="m">
+                      <div className="k">12-mo TCO</div>
+                      <div className="v operator">$284k</div>
+                    </div>
+                  </div>
+                  <div className="sc-table">
+                    <div className="row hd">
+                      <span>Use case</span>
+                      <span>Feasibility</span>
+                      <span>ROI</span>
+                      <span>Sovereign fit</span>
+                    </div>
+                    <div className="row">
+                      <span className="nm">AP invoice triage</span>
+                      <span>
+                        <span className="pill h">High</span>
+                      </span>
+                      <span>
+                        <span className="pill h">High</span>
+                      </span>
+                      <span>
+                        <span className="pill fit">On-prem</span>
+                      </span>
+                    </div>
+                    <div className="row">
+                      <span className="nm">Work-order draft</span>
+                      <span>
+                        <span className="pill h">High</span>
+                      </span>
+                      <span>
+                        <span className="pill m">Med</span>
+                      </span>
+                      <span>
+                        <span className="pill fit">On-prem</span>
+                      </span>
+                    </div>
+                    <div className="row">
+                      <span className="nm">Customer voice agent</span>
+                      <span>
+                        <span className="pill m">Med</span>
+                      </span>
+                      <span>
+                        <span className="pill h">High</span>
+                      </span>
+                      <span>
+                        <span className="pill fit warn">Hybrid</span>
+                      </span>
+                    </div>
+                    <div className="row">
+                      <span className="nm">Month-end commentary</span>
+                      <span>
+                        <span className="pill l">Low</span>
+                      </span>
+                      <span>
+                        <span className="pill m">Med</span>
+                      </span>
+                      <span>
+                        <span className="pill fit">On-prem</span>
+                      </span>
+                    </div>
+                  </div>
+                  <div className="sc-foot">
+                    <span>Deliverables · 12-mo roadmap · TCO model · vendor matrix</span>
+                  </div>
+                </div>
+              </aside>
             </div>
 
-            <RotatingChatHero />
-          </div>
-
-          {/* Proof strip — placeholder logo slots until the customer-logo
-              treatment component ships (see /opt/data/firmcraft-docs/customer-logos/README.md). */}
-          <div className="proof">
-            <div className="proof-in">
-              <div className="label">Already running for —</div>
+            <div className="proof">
+              <div className="lab">Engagements live or in flight —</div>
               <div className="logos">
-                <div className="logo-slot">DENTAL PRACTICE</div>
-                <div className="logo-slot">TREE-REMOVAL CO.</div>
-                <div className="logo-slot">SOLO ERP CONSULTANT</div>
-                <div className="logo-slot">PAYMENTS FIRM</div>
-                <div className="logo-slot">+ YOU?</div>
+                <div className="slot">DENTAL PRACTICE</div>
+                <div className="slot">TREE-REMOVAL CO.</div>
+                <div className="slot">SOLO ERP CONSULTANT</div>
+                <div className="slot">PAYMENTS FIRM</div>
+                <div className="slot">+ YOU?</div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* ══ PROBLEM ═════════════════════════════════════════════════════════ */}
-      <section className="warm-section">
-        <div className="warm-wrap">
-          <div className="sec-head">
-            <div>
-              <div className="eyebrow">01 / The honest version</div>
-              <h2>You don&apos;t need <em>another tool.</em> You need someone to actually do the thing.</h2>
-            </div>
-            <div className="right">
-              <p>
-                You&apos;ve already paid for ChatGPT or Copilot. Three people opened
-                it the first week, nobody opened it the second. Meanwhile the
-                contract still doesn&apos;t get sent until you&apos;re back at the
-                truck, the insurance claim still sits in someone&apos;s inbox, and
-                the marketing email still hasn&apos;t gone out — because the person
-                who&apos;d do it has client work.
-              </p>
-            </div>
-          </div>
-
-          <div className="problem-grid">
-            {PROBLEMS.map((p) => (
-              <div key={p.title} className="pcell">
-                <div className="num">{p.num}</div>
-                <h3>{p.title}</h3>
-                <p>{p.body}</p>
+        {/* ============ FUNNEL: Assess → Build → Operate ============ */}
+        <section className="sec" data-screen-label="02 Funnel">
+          <div className="wrap">
+            <div className="sec-head">
+              <div>
+                <div className="eyebrow">01 · The practice</div>
+                <h2>
+                  Three phases. <em className="em-italic">One operator.</em>
+                </h2>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ HOW IT WORKS ════════════════════════════════════════════════════ */}
-      <section className="how-section" id="how">
-        <div className="warm-wrap">
-          <div className="sec-head">
-            <div>
-              <div className="eyebrow">02 / How it works</div>
-              <h2>Four beats. <em>Then it&apos;s running.</em></h2>
-            </div>
-            <div className="right">
               <p>
-                No SOW theatre. No 90-day &ldquo;discovery.&rdquo; We do the intake call
-                Monday, install across your stack by Wednesday, and you&apos;re routing
-                real work to the operator by Friday. There&apos;s a person at Firmcraft
-                you can text the whole way.
+                Most firms sell you one of these and leave you to figure out the other two. We run the whole funnel — and the same engineer who scoped your roadmap is the one who&apos;ll be on the standup six months in.
               </p>
             </div>
-          </div>
 
-          <div className="how-grid">
-            {HOW.map((h) => (
-              <div key={h.title} className="how-cell">
-                <div className="glyph">{h.glyph}</div>
-                <div className="step-n">{h.step}</div>
-                <h4>{h.title}</h4>
-                <p>{h.body}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ══ PRICING ═════════════════════════════════════════════════════════ */}
-      <section className="warm-section" id="pricing">
-        <div className="warm-wrap">
-          <div className="sec-head">
-            <div>
-              <div className="eyebrow">03 / Pricing</div>
-              <h2>One flat rate. <em>No per-seat math.</em></h2>
-            </div>
-            <div className="right">
-              <p>
-                Every plan includes onboarding, all integrations, a monthly AI
-                token allowance, and a real person at Firmcraft you can text.
-                Additional usage is billed at published rates, tracked in real
-                time. The only thing that changes between tiers is how much of
-                your team&apos;s recurring work the operator absorbs.
-              </p>
-            </div>
-          </div>
-
-          <div className="price-grid">
-            {PLANS.map((plan) => (
-              <div
-                key={plan.tier}
-                className={`price-card${plan.feat ? ' feat' : ''}`}
-              >
-                {plan.badge && <span className="badge">{plan.badge}</span>}
-                <div className="tier">{plan.tier}</div>
-                <h3>{plan.headline}</h3>
-                <div className="price-amount">
-                  <span className="big">{plan.price}</span>
-                  <span className="per">/ month</span>
+            <div className="funnel">
+              <article className="stage assess">
+                <div className="num">
+                  <span>Phase 01 · Assess</span>
+                  <span className="ar">→</span>
                 </div>
-                <div className="price-setup">{plan.setup}</div>
-                <p className="sub">{plan.sub}</p>
-                <div className="divider" />
-                <ul className="price-list">
-                  {plan.features.map((f) => (
-                    <li key={f}>{f}</li>
-                  ))}
+                <h3>
+                  AI Readiness <em>Assessment</em>
+                </h3>
+                <p className="desc">
+                  A fixed-fee diagnostic that ends with a roadmap you can actually fund — not a slide deck.
+                </p>
+                <ul>
+                  <li>Stakeholder interviews &amp; system inventory</li>
+                  <li>Use-case prioritization scorecard</li>
+                  <li>Data, integration &amp; sovereignty audit</li>
+                  <li>12-month roadmap + TCO model</li>
                 </ul>
-                <a
-                  className={`btn ${plan.feat ? 'btn-primary' : 'btn-ghost'}`}
-                  href={plan.href}
-                >
-                  {plan.cta} →
-                </a>
-              </div>
-            ))}
-          </div>
+                <div className="foot">
+                  <span className="meta">2–3 weeks · fixed-fee</span>
+                  <a className="go" href="/services#assess">
+                    Details →
+                  </a>
+                </div>
+              </article>
 
-          <p style={{
-            textAlign: 'center',
-            marginTop: '24px',
-            color: 'var(--color-muted)',
-            fontSize: '14px',
-          }}>
-            Bigger than 50 seats or need a full build-out?{' '}
-            <a
-              href="mailto:hello@firmcraft.ai?subject=Enterprise%20Inquiry"
-              style={{
-                color: 'var(--color-signal)',
-                textDecoration: 'underline',
-                textUnderlineOffset: '3px',
-              }}
-            >
-              Let&apos;s talk.
-            </a>
-          </p>
-        </div>
-      </section>
+              <article className="stage build">
+                <div className="num">
+                  <span>Phase 02 · Build</span>
+                  <span className="ar">→</span>
+                </div>
+                <h3>
+                  Implementation <em>packages</em>
+                </h3>
+                <p className="desc">
+                  Four named builds, each anchored on Hermes — our sovereign LLM foundation — and wired through your ERP.
+                </p>
+                <ul>
+                  <li>Foundation — managed Hermes + RAG + gateway</li>
+                  <li>Finance — Vic.ai / Stampli + AP/AR workflows</li>
+                  <li>Operations — n8n agents + asset/maintenance</li>
+                  <li>Voice + Support — Retell / Vapi + helpdesk</li>
+                </ul>
+                <div className="foot">
+                  <span className="meta">6–16 weeks · fixed-fee</span>
+                  <a className="go" href="/services#build">
+                    Details →
+                  </a>
+                </div>
+              </article>
 
-      {/* ══ INDUSTRIES ══════════════════════════════════════════════════════ */}
-      <section className="warm-section" id="industries">
-        <div className="warm-wrap">
-          <div className="sec-head">
-            <div>
-              <div className="eyebrow">04 / Who it&apos;s for</div>
-              <h2>Built for businesses doing <em>the actual work.</em></h2>
+              <article className="stage operate">
+                <div className="num">
+                  <span>Phase 03 · Operate</span>
+                  <span className="ar">●</span>
+                </div>
+                <h3>
+                  Managed AI <em>Operations</em>
+                </h3>
+                <p className="desc">
+                  Eval, regression, prompt tuning, new workflows. The recurring engine that keeps the system honest.
+                </p>
+                <ul>
+                  <li>Essential — model monitoring &amp; tuning</li>
+                  <li>Standard — 1–2 new workflows / quarter</li>
+                  <li>Comprehensive — embedded fractional AI lead</li>
+                  <li>Self-serve Managed Operator plans</li>
+                </ul>
+                <div className="foot">
+                  <span className="meta">Monthly retainer</span>
+                  <a className="go" href="/services#operate">
+                    Details →
+                  </a>
+                </div>
+              </article>
             </div>
-            <div className="right">
+          </div>
+        </section>
+
+        {/* ============ DIFFERENTIATORS ============ */}
+        <section className="sec surface-2" data-screen-label="03 Differentiators">
+          <div className="wrap">
+            <div className="sec-head">
+              <div>
+                <div className="eyebrow">02 · Why Firmcraft</div>
+                <h2>
+                  Four things <em className="em-italic">most AI shops</em> can&apos;t say.
+                </h2>
+              </div>
               <p>
-                Our first four customers — a dental practice, a one-person tree-removal
-                company, a solo ERP consultant, and an eight-person payments firm —
-                have nothing in common operationally. The throughline: recurring work,
-                tools that don&apos;t talk, and nobody on staff to wire it together.
-                If that&apos;s you, we&apos;re a fit.
+                The differentiation isn&apos;t the model. It&apos;s the credential, the posture, the method, and the engagement model. We picked each one deliberately, and we&apos;ll defend each one in a procurement room.
               </p>
             </div>
-          </div>
 
-          <div className="ind-grid">
-            {INDUSTRIES.map((ind) => (
-              <div key={ind.title} className="ind">
-                <div>
-                  <div className="num">{ind.num}</div>
-                  <div className="glyph">{ind.glyph}</div>
+            <div className="diff-grid">
+              <div className="diff">
+                <div className="sigil">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M4 26 L4 9 L16 4 L28 9 L28 26" />
+                    <path d="M10 26 L10 16 L22 16 L22 26" />
+                    <path d="M14 22 L18 22" />
+                  </svg>
                 </div>
                 <div>
-                  <h4>{ind.title}</h4>
-                  <p>{ind.body}</p>
+                  <h3>
+                    CPA + ERP <span className="hi">credential.</span>
+                  </h3>
+                  <p>
+                    Doyle is a CPA and a working Microsoft Business Central consultant. He can debate revenue recognition with your controller, then go build the eval harness.
+                  </p>
+                  <div className="meta">Verosoft · TAG · EAM · Business Central</div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* ══ COMPARE ═════════════════════════════════════════════════════════ */}
-      <section className="compare" id="compare">
-        <div className="warm-wrap">
-          <div className="sec-head">
-            <div>
-              <div className="eyebrow">05 / Comparison</div>
-              <h2>Firmcraft <em>vs.</em> the chatbot you already pay for.</h2>
-            </div>
-            <div className="right">
-              <p>
-                ChatGPT and Copilot are perfectly fine general-purpose tools. They
-                are not operators. Nothing in their pricing is aligned with whether
-                your business actually moves a deliverable forward — and nothing in
-                their setup process gets your team past the awkward first week.
-              </p>
-            </div>
-          </div>
+              <div className="diff warm">
+                <div className="sigil">
+                  <svg viewBox="0 0 32 32">
+                    <rect x="5" y="11" width="22" height="14" rx="2.5" />
+                    <path d="M9 11 V8 a7 7 0 0 1 14 0 v3" />
+                    <circle cx="16" cy="18" r="1.5" fill="currentColor" />
+                  </svg>
+                </div>
+                <div>
+                  <h3>
+                    Sovereign by <span className="hi">default.</span>
+                  </h3>
+                  <p>
+                    Hermes is our open-source LLM foundation. Customer data never leaves the customer&apos;s walls — and we&apos;ll write that into the contract, not the marketing page.
+                  </p>
+                  <div className="meta">Open-source · On-prem / VPC · Audit-logged</div>
+                </div>
+              </div>
 
-          <table className="ctable">
-            <thead>
-              <tr>
-                <th></th>
-                <th className="us">Firmcraft</th>
-                <th>ChatGPT Teams</th>
-                <th>Microsoft Copilot</th>
-              </tr>
-            </thead>
-            <tbody>
-              {COMPARE_ROWS.map((row) => (
-                <tr key={row.feat}>
-                  <td className="featc">{row.feat}</td>
-                  <td className="usc">{row.us}</td>
-                  <td className="themc">{row.chatgpt}</td>
-                  <td className="themc">{row.copilot}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </section>
+              <div className="diff">
+                <div className="sigil">
+                  <svg viewBox="0 0 32 32">
+                    <path d="M4 20 L10 14 L16 18 L22 10 L28 14" />
+                    <circle cx="10" cy="14" r="1.6" fill="currentColor" stroke="none" />
+                    <circle cx="16" cy="18" r="1.6" fill="currentColor" stroke="none" />
+                    <circle cx="22" cy="10" r="1.6" fill="currentColor" stroke="none" />
+                    <path d="M4 26 L28 26" />
+                  </svg>
+                </div>
+                <div>
+                  <h3>
+                    Process-first, <span className="hi">not tool-first.</span>
+                  </h3>
+                  <p>
+                    We map the workflow before we pick the vendor. Half our assessments end with us telling the buyer they don&apos;t need an AI — they need three Power Automate flows and a clean COA.
+                  </p>
+                  <div className="meta">Discovery → fit-gap → configure → train → hypercare</div>
+                </div>
+              </div>
 
-      {/* ══ FINAL CTA ═══════════════════════════════════════════════════════ */}
-      <section className="final" id="cta">
-        <div className="warm-wrap">
-          <div className="final-grid">
-            <div>
-              <div className="eyebrow">06 / Get started</div>
-              <h2>Twenty minutes on a call. <em>Live by next Friday.</em></h2>
-              <p>
-                If we&apos;re a fit, we&apos;ll scope your first workflow on the call
-                and have your operator running by the end of week one. If we&apos;re
-                not a fit — we&apos;ll tell you on the call.
-              </p>
-              <div className="hero-ctas">
-                <a
-                  className="btn btn-primary btn-lg"
-                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
-                >
-                  Book a 20-min call →
-                </a>
-                <Link className="btn btn-ghost btn-lg" href="/get-started">
-                  Start onboarding →
-                </Link>
+              <div className="diff">
+                <div className="sigil">
+                  <svg viewBox="0 0 32 32">
+                    <circle cx="11" cy="13" r="4" />
+                    <path d="M3 26 a8 8 0 0 1 16 0" />
+                    <circle cx="22" cy="11" r="3" />
+                    <path d="M17 22 a6 6 0 0 1 12 0" />
+                  </svg>
+                </div>
+                <div>
+                  <h3>
+                    Fractional <span className="hi">AI head.</span>
+                  </h3>
+                  <p>
+                    Most SMBs don&apos;t need a full-time Director of AI. They need one a few days a month — same person across discovery, build, and steady-state. That&apos;s the engagement model.
+                  </p>
+                  <div className="meta">Retained · Embedded · Continuous roadmap</div>
+                </div>
               </div>
-              <p
-                style={{
-                  marginTop: '14px',
-                  color: 'var(--color-muted)',
-                  fontSize: '13px',
-                  maxWidth: '440px',
-                }}
-              >
-                Already had a call, or rather just fill out the intake yourself? The{' '}
-                <Link
-                  href="/get-started"
-                  style={{
-                    color: 'var(--color-signal)',
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '3px',
-                  }}
-                >
-                  onboarding survey
-                </Link>{' '}
-                takes about ten minutes — chat-style or markdown template, your call.
-              </p>
-            </div>
-            <div className="final-card">
-              <div className="photo">
-                <Image
-                  src="/founder/doyle.jpg"
-                  alt="Doyle Dettro, founder of Firmcraft"
-                  width={520}
-                  height={520}
-                  priority={false}
-                />
-              </div>
-              <div className="quote">
-                &ldquo;The reason small firms fall behind on AI isn&apos;t the
-                tooling — it&apos;s that nobody on staff has the time to wire
-                it up and run it. Firmcraft is that person, on retainer.&rdquo;
-              </div>
-              <div className="attr">— Doyle Dettro, founder</div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+        {/* ============ ICP ============ */}
+        <section className="sec" data-screen-label="04 ICP">
+          <div className="wrap">
+            <div className="icp">
+              <div className="lhs">
+                <div className="eyebrow">03 · Who it&apos;s for</div>
+                <h2>
+                  Mid-market shops <em>running real ERPs</em> — and quietly drowning in spreadsheets.
+                </h2>
+                <p>
+                  If you have a controller, a Director of Ops, and a chart of accounts that hasn&apos;t been cleaned in four years, you&apos;re our customer. If your AI plan today is a paid ChatGPT seat and a hope, we can fix that in a quarter.
+                </p>
+                <p style={{ color: 'var(--color-muted)', fontSize: '14px' }}>
+                  Not a fit: pre-revenue startups, agencies, and anyone whose answer to <i>&ldquo;where does your AR data live?&rdquo;</i> is <i>&ldquo;a Notion page.&rdquo;</i>
+                </p>
+              </div>
+              <div className="icp-spec">
+                <div className="r">
+                  <span className="k">Revenue</span>
+                  <span className="v">
+                    $10M – $500M
+                    <span className="sub">Lower mid-market is our hot zone</span>
+                  </span>
+                </div>
+                <div className="r">
+                  <span className="k">Headcount</span>
+                  <span className="v">50 – 1,500 employees</span>
+                </div>
+                <div className="r">
+                  <span className="k">ERP in place</span>
+                  <span className="v">
+                    BC · NetSuite · Acumatica · Sage
+                    <span className="sub">Or actively replatforming</span>
+                  </span>
+                </div>
+                <div className="r">
+                  <span className="k">Org gravity</span>
+                  <span className="v">
+                    Finance- or operations-led
+                    <span className="sub">CFO, Controller, COO, Director of FP&amp;A</span>
+                  </span>
+                </div>
+                <div className="r">
+                  <span className="k">Pain</span>
+                  <span className="v">Process drag · headcount cap · audit risk</span>
+                </div>
+                <div className="r">
+                  <span className="k">AI maturity</span>
+                  <span className="v">Pilots without scale · or none at all</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ MANAGED AI BLOCK ============ */}
+        <section
+          className="sec"
+          data-screen-label="05 Managed AI"
+          style={{ borderBottom: 'none', paddingBottom: 0 }}
+        >
+          <div className="wrap">
+            <div className="mai-block">
+              <div>
+                <div className="eyebrow">04 · Managed AI</div>
+                <h2>
+                  Every Build engagement ships with <em>a managed Hermes foundation.</em>
+                </h2>
+                <p>
+                  If you&apos;d rather start small — sovereign AI in your team chat, on a flat monthly rate, with the same operator that powers our enterprise builds — Managed AI is the entry point. Spark / Flow / Scale from $399.
+                </p>
+                <div className="links">
+                  <a className="btn primary" href="/managed-ai">
+                    Explore Managed AI <span className="arr">→</span>
+                  </a>
+                  <a className="see" href="/pricing#operator">
+                    See plans · $399–$1,499/mo →
+                  </a>
+                </div>
+              </div>
+              <div className="mai-vis">
+                <div className="head">
+                  <b>operator.run · live</b>
+                  <span className="ok">● running</span>
+                </div>
+                <div className="row">
+                  <span>10:42:14</span>
+                  <span className="nm">
+                    <em>operator.dispatch</em> · ap.triage
+                  </span>
+                  <span className="pill-r ok">218ms</span>
+                </div>
+                <div className="row">
+                  <span>10:42:09</span>
+                  <span className="nm">
+                    <em>workflow</em> · contract.draft
+                  </span>
+                  <span className="pill-r run">running</span>
+                </div>
+                <div className="row">
+                  <span>10:41:51</span>
+                  <span className="nm">
+                    <em>tool</em> · BC.invoice.post
+                  </span>
+                  <span className="pill-r ok">ok</span>
+                </div>
+                <div className="row">
+                  <span>10:41:32</span>
+                  <span className="nm">
+                    <em>review</em> · claim.submit
+                  </span>
+                  <span className="pill-r held">human</span>
+                </div>
+                <div className="row">
+                  <span>10:41:08</span>
+                  <span className="nm">
+                    <em>cron</em> · followup.batch
+                  </span>
+                  <span className="pill-r ok">ok · 14</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ============ FINAL CTA ============ */}
+        <section className="sec" id="book" data-screen-label="06 CTA">
+          <div className="wrap">
+            <div className="final-cta">
+              <div>
+                <div className="eyebrow">05 · Start here</div>
+                <h2>
+                  Twenty minutes on a call. <em>A funded roadmap by month&apos;s end.</em>
+                </h2>
+                <p>
+                  Every engagement starts with the Assessment. Fixed-fee, two to three weeks, scoped on the discovery call. If we don&apos;t think AI fits your business, we&apos;ll tell you on the call — and bill nothing.
+                </p>
+                <div className="hero-ctas">
+                  <a
+                    className="btn primary lg"
+                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                  >
+                    Book the discovery call <span className="arr">→</span>
+                  </a>
+                  <a className="btn ghost lg" href="/methodology">
+                    How we work
+                  </a>
+                </div>
+              </div>
+              <aside className="ass-card">
+                <div className="head">
+                  <div className="ttl">
+                    AI Readiness Assessment{' '}
+                    <span className="sub">The fixed-fee front door to the practice.</span>
+                  </div>
+                  <div className="pr">
+                    <span className="lab">Fixed fee</span>2–3 weeks
+                  </div>
+                </div>
+                <ul>
+                  <li>Stakeholder interviews &amp; system inventory across finance and ops</li>
+                  <li>Use-case prioritization scorecard — feasibility × ROI × sovereign fit</li>
+                  <li>Data audit + integration map for your ERP &amp; surrounding stack</li>
+                  <li>12-month AI roadmap with sequenced TCO model and vendor matrix</li>
+                  <li>Recommended Build package (or &ldquo;don&apos;t build yet, here&apos;s why&rdquo;)</li>
+                </ul>
+                <div className="foot">
+                  <span>Deliverable · funded plan</span>
+                  <span>Refundable against any Build engagement</span>
+                </div>
+              </aside>
+            </div>
+          </div>
+        </section>
+      </main>
 
       <SiteFooter />
     </>

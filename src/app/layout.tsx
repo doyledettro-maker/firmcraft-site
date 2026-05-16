@@ -19,14 +19,14 @@ const serif = Source_Serif_4({
 })
 
 export const metadata: Metadata = {
-  title: 'Firmcraft — A capable second set of hands for your business',
+  title: 'Firmcraft — AI implementation, integration, and enablement for SMBs',
   description:
-    "Firmcraft is an AI operator for small professional-services firms — lives in your team chat, plugs into the tools you already use, runs playbooks on a schedule and on events. Flat monthly rate, up and running in five business days.",
+    'Firmcraft is an AI consulting firm for finance- and operations-driven SMBs running ERPs. Assessment, implementation, managed operations, and fractional advisory. Sovereign by default.',
   metadataBase: new URL('https://firmcraft.ai'),
   openGraph: {
-    title: 'Firmcraft — A capable second set of hands for your business',
+    title: 'Firmcraft — AI implementation, integration, and enablement for SMBs',
     description:
-      'An AI operator for small firms. Lives in your team chat, runs the work, asks before it acts.',
+      'Big consulting firms won\'t touch you. Frontier labs don\'t care. We do the work in between.',
     url: 'https://firmcraft.ai',
     siteName: 'Firmcraft',
     locale: 'en_US',
@@ -34,8 +34,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Firmcraft — A capable second set of hands for your business',
-    description: 'An AI operator for small firms. Running by next Friday.',
+    title: 'Firmcraft — AI implementation, integration, and enablement for SMBs',
+    description:
+      'An AI consulting firm for finance- and operations-driven SMBs. Sovereign by default.',
   },
 }
 

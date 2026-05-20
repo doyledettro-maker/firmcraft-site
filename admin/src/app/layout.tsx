@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs'
 import './globals.css'
 
 const inter = Inter({
@@ -34,7 +35,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
+  const html = (
     <html
       lang="en"
       className={`${inter.variable} ${jakarta.variable} ${sourceSerif.variable}`}
@@ -49,5 +50,14 @@ export default function RootLayout({
       </head>
       <body className="antialiased">{children}</body>
     </html>
+  )
+
+  // Local dev / build without Clerk keys: render without the provider.
+  if (!process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY) return html
+
+  return (
+    <ClerkProvider signInUrl="/login" signInFallbackRedirectUrl="/">
+      {html}
+    </ClerkProvider>
   )
 }

@@ -4,17 +4,15 @@ import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake } from '
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
-import { getClient, mockClients } from '@/lib/mock-clients'
+import { getClient } from '@/lib/db'
 import { getPartnerForClient } from '@/lib/mock-partners'
 import { planMeta } from '@/lib/survey'
 import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
 
-export function generateStaticParams() {
-  return mockClients.map((c) => ({ id: c.id }))
-}
+export const dynamic = 'force-dynamic'
 
-export default function ClientDetailPage({ params }: { params: { id: string } }) {
-  const client = getClient(params.id)
+export default async function ClientDetailPage({ params }: { params: { id: string } }) {
+  const client = await getClient(params.id)
   if (!client) notFound()
 
   const plan = planMeta[client.planTier]

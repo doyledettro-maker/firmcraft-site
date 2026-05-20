@@ -2,13 +2,16 @@ import Link from 'next/link'
 import { ClipboardList } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card } from '@/components/ui'
-import { StatusBadge } from '@/components/StatusBadge'
 import { ClientsTable } from '@/components/ClientsTable'
-import { mockClients } from '@/lib/mock-clients'
+import { getClients } from '@/lib/db'
 
 export const metadata = { title: 'Clients · Firmcraft Admin' }
+export const dynamic = 'force-dynamic'
 
-export default function ClientsPage() {
+export default async function ClientsPage() {
+  const clients = await getClients()
+  const activeCount = clients.filter((c) => c.status === 'active').length
+
   return (
     <AppShell>
       <div className="flex items-end justify-between gap-6 mb-7">
@@ -18,7 +21,7 @@ export default function ClientsPage() {
             All <em className="text-accent italic">tenants</em>
           </h1>
           <p className="text-ink-2 mt-2">
-            {mockClients.length} clients — {mockClients.filter((c) => c.status === 'active').length} active.
+            {clients.length} clients — {activeCount} active.
           </p>
         </div>
         <Link href="/onboarding">
@@ -30,7 +33,7 @@ export default function ClientsPage() {
       </div>
 
       <Card>
-        <ClientsTable clients={mockClients} />
+        <ClientsTable clients={clients} />
       </Card>
     </AppShell>
   )

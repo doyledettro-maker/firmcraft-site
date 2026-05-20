@@ -4,7 +4,7 @@ import { MobileMenu } from './MobileMenu'
 
 const NAV_ITEMS: { label: string; href: string; key: string }[] = [
   { label: 'Services', href: '/services', key: 'services' },
-  { label: 'Managed AI', href: '/managed-ai', key: 'managed-ai' },
+  { label: 'Operator', href: '/managed-ai', key: 'managed-ai' },
   { label: 'Pricing', href: '/pricing', key: 'pricing' },
   { label: 'Methodology', href: '/methodology', key: 'methodology' },
   { label: 'About', href: '/about', key: 'about' },

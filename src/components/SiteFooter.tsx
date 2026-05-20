@@ -17,7 +17,7 @@ const COLUMNS: FooterColumn[] = [
   {
     heading: 'Practice',
     links: [
-      { label: 'Managed AI', href: '/managed-ai' },
+      { label: 'Firmcraft Operator', href: '/managed-ai' },
       { label: 'Pricing', href: '/pricing' },
       { label: 'Methodology', href: '/methodology' },
       { label: 'About', href: '/about' },

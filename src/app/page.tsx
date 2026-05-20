@@ -210,7 +210,7 @@ export default function HomePage() {
                   <li>Essential — model monitoring &amp; tuning</li>
                   <li>Standard — 1–2 new workflows / quarter</li>
                   <li>Comprehensive — embedded fractional AI lead</li>
-                  <li>Self-serve Managed Operator plans</li>
+                  <li>Self-serve Firmcraft Operator plans</li>
                 </ul>
                 <div className="foot">
                   <span className="meta">Monthly retainer</span>
@@ -376,25 +376,29 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ============ MANAGED AI BLOCK ============ */}
+        {/* ============ FIRMCRAFT OPERATOR BLOCK ============ */}
         <section
           className="sec"
-          data-screen-label="05 Managed AI"
+          data-screen-label="05 Firmcraft Operator"
           style={{ borderBottom: 'none', paddingBottom: 0 }}
         >
           <div className="wrap">
             <div className="mai-block">
               <div>
-                <div className="eyebrow">04 · Managed AI</div>
+                <div className="eyebrow">04 · Firmcraft Operator</div>
                 <h2>
-                  Every Build engagement ships with <em>a managed Hermes foundation.</em>
+                  The packaged product, sized by <em>who actually uses it.</em>
                 </h2>
                 <p>
-                  If you&apos;d rather start small — sovereign AI in your team chat, on a flat monthly rate, with the same operator that powers our enterprise builds — Managed AI is the entry point. Spark / Flow / Scale from $399.
+                  If you&apos;d rather start small — sovereign AI in
+                  your team chat, on a flat monthly rate, priced by
+                  how many of your people will work with it —
+                  Firmcraft Operator is the entry point. Solo / Team /
+                  Pro from $399, running by Friday.
                 </p>
                 <div className="links">
                   <a className="btn primary" href="/managed-ai">
-                    Explore Managed AI <span className="arr">→</span>
+                    Explore the Operator <span className="arr">→</span>
                   </a>
                   <a className="see" href="/pricing#operator">
                     See plans · $399–$1,499/mo →

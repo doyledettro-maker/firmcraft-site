@@ -12,7 +12,7 @@ import {
 export const metadata: Metadata = {
   title: 'Pricing — Firmcraft',
   description:
-    'Fixed-fee where it matters, transparent where it does not. Assessment + Build packages + Operate retainers + Spark/Flow/Scale operator plans.',
+    'Two tracks. Firmcraft Operator (Solo/Team/Pro plans from $399/mo) and Firmcraft Services (Assessment + Build + Operate). Pick the one that fits.',
 }
 
 export default function PricingPage() {
@@ -26,41 +26,192 @@ export default function PricingPage() {
           <div className="wrap">
             <div className="eyebrow">Pricing</div>
             <h1>
-              Fixed-fee where it matters.{' '}
-              <em>Transparent where it doesn&apos;t.</em>
+              Two tracks. <em>One firm.</em>
             </h1>
             <p className="lede">
-              Four ways to engage Firmcraft — the Assessment as the front door,
-              four named Build packages, three Operate retainers, and self-serve
-              Managed Operator plans. Ranges are real; we publish them because
-              we&apos;ve validated them. The only soft number on this page is
-              the out-of-scope hourly rate.
+              <strong>Firmcraft Operator</strong> is the packaged
+              product — three plans, sized by how many of your people
+              will work with the agent day-to-day, running by Friday.{' '}
+              <strong>Firmcraft Services</strong> is the consulting
+              practice for everything bigger — ERP integrations,
+              workflow design, multi-department rollouts, anything
+              past ten people.
             </p>
             <div className="price-toc">
-              <a href="#assess">→ Assessment</a>
-              <a href="#build">→ Build packages</a>
-              <a href="#operate">→ Operate retainers</a>
-              <a href="#operator">→ Managed Operator</a>
+              <a href="#operator">→ Firmcraft Operator</a>
+              <a href="#services">→ Firmcraft Services</a>
+              <a href="#assess">↳ Assessment</a>
+              <a href="#build">↳ Build packages</a>
+              <a href="#operate">↳ Operate retainers</a>
               <a href="#extras">→ Hourly &amp; hosting</a>
               <a href="#faq">→ FAQ</a>
             </div>
           </div>
         </section>
 
+        {/* TRACK 1: OPERATOR (self-serve) */}
+        <section
+          className="sec track-operator"
+          id="operator"
+          data-screen-label="02 Operator plans"
+        >
+          <div className="wrap">
+            <div className="track-marker">
+              <span className="dot"></span>
+              <span className="lab">Track 01 · The product</span>
+            </div>
+            <div className="block-head">
+              <div className="eyebrow eb-operator">Firmcraft Operator</div>
+              <h2>
+                Priced by the number of people{' '}
+                <em>actually using the agent.</em>
+              </h2>
+              <p>
+                Not seats. Not features. The operator lives in your
+                team chat, plugs into the tools you already pay for,
+                and runs by Friday. Onboarding, all integrations, a
+                monthly AI token allowance, and a real person at
+                Firmcraft you can text are included on every plan.{' '}
+                <a
+                  href="/managed-ai"
+                  style={{
+                    color: 'var(--color-operator)',
+                    textDecoration: 'underline',
+                    textUnderlineOffset: '3px',
+                  }}
+                >
+                  Full Operator page →
+                </a>
+              </p>
+            </div>
+
+            <div className="plans-row">
+              {OPERATOR_PLANS.map((plan) => (
+                <article
+                  className={`plan-mini${plan.featured ? ' feat' : ''}`}
+                  key={plan.tier}
+                >
+                  {plan.featured && plan.badge && (
+                    <span className="feat-badge">{plan.badge}</span>
+                  )}
+                  <div className="tier">{plan.tier}</div>
+                  <div className="team-size">
+                    <span className="ts-label">Team size</span>
+                    <span className="ts-value">{plan.teamSize}</span>
+                  </div>
+                  <h3>{plan.headline}</h3>
+                  <div className="price">
+                    <span className="big">{plan.price}</span>
+                    <span className="per">/ mo</span>
+                  </div>
+                  <div className="setup">{plan.setup}</div>
+                  <p className="sub">{plan.subShort}</p>
+                </article>
+              ))}
+            </div>
+
+            <blockquote className="partner-line">
+              <span className="pq-mark">“</span>
+              It&apos;s like hiring someone for the office —
+              contracts, emails, scheduling — except it&apos;s $399 a
+              month and it&apos;s running by Friday.
+              <span className="pq-mark close">”</span>
+            </blockquote>
+          </div>
+        </section>
+
+        {/* BRIDGE: from Operator to Services */}
+        <section
+          className="sec bridge"
+          id="services"
+          data-screen-label="03 Bridge to Services"
+        >
+          <div className="wrap">
+            <div className="bridge-card">
+              <div className="bridge-lhs">
+                <div className="track-marker">
+                  <span className="dot signal"></span>
+                  <span className="lab">Track 02 · The practice</span>
+                </div>
+                <h2>
+                  Beyond 10 people?{' '}
+                  <em>That&apos;s a Services engagement.</em>
+                </h2>
+                <p>
+                  Once an Operator is touching whole departments — or
+                  the conversation is &ldquo;we need the agent inside
+                  our ERP, with eval, observability, and a roadmap&rdquo;
+                  — pricing shifts from a sticker to a scoped
+                  engagement. Same engineer, same Hermes substrate, no
+                  rebuild when you graduate.
+                </p>
+                <ul className="bridge-list">
+                  <li>
+                    <span className="k">Operator for 11+ people</span>
+                    <span className="v">Workflow design, role policies, multi-team rollouts</span>
+                  </li>
+                  <li>
+                    <span className="k">ERP-deep automation</span>
+                    <span className="v">BC, NetSuite, Acumatica — wired through, audit-logged</span>
+                  </li>
+                  <li>
+                    <span className="k">AI transformation</span>
+                    <span className="v">Custom dev, voice agents, n8n orchestration</span>
+                  </li>
+                </ul>
+              </div>
+              <aside className="bridge-rhs">
+                <div className="bridge-flow">
+                  <div className="step">
+                    <span className="n">01</span>
+                    <span className="t">Discovery call</span>
+                    <span className="s">20 min · free</span>
+                  </div>
+                  <div className="arr">→</div>
+                  <div className="step">
+                    <span className="n">02</span>
+                    <span className="t">Assessment</span>
+                    <span className="s">2–3 wks · fixed-fee</span>
+                  </div>
+                  <div className="arr">→</div>
+                  <div className="step">
+                    <span className="n">03</span>
+                    <span className="t">Scoped Build</span>
+                    <span className="s">6–16 wks · fixed-fee</span>
+                  </div>
+                  <div className="arr">→</div>
+                  <div className="step">
+                    <span className="n">04</span>
+                    <span className="t">Operate</span>
+                    <span className="s">Monthly retainer</span>
+                  </div>
+                </div>
+                <a
+                  className="btn primary lg"
+                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                >
+                  Book the discovery call <span className="arr">→</span>
+                </a>
+              </aside>
+            </div>
+          </div>
+        </section>
+
         {/* ASSESSMENT */}
-        <section className="sec" id="assess" data-screen-label="02 Assessment">
+        <section className="sec surface-2" id="assess" data-screen-label="04 Assessment">
           <div className="wrap">
             <div className="block-head">
-              <div className="eyebrow">01 · The front door</div>
+              <div className="eyebrow">Services · 01 · The front door</div>
               <h2>
                 AI Readiness Assessment.{' '}
                 <em>Fixed-fee, refundable, scoped on the call.</em>
               </h2>
               <p>
-                Every Firmcraft engagement starts here. Two to three weeks, a
-                CPA-credentialed AI engineer embedded with your finance and ops
-                leads, and a board-ready plan at the end. Refundable against
-                any subsequent Build engagement.
+                Every Services engagement starts here. Two to three
+                weeks, a CPA-credentialed AI engineer embedded with
+                your finance and ops leads, and a board-ready plan at
+                the end. Refundable against any subsequent Build
+                engagement.
               </p>
             </div>
 
@@ -147,10 +298,10 @@ export default function PricingPage() {
         </section>
 
         {/* BUILD */}
-        <section className="sec surface-2" id="build" data-screen-label="03 Build">
+        <section className="sec" id="build" data-screen-label="05 Build">
           <div className="wrap">
             <div className="block-head">
-              <div className="eyebrow">02 · Implementation</div>
+              <div className="eyebrow">Services · 02 · Implementation</div>
               <h2>
                 Four named Build packages.{' '}
                 <em>Fixed-fee, fixed-scope, dated delivery.</em>
@@ -206,10 +357,10 @@ export default function PricingPage() {
         </section>
 
         {/* OPERATE */}
-        <section className="sec" id="operate" data-screen-label="04 Operate">
+        <section className="sec surface-2" id="operate" data-screen-label="06 Operate">
           <div className="wrap">
             <div className="block-head">
-              <div className="eyebrow">03 · Ongoing operations</div>
+              <div className="eyebrow">Services · 03 · Ongoing operations</div>
               <h2>
                 Managed AI retainers.{' '}
                 <em>Eval, regression, new workflows, embedded depth.</em>
@@ -250,65 +401,11 @@ export default function PricingPage() {
           </div>
         </section>
 
-        {/* OPERATOR (self-serve) */}
-        <section
-          className="sec surface-2"
-          id="operator"
-          data-screen-label="05 Operator plans"
-        >
-          <div className="wrap">
-            <div className="block-head">
-              <div className="eyebrow">04 · Self-serve · Managed Operator</div>
-              <h2>
-                Spark, Flow, Scale.{' '}
-                <em>Sovereign AI in your team chat from $399/mo.</em>
-              </h2>
-              <p>
-                The self-serve front door. Every Build engagement ships with a
-                managed Hermes foundation by default — these plans are for
-                businesses that want to start with sovereign AI in their chat
-                and grow from there.{' '}
-                <a
-                  href="/managed-ai"
-                  style={{
-                    color: 'var(--color-signal)',
-                    textDecoration: 'underline',
-                    textUnderlineOffset: '3px',
-                  }}
-                >
-                  Full Managed AI page →
-                </a>
-              </p>
-            </div>
-
-            <div className="plans-row">
-              {OPERATOR_PLANS.map((plan) => (
-                <article
-                  className={`plan-mini${plan.featured ? ' feat' : ''}`}
-                  key={plan.tier}
-                >
-                  {plan.featured && plan.badge && (
-                    <span className="feat-badge">{plan.badge}</span>
-                  )}
-                  <div className="tier">{plan.tier}</div>
-                  <h3>{plan.headline}</h3>
-                  <div className="price">
-                    <span className="big">{plan.price}</span>
-                    <span className="per">/ mo</span>
-                  </div>
-                  <div className="setup">{plan.setup}</div>
-                  <p className="sub">{plan.subShort}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* EXTRAS / line items */}
-        <section className="sec" id="extras" data-screen-label="06 Extras">
+        <section className="sec" id="extras" data-screen-label="07 Extras">
           <div className="wrap">
             <div className="block-head">
-              <div className="eyebrow">05 · Line items</div>
+              <div className="eyebrow">Line items</div>
               <h2>
                 The numbers most firms hide. <em>We just publish them.</em>
               </h2>
@@ -352,15 +449,35 @@ export default function PricingPage() {
         </section>
 
         {/* FAQ */}
-        <section className="sec surface-2" id="faq" data-screen-label="07 FAQ">
+        <section className="sec surface-2" id="faq" data-screen-label="08 FAQ">
           <div className="wrap">
             <div className="block-head">
-              <div className="eyebrow">06 · Pricing FAQ</div>
+              <div className="eyebrow">Pricing FAQ</div>
               <h2>
                 What buyers ask <em>before they sign.</em>
               </h2>
             </div>
             <div className="faq">
+              <div className="q">
+                <h4>Which track is right for me?</h4>
+                <p>
+                  If 10 or fewer people will work with the agent and
+                  you&apos;re happy with the standard workflows, the
+                  Operator is exactly the product you want. If you
+                  need ERP-deep integration, a multi-department
+                  rollout, or anything custom, that&apos;s a Services
+                  engagement.
+                </p>
+              </div>
+              <div className="q">
+                <h4>Can I start on Operator and graduate to Services?</h4>
+                <p>
+                  Yes — that&apos;s the bridge. Every Operator client
+                  can move into a scoped Build whenever the workflows
+                  get heavy enough to need it. Same engineer, same
+                  Hermes substrate, no rebuild.
+                </p>
+              </div>
               <div className="q">
                 <h4>Why fixed-fee instead of T&amp;M?</h4>
                 <p>
@@ -386,29 +503,12 @@ export default function PricingPage() {
                 </p>
               </div>
               <div className="q">
-                <h4>Is Hermes hosting required?</h4>
-                <p>
-                  For sovereign builds, yes — that&apos;s the whole point. For
-                  Voice + Support, some components can sit on frontier models
-                  with explicit data-handling terms. The Assessment maps which
-                  goes where.
-                </p>
-              </div>
-              <div className="q">
-                <h4>What about a Proof-of-Concept?</h4>
-                <p>
-                  The Assessment is the PoC. It&apos;s faster, cheaper, and
-                  produces a board-ready plan instead of a demo that dies in a
-                  quarter. We don&apos;t do free PoCs.
-                </p>
-              </div>
-              <div className="q">
                 <h4>Do you have minimums?</h4>
                 <p>
-                  The Build minimum is Foundation ($25k). Managed AI starts at
-                  $399/mo. The Assessment is the only &ldquo;small&rdquo;
-                  entry point — and it pays for itself when it kills the wrong
-                  project.
+                  The Build minimum is Foundation ($25k). The Operator
+                  starts at $399/mo. The Assessment is the only
+                  &ldquo;small&rdquo; Services entry point — and it
+                  pays for itself when it kills the wrong project.
                 </p>
               </div>
             </div>
@@ -419,7 +519,7 @@ export default function PricingPage() {
         <section
           className="sec"
           style={{ borderBottom: 'none' }}
-          data-screen-label="08 CTA"
+          data-screen-label="09 CTA"
         >
           <div className="wrap">
             <div
@@ -446,7 +546,7 @@ export default function PricingPage() {
                     maxWidth: '560px',
                   }}
                 >
-                  A twenty-minute call, a quoted Assessment,{' '}
+                  A twenty-minute call, the right track,{' '}
                   <em
                     style={{
                       fontFamily: 'var(--font-display)',
@@ -456,7 +556,7 @@ export default function PricingPage() {
                       letterSpacing: '-.018em',
                     }}
                   >
-                    and a funded plan in three weeks.
+                    and a price on the table.
                   </em>
                 </h2>
                 <p

@@ -6,9 +6,9 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { OPERATOR_PLANS } from '@/lib/pricing'
 
 export const metadata: Metadata = {
-  title: 'Managed AI — Firmcraft',
+  title: 'Firmcraft Operator — Sovereign AI in your team chat',
   description:
-    'Sovereign AI in your chat. Spark, Flow, and Scale plans. Lives in Slack or Teams, plugged into the tools you already use.',
+    'Firmcraft Operator. Solo, Team, and Pro plans from $399/mo, priced by who actually uses the agent. Lives in Slack or Teams, plugged into the tools you already use.',
 }
 
 export default function ManagedAIPage() {
@@ -17,18 +17,23 @@ export default function ManagedAIPage() {
       <SiteHeader current="managed-ai" />
       <main>
         {/* HERO */}
-        <section className="mai-hero" data-screen-label="01 Managed AI hero">
+        <section className="mai-hero" data-screen-label="01 Firmcraft Operator hero">
           <div className="wrap">
             <div className="mai-hero-grid">
               <div>
                 <span className="status-pill operator">
-                  <span className="dot"></span> The entry point. The recurring engine.
+                  <span className="dot"></span> Firmcraft Operator · the product
                 </span>
                 <h1>
                   A capable second set of hands. <em>Running by next Friday.</em>
                 </h1>
                 <p className="lede">
-                  Managed AI is the self-serve front door to the Firmcraft practice — a sovereign Hermes operator that lives in your team chat, plugs into the tools you already pay for, and quietly does the recurring work. Flat monthly rate. Up and running in five business days.
+                  Firmcraft Operator is the packaged product — a
+                  sovereign Hermes agent that lives in your team chat,
+                  plugs into the tools you already pay for, and
+                  quietly does the recurring work. Three plans, priced
+                  by how many of your people will actually use it. Up
+                  and running in five business days.
                 </p>
                 <div
                   className="hero-ctas"
@@ -228,13 +233,18 @@ export default function ManagedAIPage() {
           <div className="wrap">
             <div className="sec-head">
               <div>
-                <div className="eyebrow">03 · Plans</div>
+                <div className="eyebrow eb-operator">03 · Plans</div>
                 <h2>
-                  One flat rate. <em className="em-italic">No per-seat math.</em>
+                  Sized by <em className="em-italic">who actually uses it.</em>
                 </h2>
               </div>
               <p>
-                Every Build engagement includes a managed Hermes foundation. The operator plans below are for businesses that want to start with sovereign AI in their chat and grow from there. Onboarding, all integrations, a monthly AI token allowance, and a real person at Firmcraft you can text are included on every plan.
+                Pricing is based on how many of your team will work
+                with the agent day-to-day — not seats, not features.
+                Three flat plans cover 1 to 10 people. Onboarding, all
+                integrations, a monthly AI token allowance, and a real
+                person at Firmcraft you can text are included on every
+                plan.
               </p>
             </div>
 
@@ -245,6 +255,10 @@ export default function ManagedAIPage() {
                   <article key={plan.tier} className={`plan${isFeat ? ' feat' : ''}`}>
                     {plan.badge ? <span className="badge">{plan.badge}</span> : null}
                     <div className="tier">{plan.tier}</div>
+                    <div className="team-size">
+                      <span className="ts-label">Team size</span>
+                      <span className="ts-value">{plan.teamSize}</span>
+                    </div>
                     <h3>{plan.headline}</h3>
                     <div className="price">
                       <span className="big">{plan.price}</span>
@@ -267,26 +281,25 @@ export default function ManagedAIPage() {
               })}
             </div>
 
+            <blockquote className="partner-line">
+              <span className="pq-mark">“</span>
+              It&apos;s like hiring someone for the office — contracts,
+              emails, scheduling — except it&apos;s $399 a month and
+              it&apos;s running by Friday.
+              <span className="pq-mark close">”</span>
+            </blockquote>
+
             <p
               style={{
                 textAlign: 'center',
-                marginTop: 32,
+                marginTop: 28,
                 color: 'var(--color-muted)',
                 fontSize: 14,
               }}
             >
-              Bigger than 50 seats or need a full build-out?{' '}
-              <Link
-                href="/services#build"
-                style={{
-                  color: 'var(--color-signal)',
-                  textDecoration: 'underline',
-                  textUnderlineOffset: 3,
-                }}
-              >
-                Look at the Build packages
-              </Link>{' '}
-              — every Build engagement ships a managed Hermes foundation by default.
+              Count only the people who&apos;ll actually use the
+              agent. A 200-person company with 4 people on the
+              Operator is a Team plan — not a custom engagement.
             </p>
           </div>
         </section>
@@ -318,7 +331,7 @@ export default function ManagedAIPage() {
               <tbody>
                 <tr>
                   <td className="featc">What you&apos;re buying</td>
-                  <td className="usc">A managed operator + a real person at Firmcraft</td>
+                  <td className="usc">A managed agent + a real person at Firmcraft</td>
                   <td className="themc">A per-seat chatbot license</td>
                   <td className="themc">A per-seat chatbot license</td>
                 </tr>
@@ -415,37 +428,80 @@ export default function ManagedAIPage() {
           </div>
         </section>
 
-        {/* BRIDGE BACK */}
-        <section className="sec" style={{ borderBottom: 'none' }} data-screen-label="07 Bridge">
+        {/* SERVICES BRIDGE */}
+        <section
+          className="sec services-bridge"
+          style={{ borderBottom: 'none' }}
+          data-screen-label="07 Services bridge"
+        >
           <div className="wrap">
-            <div className="sec-head">
-              <div>
-                <div className="eyebrow">06 · Ready for more?</div>
+            <div className="srv-card">
+              <div className="srv-lhs">
+                <div className="srv-marker">
+                  <span className="dot"></span>
+                  <span className="lab">Track 02 · The practice</span>
+                </div>
                 <h2>
-                  Managed AI is the front door. <em className="em-italic">The funnel keeps going.</em>
+                  Beyond ten people?{' '}
+                  <em className="em-italic">
+                    That&apos;s a Firmcraft Services engagement.
+                  </em>
                 </h2>
+                <p>
+                  Once the Operator is touching whole departments — or
+                  you need it wired through your ERP, with eval,
+                  observability, and a roadmap — pricing shifts from a
+                  sticker to a scoped engagement. The Services
+                  practice runs that work end-to-end: discovery,
+                  fixed-fee Assessment, scoped Build, and ongoing
+                  Operate. Same engineer, same Hermes substrate, no
+                  rebuild when you graduate.
+                </p>
+                <div className="srv-ctas">
+                  <Link className="btn primary" href="/pricing#services">
+                    See the Services track <span className="arr">→</span>
+                  </Link>
+                  <a
+                    className="btn ghost"
+                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                  >
+                    Book the discovery call
+                  </a>
+                </div>
               </div>
-              <p>
-                When the operator becomes load-bearing — multi-department, integrated with your ERP, requiring eval and observability — that&apos;s when Managed AI graduates to a Build engagement. Same engineer, same Hermes substrate, no rebuild.
-              </p>
-            </div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
-              <Link className="pcard" href="/services" style={{ textDecoration: 'none' }}>
-                <div className="pn">
-                  <span>Up the stack</span>
-                  <span className="cat">Services →</span>
+              <aside className="srv-flow">
+                <div className="srv-flow-head">
+                  How the Services funnel runs
                 </div>
-                <h3>Implementation packages</h3>
-                <p>Foundation, Finance, Operations, Voice + Support. Fixed-fee builds anchored on Hermes.</p>
-              </Link>
-              <Link className="pcard" href="/pricing" style={{ textDecoration: 'none' }}>
-                <div className="pn">
-                  <span>Full picture</span>
-                  <span className="cat">Pricing →</span>
+                <div className="step">
+                  <span className="n">01</span>
+                  <div>
+                    <div className="t">Discovery</div>
+                    <div className="s">20-min call · free</div>
+                  </div>
                 </div>
-                <h3>Unified pricing</h3>
-                <p>Assessment, Build packages, Operate retainers, and Managed Operator plans — one page.</p>
-              </Link>
+                <div className="step">
+                  <span className="n">02</span>
+                  <div>
+                    <div className="t">AI Readiness Assessment</div>
+                    <div className="s">2–3 weeks · $4.5k–$8.5k fixed</div>
+                  </div>
+                </div>
+                <div className="step">
+                  <span className="n">03</span>
+                  <div>
+                    <div className="t">Scoped Build</div>
+                    <div className="s">6–16 weeks · fixed-fee</div>
+                  </div>
+                </div>
+                <div className="step">
+                  <span className="n">04</span>
+                  <div>
+                    <div className="t">Operate retainer</div>
+                    <div className="s">Monthly · eval + new workflows</div>
+                  </div>
+                </div>
+              </aside>
             </div>
           </div>
         </section>

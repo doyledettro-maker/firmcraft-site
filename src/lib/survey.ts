@@ -261,11 +261,11 @@ export const SURVEY_SECTIONS: SurveySection[] = [
       {
         id: 'plan',
         prompt:
-          'Which plan tier feels right — Spark ($399/mo), Flow ($799/mo), or Scale ($1,499/mo)?',
+          'Which Firmcraft Operator plan feels right — Solo (1–2 people, $399/mo), Team (3–5, $799/mo), or Pro (6–10, $1,499/mo)?',
         guidance:
-          "It's fine to say 'not sure yet' or describe what you'd want covered.",
+          "Count only the people who'll actually work with the agent day-to-day. It's fine to say 'not sure yet' or describe what you'd want covered.",
         placeholder:
-          "e.g. probably Flow — we'd want claims + intake + a couple internal workflows, more than one team using it.",
+          "e.g. probably Team — we'd want claims + intake + a couple internal workflows, four of us would be in it.",
       },
       {
         id: 'timeline',

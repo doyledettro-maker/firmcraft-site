@@ -1,4 +1,4 @@
-import type { SurveyData } from './survey'
+import type { PlanTier, SurveyData } from './survey'
 
 export type ClientStatus = 'onboarding' | 'active' | 'suspended'
 
@@ -7,7 +7,7 @@ export type Client = {
   name: string
   industry: string
   status: ClientStatus
-  planTier: 'spark' | 'flow' | 'forge'
+  planTier: PlanTier
   contactName: string
   contactEmail: string
   createdAt: string // ISO

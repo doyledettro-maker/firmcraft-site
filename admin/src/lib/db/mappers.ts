@@ -21,13 +21,19 @@ export type ClientRow = {
 }
 
 const PLAN_DEFAULTS: Record<PlanTier, { seats: number; aiCallsLimit: number }> = {
-  spark: { seats: 8, aiCallsLimit: 8000 },
-  flow: { seats: 15, aiCallsLimit: 25000 },
+  // Operator rebrand
+  solo:  { seats: 2,  aiCallsLimit: 8000 },
+  team:  { seats: 5,  aiCallsLimit: 25000 },
+  pro:   { seats: 10, aiCallsLimit: 80000 },
+  pilot: { seats: 3,  aiCallsLimit: 4000 },
+  // Legacy (kept for backfill safety; new clients never get these)
+  spark: { seats: 8,  aiCallsLimit: 8000 },
+  flow:  { seats: 15, aiCallsLimit: 25000 },
   forge: { seats: 60, aiCallsLimit: 80000 },
 }
 
 export function rowToClient(row: ClientRow): Client {
-  const planDefaults = PLAN_DEFAULTS[row.plan_tier] ?? PLAN_DEFAULTS.spark
+  const planDefaults = PLAN_DEFAULTS[row.plan_tier] ?? PLAN_DEFAULTS.solo
   return {
     id: row.id,
     name: row.name,

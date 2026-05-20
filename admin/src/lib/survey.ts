@@ -9,7 +9,19 @@ export type ApiAvailability = 'all' | 'some' | 'none' | 'unknown'
 export type SsoProvider = 'okta' | 'google' | 'azure-ad' | 'auth0' | 'none' | 'other'
 export type DataResidency = 'us' | 'eu' | 'apac' | 'no-pref'
 export type TrainingPreference = 'self-serve' | 'guided' | 'white-glove'
-export type PlanTier = 'spark' | 'flow' | 'forge'
+/**
+ * Plan tiers — Operator rebrand (Solo / Team / Pro) + Pilot for cost-recovery
+ * customers. Legacy spark/flow/forge are kept for backfill safety; new clients
+ * should never get those.
+ */
+export type PlanTier =
+  | 'solo'
+  | 'team'
+  | 'pro'
+  | 'pilot'
+  | 'spark'
+  | 'flow'
+  | 'forge'
 export type ImplementationTimeline = 'asap' | '30-days' | '60-days' | '90-days' | 'flexible'
 export type ContactMethod = 'email' | 'slack' | 'phone'
 export type UpdateFrequency = 'daily' | 'weekly' | 'biweekly' | 'monthly'
@@ -145,7 +157,13 @@ export const sectionTitles = [
 ] as const
 
 export const planMeta: Record<PlanTier, { name: string; price: string; tagline: string }> = {
-  spark: { name: 'Spark', price: '$399/mo', tagline: 'Single team, core integrations.' },
-  flow: { name: 'Flow', price: '$799/mo', tagline: 'Multi-team, all integrations, custom playbooks.' },
-  forge: { name: 'Forge', price: '$1,499/mo', tagline: 'Enterprise — SSO, dedicated tenant, custom SLAs.' },
+  // Operator rebrand (current naming).
+  solo:  { name: 'Operator Solo',  price: '$399/mo',   tagline: '1-2 person firms — core managed AI.' },
+  team:  { name: 'Operator Team',  price: '$799/mo',   tagline: '3-5 person firms — multi-team, all integrations.' },
+  pro:   { name: 'Operator Pro',   price: '$1,499/mo', tagline: '6-10 person firms — priority response, quarterly review.' },
+  pilot: { name: 'Operator Pilot', price: '$50/mo',    tagline: 'Cost-recovery pilot — case-study / promo participation.' },
+  // Legacy aliases — kept so old records render. Do not use for new clients.
+  spark: { name: 'Spark (legacy)', price: '$399/mo',   tagline: 'Single team, core integrations.' },
+  flow:  { name: 'Flow (legacy)',  price: '$799/mo',   tagline: 'Multi-team, all integrations, custom playbooks.' },
+  forge: { name: 'Forge (legacy)', price: '$1,499/mo', tagline: 'Enterprise — SSO, dedicated tenant, custom SLAs.' },
 }

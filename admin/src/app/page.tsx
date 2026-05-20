@@ -3,17 +3,20 @@ import { ArrowRight, ClipboardList, Users, DollarSign, Activity } from 'lucide-r
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
-import { mockClients } from '@/lib/mock-clients'
+import { getClients } from '@/lib/db'
 import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
 
-export default function DashboardPage() {
-  const total = mockClients.length
-  const active = mockClients.filter((c) => c.status === 'active').length
-  const onboarding = mockClients.filter((c) => c.status === 'onboarding').length
-  const mrr = mockClients.filter((c) => c.status === 'active').reduce((s, c) => s + c.monthlyRevenue, 0)
-  const totalUsers = mockClients.reduce((s, c) => s + c.usage.activeUsers, 0)
-  const totalCalls = mockClients.reduce((s, c) => s + c.usage.aiCallsThisMonth, 0)
-  const recent = [...mockClients].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)).slice(0, 5)
+export const dynamic = 'force-dynamic'
+
+export default async function DashboardPage() {
+  const clients = await getClients()
+  const total = clients.length
+  const active = clients.filter((c) => c.status === 'active').length
+  const onboarding = clients.filter((c) => c.status === 'onboarding').length
+  const mrr = clients.filter((c) => c.status === 'active').reduce((s, c) => s + c.monthlyRevenue, 0)
+  const totalUsers = clients.reduce((s, c) => s + c.usage.activeUsers, 0)
+  const totalCalls = clients.reduce((s, c) => s + c.usage.aiCallsThisMonth, 0)
+  const recent = [...clients].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)).slice(0, 5)
 
   return (
     <AppShell>

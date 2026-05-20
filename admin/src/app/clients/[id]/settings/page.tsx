@@ -4,14 +4,12 @@ import { ChevronLeft } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody, FieldGroup, Field, Input, Label, Select } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
-import { getClient, mockClients } from '@/lib/mock-clients'
+import { getClient } from '@/lib/db'
 
-export function generateStaticParams() {
-  return mockClients.map((c) => ({ id: c.id }))
-}
+export const dynamic = 'force-dynamic'
 
-export default function ClientSettingsPage({ params }: { params: { id: string } }) {
-  const client = getClient(params.id)
+export default async function ClientSettingsPage({ params }: { params: { id: string } }) {
+  const client = await getClient(params.id)
   if (!client) notFound()
 
   return (

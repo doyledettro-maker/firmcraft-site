@@ -72,18 +72,32 @@
 .op-tier ul li{font-size:13.5px;color:var(--color-ink-2);line-height:1.5;display:flex;gap:9px}
 .op-tier ul li::before{content:"";flex:0 0 5px;width:5px;height:5px;border-radius:50%;background:var(--color-signal);margin-top:8px}
 
-/* ===== Operator plans (Spark/Flow/Scale) ===== */
-.plans-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.plan-mini{background:var(--color-paper);border:1px solid var(--color-line);border-radius:14px;padding:26px;display:flex;flex-direction:column;gap:12px;position:relative}
+/* ===== Operator plans (Spark/Flow/Scale/Custom) ===== */
+.plans-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.plan-mini{background:var(--color-paper);border:1px solid var(--color-line);border-radius:14px;padding:22px 20px;display:flex;flex-direction:column;gap:10px;position:relative}
 .plan-mini.feat{border-color:rgba(44,107,240,.4)}
+.plan-mini.custom{background:var(--color-surface-2);border-style:dashed;border-color:var(--color-line-strong)}
 .plan-mini .feat-badge{position:absolute;top:-10px;left:20px;background:var(--color-operator);color:#fff;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;padding:5px 9px;border-radius:5px;font-weight:500;text-transform:uppercase}
 .plan-mini .tier{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;color:var(--color-muted);text-transform:uppercase;font-weight:500}
-.plan-mini h3{margin:0;font-weight:600;font-size:19px;letter-spacing:-.012em}
+.plan-mini .team-size{display:flex;flex-direction:column;gap:2px;padding:10px 12px;background:var(--color-signal-soft);border-radius:8px;margin:2px 0 2px}
+.plan-mini.custom .team-size{background:rgba(0,0,0,0.04)}
+.plan-mini .team-size .ts-label{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.14em;color:var(--color-signal-ink);text-transform:uppercase;font-weight:500}
+.plan-mini.custom .team-size .ts-label{color:var(--color-muted)}
+.plan-mini .team-size .ts-value{font-weight:600;font-size:17px;letter-spacing:-.014em;color:var(--color-ink);line-height:1.15;font-feature-settings:"tnum"}
+.plan-mini h3{margin:0;font-weight:600;font-size:18px;letter-spacing:-.012em}
 .plan-mini .price{display:flex;align-items:baseline;gap:6px}
-.plan-mini .price .big{font-weight:600;font-size:32px;letter-spacing:-.024em;color:var(--color-ink);line-height:1;font-feature-settings:"tnum"}
+.plan-mini .price .big{font-weight:600;font-size:30px;letter-spacing:-.024em;color:var(--color-ink);line-height:1;font-feature-settings:"tnum"}
+.plan-mini.custom .price .big{font-size:24px}
 .plan-mini .price .per{color:var(--color-muted);font-size:13px}
 .plan-mini .setup{font-family:var(--font-mono);font-size:11px;color:var(--color-muted);letter-spacing:.04em}
-.plan-mini p.sub{margin:0;font-size:13px;line-height:1.5;color:var(--color-ink-2)}
+.plan-mini p.sub{margin:0;font-size:12.5px;line-height:1.5;color:var(--color-ink-2)}
+.plan-mini .custom-cta{margin-top:auto;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;color:var(--color-signal);text-transform:uppercase;font-weight:500;text-decoration:none;padding-top:8px;display:inline-flex;align-items:center;gap:4px}
+.plan-mini .custom-cta:hover{text-decoration:underline;text-underline-offset:3px}
+.plan-mini .custom-cta .arr{font-family:var(--font-mono)}
+
+.plans-note{margin:28px auto 0;max-width:780px;text-align:center;font-size:13.5px;line-height:1.6;color:var(--color-ink-2)}
+.plans-note strong{color:var(--color-ink);font-weight:600}
+.plans-note .il{color:var(--color-signal);text-decoration:underline;text-underline-offset:3px}
 
 /* ===== Extras / fine print ===== */
 .extras-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -99,6 +113,9 @@
 .faq .q h4{margin:0 0 8px;font-weight:600;font-size:15px;letter-spacing:-.008em}
 .faq .q p{margin:0;font-size:13.5px;line-height:1.6;color:var(--color-ink-2)}
 
+@media (max-width:1180px){
+  .plans-row{grid-template-columns:repeat(2,1fr)}
+}
 @media (max-width:980px){
   .ass-grid,.faq{grid-template-columns:1fr}
   .op-tiers,.plans-row,.extras-grid{grid-template-columns:1fr}

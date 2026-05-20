@@ -271,23 +271,64 @@
 /* ====== PRICING ====== */
 .plans {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
 }
 .plan {
   background: var(--color-paper);
   border: 1px solid var(--color-line);
   border-radius: 18px;
-  padding: 32px 30px;
+  padding: 26px 22px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
   position: relative;
 }
 .plan.feat {
   border-color: rgba(44, 107, 240, .4);
   box-shadow: 0 0 0 1px rgba(44, 107, 240, .08);
   background: linear-gradient(180deg, var(--color-paper) 0%, #FAFBFE 100%);
+}
+.plan.custom {
+  background: var(--color-surface-2);
+  border-style: dashed;
+  border-color: var(--color-line-strong);
+}
+.plan .team-size {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 13px;
+  background: var(--color-signal-soft);
+  border-radius: 9px;
+  margin: 2px 0 0;
+}
+.plan.custom .team-size {
+  background: rgba(0, 0, 0, 0.04);
+}
+.plan .team-size .ts-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--color-signal-ink);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.plan.custom .team-size .ts-label { color: var(--color-muted); }
+.plan .team-size .ts-value {
+  font-weight: 600;
+  font-size: 19px;
+  letter-spacing: -.016em;
+  color: var(--color-ink);
+  line-height: 1.15;
+  font-feature-settings: "tnum";
+}
+.plan p.team-fit {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--color-muted);
+  font-style: italic;
 }
 .plan .badge {
   position: absolute;
@@ -314,22 +355,24 @@
 .plan h3 {
   margin: 2px 0 0;
   font-weight: 600;
-  font-size: 22px;
+  font-size: 20px;
   letter-spacing: -.018em;
 }
 .plan .price {
   display: flex;
   align-items: baseline;
   gap: 6px;
-  margin-top: 8px;
+  margin-top: 6px;
 }
 .plan .price .big {
   font-weight: 600;
-  font-size: 38px;
+  font-size: 32px;
   letter-spacing: -.026em;
   color: var(--color-ink);
   line-height: 1;
+  font-feature-settings: "tnum";
 }
+.plan.custom .price .big { font-size: 24px; }
 .plan .price .per { color: var(--color-muted); font-size: 14px; }
 .plan .setup {
   font-family: var(--font-mono);
@@ -463,6 +506,9 @@
 .proof .logos { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
 .proof .slot { background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 10px; padding: 18px 14px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; color: var(--color-muted); text-transform: uppercase; min-height: 62px; text-align: center; line-height: 1.3; }
 
+@media (max-width: 1180px) {
+  .plans { grid-template-columns: repeat(2, 1fr); }
+}
 @media (max-width: 980px) {
   .mai-hero-grid,
   .prob-grid,

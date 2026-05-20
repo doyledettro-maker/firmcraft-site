@@ -260,14 +260,15 @@ export default function PricingPage() {
             <div className="block-head">
               <div className="eyebrow">04 · Self-serve · Managed Operator</div>
               <h2>
-                Spark, Flow, Scale.{' '}
-                <em>Sovereign AI in your team chat from $399/mo.</em>
+                Priced by the number of people{' '}
+                <em>actually using the agent.</em>
               </h2>
               <p>
-                The self-serve front door. Every Build engagement ships with a
-                managed Hermes foundation by default — these plans are for
-                businesses that want to start with sovereign AI in their chat
-                and grow from there.{' '}
+                Not seats. Not features. The operator lives in your team chat,
+                and we size the plan to how many of your people will work with
+                it day-to-day. Onboarding, all integrations, monthly AI token
+                allowance, and a real person at Firmcraft you can text are
+                included on every plan.{' '}
                 <a
                   href="/managed-ai"
                   style={{
@@ -284,23 +285,50 @@ export default function PricingPage() {
             <div className="plans-row">
               {OPERATOR_PLANS.map((plan) => (
                 <article
-                  className={`plan-mini${plan.featured ? ' feat' : ''}`}
+                  className={`plan-mini${plan.featured ? ' feat' : ''}${plan.custom ? ' custom' : ''}`}
                   key={plan.tier}
                 >
                   {plan.featured && plan.badge && (
                     <span className="feat-badge">{plan.badge}</span>
                   )}
                   <div className="tier">{plan.tier}</div>
+                  <div className="team-size">
+                    <span className="ts-label">Team size</span>
+                    <span className="ts-value">{plan.teamSize}</span>
+                  </div>
                   <h3>{plan.headline}</h3>
                   <div className="price">
                     <span className="big">{plan.price}</span>
-                    <span className="per">/ mo</span>
+                    {!plan.custom && <span className="per">/ mo</span>}
                   </div>
                   <div className="setup">{plan.setup}</div>
                   <p className="sub">{plan.subShort}</p>
+                  {plan.custom && (
+                    <a className="custom-cta" href={plan.href}>
+                      {plan.cta} <span className="arr">→</span>
+                    </a>
+                  )}
                 </article>
               ))}
             </div>
+
+            <p className="plans-note">
+              The right plan is whichever one matches the headcount actually
+              touching the agent — not your whole company. A 200-person shop
+              with 4 people running the operator is a{' '}
+              <strong>Flow</strong> plan, not a{' '}
+              <strong>Custom</strong> engagement. The Custom track is for when
+              the operator becomes load-bearing across departments — that&apos;s
+              an{' '}
+              <a href="#assess" className="il">
+                AI Readiness Assessment
+              </a>{' '}
+              and a fixed-fee{' '}
+              <a href="#build" className="il">
+                Build engagement
+              </a>
+              , not a monthly plan.
+            </p>
           </div>
         </section>
 

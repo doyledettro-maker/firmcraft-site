@@ -3,8 +3,12 @@
 // in design/site-expansion/.
 
 export type OperatorPlan = {
-  tier: 'Spark' | 'Flow' | 'Scale'
+  tier: 'Spark' | 'Flow' | 'Scale' | 'Custom'
   headline: string
+  /** Plain-English team-size for the plan — the primary sizing input. */
+  teamSize: string
+  /** Short sales tagline pairing the team-size with the typical buyer. */
+  teamFit: string
   price: string
   setup: string
   /** Long-form copy used on /managed-ai. */
@@ -16,17 +20,22 @@ export type OperatorPlan = {
   href: string
   featured?: boolean
   badge?: string
+  /** True for the custom/larger-engagement card — renders without $/mo + setup row. */
+  custom?: boolean
 }
 
 export const OPERATOR_PLANS: OperatorPlan[] = [
   {
     tier: 'Spark',
     headline: 'Get started',
+    teamSize: '1–2 people',
+    teamFit: 'Solo owner-operators and one-person shops.',
     price: '$399',
     setup: '+ $1,000 one-time setup',
     sub: 'A single workflow, fully run for you. For one-person shops and businesses validating the model.',
-    subShort: 'One core workflow. 3 integrations. $100/mo token allowance. Monthly review.',
+    subShort: '1–2 people on the agent. One core workflow, 3 integrations, $100/mo token allowance, monthly review.',
     features: [
+      '1–2 people using the agent day-to-day',
       'One core workflow (e.g. contracts, intake, claims)',
       '$100/mo AI token allowance included',
       'Up to 3 tool integrations',
@@ -39,12 +48,15 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
   {
     tier: 'Flow',
     headline: 'Run the business',
+    teamSize: '3–5 people',
+    teamFit: 'Small teams running real recurring work.',
     price: '$799',
     setup: '+ $2,000 one-time setup',
     sub: 'The operator handles the recurring work eating your calendar — claims, contracts, follow-up, marketing.',
     subShort:
-      'Up to 8 workflows. Unlimited integrations. $200/mo tokens. Weekly review + SOC 2 controls.',
+      '3–5 people on the agent. Up to 8 workflows, unlimited integrations, $200/mo tokens, weekly review.',
     features: [
+      '3–5 people using the agent day-to-day',
       'Up to 8 active workflows',
       '$200/mo AI token allowance included',
       'Unlimited integrations',
@@ -60,12 +72,15 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
   {
     tier: 'Scale',
     headline: 'Operate at scale',
+    teamSize: '6–10 people',
+    teamFit: 'Multi-role teams, multiple locations, or growing crews.',
     price: '$1,499',
     setup: '+ $3,500 one-time setup',
     sub: 'Multi-team, multi-location businesses. Custom builds, dedicated lead, priority queue.',
     subShort:
-      'Unlimited workflows. Multi-team / multi-location. Dedicated ops lead. Priority queue + SLA.',
+      '6–10 people on the agent. Unlimited workflows, dedicated ops lead, priority queue + SLA.',
     features: [
+      '6–10 people using the agent day-to-day',
       'Unlimited workflows',
       '$400/mo AI token allowance included',
       'Multi-team workspaces & role policies',
@@ -75,6 +90,28 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
     ],
     cta: 'Talk to us',
     href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Scale',
+  },
+  {
+    tier: 'Custom',
+    headline: 'Bigger than ten?',
+    teamSize: '11+ people',
+    teamFit: 'Whole departments, multi-entity rollouts, ERP-deep workflows.',
+    price: 'Custom',
+    setup: 'Starts with the Assessment',
+    sub: 'Larger teams need scoped onboarding, multi-department workflows, and real ERP integration. Pricing is set by the AI Readiness Assessment, not a sticker price.',
+    subShort:
+      '11+ people. Begins with a fixed-fee Assessment ($4.5k–$8.5k), then a scoped Build engagement.',
+    features: [
+      '11+ people using the agent day-to-day',
+      'Multi-department or multi-location rollout',
+      'Embedded into your ERP (BC, NetSuite, Acumatica)',
+      'Custom workflows scoped on the Assessment',
+      'Dedicated implementation lead + roadmap',
+      'Fixed-fee Build engagement, not a monthly plan',
+    ],
+    cta: 'Book the Assessment',
+    href: '/pricing#assess',
+    custom: true,
   },
 ]
 

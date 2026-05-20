@@ -230,25 +230,39 @@ export default function ManagedAIPage() {
               <div>
                 <div className="eyebrow">03 · Plans</div>
                 <h2>
-                  One flat rate. <em className="em-italic">No per-seat math.</em>
+                  Sized by <em className="em-italic">who actually uses it.</em>
                 </h2>
               </div>
               <p>
-                Every Build engagement includes a managed Hermes foundation. The operator plans below are for businesses that want to start with sovereign AI in their chat and grow from there. Onboarding, all integrations, a monthly AI token allowance, and a real person at Firmcraft you can text are included on every plan.
+                Pricing is based on how many of your team will work with the
+                operator day-to-day — not seats, not features. Three flat plans
+                cover 1 to 10 people; bigger than that and we switch to the
+                Assessment + Build track. Onboarding, all integrations, a
+                monthly AI token allowance, and a real person at Firmcraft you
+                can text are included on every plan.
               </p>
             </div>
 
             <div className="plans">
               {OPERATOR_PLANS.map((plan) => {
                 const isFeat = !!plan.featured
+                const isCustom = !!plan.custom
                 return (
-                  <article key={plan.tier} className={`plan${isFeat ? ' feat' : ''}`}>
+                  <article
+                    key={plan.tier}
+                    className={`plan${isFeat ? ' feat' : ''}${isCustom ? ' custom' : ''}`}
+                  >
                     {plan.badge ? <span className="badge">{plan.badge}</span> : null}
                     <div className="tier">{plan.tier}</div>
+                    <div className="team-size">
+                      <span className="ts-label">Team size</span>
+                      <span className="ts-value">{plan.teamSize}</span>
+                    </div>
+                    <p className="team-fit">{plan.teamFit}</p>
                     <h3>{plan.headline}</h3>
                     <div className="price">
                       <span className="big">{plan.price}</span>
-                      <span className="per">/ month</span>
+                      {!isCustom && <span className="per">/ month</span>}
                     </div>
                     <div className="setup">{plan.setup}</div>
                     <p className="sub">{plan.sub}</p>
@@ -258,7 +272,10 @@ export default function ManagedAIPage() {
                       ))}
                     </ul>
                     <div className="cta">
-                      <a className={`btn ${isFeat ? 'primary' : 'ghost'}`} href={plan.href}>
+                      <a
+                        className={`btn ${isFeat ? 'primary' : 'ghost'}`}
+                        href={plan.href}
+                      >
                         {plan.cta} <span className="arr">→</span>
                       </a>
                     </div>
@@ -275,7 +292,9 @@ export default function ManagedAIPage() {
                 fontSize: 14,
               }}
             >
-              Bigger than 50 seats or need a full build-out?{' '}
+              Counting only the people who will actually use the agent.
+              A 200-person company with 4 people on the operator is a Flow plan
+              — not a Custom engagement.{' '}
               <Link
                 href="/services#build"
                 style={{
@@ -284,9 +303,9 @@ export default function ManagedAIPage() {
                   textUnderlineOffset: 3,
                 }}
               >
-                Look at the Build packages
+                See the Build track
               </Link>{' '}
-              — every Build engagement ships a managed Hermes foundation by default.
+              for whole-department rollouts.
             </p>
           </div>
         </section>

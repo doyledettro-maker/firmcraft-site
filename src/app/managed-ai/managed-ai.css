@@ -285,15 +285,15 @@
   position: relative;
 }
 .plan.feat {
-  border-color: rgba(44, 107, 240, .4);
-  box-shadow: 0 0 0 1px rgba(44, 107, 240, .08);
-  background: linear-gradient(180deg, var(--color-paper) 0%, #FAFBFE 100%);
+  border-color: rgba(251, 124, 80, .5);
+  box-shadow: 0 0 0 1px rgba(251, 124, 80, .08);
+  background: linear-gradient(180deg, var(--color-paper) 0%, #FFFAF6 100%);
 }
 .plan .badge {
   position: absolute;
   top: -10px;
   left: 24px;
-  background: var(--color-signal);
+  background: var(--color-operator);
   color: #fff;
   font-family: var(--font-mono);
   font-size: 10px;
@@ -307,15 +307,44 @@
   font-family: var(--font-mono);
   font-size: 10.5px;
   letter-spacing: .14em;
-  color: var(--color-muted);
+  color: var(--color-operator-ink);
   text-transform: uppercase;
   font-weight: 500;
 }
-.plan h3 {
+/* Warm eyebrow inside the Operator product pages */
+.eyebrow.eb-operator { color: var(--color-operator-ink); }
+.plan ul li::before { background: var(--color-operator); }
+.plan .team-size {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 11px 13px;
+  background: var(--color-operator-soft);
+  border-radius: 9px;
   margin: 2px 0 0;
+}
+.plan .team-size .ts-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--color-operator-ink);
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.plan .team-size .ts-value {
   font-weight: 600;
-  font-size: 22px;
-  letter-spacing: -.018em;
+  font-size: 19px;
+  letter-spacing: -.016em;
+  color: var(--color-ink);
+  line-height: 1.15;
+  font-feature-settings: "tnum";
+}
+.plan h3 {
+  margin: 4px 0 0;
+  font-weight: 600;
+  font-size: 18px;
+  letter-spacing: -.014em;
+  line-height: 1.3;
 }
 .plan .price {
   display: flex;
@@ -463,6 +492,152 @@
 .proof .logos { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; }
 .proof .slot { background: var(--color-paper); border: 1px solid var(--color-line); border-radius: 10px; padding: 18px 14px; display: flex; align-items: center; justify-content: center; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: .1em; color: var(--color-muted); text-transform: uppercase; min-height: 62px; text-align: center; line-height: 1.3; }
 
+/* ===== Sales-partner one-liner (shared style with /pricing) ===== */
+.partner-line {
+  margin: 36px auto 0;
+  max-width: 780px;
+  text-align: center;
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(18px, 2.1vw, 24px);
+  letter-spacing: -.012em;
+  line-height: 1.4;
+  color: var(--color-ink);
+  position: relative;
+  padding: 0 24px;
+}
+.partner-line .pq-mark {
+  font-family: var(--font-display);
+  font-style: italic;
+  color: var(--color-operator);
+  font-size: 1.4em;
+  line-height: 0;
+  margin: 0 2px;
+  vertical-align: -0.15em;
+}
+.partner-line .pq-mark.close { margin-left: 4px; }
+
+/* ===== Services bridge — separate practice section ===== */
+.services-bridge { background: var(--color-surface-2); padding-bottom: 96px; }
+.srv-card {
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 22px;
+  padding: 48px 52px;
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 56px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+.srv-card::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--color-signal);
+}
+.srv-marker {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px 6px 10px;
+  background: var(--color-signal-soft);
+  border-radius: 999px;
+  margin-bottom: 18px;
+}
+.srv-marker .dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--color-signal);
+  box-shadow: 0 0 0 3px rgba(44,107,240,.18);
+}
+.srv-marker .lab {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--color-signal-ink);
+}
+.srv-lhs h2 {
+  font-weight: 600;
+  font-size: clamp(26px, 3vw, 36px);
+  letter-spacing: -.022em;
+  line-height: 1.08;
+  margin: 0 0 14px;
+  text-wrap: balance;
+}
+.srv-lhs h2 em {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 500;
+  color: var(--color-signal);
+  letter-spacing: -.016em;
+}
+.srv-lhs p {
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--color-ink-2);
+  margin: 0 0 22px;
+  max-width: 560px;
+}
+.srv-ctas { display: flex; gap: 12px; flex-wrap: wrap; }
+
+.srv-flow {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  padding: 22px 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.srv-flow-head {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .14em;
+  color: var(--color-muted);
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.srv-flow .step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px;
+  align-items: center;
+  background: var(--color-paper);
+  border: 1px solid var(--color-line);
+  border-radius: 10px;
+  padding: 12px 14px;
+}
+.srv-flow .step .n {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--color-signal);
+  letter-spacing: .08em;
+  font-weight: 600;
+}
+.srv-flow .step .t {
+  font-weight: 600;
+  font-size: 14px;
+  letter-spacing: -.008em;
+  color: var(--color-ink);
+}
+.srv-flow .step .s {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--color-muted);
+  letter-spacing: .04em;
+  margin-top: 2px;
+}
+
+@media (max-width: 1100px) {
+  .srv-card { grid-template-columns: 1fr; gap: 32px; padding: 36px; }
+}
 @media (max-width: 980px) {
   .mai-hero-grid,
   .prob-grid,

@@ -36,7 +36,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Industry, headcount, locations, website — anything that paints the picture.',
         placeholder:
-          'e.g. Acme Dental — single-location family practice in Springfield, IL. 12 staff (4 dentists, 6 assistants, 2 front office). acmedental.com.',
+          'e.g. Acme Industrial — regional industrial supply distributor in Springfield, IL. 24 staff (10 sales, 6 warehouse, 5 ops/purchasing, 3 admin). acmeindustrial.com.',
       },
       {
         id: 'primaryContact',
@@ -44,7 +44,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "Name, role, email, phone, and anything else useful — like 'don't email after 5pm Central'.",
         placeholder:
-          'Jane Partner, Managing Partner, jane@acme.com, 217-555-0102. Best reached on Slack during the day.',
+          'Jane Owner, President, jane@acme.com, 217-555-0102. Best reached on Slack during the day.',
       },
       {
         id: 'context',
@@ -70,7 +70,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'CRM, project management, communication, accounting, calendar, document storage, e-sign, helpdesk, niche industry tools — whatever you actually open.',
         placeholder:
-          'e.g. Microsoft Teams, M365, QuickBooks Online, Clio, Google Drive, DocuSign, Calendly. Plus a custom intake form on Typeform.',
+          'e.g. Microsoft Teams, M365, QuickBooks Online, HubSpot CRM, Google Drive, DocuSign, Calendly. Plus a custom intake form on Typeform.',
       },
       {
         id: 'aiTools',
@@ -78,7 +78,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'ChatGPT Teams, Copilot, Claude, custom GPTs, Perplexity, anything else. Honest is fine — "we paid for it but nobody opens it" is a useful answer.',
         placeholder:
-          'e.g. ChatGPT Teams ($25/user). Two partners use it for drafting; nobody else has logged in.',
+          'e.g. ChatGPT Teams ($25/user). A couple of managers use it for drafting; nobody else has logged in.',
       },
       {
         id: 'hosting',
@@ -101,7 +101,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Comfortable with APIs and integrations, or more "just send me an email"? It is fine to be the latter.',
         placeholder:
-          'e.g. one partner is technical (built our website). The rest aren\'t — they\'ll need everything to work via Teams or email.',
+          'e.g. one of the owners is technical (built our website). The rest aren\'t — they\'ll need everything to work via Teams or email.',
       },
       {
         id: 'data',
@@ -109,7 +109,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Spreadsheets and folders? CRM with discipline? A real warehouse with pipelines? Or a mix that depends on who you ask?',
         placeholder:
-          'e.g. client data is in Clio, billing is in QuickBooks, the rest lives in shared Google Drive folders we keep meaning to clean up.',
+          'e.g. customer data is in HubSpot, billing is in QuickBooks, the rest lives in shared Google Drive folders we keep meaning to clean up.',
       },
       {
         id: 'sentiment',
@@ -117,7 +117,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Excited, skeptical, indifferent, openly resistant — all fair. Knowing this lets us calibrate the rollout.',
         placeholder:
-          'e.g. partners are curious. Two associates are excited. Most of the staff thinks it\'s overhyped and would rather not talk about it.',
+          'e.g. the owners are curious. A couple of managers are excited. Most of the staff thinks it\'s overhyped and would rather not talk about it.',
       },
     ],
   },
@@ -134,7 +134,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Be as specific as you can — the more concrete the workflow, the faster we ship it.',
         placeholder:
-          'e.g. drafting and submitting insurance reimbursement claims. The biller spends ~12 hours/week on this and we are always behind.',
+          'e.g. turning inbound RFQs into draft quotes. Sales spends ~12 hours/week retyping requests into our system and we are always behind.',
       },
       {
         id: 'roughRanking',
@@ -142,14 +142,14 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "List a few in priority order. They don't have to be fully scoped yet — even a name and one sentence is plenty.",
         placeholder:
-          '1) Insurance claim drafting\n2) Patient intake follow-up\n3) Weekly KPI digest for the partners\n4) Triage of after-hours email\n5) Drafting client engagement letters',
+          '1) RFQ-to-quote drafting\n2) Order status follow-up with customers\n3) Weekly KPI digest for leadership\n4) Triage of after-hours email\n5) Drafting vendor / supplier responses',
       },
       {
         id: 'successHeadline',
         prompt: "What's the headline you'd want to share six months in?",
         guidance: 'In your own words — what does success look like?',
         placeholder:
-          'e.g. "We took a week of administrative work off every clinician\'s plate and we are not behind on claims for the first time in three years."',
+          'e.g. "We took a week of administrative work off every manager\'s plate and we are not behind on quotes for the first time in three years."',
       },
     ],
   },
@@ -164,9 +164,9 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         id: 'systems',
         prompt: 'Which systems should the operator plug into on day one?',
         guidance:
-          'Be specific — Salesforce, Gmail, Drive, your specific PMS or PMS vendor, your accounting platform, etc.',
+          'Be specific — Salesforce, Gmail, Drive, your specific ERP or CRM vendor, your accounting platform, etc.',
         placeholder:
-          'e.g. Microsoft 365 (mail + calendar + SharePoint), Clio Manage, QuickBooks Online, DocuSign, our internal claims portal (Carestream).',
+          'e.g. Microsoft 365 (mail + calendar + SharePoint), HubSpot CRM, QuickBooks Online, DocuSign, our internal ERP (NetSuite).',
       },
       {
         id: 'apiQuirks',
@@ -175,7 +175,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "Don't worry if you don't know — but a heads-up saves a week.",
         placeholder:
-          "e.g. our PMS doesn't have a real API; we'll need to scrape PDFs out of email. Carestream requires a vendor-issued cert for any integration.",
+          "e.g. our ERP doesn't have a real API for the workflows we care about; we'll likely need to scrape PDFs out of email. NetSuite customization requires a vendor consultant.",
       },
       {
         id: 'context',
@@ -200,13 +200,13 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'HIPAA, SOC 2, GDPR, CCPA, PCI-DSS, ITAR, FedRAMP, state bar / attorney privilege, anything else.',
         placeholder:
-          'e.g. HIPAA (we handle PHI for dental claims). No SOC 2 yet — clients have not asked.',
+          'e.g. nothing formal yet. A few enterprise customers have asked about SOC 2 but no one has required it.',
       },
       {
         id: 'residency',
         prompt: 'Where does your data need to live?',
         guidance: 'US only? EU only? No preference? Anything that matters to you or your clients.',
-        placeholder: 'e.g. US only. No cross-border transfers — our BAAs require it.',
+        placeholder: 'e.g. US only. A handful of customers are starting to ask whether their data stays in the US.',
       },
       {
         id: 'controls',
@@ -231,7 +231,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
           'Roughly how many people will use this, and what departments / roles are they in?',
         guidance: 'Approximate is fine. We just need to scope seats and access.',
         placeholder:
-          'e.g. 12 total — 4 dentists, 6 assistants, 2 front office. Plus me (admin / managing partner).',
+          'e.g. 24 total — 10 sales, 6 warehouse, 5 ops/purchasing, 3 admin. Plus me (operations lead / admin).',
       },
       {
         id: 'admins',
@@ -239,7 +239,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "The people who can approve config changes, invite users, and manage billing. Names + emails.",
         placeholder:
-          'e.g. Jane Partner (jane@acme.com) and David Owner (david@acme.com). Both can approve anything.',
+          'e.g. Jane Owner (jane@acme.com) and David Operations (david@acme.com). Both can approve anything.',
       },
       {
         id: 'training',
@@ -247,7 +247,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Self-serve docs, a guided live session, white-glove department-by-department rollouts — or some mix.',
         placeholder:
-          'e.g. a 1-hour live session with the whole team, then department-specific follow-ups for clinical vs. front office.',
+          'e.g. a 1-hour live session with the whole team, then department-specific follow-ups for sales vs. warehouse vs. ops.',
       },
     ],
   },
@@ -262,15 +262,15 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         id: 'timeline',
         prompt: 'When do you want to be live?',
         guidance: 'ASAP, in 30 days, in 90 days, flexible — whatever maps to your reality.',
-        placeholder: "e.g. ASAP. We'd love claims drafting running before end of month.",
+        placeholder: "e.g. ASAP. We'd love our first workflow automated before end of month.",
       },
       {
         id: 'metrics',
         prompt: 'How will you measure success?',
         guidance:
-          'Hours saved, response time, deals closed, tickets handled, claims submitted on time — be specific if you can.',
+          'Hours saved, response time, deals closed, tickets handled, orders processed on time — be specific if you can.',
         placeholder:
-          "e.g. cut claims-to-submission time from 5 days to same-day. Get our front office's after-hours email volume to zero.",
+          "e.g. cut RFQ-to-quote time from 3 days to same-day. Get our shared inbox response time under an hour.",
       },
     ],
   },
@@ -301,7 +301,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "Names + how to reach them, especially after hours. Helpful to list a primary and a backup.",
         placeholder:
-          "e.g. primary: Jane Partner (cell 217-555-0102). Backup: David Owner (cell 217-555-0144). Don't text after 9pm Central unless it's urgent.",
+          "e.g. primary: Jane Owner (cell 217-555-0102). Backup: David Operations (cell 217-555-0144). Don't text after 9pm Central unless it's urgent.",
       },
     ],
   },
@@ -318,21 +318,21 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Air-gapped network? Translation languages? Specific industry quirks? Things that have to work day one.',
         placeholder:
-          'e.g. all PHI must stay on-prem, no third-party model training on our data, ever.',
+          'e.g. customer pricing data is highly sensitive — no third-party model training on our data, ever.',
       },
       {
         id: 'mustHave',
         prompt: 'What features would make this a clear win in the first 30 days?',
         guidance: 'The two or three things we absolutely need to land for you to feel good.',
         placeholder:
-          'e.g. (1) automated claims drafting, (2) weekly partner KPI digest, (3) inbox triage that surfaces anything from a referring dentist.',
+          'e.g. (1) automated RFQ-to-quote drafting, (2) weekly leadership KPI digest, (3) inbox triage that surfaces anything from a top-20 customer.',
       },
       {
         id: 'dealBreakers',
         prompt: "Any deal-breakers? What would cause you to walk away?",
         guidance: "We'd rather know now than later.",
         placeholder:
-          "e.g. any model training on our data; long-term contracts; per-seat pricing; vendors that don't sign a BAA.",
+          "e.g. any model training on our data; long-term contracts; per-seat pricing; vendors without a US-only data residency option.",
       },
     ],
   },

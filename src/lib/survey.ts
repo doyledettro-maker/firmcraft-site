@@ -259,15 +259,6 @@ export const SURVEY_SECTIONS: SurveySection[] = [
       'Flat monthly rate. You can change tiers any time — we will prorate.',
     questions: [
       {
-        id: 'plan',
-        prompt:
-          'Which Firmcraft Operator plan feels right — Solo (1–2 people, $399/mo), Team (3–5, $799/mo), or Pro (6–10, $1,499/mo)?',
-        guidance:
-          "Count only the people who'll actually work with the agent day-to-day. It's fine to say 'not sure yet' or describe what you'd want covered.",
-        placeholder:
-          "e.g. probably Team — we'd want claims + intake + a couple internal workflows, four of us would be in it.",
-      },
-      {
         id: 'timeline',
         prompt: 'When do you want to be live?',
         guidance: 'ASAP, in 30 days, in 90 days, flexible — whatever maps to your reality.',

@@ -7,6 +7,8 @@
  * Submitted answers are keyed by `${section.id}.${question.id}`.
  */
 
+export type SurveyScope = 'company' | 'individual'
+
 export type SurveyQuestion = {
   id: string
   prompt: string
@@ -19,6 +21,7 @@ export type SurveySection = {
   number: number
   title: string
   intro: string
+  scope: SurveyScope
   questions: SurveyQuestion[]
 }
 
@@ -29,6 +32,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Company profile',
     intro:
       "Let's start with the basics — who you are, what you do, and who we'll work with most.",
+    scope: 'company',
     questions: [
       {
         id: 'overview',
@@ -62,6 +66,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Tech stack',
     intro:
       'We integrate with the tools you already pay for. Tell us what is actually in play.',
+    scope: 'company',
     questions: [
       {
         id: 'tools',
@@ -94,6 +99,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'AI readiness',
     intro:
       "No wrong answers — this just tells us how much hand-holding to plan for.",
+    scope: 'company',
     questions: [
       {
         id: 'technicalMaturity',
@@ -127,6 +133,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Use case priorities',
     intro:
       "What should the operator focus on first? Top of the list is what we'll wire up in week one.",
+    scope: 'individual',
     questions: [
       {
         id: 'firstWin',
@@ -159,6 +166,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Integrations',
     intro:
       'We support most modern SaaS APIs. Tell us what to connect on day one.',
+    scope: 'company',
     questions: [
       {
         id: 'systems',
@@ -193,6 +201,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Security & compliance',
     intro:
       'Honest answers help us configure the right tenant — encryption, audit logs, data residency.',
+    scope: 'company',
     questions: [
       {
         id: 'regulations',
@@ -224,6 +233,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     number: 7,
     title: 'Team & access',
     intro: 'Seats, departments, and who runs the show on your side.',
+    scope: 'individual',
     questions: [
       {
         id: 'users',
@@ -257,6 +267,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Budget & timeline',
     intro:
       'Flat monthly rate. You can change tiers any time — we will prorate.',
+    scope: 'individual',
     questions: [
       {
         id: 'timeline',
@@ -279,6 +290,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     number: 9,
     title: 'Communication preferences',
     intro: 'During onboarding and ongoing operations.',
+    scope: 'individual',
     questions: [
       {
         id: 'channel',
@@ -311,6 +323,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     title: 'Custom requirements',
     intro:
       "Edge cases, hard requirements, things you wish other vendors had asked. Be candid — this is where we calibrate.",
+    scope: 'individual',
     questions: [
       {
         id: 'specialNeeds',
@@ -356,4 +369,12 @@ export function answerKey(sectionId: string, questionId: string): string {
 
 export function totalQuestions(): number {
   return SURVEY_SECTIONS.reduce((n, s) => n + s.questions.length, 0)
+}
+
+export function sectionsByScope(scope: SurveyScope): SurveySection[] {
+  return SURVEY_SECTIONS.filter((s) => s.scope === scope)
+}
+
+export function getSection(sectionId: string): SurveySection | undefined {
+  return SURVEY_SECTIONS.find((s) => s.id === sectionId)
 }

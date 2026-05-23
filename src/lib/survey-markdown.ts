@@ -6,14 +6,20 @@
  * section headings and `### Question` sub-headings, and gather everything
  * underneath each sub-heading as the answer (until the next heading).
  *
- * v2 format adds a YAML front-matter block and an "instructions for AI agents"
- * header so external AI agents can fill the file out without other context. The
- * parser is intentionally lenient and handles both v1 and v2 files without any
- * version sniffing — YAML lines and `#`-prefixed comment lines don't collide
- * with `##` / `###` headings.
+ * v3 splits templates by scope: one file for company-wide sections (shared
+ * across everyone from a company) and one for individual sections (filled out
+ * per respondent). The YAML front-matter carries `scope: company|individual`
+ * so an uploaded file is unambiguous; if missing, we infer from which sections
+ * the file actually contains answers for.
  */
 
-import { SURVEY_SECTIONS, type SurveyAnswers, answerKey, totalQuestions } from './survey'
+import {
+  SURVEY_SECTIONS,
+  answerKey,
+  type SurveyAnswers,
+  type SurveyScope,
+  type SurveySection,
+} from './survey'
 
 const PLACEHOLDER_LINE =
   "_Your answer here. Delete this line and write whatever you'd like — paragraphs are welcome._"
@@ -23,8 +29,6 @@ const PLACEHOLDER_PATTERNS: RegExp[] = [
   /^_Your answer here\.\s*$/i,
 ]
 
-// Critical questions: a dismissive answer here ("N/A") is suspicious enough to
-// flag. Used by reviewMarkdownImport. Everything else is fine to skip.
 const CRITICAL_QUESTION_KEYS: ReadonlySet<string> = new Set([
   'company.overview',
   'company.primaryContact',
@@ -34,12 +38,28 @@ const CRITICAL_QUESTION_KEYS: ReadonlySet<string> = new Set([
 const DISMISSIVE_ANSWER_PATTERN =
   /^(n\/a|na|not applicable|unknown|none|no|nope|skip|tbd|todo|\?)\.?$/i
 
-function buildV2Header(opts: { companyHint?: string; sessionId?: string }): string {
-  const companyHint = opts.companyHint ?? ''
-  const sessionId = opts.sessionId ?? ''
+function scopeLabel(scope: SurveyScope): string {
+  return scope === 'company' ? 'company-wide' : 'individual'
+}
+
+function buildHeader(opts: {
+  scope: SurveyScope
+  companyName?: string
+  token?: string
+  respondentEmail?: string
+}): string {
+  const sharedLine =
+    opts.scope === 'company'
+      ? 'These answers are SHARED across everyone from this company. Anyone with the same'
+      : "These answers are TIED to one respondent's email address. Other people from the same"
+  const sharedLine2 =
+    opts.scope === 'company'
+      ? 'invitation link will see them and can edit them.'
+      : 'company answer their own individual sections separately.'
+
   return `---
-# Firmcraft Onboarding Survey
-# Format: firmcraft-survey-v2
+# Firmcraft Onboarding Survey — ${scopeLabel(opts.scope).toUpperCase()} sections
+# Format: firmcraft-survey-v3
 #
 # INSTRUCTIONS FOR AI AGENTS:
 # 1. Each ## heading is a survey section. Do NOT rename or reorder them.
@@ -49,47 +69,57 @@ function buildV2Header(opts: { companyHint?: string; sessionId?: string }): stri
 # 5. Answers can be any length — paragraphs, bullet lists, whatever fits.
 # 6. If you don't have information for a question, write "Not applicable" or "Unknown"
 #    rather than leaving it blank.
-# 7. The section intros (in <!-- --> after each ## heading) explain what the section covers.
-#    Use them to understand the context of each question.
+# 7. ${sharedLine}
+#    ${sharedLine2}
 #
 # CONTEXT:
 # This survey helps Firmcraft build an AI agent environment customized to a company's
 # needs. The more specific and detailed the answers, the better the resulting setup.
-# Think of each answer as briefing a senior engineer who will configure the system.
 
-format_version: "2.0"
-survey_type: "marketing"
-company_hint: ${JSON.stringify(companyHint)}
-session_id: ${JSON.stringify(sessionId)}
+format_version: "3.0"
+scope: ${opts.scope}
+company_name: ${JSON.stringify(opts.companyName ?? '')}
+token: ${JSON.stringify(opts.token ?? '')}
+respondent_email: ${JSON.stringify(opts.respondentEmail ?? '')}
 ---
 
-# Firmcraft onboarding survey
+# Firmcraft onboarding — ${scopeLabel(opts.scope)} sections
 
-Thanks for filling this out. Take as long as you need. There are no character
-limits, no required fields, and you can rewrite anything. The more candid the
-better.
+${
+  opts.scope === 'company'
+    ? `These are the sections shared across everyone from ${opts.companyName || 'your company'}. Whoever fills these in first writes the canonical answer; teammates can edit them later.`
+    : `These are the sections specific to you${opts.respondentEmail ? ` (${opts.respondentEmail})` : ''}. Other people from ${opts.companyName || 'your company'} will fill these out for themselves.`
+}
 
-When you're done, head back to https://firmcraft.ai/get-started and drop this
-file in the upload area.
+When you're done, head back to the survey link and drop this file in the upload
+area, or email it back to Firmcraft.
 `
 }
 
 export type BuildTemplateOptions = {
-  companyHint?: string
-  sessionId?: string
+  scope: SurveyScope
+  companyName?: string
+  token?: string
+  respondentEmail?: string
+  existingAnswers?: SurveyAnswers
 }
 
 /**
- * Build the markdown template. If `existingAnswers` is provided, render each
- * answer inline beneath its question instead of the blank placeholder line —
- * this enables the export → AI edit → reimport round-trip.
+ * Build a scope-specific markdown template. Only sections matching `scope` are
+ * included. If `existingAnswers` is provided, current answers are rendered
+ * inline so the file becomes a round-trippable working document.
  */
-export function buildMarkdownTemplate(
-  existingAnswers?: SurveyAnswers,
-  options: BuildTemplateOptions = {},
-): string {
-  const parts: string[] = [buildV2Header(options)]
+export function buildMarkdownTemplate(options: BuildTemplateOptions): string {
+  const parts: string[] = [
+    buildHeader({
+      scope: options.scope,
+      companyName: options.companyName,
+      token: options.token,
+      respondentEmail: options.respondentEmail,
+    }),
+  ]
   for (const section of SURVEY_SECTIONS) {
+    if (section.scope !== options.scope) continue
     parts.push(`\n## ${section.number}. ${section.title}\n`)
     parts.push(`<!-- ${section.intro} -->\n`)
     for (const q of section.questions) {
@@ -97,7 +127,7 @@ export function buildMarkdownTemplate(
       if (q.guidance) {
         parts.push(`<!-- ${q.guidance} -->\n`)
       }
-      const existing = existingAnswers?.[answerKey(section.id, q.id)]?.trim()
+      const existing = options.existingAnswers?.[answerKey(section.id, q.id)]?.trim()
       if (existing) {
         parts.push(`\n${existing}\n`)
       } else {
@@ -121,14 +151,83 @@ function normalize(s: string): string {
     .trim()
 }
 
+export type FrontMatter = {
+  scope?: SurveyScope
+  companyName?: string
+  token?: string
+  respondentEmail?: string
+  formatVersion?: string
+}
+
 /**
- * Parse a markdown file produced from `buildMarkdownTemplate` (with light
- * client edits). Returns the answers keyed by `${sectionId}.${questionId}`.
- *
- * Lenient: missing headings yield empty strings, extra headings are ignored,
- * YAML front matter is skipped naturally (its lines don't start with `##`).
+ * Extract the YAML front matter block, if any. Returns the body without the
+ * fence and a loosely-typed metadata object. Format is intentionally lenient:
+ * we tolerate v2 files with no `scope:` key (will be inferred later).
  */
-export function parseMarkdownAnswers(markdown: string): SurveyAnswers {
+function readFrontMatter(markdown: string): { body: string; meta: FrontMatter } {
+  const lines = markdown.split(/\r?\n/)
+  let i = 0
+  while (i < lines.length && lines[i].trim() === '') i++
+  if (lines[i]?.trim() !== '---') return { body: markdown, meta: {} }
+  const start = i
+  i++
+  const yamlLines: string[] = []
+  while (i < lines.length && lines[i].trim() !== '---') {
+    yamlLines.push(lines[i])
+    i++
+  }
+  if (i >= lines.length) return { body: markdown, meta: {} }
+  const body = lines.slice(0, start).concat(lines.slice(i + 1)).join('\n')
+
+  const meta: FrontMatter = {}
+  for (const line of yamlLines) {
+    const stripped = line.replace(/^\s*#.*/, '').trim()
+    if (!stripped) continue
+    const m = /^([a-zA-Z_]+)\s*:\s*(.*)$/.exec(stripped)
+    if (!m) continue
+    const key = m[1]
+    let value = m[2].trim()
+    // Strip surrounding quotes (JSON.stringify uses double quotes; tolerate single too).
+    if (
+      (value.startsWith('"') && value.endsWith('"')) ||
+      (value.startsWith("'") && value.endsWith("'"))
+    ) {
+      value = value.slice(1, -1)
+    }
+    switch (key) {
+      case 'scope':
+        if (value === 'company' || value === 'individual') meta.scope = value
+        break
+      case 'company_name':
+        meta.companyName = value
+        break
+      case 'token':
+        meta.token = value
+        break
+      case 'respondent_email':
+        meta.respondentEmail = value
+        break
+      case 'format_version':
+        meta.formatVersion = value
+        break
+    }
+  }
+
+  return { body, meta }
+}
+
+/**
+ * Parse a filled-out markdown file into an answers map. Only questions whose
+ * section matches `scopeFilter` are populated (others are left empty); if
+ * `scopeFilter` is undefined, every section is considered.
+ *
+ * Always returns a fully-keyed answers object (every question in the full
+ * survey has a key, blank if not in the file or out of scope).
+ */
+export function parseMarkdownAnswers(
+  markdown: string,
+  scopeFilter?: SurveyScope,
+): SurveyAnswers {
   const answers: SurveyAnswers = {}
   for (const section of SURVEY_SECTIONS) {
     for (const q of section.questions) {
@@ -139,29 +238,31 @@ export function parseMarkdownAnswers(markdown: string): SurveyAnswers {
   type SurveyQuestionRef = {
     sectionId: string
     questionId: string
+    scope: SurveyScope
   }
 
-  // Strip the leading YAML front matter block, if any (`---\n...\n---`).
-  const body = stripFrontMatter(markdown)
+  const { body } = readFrontMatter(markdown)
   const lines = body.split(/\r?\n/)
-  let currentSection: typeof SURVEY_SECTIONS[number] | null = null
+  let currentSection: SurveySection | null = null
   let currentQuestion: SurveyQuestionRef | null = null
   let buffer: string[] = []
 
   function flush() {
     if (currentQuestion) {
-      const raw = buffer.join('\n')
-      const cleaned = stripComments(raw)
-      const filtered = cleaned
-        .split(/\r?\n/)
-        .filter((l) => {
-          const t = l.trim()
-          return !PLACEHOLDER_PATTERNS.some((p) => p.test(t))
-        })
-        .join('\n')
-        .trim()
-      const key = answerKey(currentQuestion.sectionId, currentQuestion.questionId)
-      answers[key] = filtered
+      if (!scopeFilter || currentQuestion.scope === scopeFilter) {
+        const raw = buffer.join('\n')
+        const cleaned = stripComments(raw)
+        const filtered = cleaned
+          .split(/\r?\n/)
+          .filter((l) => {
+            const t = l.trim()
+            return !PLACEHOLDER_PATTERNS.some((p) => p.test(t))
+          })
+          .join('\n')
+          .trim()
+        const key = answerKey(currentQuestion.sectionId, currentQuestion.questionId)
+        answers[key] = filtered
+      }
     }
     buffer = []
   }
@@ -178,7 +279,7 @@ export function parseMarkdownAnswers(markdown: string): SurveyAnswers {
     })
   }
 
-  function findQuestion(section: typeof SURVEY_SECTIONS[number], heading: string) {
+  function findQuestion(section: SurveySection, heading: string) {
     const norm = normalize(heading)
     return section.questions.find((q) => {
       const promptNorm = normalize(q.prompt)
@@ -202,15 +303,13 @@ export function parseMarkdownAnswers(markdown: string): SurveyAnswers {
       if (currentSection) {
         const q = findQuestion(currentSection, h3[1])
         currentQuestion = q
-          ? { sectionId: currentSection.id, questionId: q.id }
+          ? { sectionId: currentSection.id, questionId: q.id, scope: currentSection.scope }
           : null
       } else {
         currentQuestion = null
       }
       continue
     }
-    // `---` on its own line acts as a soft boundary — used for the footer
-    // separator in the template, but also a natural break in user edits.
     if (/^---+\s*$/.test(line)) {
       flush()
       currentQuestion = null
@@ -225,31 +324,50 @@ export function parseMarkdownAnswers(markdown: string): SurveyAnswers {
   return answers
 }
 
-function stripFrontMatter(markdown: string): string {
-  const lines = markdown.split(/\r?\n/)
-  let i = 0
-  // Allow a leading BOM or blank lines before front matter.
-  while (i < lines.length && lines[i].trim() === '') i++
-  if (lines[i]?.trim() !== '---') return markdown
-  const start = i
-  i++
-  while (i < lines.length && lines[i].trim() !== '---') i++
-  if (i >= lines.length) return markdown // no closing fence — leave as-is
-  // Drop start..i inclusive.
-  return lines.slice(0, start).concat(lines.slice(i + 1)).join('\n')
+/**
+ * Detect which scope a file appears to target. Front matter wins; otherwise
+ * inferred by counting non-empty answers per scope from a permissive parse.
+ */
+export function detectScope(markdown: string): SurveyScope | null {
+  const { meta } = readFrontMatter(markdown)
+  if (meta.scope) return meta.scope
+  const allParsed = parseMarkdownAnswers(markdown)
+  let company = 0
+  let individual = 0
+  for (const section of SURVEY_SECTIONS) {
+    for (const q of section.questions) {
+      const value = allParsed[answerKey(section.id, q.id)]
+      if (!value || !value.trim()) continue
+      if (section.scope === 'company') company++
+      else individual++
+    }
+  }
+  if (company === 0 && individual === 0) return null
+  return company >= individual ? 'company' : 'individual'
 }
 
-export function answersFilename(companyHint?: string): string {
-  const base = (companyHint || 'firmcraft-onboarding')
+export function answersFilenameForScope(
+  scope: SurveyScope,
+  companyName?: string,
+  respondentEmail?: string,
+): string {
+  const slug = (companyName || 'firmcraft-onboarding')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '')
     .slice(0, 40) || 'firmcraft-onboarding'
-  return `${base}.md`
+  if (scope === 'company') return `${slug}-company.md`
+  const emailSlug = (respondentEmail ?? '')
+    .toLowerCase()
+    .split('@')[0]
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 24)
+  return emailSlug ? `${slug}-${emailSlug}.md` : `${slug}-individual.md`
 }
 
 // ---------------------------------------------------------------------------
-// AI-reviewed import
+// Import review
 // ---------------------------------------------------------------------------
 
 export type ImportIssueLevel = 'error' | 'warning' | 'info'
@@ -260,47 +378,51 @@ export type ImportIssue = {
   questionKey?: string
 }
 
-export type ImportChangeKind = 'added' | 'modified' | 'removed'
-
-export type ImportChange = {
-  questionKey: string
-  kind: ImportChangeKind
-  before: string
-  after: string
-}
-
 export type ImportReview = {
+  scope: SurveyScope
+  detectedFromFrontMatter: boolean
   answers: SurveyAnswers
   stats: {
     totalQuestions: number
     answeredQuestions: number
     emptyQuestions: number
-    changedQuestions: number
   }
   issues: ImportIssue[]
-  changes: ImportChange[] | null
+  frontMatter: FrontMatter
 }
 
 /**
- * Run the deterministic parser and produce a review summary: stats, validation
- * issues, and (if existing answers are provided) a per-question diff. Callers
- * present this to the user as a confirmation step before committing the import.
+ * Parse a markdown file scoped to a single survey scope. Returns counts and
+ * any quality issues (dismissive answers on critical questions, etc.) so the
+ * client can show a confirmation step before persisting.
  *
- * Async by design — leaves room for a future AI pass (fuzzy heading repair,
- * answer-quality checks) without changing the call sites.
+ * If `forceScope` is provided, that scope is used regardless of what the file
+ * declares. Otherwise we read the front matter, falling back to inference.
  */
 export async function reviewMarkdownImport(
   markdown: string,
-  existingAnswers?: SurveyAnswers,
+  forceScope?: SurveyScope,
 ): Promise<ImportReview> {
-  const parsed = parseMarkdownAnswers(markdown)
+  const { meta } = readFrontMatter(markdown)
+  const detected = forceScope ?? meta.scope ?? detectScope(markdown)
+  if (!detected) {
+    throw new Error(
+      "Couldn't tell whether this is a company-wide or individual file — and we didn't find any answers. Re-download a template and try again.",
+    )
+  }
+  const detectedFromFrontMatter = !forceScope && !!meta.scope
+
+  const parsed = parseMarkdownAnswers(markdown, detected)
 
   const issues: ImportIssue[] = []
   let answeredQuestions = 0
   let emptyQuestions = 0
+  let scopeTotal = 0
 
   for (const section of SURVEY_SECTIONS) {
+    if (section.scope !== detected) continue
     for (const q of section.questions) {
+      scopeTotal++
       const key = answerKey(section.id, q.id)
       const value = (parsed[key] || '').trim()
       if (value) {
@@ -323,34 +445,16 @@ export async function reviewMarkdownImport(
     }
   }
 
-  let changes: ImportChange[] | null = null
-  let changedQuestions = 0
-  if (existingAnswers) {
-    changes = []
-    for (const section of SURVEY_SECTIONS) {
-      for (const q of section.questions) {
-        const key = answerKey(section.id, q.id)
-        const before = (existingAnswers[key] || '').trim()
-        const after = (parsed[key] || '').trim()
-        if (before === after) continue
-        changedQuestions++
-        let kind: ImportChangeKind = 'modified'
-        if (!before && after) kind = 'added'
-        else if (before && !after) kind = 'removed'
-        changes.push({ questionKey: key, kind, before, after })
-      }
-    }
-  }
-
   return {
+    scope: detected,
+    detectedFromFrontMatter,
     answers: parsed,
     stats: {
-      totalQuestions: totalQuestions(),
+      totalQuestions: scopeTotal,
       answeredQuestions,
       emptyQuestions,
-      changedQuestions,
     },
     issues,
-    changes,
+    frontMatter: meta,
   }
 }

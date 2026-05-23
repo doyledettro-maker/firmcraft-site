@@ -3,19 +3,42 @@ import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import { GetStartedClient } from './GetStartedClient'
+import { InvitationRequired } from './InvitationRequired'
+import {
+  fetchToken,
+  fetchCompanyAnswers,
+  type TokenStatus,
+} from '@/lib/survey-tokens'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   title: 'Get started · Firmcraft',
   description:
-    'Tell us about your business so we can scope your AI operator. Two ways: a guided conversation, or a markdown template you can fill out offline.',
+    'Tell us about your business so we can scope your AI operator. Token-gated onboarding survey.',
 }
 
-export default function GetStartedPage() {
+type SearchParams = { t?: string }
+
+export default async function GetStartedPage({
+  searchParams,
+}: {
+  searchParams: SearchParams
+}) {
+  const rawToken = typeof searchParams.t === 'string' ? searchParams.t.trim() : ''
+
+  let status: TokenStatus
+  try {
+    status = await fetchToken(rawToken)
+  } catch (err) {
+    console.error('[get-started/page] token lookup failed', err)
+    status = { ok: false, reason: 'unknown' }
+  }
+
   return (
     <>
       <SiteHeader />
 
-      {/* HERO */}
       <section className="relative overflow-hidden pt-16 pb-8">
         <div
           aria-hidden
@@ -37,35 +60,38 @@ export default function GetStartedPage() {
           </div>
           <div className="eyebrow">Client onboarding survey</div>
           <h1 className="font-sans font-medium text-[clamp(40px,4.6vw,64px)] leading-[1.04] tracking-[-0.022em] mt-3 mb-4 text-balance ">
-            Tell us about your <em>business.</em>
+            {status.ok ? (
+              <>
+                Welcome, <em>{status.token.company_name}.</em>
+              </>
+            ) : (
+              <>
+                Tell us about your <em>business.</em>
+              </>
+            )}
           </h1>
           <p className="text-[18px] leading-[1.55] text-ink-2 max-w-[640px] m-0 mb-2">
-            Ten short sections. We use this to scope your operator, write the
-            playbooks, and have something running by the end of week one. Pick
-            the way that fits how you like to work.
-          </p>
-          <p className="text-[13.5px] text-muted leading-[1.5] max-w-[640px] m-0 mb-6">
-            Every answer is freeform — paragraphs welcome, nothing required, you can
-            edit everything before submitting. If you&apos;d rather walk through it
-            with a person,{' '}
-            <a
-              href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
-              className="text-signal hover:underline underline-offset-[3px]"
-            >
-              book a 20-minute call
-            </a>
-            .
+            {status.ok
+              ? 'Ten short sections. Some are shared across your team, some are just for you. We use this to scope your operator and have something running by the end of week one.'
+              : 'This survey is invitation-only — each company gets a unique link from Firmcraft.'}
           </p>
         </div>
       </section>
 
-      {/* CLIENT */}
       <section
         className="pb-24"
         style={{ background: 'linear-gradient(180deg,var(--color-surface),var(--color-surface-2))' }}
       >
         <div className="max-w-[1080px] mx-auto px-8">
-          <GetStartedClient />
+          {status.ok ? (
+            <GetStartedClient
+              token={status.token.token}
+              companyName={status.token.company_name}
+              initialCompanyAnswers={await fetchCompanyAnswers(status.token.token)}
+            />
+          ) : (
+            <InvitationRequired reason={status.reason} />
+          )}
         </div>
       </section>
 

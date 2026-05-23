@@ -4,65 +4,80 @@ import { useRef, useState } from 'react'
 import {
   buildMarkdownTemplate,
   reviewMarkdownImport,
-  answersFilename,
+  answersFilenameForScope,
   type ImportReview,
 } from '@/lib/survey-markdown'
-import { SURVEY_SECTIONS, answerKey, type SurveyAnswers } from '@/lib/survey'
-
-type ParseError = {
-  message: string
-}
+import {
+  SURVEY_SECTIONS,
+  answerKey,
+  type SurveyAnswers,
+  type SurveyScope,
+} from '@/lib/survey'
+import type { Respondent } from './RespondentGate'
 
 type Stage =
   | { kind: 'idle' }
-  | { kind: 'preview'; review: ImportReview; hint: string }
+  | { kind: 'preview'; review: ImportReview }
+  | { kind: 'persisting'; review: ImportReview }
 
 export function MarkdownForm({
-  onCancel,
-  onParsed,
+  token,
+  companyName,
+  respondent,
+  answers,
+  onAnswersChange,
+  onBack,
+  onContinue,
 }: {
-  onCancel: () => void
-  onParsed: (answers: SurveyAnswers, companyHint: string) => void
+  token: string
+  companyName: string
+  respondent: Respondent
+  answers: SurveyAnswers
+  onAnswersChange: (next: SurveyAnswers) => void
+  /** Switch back to the chat flow. */
+  onBack: () => void
+  /** Called after a successful upload+persist. The caller routes onward. */
+  onContinue: (merged: SurveyAnswers, scope: SurveyScope) => void
 }) {
   const fileInputRef = useRef<HTMLInputElement>(null)
   const [dragActive, setDragActive] = useState(false)
-  const [error, setError] = useState<ParseError | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [pasted, setPasted] = useState('')
   const [stage, setStage] = useState<Stage>({ kind: 'idle' })
 
-  function handleDownload() {
-    const template = buildMarkdownTemplate()
+  function handleDownload(scope: SurveyScope) {
+    const template = buildMarkdownTemplate({
+      scope,
+      companyName,
+      token,
+      respondentEmail: scope === 'individual' ? respondent.email : undefined,
+      existingAnswers: answers,
+    })
     const blob = new Blob([template], { type: 'text/markdown;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = answersFilename()
+    a.download = answersFilenameForScope(scope, companyName, respondent.email)
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
     URL.revokeObjectURL(url)
   }
 
-  async function processText(text: string, hint?: string) {
+  async function processText(text: string) {
     setError(null)
     try {
       const review = await reviewMarkdownImport(text)
       if (review.stats.answeredQuestions === 0) {
-        setError({
-          message:
-            "We couldn't find any answers in that file. Make sure section headings start with '##' and question headings start with '###'.",
-        })
+        setError(
+          "We couldn't find any answers in that file. Make sure section headings start with '##' and question headings start with '###'.",
+        )
         return
       }
-      const companyOverview = review.answers[answerKey('company', 'overview')] || ''
-      const inferred = hint || extractHint(companyOverview)
-      setStage({ kind: 'preview', review, hint: inferred })
+      setStage({ kind: 'preview', review })
     } catch (err) {
-      setError({
-        message:
-          err instanceof Error ? err.message : 'Could not read that file.',
-      })
+      setError(err instanceof Error ? err.message : 'Could not read that file.')
     }
   }
 
@@ -70,9 +85,9 @@ export function MarkdownForm({
     setBusy(true)
     try {
       const text = await file.text()
-      await processText(text, file.name.replace(/\.md$/i, '').replace(/[-_]/g, ' '))
+      await processText(text)
     } catch {
-      setError({ message: 'Could not read that file.' })
+      setError('Could not read that file.')
     } finally {
       setBusy(false)
     }
@@ -87,28 +102,78 @@ export function MarkdownForm({
       first.type !== 'text/markdown' &&
       first.type !== 'text/plain'
     ) {
-      setError({
-        message: `That doesn't look like a markdown file (got ${first.type || first.name}). Try the .md template.`,
-      })
+      setError(
+        `That doesn't look like a markdown file (got ${first.type || first.name}). Try a .md template.`,
+      )
       return
     }
     void handleFile(first)
   }
 
-  if (stage.kind === 'preview') {
+  async function persistReview(review: ImportReview) {
+    setStage({ kind: 'persisting', review })
+    setError(null)
+    try {
+      for (const section of SURVEY_SECTIONS) {
+        if (section.scope !== review.scope) continue
+        for (const q of section.questions) {
+          const key = answerKey(section.id, q.id)
+          const value = review.answers[key]
+          if (typeof value !== 'string') continue
+          if (!value.trim()) continue
+          const res = await fetch('/api/get-started/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              token,
+              respondentEmail: respondent.email,
+              scope: review.scope,
+              sectionId: section.id,
+              questionId: q.id,
+              answer: value,
+            }),
+          })
+          if (!res.ok) {
+            const data = await res.json().catch(() => ({}))
+            throw new Error(data.error || `Could not save ${section.id}.${q.id}`)
+          }
+        }
+      }
+
+      // Merge: take everything we just parsed, but only overwrite keys that are
+      // in the file's scope. Out-of-scope keys keep whatever the user had.
+      const merged: SurveyAnswers = { ...answers }
+      for (const section of SURVEY_SECTIONS) {
+        if (section.scope !== review.scope) continue
+        for (const q of section.questions) {
+          const key = answerKey(section.id, q.id)
+          merged[key] = review.answers[key] ?? ''
+        }
+      }
+      onAnswersChange(merged)
+      onContinue(merged, review.scope)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Could not save those answers.')
+      setStage({ kind: 'preview', review })
+    }
+  }
+
+  if (stage.kind === 'preview' || stage.kind === 'persisting') {
     return (
       <ImportPreview
         review={stage.review}
-        hint={stage.hint}
+        companyName={companyName}
+        respondent={respondent}
+        persisting={stage.kind === 'persisting'}
         onBack={() => setStage({ kind: 'idle' })}
-        onConfirm={() => onParsed(stage.review.answers, stage.hint)}
+        onConfirm={() => persistReview(stage.review)}
+        error={error}
       />
     )
   }
 
   return (
     <div className="grid lg:grid-cols-[1fr_1fr] gap-6">
-      {/* Step 1: download */}
       <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
@@ -119,38 +184,32 @@ export function MarkdownForm({
           </span>
         </div>
         <h3 className="font-sans font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0 ">
-          Download the <em>template.</em>
+          Download the <em>templates.</em>
         </h3>
         <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
-          A plain markdown file with all 10 sections and the questions inside.
-          Open it in any editor — VS Code, Obsidian, Typora, plain Notepad. Take
-          your time. Share it with the team if you want a second opinion.
+          Two scoped files — fill them in your editor of choice (or hand them to ChatGPT / Claude
+          for a draft). Both work standalone; you can do company first and individual later, or
+          split them across your team.
         </p>
+
+        <TemplateCard
+          scope="company"
+          companyName={companyName}
+          onDownload={() => handleDownload('company')}
+        />
+        <TemplateCard
+          scope="individual"
+          respondentEmail={respondent.email}
+          onDownload={() => handleDownload('individual')}
+        />
+
         <p className="text-[12.5px] text-muted leading-[1.5] m-0">
-          The file includes instructions for AI agents, so you can also hand it
-          to Claude, ChatGPT, or any other model and have it draft the answers
-          for you.
+          Each template includes instructions for AI agents, so you can hand it to Claude, ChatGPT,
+          or any other model and have it draft the answers for you. The YAML front matter tells
+          us which scope the file is — don&apos;t edit those lines.
         </p>
-        <ul className="grid gap-1.5 text-[13px] text-muted m-0 p-0 list-none">
-          {SURVEY_SECTIONS.map((s) => (
-            <li key={s.id}>
-              <span className="font-mono text-[11px] tracking-[0.08em] mr-2">
-                {String(s.number).padStart(2, '0')}
-              </span>
-              {s.title}
-            </li>
-          ))}
-        </ul>
-        <button
-          type="button"
-          onClick={handleDownload}
-          className="btn btn-primary self-start mt-2"
-        >
-          ↓ Download template (.md)
-        </button>
       </div>
 
-      {/* Step 2: upload */}
       <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-4">
         <div className="flex items-center justify-between">
           <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
@@ -164,8 +223,8 @@ export function MarkdownForm({
           Drop your filled <em>.md</em> here.
         </h3>
         <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
-          We&apos;ll parse it, show you a preview with any issues we caught, and
-          let you confirm before anything is written.
+          We&apos;ll parse it, show you a preview with any issues we caught, and let you confirm
+          before anything is written.
         </p>
 
         <div
@@ -205,7 +264,9 @@ export function MarkdownForm({
           <p className="font-sans font-medium text-[18px] tracking-[-0.005em] m-0 mb-1">
             Drop the file here, <em>or click to browse.</em>
           </p>
-          <p className="text-[12.5px] text-muted m-0 mb-4">.md files only.</p>
+          <p className="text-[12.5px] text-muted m-0 mb-4">
+            .md files only. Either scope works — we&apos;ll detect which one.
+          </p>
           <button
             type="button"
             onClick={() => fileInputRef.current?.click()}
@@ -229,7 +290,6 @@ export function MarkdownForm({
           />
         </div>
 
-        {/* Or paste */}
         <details className="group">
           <summary className="cursor-pointer text-[12.5px] font-mono tracking-[0.1em] uppercase text-muted hover:text-ink transition-colors list-none">
             <span className="mr-1.5">+</span>
@@ -264,7 +324,7 @@ export function MarkdownForm({
               borderColor: 'rgba(251,124,80,.3)',
             }}
           >
-            {error.message}
+            {error}
           </div>
         )}
       </div>
@@ -272,34 +332,118 @@ export function MarkdownForm({
       <div className="lg:col-span-2 flex items-center justify-between gap-3 flex-wrap pt-2">
         <button
           type="button"
-          onClick={onCancel}
+          onClick={onBack}
           className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors"
         >
-          ← Switch method
+          ← Switch to chat
         </button>
         <p className="text-[12px] text-muted m-0 leading-[1.55] max-w-[440px] text-right">
-          Headings can be lightly edited and we&apos;ll still find your answers.
-          Empty sections and skipped questions are fine.
+          Headings can be lightly edited and we&apos;ll still find your answers. Empty sections
+          and skipped questions are fine.
         </p>
       </div>
     </div>
   )
 }
 
+function TemplateCard({
+  scope,
+  companyName,
+  respondentEmail,
+  onDownload,
+}: {
+  scope: SurveyScope
+  companyName?: string
+  respondentEmail?: string
+  onDownload: () => void
+}) {
+  const isCompany = scope === 'company'
+  const sectionCount = SURVEY_SECTIONS.filter((s) => s.scope === scope).length
+  const questionCount = SURVEY_SECTIONS.filter((s) => s.scope === scope).reduce(
+    (n, s) => n + s.questions.length,
+    0,
+  )
+  const sections = SURVEY_SECTIONS.filter((s) => s.scope === scope)
+
+  return (
+    <div
+      className="rounded-xl p-4 flex flex-col gap-3"
+      style={{
+        background: isCompany ? 'rgba(44,107,240,0.05)' : 'rgba(15,23,42,0.03)',
+        border: `1px solid ${isCompany ? 'rgba(44,107,240,0.22)' : 'var(--color-line)'}`,
+      }}
+    >
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span
+            className="font-mono text-[10px] uppercase tracking-[0.12em] rounded-full px-2 py-0.5"
+            style={{
+              background: isCompany ? 'rgba(44,107,240,0.15)' : 'rgba(15,23,42,0.08)',
+              color: isCompany ? 'var(--color-signal)' : 'var(--color-ink-2)',
+            }}
+          >
+            {isCompany ? 'Shared with team' : 'Just for you'}
+          </span>
+          <span className="font-mono text-[11px] text-muted">
+            {sectionCount} sections · {questionCount} questions
+          </span>
+        </div>
+      </div>
+      <div>
+        <div className="font-sans font-medium text-[15px] text-ink leading-[1.3]">
+          {isCompany
+            ? `${companyName || 'Company'}-wide template`
+            : `Individual template${respondentEmail ? ` for ${respondentEmail}` : ''}`}
+        </div>
+        <p className="text-[12.5px] text-muted leading-[1.5] m-0 mt-1">
+          {isCompany
+            ? 'Company profile, tech stack, AI readiness, integrations, security. Filled once, shared across your team.'
+            : 'Use case priorities, team & access, budget, communication, custom needs. Specific to you.'}
+        </p>
+      </div>
+      <ul className="grid gap-1 text-[12px] text-muted m-0 p-0 list-none">
+        {sections.map((s) => (
+          <li key={s.id}>
+            <span className="font-mono text-[10.5px] tracking-[0.08em] mr-2">
+              {String(s.number).padStart(2, '0')}
+            </span>
+            {s.title}
+          </li>
+        ))}
+      </ul>
+      <button type="button" onClick={onDownload} className="btn btn-ghost self-start">
+        ↓ Download {isCompany ? 'company' : 'individual'} template (.md)
+      </button>
+    </div>
+  )
+}
+
 function ImportPreview({
   review,
-  hint,
+  companyName,
+  respondent,
+  persisting,
   onBack,
   onConfirm,
+  error,
 }: {
   review: ImportReview
-  hint: string
+  companyName: string
+  respondent: Respondent
+  persisting: boolean
   onBack: () => void
   onConfirm: () => void
+  error: string | null
 }) {
-  const { stats, issues } = review
+  const { stats, issues, scope, detectedFromFrontMatter } = review
   const warnings = issues.filter((i) => i.level === 'warning' || i.level === 'error')
   const infos = issues.filter((i) => i.level === 'info')
+
+  const scopeLabel = scope === 'company' ? 'Company-wide' : 'Just for you'
+  const scopeNote =
+    scope === 'company'
+      ? `These answers will be saved to ${companyName}'s shared profile. Anyone else with the survey link will see them.`
+      : `These answers will be saved against ${respondent.email}. Other people from ${companyName} fill out their own copy.`
 
   return (
     <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 max-w-[760px] mx-auto">
@@ -315,17 +459,31 @@ function ImportPreview({
         Here&apos;s what we <em>parsed.</em>
       </h3>
 
+      <div
+        className="rounded-xl p-4"
+        style={{
+          background: scope === 'company' ? 'rgba(44,107,240,0.05)' : 'rgba(15,23,42,0.03)',
+          border: `1px solid ${scope === 'company' ? 'rgba(44,107,240,0.22)' : 'var(--color-line)'}`,
+        }}
+      >
+        <div className="font-mono text-[11px] uppercase tracking-[0.12em] font-medium" style={{ color: scope === 'company' ? 'var(--color-signal)' : 'var(--color-ink-2)' }}>
+          Scope · {scopeLabel}
+        </div>
+        <p className="text-[13.5px] text-ink-2 leading-[1.55] m-0 mt-1">{scopeNote}</p>
+        {!detectedFromFrontMatter && (
+          <p className="text-[12px] text-muted leading-[1.5] m-0 mt-2">
+            Inferred from the file&apos;s contents — no <code>scope:</code> line in the front
+            matter. If that&apos;s wrong, edit the front matter to add <code>scope: company</code>{' '}
+            or <code>scope: individual</code> and re-upload.
+          </p>
+        )}
+      </div>
+
       <div className="grid grid-cols-3 gap-3">
-        <Stat label="Total questions" value={stats.totalQuestions} />
+        <Stat label="Total in scope" value={stats.totalQuestions} />
         <Stat label="Answered" value={stats.answeredQuestions} accent />
         <Stat label="Empty" value={stats.emptyQuestions} muted={stats.emptyQuestions === 0} />
       </div>
-
-      {hint && (
-        <p className="text-[13.5px] text-ink-2 m-0">
-          Company hint: <span className="font-mono text-ink">{hint}</span>
-        </p>
-      )}
 
       {warnings.length > 0 && (
         <IssueList
@@ -339,26 +497,37 @@ function ImportPreview({
         <details>
           <summary className="cursor-pointer text-[12.5px] font-mono tracking-[0.1em] uppercase text-muted hover:text-ink list-none">
             <span className="mr-1.5">+</span>
-            {infos.length} skipped question{infos.length === 1 ? '' : 's'}
+            {infos.length} unanswered question{infos.length === 1 ? '' : 's'}
           </summary>
           <IssueList title="" issues={infos} tone="info" />
         </details>
       )}
 
-      <div className="flex items-center justify-between gap-3 flex-wrap pt-2 border-t border-[var(--color-line)]">
-        <button
-          type="button"
-          onClick={onBack}
-          className="btn btn-ghost"
+      {error && (
+        <div
+          role="alert"
+          className="rounded-xl border px-4 py-3 text-[13.5px]"
+          style={{
+            color: 'var(--color-operator)',
+            background: 'rgba(251,124,80,.08)',
+            borderColor: 'rgba(251,124,80,.3)',
+          }}
         >
+          {error}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between gap-3 flex-wrap pt-2 border-t border-[var(--color-line)]">
+        <button type="button" onClick={onBack} disabled={persisting} className="btn btn-ghost disabled:opacity-60">
           ← Upload a different file
         </button>
         <button
           type="button"
           onClick={onConfirm}
-          className="btn btn-primary"
+          disabled={persisting}
+          className="btn btn-primary disabled:opacity-60 disabled:cursor-not-allowed"
         >
-          Continue to review →
+          {persisting ? 'Saving…' : 'Save & continue →'}
         </button>
       </div>
     </div>
@@ -421,14 +590,9 @@ function IssueList({
           borderColor: 'var(--color-line)',
         }
   return (
-    <div
-      className="rounded-xl border p-4 flex flex-col gap-2"
-      style={styles}
-    >
+    <div className="rounded-xl border p-4 flex flex-col gap-2" style={styles}>
       {title && (
-        <div className="font-mono text-[11px] tracking-[0.12em] uppercase font-medium">
-          {title}
-        </div>
+        <div className="font-mono text-[11px] tracking-[0.12em] uppercase font-medium">{title}</div>
       )}
       <ul className="m-0 p-0 list-none flex flex-col gap-1.5 text-[13.5px] leading-[1.5]">
         {issues.map((issue, i) => (
@@ -437,11 +601,4 @@ function IssueList({
       </ul>
     </div>
   )
-}
-
-function extractHint(overview: string): string {
-  const t = overview.trim()
-  if (!t) return ''
-  const firstLine = t.split(/\r?\n/)[0]
-  return firstLine.split(/[—–-]/)[0].trim().slice(0, 80)
 }

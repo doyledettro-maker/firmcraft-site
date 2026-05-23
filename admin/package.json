@@ -8,7 +8,8 @@
     "start": "next start -p 3001",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed": "tsx scripts/seed.ts"
+    "seed": "tsx scripts/seed.ts",
+    "create-survey-token": "tsx scripts/create-survey-token.ts"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.39.3",

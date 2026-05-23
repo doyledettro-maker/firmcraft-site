@@ -1,24 +1,25 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { SURVEY_SECTIONS, answerKey, type SurveyAnswers } from '@/lib/survey'
+import { SURVEY_SECTIONS, answerKey, type SurveyAnswers, type SurveySection } from '@/lib/survey'
+import type { Respondent } from './RespondentGate'
 
 type Status = 'idle' | 'submitting' | 'error'
 
 export function ReviewAndSubmit({
+  token,
+  companyName,
+  respondent,
   answers,
-  method,
-  companyHint,
   onAnswersChange,
-  onCompanyHintChange,
   onBack,
   onSuccess,
 }: {
+  token: string
+  companyName: string
+  respondent: Respondent
   answers: SurveyAnswers
-  method: 'conversational' | 'markdown'
-  companyHint: string
   onAnswersChange: (next: SurveyAnswers) => void
-  onCompanyHintChange: (hint: string) => void
   onBack: () => void
   onSuccess: () => void
 }) {
@@ -36,20 +37,15 @@ export function ReviewAndSubmit({
       const res = await fetch('/api/get-started', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ method, answers, companyHint }),
+        body: JSON.stringify({
+          token,
+          respondentEmail: respondent.email,
+          answers,
+        }),
       })
       if (!res.ok) {
         const data = await res.json().catch(() => ({}))
         throw new Error(data.error || 'Submission failed.')
-      }
-      // Clear local cached drafts only after a successful submit.
-      try {
-        if (typeof window !== 'undefined') {
-          window.localStorage.removeItem('firmcraft.getStarted.answers.v1')
-          window.localStorage.removeItem('firmcraft.getStarted.companyHint.v1')
-        }
-      } catch {
-        // ignore
       }
       onSuccess()
     } catch (err) {
@@ -58,9 +54,11 @@ export function ReviewAndSubmit({
     }
   }
 
+  const companySections = SURVEY_SECTIONS.filter((s) => s.scope === 'company')
+  const individualSections = SURVEY_SECTIONS.filter((s) => s.scope === 'individual')
+
   return (
-    <div className="grid lg:grid-cols-[260px_1fr] gap-6 lg:gap-8">
-      {/* Sidebar */}
+    <div className="grid lg:grid-cols-[280px_1fr] gap-6 lg:gap-8">
       <aside className="lg:sticky lg:top-24 lg:self-start">
         <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
           Review · {answeredCount(answers)} of {totalQ()} answered
@@ -89,17 +87,22 @@ export function ReviewAndSubmit({
           })}
         </ol>
         <div className="mt-5 pt-5 border-t border-[var(--color-line)] flex flex-col gap-2">
+          <div className="text-[12px] text-muted leading-[1.55]">
+            Reviewing for{' '}
+            <span className="text-ink font-medium">{respondent.name}</span>
+            <br />
+            <span className="font-mono text-[11px]">{respondent.email}</span>
+          </div>
           <button
             type="button"
             onClick={onBack}
             className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors text-left"
           >
-            ← {method === 'conversational' ? 'Back to chat' : 'Re-upload file'}
+            ← Back to chat
           </button>
         </div>
       </aside>
 
-      {/* Review body */}
       <div className="flex flex-col gap-5">
         <div className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-3">
           <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium">
@@ -109,71 +112,29 @@ export function ReviewAndSubmit({
             Review &amp; <em>submit.</em>
           </h2>
           <p className="text-[15px] text-ink-2 leading-[1.55] m-0">
-            Everything below is editable. Tweak anything that doesn&apos;t read
-            right, fill in anything you skipped, and hit submit when you&apos;re
-            ready.
+            Everything below is editable. The two coloured banners separate company-wide answers
+            (shared with everyone from <strong className="text-ink font-medium">{companyName}</strong>)
+            from your individual responses.
           </p>
-          <label className="flex flex-col gap-1 mt-3 max-w-[420px]">
-            <span className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted font-medium">
-              Company name (for our records)
-            </span>
-            <input
-              type="text"
-              value={companyHint}
-              onChange={(e) => onCompanyHintChange(e.target.value)}
-              placeholder="Acme Co."
-              className="rounded-lg border border-[var(--color-line)] bg-paper px-3 py-2 text-[15px] text-ink placeholder:text-muted focus:outline-none focus:border-ink focus:bg-white transition-colors"
-            />
-          </label>
         </div>
 
-        {SURVEY_SECTIONS.map((s) => (
-          <section
-            key={s.id}
-            id={`section-${s.id}`}
-            className="bg-white border border-[var(--color-line)] rounded-[18px] p-6 sm:p-8 flex flex-col gap-5 scroll-mt-20"
-          >
-            <div className="flex items-baseline justify-between gap-4 flex-wrap">
-              <div>
-                <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium mb-1">
-                  Section {s.number} of {SURVEY_SECTIONS.length}
-                </div>
-                <h3 className="font-sans font-medium text-[24px] leading-[1.15] tracking-[-0.01em] m-0">
-                  {s.title}
-                </h3>
-              </div>
-              <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted">
-                {s.questions.filter((q) => (answers[answerKey(s.id, q.id)] || '').trim().length > 0).length}{' '}
-                of {s.questions.length} answered
-              </span>
-            </div>
+        <ReviewGroup
+          title="Company-wide"
+          subtitle={`Shared with everyone from ${companyName}. If you edit anything here, your teammates will see the update.`}
+          tone="company"
+          sections={companySections}
+          answers={answers}
+          onUpdate={update}
+        />
 
-            <div className="grid gap-5">
-              {s.questions.map((q) => {
-                const key = answerKey(s.id, q.id)
-                return (
-                  <div key={q.id} className="flex flex-col gap-1.5">
-                    <label
-                      htmlFor={`a-${key}`}
-                      className="font-sans font-medium text-[15.5px] leading-[1.4] tracking-[-0.005em] text-ink"
-                    >
-                      {q.prompt}
-                    </label>
-                    {q.guidance && (
-                      <p className="text-[12.5px] text-muted leading-[1.5] m-0">{q.guidance}</p>
-                    )}
-                    <AutoTextarea
-                      id={`a-${key}`}
-                      value={answers[key] || ''}
-                      placeholder={q.placeholder || 'Your answer — paragraphs welcome.'}
-                      onChange={(v) => update(key, v)}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          </section>
-        ))}
+        <ReviewGroup
+          title="Just for you"
+          subtitle={`Tied to ${respondent.email}. Other people from ${companyName} will fill these out separately.`}
+          tone="individual"
+          sections={individualSections}
+          answers={answers}
+          onUpdate={update}
+        />
 
         {error && (
           <div
@@ -196,7 +157,7 @@ export function ReviewAndSubmit({
             disabled={status === 'submitting'}
             className="btn btn-ghost"
           >
-            ← {method === 'conversational' ? 'Back to chat' : 'Re-upload'}
+            ← Back to chat
           </button>
           <button
             type="button"
@@ -208,6 +169,89 @@ export function ReviewAndSubmit({
           </button>
         </div>
       </div>
+    </div>
+  )
+}
+
+function ReviewGroup({
+  title,
+  subtitle,
+  tone,
+  sections,
+  answers,
+  onUpdate,
+}: {
+  title: string
+  subtitle: string
+  tone: 'company' | 'individual'
+  sections: SurveySection[]
+  answers: SurveyAnswers
+  onUpdate: (key: string, value: string) => void
+}) {
+  const bg =
+    tone === 'company' ? 'rgba(44,107,240,0.05)' : 'rgba(15,23,42,0.03)'
+  const border =
+    tone === 'company' ? 'rgba(44,107,240,0.22)' : 'var(--color-line)'
+
+  return (
+    <div
+      className="rounded-[20px] p-3 sm:p-4 flex flex-col gap-4"
+      style={{ background: bg, border: `1px solid ${border}` }}
+    >
+      <div className="px-3 sm:px-4 pt-2 flex flex-col gap-1">
+        <div className="font-mono text-[11px] tracking-[0.14em] uppercase font-medium" style={{ color: tone === 'company' ? 'var(--color-signal)' : 'var(--color-ink-2)' }}>
+          {title}
+        </div>
+        <p className="text-[13px] text-muted leading-[1.55] m-0">{subtitle}</p>
+      </div>
+
+      {sections.map((s) => (
+        <section
+          key={s.id}
+          id={`section-${s.id}`}
+          className="bg-white border border-[var(--color-line)] rounded-[14px] p-6 sm:p-7 flex flex-col gap-5 scroll-mt-20"
+        >
+          <div className="flex items-baseline justify-between gap-4 flex-wrap">
+            <div>
+              <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-signal font-medium mb-1">
+                Section {s.number} of {SURVEY_SECTIONS.length}
+              </div>
+              <h3 className="font-sans font-medium text-[22px] leading-[1.15] tracking-[-0.01em] m-0">
+                {s.title}
+              </h3>
+            </div>
+            <span className="font-mono text-[11px] tracking-[0.1em] uppercase text-muted">
+              {s.questions.filter((q) => (answers[answerKey(s.id, q.id)] || '').trim().length > 0).length}{' '}
+              of {s.questions.length} answered
+            </span>
+          </div>
+
+          <div className="grid gap-5">
+            {s.questions.map((q) => {
+              const key = answerKey(s.id, q.id)
+              return (
+                <div key={q.id} className="flex flex-col gap-1.5">
+                  <label
+                    htmlFor={`a-${key}`}
+                    className="font-sans font-medium text-[15.5px] leading-[1.4] tracking-[-0.005em] text-ink"
+                  >
+                    {q.prompt}
+                  </label>
+                  {q.guidance && (
+                    <p className="text-[12.5px] text-muted leading-[1.5] m-0">{q.guidance}</p>
+                  )}
+                  <AutoTextarea
+                    id={`a-${key}`}
+                    value={answers[key] || ''}
+                    placeholder={q.placeholder || 'Your answer — paragraphs welcome.'}
+                    onChange={(v) => onUpdate(key, v)}
+                  />
+                </div>
+              )
+            })}
+          </div>
+        </section>
+      ))}
     </div>
   )
 }

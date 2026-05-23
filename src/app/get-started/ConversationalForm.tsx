@@ -1,12 +1,10 @@
 'use client'
 
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { SURVEY_SECTIONS, answerKey, type SurveyAnswers } from '@/lib/survey'
+import { SURVEY_SECTIONS, answerKey, type SurveyAnswers, type SurveySection } from '@/lib/survey'
+import type { Respondent } from './RespondentGate'
 
 type Step = { sectionIndex: number; questionIndex: number }
-
-const STORAGE_KEY = 'firmcraft.getStarted.answers.v1'
-const COMPANY_HINT_KEY = 'firmcraft.getStarted.companyHint.v1'
 
 function flattenSteps(): Step[] {
   const steps: Step[] = []
@@ -21,71 +19,40 @@ function flattenSteps(): Step[] {
 const STEPS = flattenSteps()
 
 export function ConversationalForm({
-  initial,
-  onCancel,
+  token,
+  companyName,
+  respondent,
+  answers,
+  onAnswersChange,
   onComplete,
+  onSwitchRespondent,
+  onSwitchToMarkdown,
 }: {
-  initial: SurveyAnswers
-  onCancel: () => void
-  onComplete: (answers: SurveyAnswers, companyHint: string) => void
+  token: string
+  companyName: string
+  respondent: Respondent
+  answers: SurveyAnswers
+  onAnswersChange: (next: SurveyAnswers) => void
+  onComplete: () => void
+  onSwitchRespondent: () => void
+  onSwitchToMarkdown: () => void
 }) {
-  const [answers, setAnswers] = useState<SurveyAnswers>(initial)
   const [stepIndex, setStepIndex] = useState(0)
   const [draft, setDraft] = useState('')
-  const [companyHint, setCompanyHint] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saveError, setSaveError] = useState('')
   const transcriptRef = useRef<HTMLDivElement>(null)
 
-  // Restore from local storage on mount.
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      const raw = window.localStorage.getItem(STORAGE_KEY)
-      if (raw) {
-        const parsed = JSON.parse(raw) as Record<string, unknown>
-        setAnswers((prev) => {
-          const next: SurveyAnswers = { ...prev }
-          for (const [k, v] of Object.entries(parsed)) {
-            if (typeof v === 'string') next[k] = v
-          }
-          return next
-        })
-      }
-      const hint = window.localStorage.getItem(COMPANY_HINT_KEY)
-      if (hint) setCompanyHint(hint)
-    } catch {
-      // ignore
-    }
-  }, [])
-
-  // Persist answers as the user advances.
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(answers))
-    } catch {
-      // ignore
-    }
-  }, [answers])
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    try {
-      window.localStorage.setItem(COMPANY_HINT_KEY, companyHint)
-    } catch {
-      // ignore
-    }
-  }, [companyHint])
-
-  // Pre-fill draft when stepping back to a previously-answered question.
+  // Pre-fill draft from saved answer when switching steps.
   useEffect(() => {
     const step = STEPS[stepIndex]
     if (!step) return
     const section = SURVEY_SECTIONS[step.sectionIndex]
     const question = section.questions[step.questionIndex]
     setDraft(answers[answerKey(section.id, question.id)] || '')
+    setSaveError('')
   }, [stepIndex, answers])
 
-  // Auto-scroll the transcript so the latest exchange is in view.
   useEffect(() => {
     const node = transcriptRef.current
     if (!node) return
@@ -99,58 +66,92 @@ export function ConversationalForm({
   const isLast = stepIndex === STEPS.length - 1
   const total = STEPS.length
 
-  // Build the transcript: all prior questions + their answers, then the current
-  // section intro (if this is the first question of the section), then the
-  // current question.
-  const transcript = useMemo(() => buildTranscript(stepIndex, answers), [stepIndex, answers])
+  const transcript = useMemo(
+    () => buildTranscript(stepIndex, answers, companyName),
+    [stepIndex, answers, companyName],
+  )
 
-  function commitAnswer(): SurveyAnswers {
-    const next = { ...answers, [answerKey(section.id, question.id)]: draft }
-    setAnswers(next)
-    return next
+  async function persistAnswer(value: string) {
+    setSaving(true)
+    setSaveError('')
+    try {
+      const res = await fetch('/api/get-started/save', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token,
+          respondentEmail: respondent.email,
+          scope: section.scope,
+          sectionId: section.id,
+          questionId: question.id,
+          answer: value,
+        }),
+      })
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}))
+        throw new Error(data.error || 'Could not save that answer.')
+      }
+    } catch (err) {
+      setSaveError(err instanceof Error ? err.message : 'Save failed.')
+      throw err
+    } finally {
+      setSaving(false)
+    }
   }
 
-  function handleSend() {
-    const next = commitAnswer()
+  async function handleSend() {
+    const next = { ...answers, [answerKey(section.id, question.id)]: draft }
+    onAnswersChange(next)
+    try {
+      await persistAnswer(draft)
+    } catch {
+      // Keep the user on this step so they can retry.
+      return
+    }
     if (isLast) {
-      // Try to extract a companyHint from section 1, question 1 if not set.
-      const hint = companyHint || extractCompanyHint(next[answerKey('company', 'overview')] || '')
-      onComplete(next, hint)
+      onComplete()
+      return
+    }
+    setStepIndex((i) => Math.min(STEPS.length - 1, i + 1))
+  }
+
+  async function handleSkip() {
+    // Skipping persists the current draft as-is (could be empty or partial).
+    const next = { ...answers, [answerKey(section.id, question.id)]: draft }
+    onAnswersChange(next)
+    try {
+      await persistAnswer(draft)
+    } catch {
+      return
+    }
+    if (isLast) {
+      onComplete()
       return
     }
     setStepIndex((i) => Math.min(STEPS.length - 1, i + 1))
   }
 
   function handleBack() {
-    commitAnswer()
+    onAnswersChange({ ...answers, [answerKey(section.id, question.id)]: draft })
     setStepIndex((i) => Math.max(0, i - 1))
   }
 
-  function handleSkip() {
-    if (isLast) {
-      const hint = companyHint || extractCompanyHint(answers[answerKey('company', 'overview')] || '')
-      onComplete(answers, hint)
-      return
-    }
-    setStepIndex((i) => Math.min(STEPS.length - 1, i + 1))
-  }
-
   function handleJump(targetSectionIndex: number) {
-    commitAnswer()
+    onAnswersChange({ ...answers, [answerKey(section.id, question.id)]: draft })
     const target = STEPS.findIndex((s) => s.sectionIndex === targetSectionIndex)
     if (target >= 0) setStepIndex(target)
   }
 
   return (
-    <div className="grid lg:grid-cols-[260px_1fr] gap-6 lg:gap-8">
-      {/* Sidebar: section progress */}
+    <div className="grid lg:grid-cols-[280px_1fr] gap-6 lg:gap-8">
+      {/* Sidebar */}
       <aside className="lg:sticky lg:top-24 lg:self-start">
         <div className="font-mono text-[11px] tracking-[0.16em] uppercase text-muted mb-3">
-          Sections — {progressLabel(stepIndex)} of {total}
+          Sections — {section.number} of {SURVEY_SECTIONS.length}
         </div>
         <ol className="grid gap-1.5 m-0 p-0 list-none">
           {SURVEY_SECTIONS.map((s, i) => {
-            const status = sectionStatus(i, stepIndex, answers, s)
+            const status = sectionStatus(i, stepIndex)
             return (
               <li key={s.id}>
                 <button
@@ -187,11 +188,7 @@ export function ConversationalForm({
                     >
                       {s.title}
                     </span>
-                    {status === 'current' && (
-                      <span className="block text-[11.5px] text-muted mt-0.5 font-mono tracking-[0.08em] uppercase">
-                        Question {step.questionIndex + 1} of {s.questions.length}
-                      </span>
-                    )}
+                    <ScopeChip scope={s.scope} small />
                   </span>
                 </button>
               </li>
@@ -200,26 +197,41 @@ export function ConversationalForm({
         </ol>
 
         <div className="mt-5 pt-5 border-t border-[var(--color-line)] flex flex-col gap-2">
+          <div className="text-[12px] text-muted leading-[1.55]">
+            Signed in as{' '}
+            <span className="text-ink font-medium">{respondent.name}</span>
+            <br />
+            <span className="font-mono text-[11px]">{respondent.email}</span>
+          </div>
           <button
             type="button"
-            onClick={onCancel}
+            onClick={onSwitchToMarkdown}
             className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors text-left"
           >
-            ← Switch method
+            📄 Use markdown templates instead
           </button>
-          <span className="text-[11.5px] text-muted leading-[1.5]">
-            We auto-save your answers in this browser as you go.
+          <button
+            type="button"
+            onClick={onSwitchRespondent}
+            className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-signal transition-colors text-left"
+          >
+            ← Not you?
+          </button>
+          <span className="text-[11.5px] text-muted leading-[1.5] mt-2">
+            Your answers save as you go. Refresh the page anytime — your progress sticks.
           </span>
         </div>
       </aside>
 
       {/* Chat */}
       <div className="bg-white border border-[var(--color-line)] rounded-[18px] flex flex-col min-h-[560px]">
-        {/* Progress */}
         <div className="px-5 sm:px-7 pt-5 pb-3 border-b border-[var(--color-line)]">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
-              {section.title}
+            <div className="flex items-center gap-3">
+              <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
+                {section.title}
+              </div>
+              <ScopeChip scope={section.scope} />
             </div>
             <div className="font-mono text-[11px] tracking-[0.14em] uppercase text-muted">
               {stepIndex + 1} / {total}
@@ -243,7 +255,6 @@ export function ConversationalForm({
           </div>
         </div>
 
-        {/* Transcript */}
         <div
           ref={transcriptRef}
           className="flex-1 overflow-y-auto px-5 sm:px-7 py-6 flex flex-col gap-4 max-h-[440px] sm:max-h-[520px]"
@@ -253,20 +264,39 @@ export function ConversationalForm({
           ))}
         </div>
 
-        {/* Composer */}
         <div className="border-t border-[var(--color-line)] px-5 sm:px-7 pt-4 pb-5 flex flex-col gap-3 bg-paper/40 rounded-b-[18px]">
+          {section.scope === 'company' && draft.trim().length > 0 && (
+            <div className="text-[12px] text-muted leading-[1.55] -mb-1">
+              <strong className="text-ink font-medium">Heads up:</strong> this is a company-wide
+              question. Anyone else from {companyName} who opens this link will see what you save
+              here.
+            </div>
+          )}
           <AutoTextarea
             value={draft}
             onChange={setDraft}
             placeholder={question.placeholder || 'Type your answer — paragraphs welcome.'}
             onSubmit={handleSend}
           />
+          {saveError && (
+            <div
+              role="alert"
+              className="rounded-lg border px-3 py-2 text-[12.5px]"
+              style={{
+                color: 'var(--color-operator)',
+                background: 'rgba(251,124,80,.08)',
+                borderColor: 'rgba(251,124,80,.3)',
+              }}
+            >
+              {saveError}
+            </div>
+          )}
           <div className="flex items-center justify-between gap-3 flex-wrap">
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={handleBack}
-                disabled={isFirst}
+                disabled={isFirst || saving}
                 className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 ← Back
@@ -274,7 +304,8 @@ export function ConversationalForm({
               <button
                 type="button"
                 onClick={handleSkip}
-                className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors"
+                disabled={saving}
+                className="text-[12.5px] font-mono tracking-[0.12em] uppercase text-muted hover:text-ink transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 Skip for now
               </button>
@@ -282,9 +313,10 @@ export function ConversationalForm({
             <button
               type="button"
               onClick={handleSend}
-              className="btn btn-primary"
+              disabled={saving}
+              className="btn btn-primary disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              {isLast ? 'Review my answers →' : 'Send & continue →'}
+              {saving ? 'Saving…' : isLast ? 'Review my answers →' : 'Send & continue →'}
             </button>
           </div>
           <div className="text-[11.5px] text-muted font-mono tracking-[0.08em]">
@@ -297,16 +329,40 @@ export function ConversationalForm({
   )
 }
 
+// ─── Scope chip ─────────────────────────────────────────────────────────────
+
+function ScopeChip({ scope, small }: { scope: SurveySection['scope']; small?: boolean }) {
+  const label = scope === 'company' ? 'Shared with team' : 'Just for you'
+  const bg = scope === 'company' ? 'rgba(44,107,240,0.10)' : 'rgba(15,23,42,0.06)'
+  const fg = scope === 'company' ? 'var(--color-signal)' : 'var(--color-ink-2)'
+  return (
+    <span
+      className={[
+        'inline-block font-mono uppercase tracking-[0.12em] rounded-full',
+        small ? 'text-[9.5px] px-1.5 py-0.5 mt-1' : 'text-[10px] px-2 py-0.5',
+      ].join(' ')}
+      style={{ background: bg, color: fg }}
+    >
+      {label}
+    </span>
+  )
+}
+
 // ─── Transcript ─────────────────────────────────────────────────────────────
 
 type TranscriptItem =
-  | { kind: 'intro'; text: string; eyebrow: string }
+  | { kind: 'intro'; text: string; eyebrow: string; scope: SurveySection['scope'] }
   | { kind: 'question'; text: string; guidance?: string; eyebrow: string }
   | { kind: 'answer'; text: string }
-  | { kind: 'welcome' }
+  | { kind: 'welcome'; companyName: string }
+  | { kind: 'note'; text: string }
 
-function buildTranscript(stepIndex: number, answers: SurveyAnswers): TranscriptItem[] {
-  const items: TranscriptItem[] = [{ kind: 'welcome' }]
+function buildTranscript(
+  stepIndex: number,
+  answers: SurveyAnswers,
+  companyName: string,
+): TranscriptItem[] {
+  const items: TranscriptItem[] = [{ kind: 'welcome', companyName }]
 
   let lastSectionEmitted = -1
 
@@ -320,7 +376,22 @@ function buildTranscript(stepIndex: number, answers: SurveyAnswers): TranscriptI
         kind: 'intro',
         eyebrow: `Section ${section.number} of ${SURVEY_SECTIONS.length} — ${section.title}`,
         text: section.intro,
+        scope: section.scope,
       })
+
+      // If we're entering a company section that already has answers, note it.
+      if (section.scope === 'company') {
+        const filledCount = section.questions.filter(
+          (q) => (answers[answerKey(section.id, q.id)] || '').trim().length > 0,
+        ).length
+        if (filledCount > 0 && i === stepIndex) {
+          items.push({
+            kind: 'note',
+            text: `Heads up — ${filledCount} of these ${section.questions.length} answers were already filled in by someone else from your team. Review and edit if anything needs updating.`,
+          })
+        }
+      }
+
       lastSectionEmitted = step.sectionIndex
     }
 
@@ -331,7 +402,6 @@ function buildTranscript(stepIndex: number, answers: SurveyAnswers): TranscriptI
       guidance: question.guidance,
     })
 
-    // If we've moved past this question, render the user's answer.
     if (i < stepIndex) {
       const ans = answers[answerKey(section.id, question.id)] || ''
       if (ans.trim().length > 0) {
@@ -352,10 +422,10 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
         <Avatar />
         <div className="flex-1 bg-paper border border-[var(--color-line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
           <p className="text-[14.5px] leading-[1.55] text-ink m-0">
-            Hey — I&apos;m going to walk us through ten quick sections so we can scope your
-            operator. Take as long as you need on each answer. There are no
-            character limits, no required fields, and you can rewrite anything before
-            it&apos;s submitted. Let&apos;s start.
+            Welcome. I&apos;m going to walk us through ten quick sections to scope your operator
+            for <strong className="font-medium">{entry.companyName}</strong>. Take as long as you
+            need on each answer. Sections marked <em>Shared with team</em> are filled once and
+            shared across everyone from your company; the rest are just for you.
           </p>
         </div>
       </div>
@@ -366,12 +436,32 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
       <div className="flex items-start gap-3 mt-2">
         <Avatar />
         <div className="flex-1 bg-paper border border-[var(--color-line)] rounded-2xl rounded-tl-md px-4 py-3 max-w-[680px]">
-          <div className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-signal font-medium mb-1">
-            {entry.eyebrow}
+          <div className="flex items-center gap-2 mb-1">
+            <div className="font-mono text-[10.5px] tracking-[0.16em] uppercase text-signal font-medium">
+              {entry.eyebrow}
+            </div>
+            <ScopeChip scope={entry.scope} small />
           </div>
           <p className="text-[14.5px] leading-[1.55] text-ink-2 m-0 italic font-sans">
             {entry.text}
           </p>
+        </div>
+      </div>
+    )
+  }
+  if (entry.kind === 'note') {
+    return (
+      <div className="flex items-start gap-3">
+        <div className="w-8" aria-hidden />
+        <div
+          className="flex-1 rounded-xl px-4 py-2.5 text-[13px] leading-[1.5] max-w-[680px]"
+          style={{
+            color: 'var(--color-ink-2)',
+            background: 'rgba(44,107,240,0.06)',
+            border: '1px solid rgba(44,107,240,0.18)',
+          }}
+        >
+          {entry.text}
         </div>
       </div>
     )
@@ -394,7 +484,6 @@ function TranscriptEntry({ entry }: { entry: TranscriptItem }) {
       </div>
     )
   }
-  // answer
   return (
     <div className="flex items-start gap-3 justify-end">
       <div className="flex-1 max-w-[680px] bg-ink text-paper rounded-2xl rounded-tr-md px-4 py-3">
@@ -431,8 +520,6 @@ function UserAvatar() {
   )
 }
 
-// ─── Auto-growing textarea ──────────────────────────────────────────────────
-
 function AutoTextarea({
   value,
   onChange,
@@ -445,7 +532,6 @@ function AutoTextarea({
   onSubmit: () => void
 }) {
   const ref = useRef<HTMLTextAreaElement>(null)
-
   useEffect(() => {
     const el = ref.current
     if (!el) return
@@ -472,42 +558,12 @@ function AutoTextarea({
   )
 }
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
-
-function progressLabel(stepIndex: number): number {
-  return SURVEY_SECTIONS[STEPS[stepIndex].sectionIndex].number
-}
-
 function sectionStatus(
   sectionIndex: number,
   stepIndex: number,
-  answers: SurveyAnswers,
-  section: typeof SURVEY_SECTIONS[number],
 ): 'done' | 'current' | 'pending' {
   const currentSectionIndex = STEPS[stepIndex].sectionIndex
   if (sectionIndex < currentSectionIndex) return 'done'
-  if (sectionIndex === currentSectionIndex) {
-    // If current section is the very last one and we're on its last question
-    // and it has been answered, count it as done.
-    const isLastSection = sectionIndex === SURVEY_SECTIONS.length - 1
-    if (isLastSection) {
-      const allAnswered = section.questions.every((q) =>
-        (answers[answerKey(section.id, q.id)] || '').trim().length > 0,
-      )
-      return allAnswered && stepIndex === STEPS.length - 1 ? 'current' : 'current'
-    }
-    return 'current'
-  }
+  if (sectionIndex === currentSectionIndex) return 'current'
   return 'pending'
 }
-
-function extractCompanyHint(overviewAnswer: string): string {
-  if (!overviewAnswer) return ''
-  const trimmed = overviewAnswer.trim()
-  if (!trimmed) return ''
-  // Take the first sentence-ish chunk, or the part before a dash.
-  const firstLine = trimmed.split(/\r?\n/)[0]
-  const dash = firstLine.split(/[—–-]/)[0]
-  return dash.trim().slice(0, 80)
-}
-

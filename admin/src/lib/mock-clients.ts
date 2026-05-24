@@ -12,6 +12,7 @@ export type Client = {
   contactEmail: string
   createdAt: string // ISO
   monthlyRevenue: number
+  tokenAllowance: number
   usage: {
     activeUsers: number
     seats: number
@@ -35,6 +36,7 @@ export const mockClients: Client[] = [
     contactEmail: 'margaret@acmelaw.com',
     createdAt: '2026-02-14T16:30:00Z',
     monthlyRevenue: 799,
+    tokenAllowance: 200,
     usage: {
       activeUsers: 12,
       seats: 15,
@@ -79,6 +81,7 @@ export const mockClients: Client[] = [
     contactEmail: 'dpark@summitcpa.com',
     createdAt: '2026-03-02T20:15:00Z',
     monthlyRevenue: 399,
+    tokenAllowance: 100,
     usage: {
       activeUsers: 6,
       seats: 8,
@@ -107,6 +110,7 @@ export const mockClients: Client[] = [
     contactEmail: 'yuki@brightside.studio',
     createdAt: '2026-05-04T14:00:00Z',
     monthlyRevenue: 0,
+    tokenAllowance: 200,
     usage: {
       activeUsers: 0,
       seats: 12,
@@ -136,6 +140,7 @@ export const mockClients: Client[] = [
     contactEmail: 'apatel@redwoodpe.com',
     createdAt: '2025-11-20T18:45:00Z',
     monthlyRevenue: 1499,
+    tokenAllowance: 300,
     usage: {
       activeUsers: 47,
       seats: 60,
@@ -167,6 +172,7 @@ export const mockClients: Client[] = [
     contactEmail: 'tom@oakhill.realty',
     createdAt: '2025-09-10T15:20:00Z',
     monthlyRevenue: 0,
+    tokenAllowance: 100,
     usage: {
       activeUsers: 0,
       seats: 5,
@@ -193,6 +199,7 @@ export const mockClients: Client[] = [
     contactEmail: 'rolsen@prairiedental.com',
     createdAt: '2026-05-07T19:10:00Z',
     monthlyRevenue: 0,
+    tokenAllowance: 200,
     usage: {
       activeUsers: 0,
       seats: 18,

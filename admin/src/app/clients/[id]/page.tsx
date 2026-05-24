@@ -22,6 +22,12 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
 
   const plan = planMeta[client.planTier]
   const usagePct = Math.round((client.usage.aiCallsThisMonth / client.usage.aiCallsLimit) * 100)
+  const spendPct = client.tokenAllowance > 0
+    ? Math.round((client.usage.costThisMonth / client.tokenAllowance) * 100)
+    : 0
+  const overage = client.usage.costThisMonth > client.tokenAllowance && client.tokenAllowance > 0
+    ? client.usage.costThisMonth - client.tokenAllowance
+    : 0
   const seatPct = Math.round((client.usage.activeUsers / client.usage.seats) * 100)
   const survey = client.survey
   const partner = getPartnerForClient(client.id)
@@ -185,19 +191,18 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
               <h3 className="font-serif-warm text-[20px] mt-1 tracking-[-0.01em]">Live tenant stats</h3>
             </div>
             <CardBody className="grid gap-5">
-              <UsageBar
-                label="AI calls"
-                value={client.usage.aiCallsThisMonth}
-                limit={client.usage.aiCallsLimit}
-                pct={usagePct}
-                href="#ai-calls"
+              <SpendBar
+                spend={client.usage.costThisMonth}
+                allowance={client.tokenAllowance}
+                pct={spendPct}
+                calls={client.usage.aiCallsThisMonth}
               />
-              <div className="flex items-baseline justify-between pt-1">
-                <span className="text-[13px] font-medium text-ink">AI spend this month</span>
-                <span className="font-serif-warm text-[22px] tracking-[-0.01em] text-ink tabular-nums">
-                  {formatCurrency(client.usage.costThisMonth)}
-                </span>
-              </div>
+              {overage > 0 && (
+                <div className="flex items-center justify-between px-3 py-2 rounded-lg bg-status-down/10 border border-status-down/30">
+                  <span className="text-[13px] font-medium text-status-down">Overage</span>
+                  <span className="text-[14px] font-medium text-status-down tabular-nums">{formatCurrency(overage)}</span>
+                </div>
+              )}
               <UsageBar
                 label="Seats"
                 value={client.usage.activeUsers}
@@ -425,6 +430,26 @@ function UsageBar({
     )
   }
   return <div>{body}</div>
+}
+
+function SpendBar({ spend, allowance, pct, calls }: { spend: number; allowance: number; pct: number; calls: number }) {
+  const tone = pct > 100 ? 'bg-status-down' : pct > 80 ? 'bg-accent' : 'bg-accent-2'
+  return (
+    <a href="#ai-calls" className="block -mx-2 px-2 py-1 rounded-md hover:bg-paper transition-colors">
+      <div className="flex justify-between items-baseline">
+        <span className="text-[13px] font-medium text-ink">AI spend</span>
+        <span className="text-[12.5px] text-muted tabular-nums">
+          {formatCurrency(spend)} / {formatCurrency(allowance)} ({pct}%)
+        </span>
+      </div>
+      <div className="mt-2 h-2 bg-paper rounded-full overflow-hidden border border-line">
+        <div className={`h-full ${tone} transition-all`} style={{ width: `${Math.min(100, pct)}%` }} />
+      </div>
+      <div className="mt-1.5 text-[11.5px] text-muted tabular-nums">
+        {formatNumber(calls)} API calls this month
+      </div>
+    </a>
+  )
 }
 
 function MiniStat({ label, value, href }: { label: string; value: string; href?: string }) {

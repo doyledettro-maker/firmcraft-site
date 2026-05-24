@@ -29,7 +29,7 @@ const PLAN_DEFAULTS: Record<PlanTier, { seats: number; aiCallsLimit: number }> =
   solo:  { seats: 2,  aiCallsLimit: 8000 },
   team:  { seats: 5,  aiCallsLimit: 25000 },
   pro:   { seats: 10, aiCallsLimit: 80000 },
-  pilot: { seats: 3,  aiCallsLimit: 4000 },
+  pilot: { seats: 3,  aiCallsLimit: 1000 },
   // Legacy (kept for backfill safety; new clients never get these)
   spark: { seats: 8,  aiCallsLimit: 8000 },
   flow:  { seats: 15, aiCallsLimit: 25000 },
@@ -56,6 +56,7 @@ export function rowToClient(row: ClientRow): Client {
       // bypass that aggregation (eg. list views).
       aiCallsThisMonth: 0,
       aiCallsLimit: planDefaults.aiCallsLimit,
+      costThisMonth: 0,
       skillsActive: 0,
       integrationsConnected: 0,
     },

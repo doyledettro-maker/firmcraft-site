@@ -65,6 +65,7 @@ export async function getClient(id: string): Promise<Client | undefined> {
     usage: {
       ...client.usage,
       aiCallsThisMonth: usage.totals.apiCalls,
+      costThisMonth: usage.totals.cost,
       integrationsConnected: infrastructure.length,
       skillsActive: skillCount,
     },

@@ -17,6 +17,7 @@ export type Client = {
     seats: number
     aiCallsThisMonth: number
     aiCallsLimit: number
+    costThisMonth: number
     skillsActive: number
     integrationsConnected: number
   }
@@ -39,6 +40,7 @@ export const mockClients: Client[] = [
       seats: 15,
       aiCallsThisMonth: 8420,
       aiCallsLimit: 25000,
+      costThisMonth: 247.50,
       skillsActive: 142,
       integrationsConnected: 6,
     },
@@ -82,6 +84,7 @@ export const mockClients: Client[] = [
       seats: 8,
       aiCallsThisMonth: 2150,
       aiCallsLimit: 8000,
+      costThisMonth: 62.30,
       skillsActive: 38,
       integrationsConnected: 3,
     },
@@ -109,6 +112,7 @@ export const mockClients: Client[] = [
       seats: 12,
       aiCallsThisMonth: 0,
       aiCallsLimit: 25000,
+      costThisMonth: 0,
       skillsActive: 0,
       integrationsConnected: 0,
     },
@@ -137,6 +141,7 @@ export const mockClients: Client[] = [
       seats: 60,
       aiCallsThisMonth: 31200,
       aiCallsLimit: 80000,
+      costThisMonth: 1205.80,
       skillsActive: 612,
       integrationsConnected: 11,
     },
@@ -167,6 +172,7 @@ export const mockClients: Client[] = [
       seats: 5,
       aiCallsThisMonth: 0,
       aiCallsLimit: 8000,
+      costThisMonth: 0,
       skillsActive: 0,
       integrationsConnected: 2,
     },
@@ -192,6 +198,7 @@ export const mockClients: Client[] = [
       seats: 18,
       aiCallsThisMonth: 0,
       aiCallsLimit: 25000,
+      costThisMonth: 0,
       skillsActive: 0,
       integrationsConnected: 0,
     },

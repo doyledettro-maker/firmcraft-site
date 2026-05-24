@@ -192,6 +192,12 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                 pct={usagePct}
                 href="#ai-calls"
               />
+              <div className="flex items-baseline justify-between pt-1">
+                <span className="text-[13px] font-medium text-ink">AI spend this month</span>
+                <span className="font-serif-warm text-[22px] tracking-[-0.01em] text-ink tabular-nums">
+                  {formatCurrency(client.usage.costThisMonth)}
+                </span>
+              </div>
               <UsageBar
                 label="Seats"
                 value={client.usage.activeUsers}

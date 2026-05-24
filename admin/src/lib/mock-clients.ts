@@ -17,7 +17,7 @@ export type Client = {
     seats: number
     aiCallsThisMonth: number
     aiCallsLimit: number
-    playbooksRun: number
+    skillsActive: number
     integrationsConnected: number
   }
   survey: Partial<SurveyData>
@@ -39,7 +39,7 @@ export const mockClients: Client[] = [
       seats: 15,
       aiCallsThisMonth: 8420,
       aiCallsLimit: 25000,
-      playbooksRun: 142,
+      skillsActive: 142,
       integrationsConnected: 6,
     },
     survey: {
@@ -82,7 +82,7 @@ export const mockClients: Client[] = [
       seats: 8,
       aiCallsThisMonth: 2150,
       aiCallsLimit: 8000,
-      playbooksRun: 38,
+      skillsActive: 38,
       integrationsConnected: 3,
     },
     survey: {
@@ -109,7 +109,7 @@ export const mockClients: Client[] = [
       seats: 12,
       aiCallsThisMonth: 0,
       aiCallsLimit: 25000,
-      playbooksRun: 0,
+      skillsActive: 0,
       integrationsConnected: 0,
     },
     survey: {
@@ -137,7 +137,7 @@ export const mockClients: Client[] = [
       seats: 60,
       aiCallsThisMonth: 31200,
       aiCallsLimit: 80000,
-      playbooksRun: 612,
+      skillsActive: 612,
       integrationsConnected: 11,
     },
     survey: {
@@ -167,7 +167,7 @@ export const mockClients: Client[] = [
       seats: 5,
       aiCallsThisMonth: 0,
       aiCallsLimit: 8000,
-      playbooksRun: 0,
+      skillsActive: 0,
       integrationsConnected: 2,
     },
     survey: {
@@ -192,7 +192,7 @@ export const mockClients: Client[] = [
       seats: 18,
       aiCallsThisMonth: 0,
       aiCallsLimit: 25000,
-      playbooksRun: 0,
+      skillsActive: 0,
       integrationsConnected: 0,
     },
     survey: {

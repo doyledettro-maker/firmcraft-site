@@ -4,7 +4,7 @@ import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake, Sliders
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
-import { getClient } from '@/lib/db'
+import { getClient, getClientSkills, getInfrastructureStatus } from '@/lib/db'
 import { getPartnerForClient } from '@/lib/mock-partners'
 import { planMeta } from '@/lib/survey'
 import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
@@ -14,6 +14,11 @@ export const dynamic = 'force-dynamic'
 export default async function ClientDetailPage({ params }: { params: { id: string } }) {
   const client = await getClient(params.id)
   if (!client) notFound()
+
+  const [skills, infrastructure] = await Promise.all([
+    getClientSkills(client.id),
+    getInfrastructureStatus(client.id),
+  ])
 
   const plan = planMeta[client.planTier]
   const usagePct = Math.round((client.usage.aiCallsThisMonth / client.usage.aiCallsLimit) * 100)
@@ -185,16 +190,26 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                 value={client.usage.aiCallsThisMonth}
                 limit={client.usage.aiCallsLimit}
                 pct={usagePct}
+                href="#ai-calls"
               />
               <UsageBar
                 label="Seats"
                 value={client.usage.activeUsers}
                 limit={client.usage.seats}
                 pct={seatPct}
+                href="#seats"
               />
               <div className="grid grid-cols-2 gap-3 pt-2 border-t border-line">
-                <MiniStat label="Playbooks run" value={formatNumber(client.usage.playbooksRun)} />
-                <MiniStat label="Integrations" value={String(client.usage.integrationsConnected)} />
+                <MiniStat
+                  label="Custom skills"
+                  value={formatNumber(client.usage.skillsActive)}
+                  href="#skills"
+                />
+                <MiniStat
+                  label="Integrations"
+                  value={String(client.usage.integrationsConnected)}
+                  href="#integrations"
+                />
               </div>
             </CardBody>
           </Card>
@@ -211,6 +226,113 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
             </CardBody>
           </Card>
         </div>
+      </div>
+
+      <div className="grid gap-6 mt-8">
+        <Card id="ai-calls" className="scroll-mt-24">
+          <div className="px-6 py-5 border-b border-line">
+            <div className="eyebrow">AI calls</div>
+            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">Usage this month</h3>
+          </div>
+          <CardBody>
+            <div className="text-[14px] text-ink-2">
+              <span className="font-mono-warm text-ink">{formatNumber(client.usage.aiCallsThisMonth)}</span>{' '}
+              of {formatNumber(client.usage.aiCallsLimit)} calls used ({usagePct}%) ·{' '}
+              source: <span className="font-mono-warm text-ink">usage_events</span>
+            </div>
+            <div className="text-[12.5px] text-muted mt-2">
+              Per-day breakdown and model split coming soon. For now, totals are summed from LiteLLM
+              roll-ups for the current calendar month.
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card id="seats" className="scroll-mt-24">
+          <div className="px-6 py-5 border-b border-line">
+            <div className="eyebrow">Seats</div>
+            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">Active users</h3>
+          </div>
+          <CardBody>
+            <div className="text-[14px] text-ink-2">
+              <span className="font-mono-warm text-ink">{client.usage.activeUsers}</span>{' '}
+              of {client.usage.seats} seats in use
+            </div>
+            <div className="text-[12.5px] text-muted mt-2">
+              TODO: wire to auth/session data. Today this is a placeholder per plan tier.
+            </div>
+          </CardBody>
+        </Card>
+
+        <Card id="skills" className="scroll-mt-24">
+          <div className="px-6 py-5 border-b border-line">
+            <div className="eyebrow">Custom skills</div>
+            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+              Skills installed on this tenant
+            </h3>
+          </div>
+          <CardBody className="p-0">
+            {skills.length === 0 ? (
+              <div className="px-6 py-5 text-muted text-[14px]">No skills installed yet.</div>
+            ) : (
+              <ul className="divide-y divide-line">
+                {skills.map((s) => (
+                  <li key={s.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
+                    <span className="font-mono-warm text-[13.5px] text-ink">{s.skillName}</span>
+                    <span
+                      className={
+                        s.status === 'active'
+                          ? 'text-[12px] text-accent-2 font-mono-warm uppercase tracking-[0.12em]'
+                          : 'text-[12px] text-muted font-mono-warm uppercase tracking-[0.12em]'
+                      }
+                    >
+                      {s.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardBody>
+        </Card>
+
+        <Card id="integrations" className="scroll-mt-24">
+          <div className="px-6 py-5 border-b border-line">
+            <div className="eyebrow">Integrations</div>
+            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+              Connected services
+            </h3>
+          </div>
+          <CardBody className="p-0">
+            {infrastructure.length === 0 ? (
+              <div className="px-6 py-5 text-muted text-[14px]">No integrations recorded.</div>
+            ) : (
+              <ul className="divide-y divide-line">
+                {infrastructure.map((i) => (
+                  <li key={i.id} className="px-6 py-3.5 grid grid-cols-[1fr_auto] gap-4 items-center">
+                    <div>
+                      <div className="text-[14px] text-ink">{i.serviceName}</div>
+                      {i.endpoint ? (
+                        <div className="text-[12px] text-muted font-mono-warm mt-0.5 truncate">
+                          {i.endpoint}
+                        </div>
+                      ) : null}
+                    </div>
+                    <span
+                      className={
+                        i.status === 'up'
+                          ? 'text-[12px] text-accent-2 font-mono-warm uppercase tracking-[0.12em]'
+                          : i.status === 'down'
+                          ? 'text-[12px] text-status-down font-mono-warm uppercase tracking-[0.12em]'
+                          : 'text-[12px] text-muted font-mono-warm uppercase tracking-[0.12em]'
+                      }
+                    >
+                      {i.status}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </CardBody>
+        </Card>
       </div>
     </AppShell>
   )
@@ -262,10 +384,22 @@ function scaleLabel(n?: number) {
   return `${n} / 5`
 }
 
-function UsageBar({ label, value, limit, pct }: { label: string; value: number; limit: number; pct: number }) {
+function UsageBar({
+  label,
+  value,
+  limit,
+  pct,
+  href,
+}: {
+  label: string
+  value: number
+  limit: number
+  pct: number
+  href?: string
+}) {
   const tone = pct > 85 ? 'bg-status-down' : pct > 60 ? 'bg-accent' : 'bg-accent-2'
-  return (
-    <div>
+  const body = (
+    <>
       <div className="flex justify-between items-baseline">
         <span className="text-[13px] font-medium text-ink">{label}</span>
         <span className="text-[12.5px] text-muted tabular-nums">
@@ -275,15 +409,31 @@ function UsageBar({ label, value, limit, pct }: { label: string; value: number; 
       <div className="mt-2 h-2 bg-paper rounded-full overflow-hidden border border-line">
         <div className={`h-full ${tone} transition-all`} style={{ width: `${Math.min(100, pct)}%` }} />
       </div>
-    </div>
+    </>
   )
+  if (href) {
+    return (
+      <a href={href} className="block -mx-2 px-2 py-1 rounded-md hover:bg-paper transition-colors">
+        {body}
+      </a>
+    )
+  }
+  return <div>{body}</div>
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
-  return (
-    <div>
+function MiniStat({ label, value, href }: { label: string; value: string; href?: string }) {
+  const body = (
+    <>
       <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted">{label}</div>
       <div className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1 leading-none">{value}</div>
-    </div>
+    </>
   )
+  if (href) {
+    return (
+      <a href={href} className="block -mx-2 px-2 py-1 rounded-md hover:bg-paper transition-colors">
+        {body}
+      </a>
+    )
+  }
+  return <div>{body}</div>
 }

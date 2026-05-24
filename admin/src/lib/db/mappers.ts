@@ -1,11 +1,15 @@
 import type { Client, ClientStatus } from '@/lib/mock-clients'
 import type { PlanTier } from '@/lib/survey'
 
+export type SurveyStatus = 'pending' | 'in_progress' | 'submitted' | 'not_applicable'
+
 export type ClientRow = {
   id: string
   name: string
+  slug: string | null
   industry: string | null
   status: ClientStatus
+  survey_status: SurveyStatus | null
   plan_tier: PlanTier
   contact_name: string | null
   contact_email: string | null
@@ -45,11 +49,14 @@ export function rowToClient(row: ClientRow): Client {
     createdAt: row.created_at,
     monthlyRevenue: Number(row.monthly_price),
     usage: {
+      // TODO: activeUsers should come from auth/session data once seats are wired up.
       activeUsers: 0,
       seats: planDefaults.seats,
+      // Real values populated by getClient() — these are fallbacks when callers
+      // bypass that aggregation (eg. list views).
       aiCallsThisMonth: 0,
       aiCallsLimit: planDefaults.aiCallsLimit,
-      playbooksRun: 0,
+      skillsActive: 0,
       integrationsConnected: 0,
     },
     survey: {},

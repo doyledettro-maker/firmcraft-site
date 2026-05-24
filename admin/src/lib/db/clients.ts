@@ -8,6 +8,17 @@ import {
   type ClientCreateInput,
   type ClientUpdateInput,
 } from './mappers'
+import { getClientUsage } from './usage'
+import { getInfrastructureStatus } from './infrastructure'
+import { getClientSkillCount } from './skills'
+
+function currentMonthRange(now = new Date()) {
+  const year = now.getUTCFullYear()
+  const month = now.getUTCMonth()
+  const from = new Date(Date.UTC(year, month, 1)).toISOString().slice(0, 10)
+  const to = new Date(Date.UTC(year, month + 1, 0)).toISOString().slice(0, 10)
+  return { from, to }
+}
 
 /**
  * Return every non-deleted client, newest first.
@@ -40,7 +51,24 @@ export async function getClient(id: string): Promise<Client | undefined> {
 
   if (error) throw new Error(`getClient(${id}) failed: ${error.message}`)
   if (!data) return undefined
-  return rowToClient(data as ClientRow)
+
+  const client = rowToClient(data as ClientRow)
+
+  const [usage, infrastructure, skillCount] = await Promise.all([
+    getClientUsage(id, currentMonthRange()),
+    getInfrastructureStatus(id),
+    getClientSkillCount(id),
+  ])
+
+  return {
+    ...client,
+    usage: {
+      ...client.usage,
+      aiCallsThisMonth: usage.totals.apiCalls,
+      integrationsConnected: infrastructure.length,
+      skillsActive: skillCount,
+    },
+  }
 }
 
 export async function createClient(input: ClientCreateInput): Promise<Client> {

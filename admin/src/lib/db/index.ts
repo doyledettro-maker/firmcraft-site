@@ -2,6 +2,7 @@ export { getClients, getClient, createClient, updateClient } from './clients'
 export { getClientUsage } from './usage'
 export { getClientInvoices } from './invoices'
 export { getInfrastructureStatus } from './infrastructure'
+export { getClientConfig, upsertClientConfig } from './config'
 
 export type { ClientCreateInput, ClientUpdateInput } from './mappers'
 export type { UsageEvent, UsageSummary, DateRange } from './usage'

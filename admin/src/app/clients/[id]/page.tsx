@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake } from 'lucide-react'
+import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake, SlidersHorizontal } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
@@ -47,6 +47,12 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           </p>
         </div>
         <div className="flex gap-2">
+          <Link href={`/clients/${client.id}/config`}>
+            <Button variant="ghost">
+              <SlidersHorizontal className="w-4 h-4" />
+              Configuration
+            </Button>
+          </Link>
           <Link href={`/clients/${client.id}/settings`}>
             <Button variant="ghost">
               <SettingsIcon className="w-4 h-4" />

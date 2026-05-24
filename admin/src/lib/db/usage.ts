@@ -82,3 +82,36 @@ export async function getClientUsage(
 
   return { events, totals }
 }
+
+/**
+ * Aggregate usage totals across ALL clients for a date range.
+ * Used by the summary dashboard to show platform-wide spend & calls.
+ */
+export async function getAllUsageTotals(
+  range?: DateRange,
+): Promise<{ cost: number; apiCalls: number }> {
+  if (!isSupabaseConfigured()) {
+    return { cost: 0, apiCalls: 0 }
+  }
+
+  const db = getSupabaseAdmin()
+  let query = db
+    .from('usage_events')
+    .select('cost, api_calls')
+
+  if (range) {
+    query = query.gte('date', range.from).lte('date', range.to)
+  }
+
+  const { data, error } = await query
+  if (error) throw new Error(`getAllUsageTotals failed: ${error.message}`)
+
+  const rows = data ?? []
+  return rows.reduce(
+    (acc, r) => ({
+      cost: acc.cost + Number(r.cost),
+      apiCalls: acc.apiCalls + Number(r.api_calls),
+    }),
+    { cost: 0, apiCalls: 0 },
+  )
+}

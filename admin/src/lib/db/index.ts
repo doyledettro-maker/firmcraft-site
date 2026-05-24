@@ -1,5 +1,5 @@
 export { getClients, getClient, createClient, updateClient } from './clients'
-export { getClientUsage } from './usage'
+export { getClientUsage, getAllUsageTotals } from './usage'
 export { getClientInvoices } from './invoices'
 export { getInfrastructureStatus } from './infrastructure'
 export { getClientConfig, upsertClientConfig } from './config'

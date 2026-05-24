@@ -20,6 +20,7 @@ export type ClientRow = {
   vps_ip: string | null
   hermes_port: number | null
   token_allowance: string | number | null
+  active_users: number | null
   created_at: string
   updated_at: string
   deleted_at: string | null
@@ -51,8 +52,7 @@ export function rowToClient(row: ClientRow): Client {
     monthlyRevenue: Number(row.monthly_price),
     tokenAllowance: Number(row.token_allowance ?? 100),
     usage: {
-      // TODO: activeUsers should come from auth/session data once seats are wired up.
-      activeUsers: 0,
+      activeUsers: Number(row.active_users ?? 0),
       seats: planDefaults.seats,
       // Real values populated by getClient() — these are fallbacks when callers
       // bypass that aggregation (eg. list views).

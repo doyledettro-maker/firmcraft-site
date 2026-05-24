@@ -3,20 +3,35 @@ import { ArrowRight, ClipboardList, Users, DollarSign, Activity } from 'lucide-r
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
-import { getClients } from '@/lib/db'
-import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
+import { getClients, getAllUsageTotals } from '@/lib/db'
+import { formatCurrency, formatSpend, formatDate, formatNumber } from '@/lib/format'
 
 export const dynamic = 'force-dynamic'
 
+function currentMonthRange(now = new Date()) {
+  const year = now.getUTCFullYear()
+  const month = now.getUTCMonth()
+  const from = new Date(Date.UTC(year, month, 1)).toISOString().slice(0, 10)
+  const to = new Date(Date.UTC(year, month + 1, 0)).toISOString().slice(0, 10)
+  return { from, to }
+}
+
 export default async function DashboardPage() {
-  const clients = await getClients()
+  const [clients, usageTotals] = await Promise.all([
+    getClients(),
+    getAllUsageTotals(currentMonthRange()),
+  ])
   const total = clients.length
   const active = clients.filter((c) => c.status === 'active').length
   const onboarding = clients.filter((c) => c.status === 'onboarding').length
   const mrr = clients.filter((c) => c.status === 'active').reduce((s, c) => s + c.monthlyRevenue, 0)
   const totalUsers = clients.reduce((s, c) => s + c.usage.activeUsers, 0)
-  const totalCalls = clients.reduce((s, c) => s + c.usage.aiCallsThisMonth, 0)
   const recent = [...clients].sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)).slice(0, 5)
+
+  const spendDisplay = formatSpend(usageTotals.cost)
+  const callsSub = usageTotals.apiCalls > 0
+    ? `${formatNumber(usageTotals.apiCalls)} calls this month`
+    : 'rolling 30 days'
 
   return (
     <AppShell>
@@ -27,7 +42,7 @@ export default async function DashboardPage() {
             Firmcraft <em className="text-accent italic">control room</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
-            Manage tenants, watch usage, and onboard new clients. Mock data for now — backend wiring lands next.
+            Manage tenants, monitor usage, and onboard new clients.
           </p>
         </div>
         <div className="flex gap-2 flex-none">
@@ -48,7 +63,7 @@ export default async function DashboardPage() {
         <Kpi icon={Users} label="Total clients" value={String(total)} sub={`${active} active · ${onboarding} onboarding`} />
         <Kpi icon={DollarSign} label="MRR" value={formatCurrency(mrr)} sub="across active clients" />
         <Kpi icon={Users} label="Active users" value={formatNumber(totalUsers)} sub="across all tenants" />
-        <Kpi icon={Activity} label="AI calls / mo" value={formatNumber(totalCalls)} sub="rolling 30 days" />
+        <Kpi icon={Activity} label="AI spend / mo" value={spendDisplay} sub={callsSub} />
       </div>
 
       <Card>

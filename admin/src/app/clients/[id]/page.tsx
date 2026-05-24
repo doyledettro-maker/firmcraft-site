@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
-import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake, SlidersHorizontal } from 'lucide-react'
+import { ChevronLeft, Settings as SettingsIcon, ExternalLink, Handshake, SlidersHorizontal, TrendingUp } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, CardBody } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
@@ -210,6 +210,13 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                 pct={seatPct}
                 href="#seats"
               />
+              <Link
+                href={`/clients/${client.id}/usage`}
+                className="flex items-center gap-2 px-3 py-2.5 rounded-lg border border-line hover:border-ink hover:bg-paper-2 transition-colors text-[13px] text-ink-2 hover:text-ink"
+              >
+                <TrendingUp className="w-4 h-4 text-accent-2" />
+                View daily breakdown
+              </Link>
               <div className="grid grid-cols-2 gap-3 pt-2 border-t border-line">
                 <MiniStat
                   label="Custom skills"

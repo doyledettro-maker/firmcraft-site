@@ -1,6 +1,5 @@
-import { NextResponse } from 'next/server'
-import { getProspect, updateProspect } from '@/lib/db/prospects'
-import { logTrackingEvent } from '@/lib/db/tracking'
+import { getContact, updateContact } from '@/lib/db/contacts'
+import { logCorrespondence } from '@/lib/db/correspondence'
 import { TRANSPARENT_PIXEL } from '@/lib/outreach'
 
 export const dynamic = 'force-dynamic'
@@ -26,24 +25,30 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   // Always return a pixel — never block the response on tracking.
   try {
-    const prospect = await getProspect(id)
-    if (prospect) {
+    const contact = await getContact(id)
+    if (contact) {
       const userAgent = req.headers.get('user-agent') ?? ''
       const ip =
         req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
         req.headers.get('x-real-ip') ||
         null
 
-      await logTrackingEvent(id, 'open', { user_agent: userAgent, ip })
-
       const now = new Date().toISOString()
-      const patch: Parameters<typeof updateProspect>[1] = { openedAt: now }
-      if (!prospect.openedAt) {
-        if (prospect.status === 'sent' || prospect.status === 'queued') {
+      await logCorrespondence({
+        contactId: contact.id,
+        companyId: contact.companyId,
+        type: 'email_opened',
+        metadata: { user_agent: userAgent, ip },
+        occurredAt: now,
+      })
+
+      const patch: Parameters<typeof updateContact>[1] = { openedAt: now }
+      if (!contact.openedAt) {
+        if (contact.status === 'sent' || contact.status === 'queued') {
           patch.status = 'opened'
         }
       }
-      await updateProspect(id, patch)
+      await updateContact(id, patch)
     }
   } catch {
     // Swallow — tracking must never break the pixel response.

@@ -3,25 +3,25 @@
 import { useEffect, useState } from 'react'
 
 type Props = {
-  prospectId: string | null
+  contactId: string | null
 }
 
 type Status = 'pending' | 'ok' | 'not_found' | 'error'
 
-export function UnsubscribeRunner({ prospectId }: Props) {
+export function UnsubscribeRunner({ contactId }: Props) {
   const [status, setStatus] = useState<Status>('pending')
 
   useEffect(() => {
     let cancelled = false
 
     async function run() {
-      if (!prospectId) {
+      if (!contactId) {
         if (!cancelled) setStatus('not_found')
         return
       }
 
       try {
-        const res = await fetch(`/api/outreach/unsubscribe/${encodeURIComponent(prospectId)}`, {
+        const res = await fetch(`/api/outreach/unsubscribe/${encodeURIComponent(contactId)}`, {
           method: 'GET',
           cache: 'no-store',
         })
@@ -47,7 +47,7 @@ export function UnsubscribeRunner({ prospectId }: Props) {
     return () => {
       cancelled = true
     }
-  }, [prospectId])
+  }, [contactId])
 
   if (status === 'pending') {
     return (

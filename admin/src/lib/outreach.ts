@@ -1,5 +1,5 @@
 import { Resend } from 'resend'
-import type { Prospect } from '@/lib/db/prospects'
+import type { Contact } from '@/lib/db/contacts'
 
 const FROM_DEFAULT = 'Doyle Dettro <doyle@firmcraft.ai>'
 const REPLY_TO_DEFAULT = 'doyle@firmcraft.ai'
@@ -37,28 +37,24 @@ export function getTrackingBaseUrl(): string {
   ).replace(/\/$/, '')
 }
 
-export function buildOpenPixelUrl(prospectId: string): string {
-  return `${getTrackingBaseUrl()}/api/outreach/track/open/${prospectId}`
+export function buildOpenPixelUrl(contactId: string): string {
+  return `${getTrackingBaseUrl()}/api/outreach/track/open/${contactId}`
 }
 
-export function buildClickUrl(prospectId: string, destination: string): string {
-  return `${getTrackingBaseUrl()}/api/outreach/track/click/${prospectId}?u=${encodeURIComponent(destination)}`
+export function buildClickUrl(contactId: string, destination: string): string {
+  return `${getTrackingBaseUrl()}/api/outreach/track/click/${contactId}?u=${encodeURIComponent(destination)}`
 }
 
-export function buildUnsubscribeUrl(prospectId: string): string {
-  return `${getTrackingBaseUrl()}/api/outreach/track/click/${prospectId}?u=${encodeURIComponent(
-    `${getTrackingBaseUrl()}/unsubscribe?id=${prospectId}`,
+export function buildUnsubscribeUrl(contactId: string): string {
+  return `${getTrackingBaseUrl()}/api/outreach/track/click/${contactId}?u=${encodeURIComponent(
+    `${getTrackingBaseUrl()}/unsubscribe?id=${contactId}`,
   )}`
 }
 
 const HTTP_LINK_RE = /https?:\/\/[^\s<>"')]+/g
 
-/**
- * Wraps every bare URL in the body with a click-tracker redirect.
- * Leaves anchor tags alone — we rewrite their hrefs in renderEmailHtml.
- */
-export function wrapLinksInText(prospectId: string, text: string): string {
-  return text.replace(HTTP_LINK_RE, (url) => buildClickUrl(prospectId, url))
+export function wrapLinksInText(contactId: string, text: string): string {
+  return text.replace(HTTP_LINK_RE, (url) => buildClickUrl(contactId, url))
 }
 
 function escapeHtml(s: string): string {
@@ -70,17 +66,11 @@ function escapeHtml(s: string): string {
     .replace(/'/g, '&#39;')
 }
 
-/**
- * Render the prospect's plain-text email body to a clean HTML email.
- * - Auto-links bare URLs through the click tracker.
- * - Appends an unsubscribe footer and the 1x1 open-tracking pixel.
- * - Looks like a real personal email, not a marketing template.
- */
-export function renderEmailHtml(prospect: Prospect): string {
-  const body = prospect.emailBody ?? ''
+export function renderEmailHtml(contact: Contact): string {
+  const body = contact.emailBody ?? ''
   const escaped = escapeHtml(body).replace(/\r\n/g, '\n')
   const withLinks = escaped.replace(HTTP_LINK_RE, (url) => {
-    const tracked = buildClickUrl(prospect.id, url)
+    const tracked = buildClickUrl(contact.id, url)
     return `<a href="${tracked}" style="color:#2A5BD7;text-decoration:underline">${url}</a>`
   })
   const html = withLinks.split(/\n{2,}/).map((para) => {
@@ -88,12 +78,12 @@ export function renderEmailHtml(prospect: Prospect): string {
     return `<p style="margin:0 0 14px 0">${lines}</p>`
   }).join('\n')
 
-  const unsubscribeUrl = buildUnsubscribeUrl(prospect.id)
-  const pixelUrl = buildOpenPixelUrl(prospect.id)
+  const unsubscribeUrl = buildUnsubscribeUrl(contact.id)
+  const pixelUrl = buildOpenPixelUrl(contact.id)
 
   return `<!doctype html>
 <html>
-<head><meta charset="utf-8"/><title>${escapeHtml(prospect.subjectLine ?? '')}</title></head>
+<head><meta charset="utf-8"/><title>${escapeHtml(contact.subjectLine ?? '')}</title></head>
 <body style="margin:0;padding:0;background:#ffffff;color:#1a1a1a;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;font-size:15px;line-height:1.55">
   <div style="max-width:600px;margin:0 auto;padding:24px 20px">
     ${html}
@@ -106,31 +96,31 @@ export function renderEmailHtml(prospect: Prospect): string {
 </html>`
 }
 
-export function renderEmailText(prospect: Prospect): string {
-  const body = prospect.emailBody ?? ''
-  const wrapped = wrapLinksInText(prospect.id, body)
-  const unsub = `${getTrackingBaseUrl()}/unsubscribe?id=${prospect.id}`
+export function renderEmailText(contact: Contact): string {
+  const body = contact.emailBody ?? ''
+  const wrapped = wrapLinksInText(contact.id, body)
+  const unsub = `${getTrackingBaseUrl()}/unsubscribe?id=${contact.id}`
   return `${wrapped}\n\n---\nIf you'd rather not hear from me, unsubscribe: ${unsub}`
 }
 
 export type SendResult = {
-  prospectId: string
+  contactId: string
   ok: boolean
   messageId?: string
   error?: string
 }
 
-export async function sendProspectEmail(prospect: Prospect): Promise<SendResult> {
-  if (!prospect.email || !prospect.subjectLine || !prospect.emailBody) {
+export async function sendContactEmail(contact: Contact): Promise<SendResult> {
+  if (!contact.email || !contact.subjectLine || !contact.emailBody) {
     return {
-      prospectId: prospect.id,
+      contactId: contact.id,
       ok: false,
       error: 'Missing email, subject, or body',
     }
   }
   if (!isResendConfigured()) {
     return {
-      prospectId: prospect.id,
+      contactId: contact.id,
       ok: false,
       error: 'Resend not configured (RESEND_API_KEY missing)',
     }
@@ -139,23 +129,23 @@ export async function sendProspectEmail(prospect: Prospect): Promise<SendResult>
     const resend = getResend()
     const { data, error } = await resend.emails.send({
       from: getOutreachFrom(),
-      to: [prospect.email],
+      to: [contact.email],
       replyTo: getOutreachReplyTo(),
-      subject: prospect.subjectLine,
-      html: renderEmailHtml(prospect),
-      text: renderEmailText(prospect),
+      subject: contact.subjectLine,
+      html: renderEmailHtml(contact),
+      text: renderEmailText(contact),
       headers: {
-        'List-Unsubscribe': `<${getTrackingBaseUrl()}/unsubscribe?id=${prospect.id}>`,
+        'List-Unsubscribe': `<${getTrackingBaseUrl()}/unsubscribe?id=${contact.id}>`,
         'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
       },
     })
     if (error) {
-      return { prospectId: prospect.id, ok: false, error: error.message }
+      return { contactId: contact.id, ok: false, error: error.message }
     }
-    return { prospectId: prospect.id, ok: true, messageId: data?.id }
+    return { contactId: contact.id, ok: true, messageId: data?.id }
   } catch (err) {
     return {
-      prospectId: prospect.id,
+      contactId: contact.id,
       ok: false,
       error: err instanceof Error ? err.message : 'Unknown send error',
     }

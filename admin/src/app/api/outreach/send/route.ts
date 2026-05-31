@@ -1,27 +1,31 @@
 import { NextResponse } from 'next/server'
 import {
-  getProspect,
-  getProspects,
-  updateProspect,
-  type Prospect,
-} from '@/lib/db/prospects'
-import { sendProspectEmail, type SendResult } from '@/lib/outreach'
+  getContact,
+  getContacts,
+  updateContact,
+  type Contact,
+} from '@/lib/db/contacts'
+import { logCorrespondence } from '@/lib/db/correspondence'
+import { sendContactEmail, type SendResult } from '@/lib/outreach'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 type SendBody = {
+  contactId?: string
+  contactIds?: string[]
+  // Legacy aliases for backwards-compatible callers.
   prospectId?: string
   prospectIds?: string[]
   sendAllQueued?: boolean
 }
 
 /**
- * Send one or more prospect emails through Resend.
+ * Send one or more contact emails through Resend.
  * Body shapes:
- *   { prospectId: "<uuid>" }
- *   { prospectIds: ["<uuid>", "<uuid>"] }
- *   { sendAllQueued: true }   // picks up every prospect in `queued` status
+ *   { contactId: "<uuid>" }
+ *   { contactIds: ["<uuid>"] }
+ *   { sendAllQueued: true }   // every contact whose status is `queued`
  */
 export async function POST(req: Request) {
   let body: SendBody
@@ -31,21 +35,27 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 })
   }
 
-  let targets: Prospect[] = []
+  const singleId = body.contactId ?? body.prospectId
+  const manyIds = body.contactIds ?? body.prospectIds
+
+  let targets: Contact[] = []
   try {
-    if (body.prospectId) {
-      const p = await getProspect(body.prospectId)
-      if (!p) return NextResponse.json({ error: 'Prospect not found' }, { status: 404 })
-      targets = [p]
-    } else if (Array.isArray(body.prospectIds) && body.prospectIds.length > 0) {
-      const all = await getProspects()
-      const wanted = new Set(body.prospectIds)
-      targets = all.filter((p) => wanted.has(p.id))
+    if (singleId) {
+      const c = await getContact(singleId)
+      if (!c) return NextResponse.json({ error: 'Contact not found' }, { status: 404 })
+      targets = [c]
+    } else if (Array.isArray(manyIds) && manyIds.length > 0) {
+      const all = await getContacts()
+      const wanted = new Set(manyIds)
+      targets = all.filter((c) => wanted.has(c.id))
     } else if (body.sendAllQueued) {
-      const all = await getProspects()
-      targets = all.filter((p) => p.status === 'queued')
+      const all = await getContacts()
+      targets = all.filter((c) => c.status === 'queued')
     } else {
-      return NextResponse.json({ error: 'Specify prospectId, prospectIds, or sendAllQueued' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Specify contactId, contactIds, or sendAllQueued' },
+        { status: 400 },
+      )
     }
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
@@ -57,15 +67,25 @@ export async function POST(req: Request) {
   }
 
   const results: SendResult[] = []
-  for (const prospect of targets) {
-    const result = await sendProspectEmail(prospect)
+  for (const contact of targets) {
+    const result = await sendContactEmail(contact)
     results.push(result)
     try {
       if (result.ok) {
-        await updateProspect(prospect.id, {
+        const sentAt = new Date().toISOString()
+        await updateContact(contact.id, {
           status: 'sent',
           resendMessageId: result.messageId ?? null,
-          sentAt: new Date().toISOString(),
+          sentAt,
+        })
+        await logCorrespondence({
+          contactId: contact.id,
+          companyId: contact.companyId,
+          type: 'email_sent',
+          subject: contact.subjectLine,
+          body: contact.emailBody,
+          occurredAt: sentAt,
+          metadata: result.messageId ? { resend_message_id: result.messageId } : {},
         })
       }
     } catch (err) {

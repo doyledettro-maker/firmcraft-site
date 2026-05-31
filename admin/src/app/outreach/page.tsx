@@ -1,8 +1,9 @@
-import { Mail, MailOpen, MousePointerClick, Send } from 'lucide-react'
+import { Building2, Mail, MailOpen, MousePointerClick, Send } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Card, CardBody } from '@/components/ui'
-import { OutreachTable } from '@/components/outreach/OutreachTable'
-import { getProspects, getProspectStats } from '@/lib/db/prospects'
+import { OutreachWorkspace } from '@/components/outreach/OutreachWorkspace'
+import { getCompanies } from '@/lib/db/companies'
+import { getContacts, getContactStats } from '@/lib/db/contacts'
 import { formatNumber } from '@/lib/format'
 
 export const metadata = { title: 'Outreach · Firmcraft Admin' }
@@ -13,7 +14,11 @@ function formatPct(n: number) {
 }
 
 export default async function OutreachPage() {
-  const [prospects, stats] = await Promise.all([getProspects(), getProspectStats()])
+  const [companies, contacts, stats] = await Promise.all([
+    getCompanies(),
+    getContacts(),
+    getContactStats(),
+  ])
 
   return (
     <AppShell>
@@ -24,20 +29,26 @@ export default async function OutreachPage() {
             Cold <em className="text-accent italic">outbound</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
-            Prospects, drafts, sends, and tracking — all in one place.
+            Companies, contacts, and every touch — all in one place.
           </p>
         </div>
       </div>
 
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <Kpi icon={Mail} label="Total prospects" value={formatNumber(stats.total)} sub={`${stats.sent} sent`} />
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+        <Kpi
+          icon={Building2}
+          label="Companies"
+          value={formatNumber(companies.length)}
+          sub={`${stats.total} contacts`}
+        />
+        <Kpi icon={Mail} label="Total contacts" value={formatNumber(stats.total)} sub={`${stats.sent} sent`} />
         <Kpi icon={Send} label="Sent" value={formatNumber(stats.sent)} sub={`${stats.bounced} bounced`} />
         <Kpi icon={MailOpen} label="Open rate" value={formatPct(stats.openRate)} sub={`${stats.opened} opens`} />
         <Kpi icon={MousePointerClick} label="Click rate" value={formatPct(stats.clickRate)} sub={`${stats.clicked} clicks`} />
       </div>
 
       <Card>
-        <OutreachTable prospects={prospects} />
+        <OutreachWorkspace companies={companies} contacts={contacts} />
       </Card>
     </AppShell>
   )

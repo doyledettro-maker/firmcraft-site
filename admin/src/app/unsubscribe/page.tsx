@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { Logo } from '@/components/Logo'
-import { getProspectByEmail } from '@/lib/db/prospects'
+import { getContactByEmail } from '@/lib/db/contacts'
 import { UnsubscribeRunner } from './UnsubscribeRunner'
 
 export const metadata = {
@@ -25,13 +25,13 @@ export default async function UnsubscribePage({
 }: {
   searchParams: SearchParams
 }) {
-  let prospectId = pickFirst(searchParams.id)
+  let contactId = pickFirst(searchParams.id)
   const email = pickFirst(searchParams.email)
 
-  if (!prospectId && email) {
+  if (!contactId && email) {
     try {
-      const found = await getProspectByEmail(email)
-      if (found) prospectId = found.id
+      const found = await getContactByEmail(email)
+      if (found) contactId = found.id
     } catch {
       // Best-effort lookup — fall through and show generic confirmation.
     }
@@ -55,7 +55,7 @@ export default async function UnsubscribePage({
           </div>
 
           <div className="bg-paper-2 border border-line rounded-2xl px-6 py-6">
-            <UnsubscribeRunner prospectId={prospectId} />
+            <UnsubscribeRunner contactId={contactId} />
           </div>
 
           <div className="mt-8 text-[13px] text-muted leading-relaxed">

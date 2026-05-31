@@ -1,14 +1,14 @@
 import { NextResponse } from 'next/server'
-import { getProspect, updateProspect } from '@/lib/db/prospects'
-import { logTrackingEvent } from '@/lib/db/tracking'
+import { getContact, updateContact } from '@/lib/db/contacts'
+import { logCorrespondence } from '@/lib/db/correspondence'
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   try {
-    const prospect = await getProspect(params.id)
-    if (!prospect) {
+    const contact = await getContact(params.id)
+    if (!contact) {
       return NextResponse.json({ ok: true, found: false })
     }
 
@@ -18,12 +18,19 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
       req.headers.get('x-real-ip') ||
       null
 
-    await logTrackingEvent(prospect.id, 'unsubscribe', { user_agent: userAgent, ip })
+    const now = new Date().toISOString()
+    await logCorrespondence({
+      contactId: contact.id,
+      companyId: contact.companyId,
+      type: 'email_unsubscribed',
+      metadata: { user_agent: userAgent, ip },
+      occurredAt: now,
+    })
 
-    if (prospect.status !== 'unsubscribed') {
-      await updateProspect(prospect.id, {
+    if (contact.status !== 'unsubscribed') {
+      await updateContact(contact.id, {
         status: 'unsubscribed',
-        unsubscribedAt: new Date().toISOString(),
+        unsubscribedAt: now,
       })
     }
 

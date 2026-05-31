@@ -6,7 +6,9 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/api/health',
   '/api/stripe/webhook',
+  '/api/outreach/track/(.*)',
   '/status',
+  '/unsubscribe',
 ])
 
 const clerkConfigured = Boolean(

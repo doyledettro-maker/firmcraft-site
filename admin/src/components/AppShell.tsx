@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { type ReactNode } from 'react'
-import { LayoutGrid, Users, Settings, ClipboardList, Bell, LifeBuoy, Activity, Handshake } from 'lucide-react'
+import { LayoutGrid, Users, Settings, ClipboardList, Bell, LifeBuoy, Activity, Handshake, Send } from 'lucide-react'
 import { Logo } from './Logo'
 
 const NAV = [
@@ -11,6 +11,7 @@ const NAV = [
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/partners', label: 'Partners', icon: Handshake },
   { href: '/onboarding', label: 'Submissions', icon: ClipboardList },
+  { href: '/outreach', label: 'Outreach', icon: Send },
   { href: '/status', label: 'Status', icon: Activity },
   { href: '/support', label: 'Support', icon: LifeBuoy },
   { href: '/settings', label: 'Settings', icon: Settings },

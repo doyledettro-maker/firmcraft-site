@@ -165,6 +165,19 @@ export async function getProspect(id: string): Promise<Prospect | undefined> {
   return rowToProspect(data as ProspectRow)
 }
 
+export async function getProspectByEmail(email: string): Promise<Prospect | undefined> {
+  if (!isSupabaseConfigured()) return undefined
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('prospects')
+    .select('*')
+    .ilike('email', email)
+    .maybeSingle()
+  if (error) throw new Error(`getProspectByEmail failed: ${error.message}`)
+  if (!data) return undefined
+  return rowToProspect(data as ProspectRow)
+}
+
 export async function createProspects(inputs: ProspectInput[]): Promise<Prospect[]> {
   if (!isSupabaseConfigured()) {
     throw new Error('createProspects requires Supabase to be configured.')

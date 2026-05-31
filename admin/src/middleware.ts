@@ -7,6 +7,7 @@ const isPublicRoute = createRouteMatcher([
   '/api/health',
   '/api/stripe/webhook',
   '/api/outreach/track/(.*)',
+  '/api/outreach/unsubscribe/(.*)',
   '/status',
   '/unsubscribe',
 ])

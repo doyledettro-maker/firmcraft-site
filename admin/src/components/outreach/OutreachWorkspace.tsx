@@ -33,11 +33,17 @@ import {
 } from '@/components/ui'
 import { CompanyStatusBadge, ContactStatusBadge } from './StatusBadges'
 import { formatDate } from '@/lib/format'
-import type { Company, CompanyStatus } from '@/lib/db/companies'
+import type { Company, CompanyStatus, CompanySegment } from '@/lib/db/companies'
 import type { Contact, ContactStatus, ContactWithCompany } from '@/lib/db/contacts'
 import type { Correspondence, CorrespondenceType } from '@/lib/db/correspondence'
 
 const COMPANY_STATUS_OPTIONS: CompanyStatus[] = ['active', 'engaged', 'customer', 'archived']
+const COMPANY_SEGMENT_OPTIONS: CompanySegment[] = ['small', 'midmarket', 'enterprise']
+const SEGMENT_LABELS: Record<CompanySegment, string> = {
+  small: 'Small',
+  midmarket: 'Mid-market',
+  enterprise: 'Enterprise',
+}
 const CONTACT_STATUS_OPTIONS: ContactStatus[] = [
   'draft', 'queued', 'sent', 'opened', 'clicked', 'replied', 'bounced', 'unsubscribed',
 ]
@@ -73,6 +79,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
   const [filter, setFilter] = useState<CompanyFilter>('all')
   const [industry, setIndustry] = useState<string>('all')
   const [city, setCity] = useState<string>('all')
+  const [segment, setSegment] = useState<'all' | CompanySegment>('all')
   const [query, setQuery] = useState('')
   const [openCompanyId, setOpenCompanyId] = useState<string | null>(null)
   const [openContactId, setOpenContactId] = useState<string | null>(null)
@@ -110,6 +117,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
       if (filter !== 'all' && c.status !== filter) return false
       if (industry !== 'all' && c.industry !== industry) return false
       if (city !== 'all' && c.city !== city) return false
+      if (segment !== 'all' && c.segment !== segment) return false
       if (q) {
         const companyContacts = contactsByCompany.get(c.id) ?? []
         const contactHay = companyContacts
@@ -120,7 +128,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
       }
       return true
     })
-  }, [companies, filter, industry, city, query, contactsByCompany])
+  }, [companies, filter, industry, city, segment, query, contactsByCompany])
 
   const queuedCount = useMemo(
     () => contacts.filter((c) => c.status === 'queued').length,
@@ -170,6 +178,16 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
           />
         </div>
         <div className="flex gap-2 flex-wrap items-center">
+          <Select
+            value={segment}
+            onChange={(e) => setSegment(e.target.value as 'all' | CompanySegment)}
+            className="h-9 py-0 w-[140px]"
+          >
+            <option value="all">All segments</option>
+            {COMPANY_SEGMENT_OPTIONS.map((v) => (
+              <option key={v} value={v}>{SEGMENT_LABELS[v]}</option>
+            ))}
+          </Select>
           <Select value={industry} onChange={(e) => setIndustry(e.target.value)} className="h-9 py-0 w-[150px]">
             <option value="all">All industries</option>
             {industries.map((v) => <option key={v} value={v}>{v}</option>)}
@@ -217,6 +235,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
             <tr className="text-left">
               <Th>Company</Th>
               <Th>Industry</Th>
+              <Th>Segment</Th>
               <Th>Location</Th>
               <Th>Contacts</Th>
               <Th>Status</Th>
@@ -250,6 +269,9 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
                   </td>
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">{c.industry ?? '—'}</td>
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">
+                    <SegmentBadge segment={c.segment} />
+                  </td>
+                  <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">
                     {[c.city, c.state].filter(Boolean).join(', ') || '—'}
                   </td>
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">
@@ -269,7 +291,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
             })}
             {visible.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-10 text-center text-muted border-t border-line">
+                <td colSpan={8} className="px-4 py-10 text-center text-muted border-t border-line">
                   No companies match.
                 </td>
               </tr>
@@ -336,6 +358,22 @@ function Th({ children, className }: { children: React.ReactNode; className?: st
   )
 }
 
+const SEGMENT_BADGE_CLASS: Record<CompanySegment, string> = {
+  small: 'bg-paper-2 text-ink-2 border-line-2',
+  midmarket: 'bg-accent/10 text-accent border-accent/30',
+  enterprise: 'bg-[#2D2410] text-[#E8C07B] border-[#E8C07B]/30',
+}
+
+function SegmentBadge({ segment }: { segment: CompanySegment }) {
+  return (
+    <span
+      className={`inline-flex items-center px-2 py-0.5 rounded-full border text-[11px] font-medium whitespace-nowrap ${SEGMENT_BADGE_CLASS[segment]}`}
+    >
+      {SEGMENT_LABELS[segment]}
+    </span>
+  )
+}
+
 function latestTouch(c: Contact): string | null {
   const times = [c.sentAt, c.openedAt, c.clickedAt, c.repliedAt, c.bouncedAt, c.unsubscribedAt]
     .filter((t): t is string => Boolean(t))
@@ -383,6 +421,7 @@ function CompanyDrawer({
     state: company.state ?? '',
     notes: company.notes ?? '',
     status: company.status,
+    segment: company.segment,
   })
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -406,6 +445,7 @@ function CompanyDrawer({
         state: form.state || null,
         notes: form.notes || null,
         status: form.status,
+        segment: form.segment,
       }
       const res = await fetch(`/api/outreach/companies/${company.id}`, {
         method: 'PATCH',
@@ -493,6 +533,13 @@ function CompanyDrawer({
               <Select value={form.status} onChange={(e) => set('status', e.target.value as CompanyStatus)}>
                 {COMPANY_STATUS_OPTIONS.map((s) => (
                   <option key={s} value={s}>{s}</option>
+                ))}
+              </Select>
+            </Field>
+            <Field label="Segment">
+              <Select value={form.segment} onChange={(e) => set('segment', e.target.value as CompanySegment)}>
+                {COMPANY_SEGMENT_OPTIONS.map((s) => (
+                  <option key={s} value={s}>{SEGMENT_LABELS[s]}</option>
                 ))}
               </Select>
             </Field>
@@ -1153,6 +1200,7 @@ function NewCompanyModal({
   const [website, setWebsite] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
+  const [segment, setSegment] = useState<CompanySegment>('small')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -1173,6 +1221,7 @@ function NewCompanyModal({
             city: city || null,
             state: state || null,
             status: 'active',
+            segment,
           },
           contacts: [],
         }),
@@ -1222,6 +1271,13 @@ function NewCompanyModal({
             </Field>
             <Field label="Employees">
               <Input type="number" value={employeeCount} onChange={(e) => setEmployeeCount(e.target.value)} />
+            </Field>
+            <Field label="Segment">
+              <Select value={segment} onChange={(e) => setSegment(e.target.value as CompanySegment)}>
+                {COMPANY_SEGMENT_OPTIONS.map((s) => (
+                  <option key={s} value={s}>{SEGMENT_LABELS[s]}</option>
+                ))}
+              </Select>
             </Field>
           </div>
           {error ? (

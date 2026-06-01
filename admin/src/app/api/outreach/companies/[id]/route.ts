@@ -4,7 +4,9 @@ import {
   updateCompany,
   deleteCompany,
   COMPANY_STATUSES,
+  COMPANY_SEGMENTS,
   type CompanyStatus,
+  type CompanySegment,
   type CompanyUpdate,
 } from '@/lib/db/companies'
 import { getContactsForCompany } from '@/lib/db/contacts'
@@ -54,6 +56,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
       return NextResponse.json({ error: `Invalid status: ${String(s)}` }, { status: 400 })
     }
     update.status = s
+  }
+  if ('segment' in r) {
+    const seg = r.segment as CompanySegment
+    if (!COMPANY_SEGMENTS.includes(seg)) {
+      return NextResponse.json({ error: `Invalid segment: ${String(seg)}` }, { status: 400 })
+    }
+    update.segment = seg
   }
   try {
     const updated = await updateCompany(params.id, update)

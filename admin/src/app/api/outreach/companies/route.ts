@@ -5,6 +5,7 @@ import {
   upsertCompanyByName,
   type CompanyInput,
   type CompanyStatus,
+  type CompanySegment,
 } from '@/lib/db/companies'
 import {
   createContacts,
@@ -12,7 +13,11 @@ import {
   type ContactStatus,
 } from '@/lib/db/contacts'
 import { CONTACT_STATUSES } from '@/lib/db/contacts'
-import { COMPANY_STATUSES } from '@/lib/db/companies'
+import { COMPANY_STATUSES, COMPANY_SEGMENTS } from '@/lib/db/companies'
+
+function parseSegment(raw: unknown): CompanySegment {
+  return COMPANY_SEGMENTS.includes(raw as CompanySegment) ? (raw as CompanySegment) : 'small'
+}
 
 export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
@@ -110,6 +115,7 @@ export async function POST(req: Request) {
           city: (r.city as string | null | undefined) ?? null,
           state: (r.state as string | null | undefined) ?? null,
           status: 'active',
+          segment: parseSegment(r.segment),
           notes: null,
         },
         contacts: [],
@@ -178,6 +184,7 @@ function parseCompany(raw: unknown): CompanyInput | null {
     city: (r.city as string | null | undefined) ?? null,
     state: (r.state as string | null | undefined) ?? null,
     status: status && COMPANY_STATUSES.includes(status) ? status : 'active',
+    segment: parseSegment(r.segment),
     notes: (r.notes as string | null | undefined) ?? null,
   }
 }

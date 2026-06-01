@@ -84,15 +84,26 @@ function inputToRow(input: CompanyInput | CompanyUpdate): Record<string, unknown
   return row
 }
 
+// PostgREST caps a single response at 1000 rows, so page through with .range()
+// to return every company (we have thousands).
+const PAGE_SIZE = 1000
+
 export async function getCompanies(): Promise<Company[]> {
   if (!isSupabaseConfigured()) return []
   const db = getSupabaseAdmin()
-  const { data, error } = await db
-    .from('companies')
-    .select('*')
-    .order('created_at', { ascending: false })
-  if (error) throw new Error(`getCompanies failed: ${error.message}`)
-  return (data ?? []).map((row) => rowToCompany(row as CompanyRow))
+  const rows: CompanyRow[] = []
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await db
+      .from('companies')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .range(from, from + PAGE_SIZE - 1)
+    if (error) throw new Error(`getCompanies failed: ${error.message}`)
+    const batch = (data ?? []) as CompanyRow[]
+    rows.push(...batch)
+    if (batch.length < PAGE_SIZE) break
+  }
+  return rows.map((row) => rowToCompany(row))
 }
 
 export async function getCompany(id: string): Promise<Company | undefined> {

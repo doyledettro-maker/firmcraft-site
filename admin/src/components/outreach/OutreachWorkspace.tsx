@@ -603,7 +603,7 @@ function ContactDrawer({
   const [form, setForm] = useState({
     contactName: contact.contactName ?? '',
     title: contact.title ?? '',
-    email: contact.email,
+    email: contact.email ?? '',
     phone: contact.phone ?? '',
     subjectLine: contact.subjectLine ?? '',
     emailBody: contact.emailBody ?? '',

@@ -27,7 +27,7 @@ export type Contact = {
   companyId: string
   contactName: string | null
   title: string | null
-  email: string
+  email: string | null
   phone: string | null
   subjectLine: string | null
   emailBody: string | null
@@ -49,7 +49,7 @@ type ContactRow = {
   company_id: string
   contact_name: string | null
   title: string | null
-  email: string
+  email: string | null
   phone: string | null
   subject_line: string | null
   email_body: string | null
@@ -70,7 +70,7 @@ export type ContactInput = {
   companyId: string
   contactName?: string | null
   title?: string | null
-  email: string
+  email?: string | null
   phone?: string | null
   subjectLine?: string | null
   emailBody?: string | null
@@ -170,15 +170,26 @@ const CONTACT_WITH_COMPANY_SELECT = `
   )
 `
 
+// PostgREST caps a single response at 1000 rows, so page through with .range()
+// to return every contact (we have thousands).
+const PAGE_SIZE = 1000
+
 export async function getContacts(): Promise<ContactWithCompany[]> {
   if (!isSupabaseConfigured()) return []
   const db = getSupabaseAdmin()
-  const { data, error } = await db
-    .from('contacts')
-    .select(CONTACT_WITH_COMPANY_SELECT)
-    .order('created_at', { ascending: false })
-  if (error) throw new Error(`getContacts failed: ${error.message}`)
-  return (data ?? []).map((row) => rowToContactWithCompany(row as unknown as ContactRowWithCompany))
+  const rows: ContactRowWithCompany[] = []
+  for (let from = 0; ; from += PAGE_SIZE) {
+    const { data, error } = await db
+      .from('contacts')
+      .select(CONTACT_WITH_COMPANY_SELECT)
+      .order('created_at', { ascending: false })
+      .range(from, from + PAGE_SIZE - 1)
+    if (error) throw new Error(`getContacts failed: ${error.message}`)
+    const batch = (data ?? []) as unknown as ContactRowWithCompany[]
+    rows.push(...batch)
+    if (batch.length < PAGE_SIZE) break
+  }
+  return rows.map((row) => rowToContactWithCompany(row))
 }
 
 export async function getContactsForCompany(companyId: string): Promise<Contact[]> {

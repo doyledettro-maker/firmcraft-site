@@ -9,9 +9,9 @@ export const COMPANY_STATUSES: CompanyStatus[] = [
   'archived',
 ]
 
-export type CompanySegment = 'small' | 'midmarket' | 'enterprise'
+export type CompanySegment = 'small' | 'midmarket' | 'enterprise' | 'pe'
 
-export const COMPANY_SEGMENTS: CompanySegment[] = ['small', 'midmarket', 'enterprise']
+export const COMPANY_SEGMENTS: CompanySegment[] = ['small', 'midmarket', 'enterprise', 'pe']
 
 export type Company = {
   id: string

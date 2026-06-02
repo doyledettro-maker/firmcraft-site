@@ -83,6 +83,39 @@ export async function getClientUsage(
   return { events, totals }
 }
 
+export type ClientUsageTotals = { cost: number; apiCalls: number }
+
+/**
+ * Aggregate usage totals per client for a date range, keyed by client_id.
+ * One query for the whole tenant list — avoids an N+1 when rendering the
+ * clients table's spend progress bars.
+ */
+export async function getUsageTotalsByClient(
+  range?: DateRange,
+): Promise<Record<string, ClientUsageTotals>> {
+  if (!isSupabaseConfigured()) return {}
+
+  const db = getSupabaseAdmin()
+  let query = db.from('usage_events').select('client_id, cost, api_calls')
+
+  if (range) {
+    query = query.gte('date', range.from).lte('date', range.to)
+  }
+
+  const { data, error } = await query
+  if (error) throw new Error(`getUsageTotalsByClient failed: ${error.message}`)
+
+  const byClient: Record<string, ClientUsageTotals> = {}
+  for (const r of data ?? []) {
+    const row = r as { client_id: string; cost: number | string; api_calls: number | string }
+    const acc = byClient[row.client_id] ?? { cost: 0, apiCalls: 0 }
+    acc.cost += Number(row.cost)
+    acc.apiCalls += Number(row.api_calls)
+    byClient[row.client_id] = acc
+  }
+  return byClient
+}
+
 /**
  * Aggregate usage totals across ALL clients for a date range.
  * Used by the summary dashboard to show platform-wide spend & calls.

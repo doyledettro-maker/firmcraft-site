@@ -8,7 +8,7 @@ import {
   type ClientCreateInput,
   type ClientUpdateInput,
 } from './mappers'
-import { getClientUsage } from './usage'
+import { getClientUsage, getUsageTotalsByClient } from './usage'
 import { getInfrastructureStatus } from './infrastructure'
 import { getClientSkillCount } from './skills'
 
@@ -35,7 +35,24 @@ export async function getClients(): Promise<Client[]> {
     .order('created_at', { ascending: false })
 
   if (error) throw new Error(`getClients failed: ${error.message}`)
-  return (data ?? []).map((row) => rowToClient(row as ClientRow))
+
+  // Merge in current-month spend so the list view can render per-client usage
+  // bars without an N+1 (one aggregated query covers every tenant).
+  const usageByClient = await getUsageTotalsByClient(currentMonthRange())
+
+  return (data ?? []).map((row) => {
+    const client = rowToClient(row as ClientRow)
+    const usage = usageByClient[client.id]
+    if (!usage) return client
+    return {
+      ...client,
+      usage: {
+        ...client.usage,
+        aiCallsThisMonth: usage.apiCalls,
+        costThisMonth: usage.cost,
+      },
+    }
+  })
 }
 
 export async function getClient(id: string): Promise<Client | undefined> {

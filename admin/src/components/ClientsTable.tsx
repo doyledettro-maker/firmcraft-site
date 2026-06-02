@@ -7,7 +7,7 @@ import { Input } from './ui'
 import { StatusBadge } from './StatusBadge'
 import type { Client, ClientStatus } from '@/lib/mock-clients'
 import { getPartnerForClient } from '@/lib/mock-partners'
-import { formatCurrency, formatDate, formatNumber } from '@/lib/format'
+import { formatCurrency, formatDate, formatSpend } from '@/lib/format'
 
 const FILTERS: Array<{ key: 'all' | ClientStatus; label: string }> = [
   { key: 'all', label: 'All' },
@@ -72,7 +72,7 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
               <Th>Partner</Th>
               <Th className="text-right">MRR</Th>
               <Th className="text-right">Users</Th>
-              <Th className="text-right">AI calls / mo</Th>
+              <Th>Token usage / mo</Th>
               <Th>Added</Th>
             </tr>
           </thead>
@@ -109,7 +109,9 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
                   <td className="px-4 py-3 border-t border-line text-right tabular-nums">
                     {c.usage.activeUsers}<span className="text-muted">/{c.usage.seats}</span>
                   </td>
-                  <td className="px-4 py-3 border-t border-line text-right tabular-nums">{formatNumber(c.usage.aiCallsThisMonth)}</td>
+                  <td className="px-4 py-3 border-t border-line min-w-[170px]">
+                    <SpendBar spend={c.usage.costThisMonth} allowance={c.tokenAllowance} />
+                  </td>
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2 whitespace-nowrap">{formatDate(c.createdAt)}</td>
                 </tr>
               )
@@ -123,6 +125,39 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
             ) : null}
           </tbody>
         </table>
+      </div>
+    </div>
+  )
+}
+
+function SpendBar({ spend, allowance }: { spend: number; allowance: number }) {
+  const hasBudget = allowance > 0
+  const pct = hasBudget ? Math.round((spend / allowance) * 100) : 0
+  // green < 50%, yellow 50–80%, red > 80%
+  const tone = !hasBudget
+    ? 'bg-line-2'
+    : pct > 80
+      ? 'bg-status-down'
+      : pct >= 50
+        ? 'bg-status-warn'
+        : 'bg-status-up'
+
+  return (
+    <div>
+      <div className="flex justify-between items-baseline gap-2">
+        <span className="text-[12.5px] text-ink tabular-nums">
+          {formatSpend(spend)}
+          <span className="text-muted"> / {hasBudget ? formatSpend(allowance) : '—'}</span>
+        </span>
+        {hasBudget ? (
+          <span className="text-[11.5px] text-muted tabular-nums">{pct}%</span>
+        ) : null}
+      </div>
+      <div className="mt-1.5 h-1.5 bg-paper rounded-full overflow-hidden border border-line">
+        <div
+          className={`h-full ${tone} transition-all`}
+          style={{ width: `${hasBudget ? Math.min(100, pct) : 0}%` }}
+        />
       </div>
     </div>
   )

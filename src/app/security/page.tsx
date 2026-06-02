@@ -576,13 +576,13 @@ export default function SecurityPage() {
               <div className="flex gap-3 flex-wrap">
                 <a
                   className="btn btn-primary btn-lg"
-                  href="mailto:hello@firmcraft.ai?subject=Security%20packet%20request"
+                  href="/contact"
                 >
                   Request the security packet →
                 </a>
                 <a
                   className="btn btn-ghost btn-lg"
-                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+                  href="/contact"
                 >
                   Or book a call
                 </a>

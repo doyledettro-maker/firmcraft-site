@@ -48,7 +48,7 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
             Pricing
           </Link>
           <a
-            href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+            href="/contact"
             className="btn primary sm"
           >
             Book a call <span className="arr">→</span>

@@ -34,7 +34,7 @@ export function InvitationRequired({ reason }: { reason: Reason }) {
         <a href="/" className="btn btn-ghost">
           ← Back to home
         </a>
-        <a href="mailto:hello@firmcraft.ai?subject=Onboarding%20survey%20invitation" className="btn btn-primary">
+        <a href="/contact" className="btn btn-primary">
           Email Firmcraft →
         </a>
       </div>

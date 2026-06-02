@@ -38,7 +38,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'hello@firmcraft.ai', href: 'mailto:hello@firmcraft.ai', external: true },
       {
         label: 'Book a call',
-        href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call',
+        href: '/contact',
         external: true,
       },
       { label: 'LinkedIn', href: 'https://www.linkedin.com/company/firmcraft-ai/', external: true },

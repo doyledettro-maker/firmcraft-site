@@ -41,7 +41,7 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
       'Monthly review with your ops lead',
     ],
     cta: 'Start with Solo',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Operator%20Solo',
+    href: '/contact',
   },
   {
     tier: 'Team',
@@ -63,7 +63,7 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
       'SOC 2 controls + audit log access',
     ],
     cta: 'Choose Team',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Operator%20Team',
+    href: '/contact',
     featured: true,
     badge: 'Most popular',
   },
@@ -87,7 +87,7 @@ export const OPERATOR_PLANS: OperatorPlan[] = [
       'Quarterly business review',
     ],
     cta: 'Choose Pro',
-    href: 'mailto:hello@firmcraft.ai?subject=Firmcraft%20Operator%20Pro',
+    href: '/contact',
   },
 ]
 

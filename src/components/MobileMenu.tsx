@@ -116,7 +116,7 @@ export function MobileMenu({ items, current }: Props) {
             )
           })}
           <a
-            href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+            href="/contact"
             onClick={() => setOpen(false)}
             className="btn primary mt-3 w-full justify-center"
           >

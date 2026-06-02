@@ -1,6 +1,8 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { JetBrains_Mono, Source_Serif_4 } from 'next/font/google'
 import { GeistSans } from 'geist/font/sans'
+import { Analytics } from '@/components/Analytics'
 import '../styles/tokens.css'
 import './globals.css'
 
@@ -51,7 +53,12 @@ export default function RootLayout({
       suppressHydrationWarning
       className={`${GeistSans.variable} ${mono.variable} ${serif.variable}`}
     >
-      <body suppressHydrationWarning className="antialiased">{children}</body>
+      <body suppressHydrationWarning className="antialiased">
+        {children}
+        <Suspense fallback={null}>
+          <Analytics />
+        </Suspense>
+      </body>
     </html>
   )
 }

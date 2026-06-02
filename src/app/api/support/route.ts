@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { saveLead, sendLeadEmail } from '@/lib/leads'
 
 export const runtime = 'nodejs'
 
@@ -57,8 +58,27 @@ export async function POST(req: Request) {
     timeframe: URGENCY_TIMEFRAME[body.urgency],
   }
 
-  // v1: log only. When SMTP/Resend/etc. is wired, send to doyle.dettro@emergenext.com here.
   console.log('[support] new submission', JSON.stringify(submission))
+
+  // Capture every support request as an inbound lead and notify Doyle. The
+  // urgency is folded into the message so it survives in the leads pipeline.
+  const message = `[Support · ${body.urgency} · reply within ${submission.timeframe}]\n\n${submission.description}`
+  try {
+    const lead = await saveLead({
+      name: submission.name,
+      // Support form has no email field; routes through company so we can
+      // still reach them, with a clearly-flagged placeholder address.
+      email: 'support-request@firmcraft.ai',
+      company: submission.company,
+      message,
+      source: 'support',
+    })
+    const notify = await sendLeadEmail(lead)
+    if (!notify.ok) console.error('[support] notification email failed:', notify.error)
+  } catch (err) {
+    // Don't fail the request if lead capture hiccups — the submission is logged.
+    console.error('[support] lead capture failed:', err instanceof Error ? err.message : err)
+  }
 
   return NextResponse.json({ ok: true, timeframe: submission.timeframe })
 }

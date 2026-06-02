@@ -3,15 +3,17 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState, type ReactNode } from 'react'
-import { LayoutGrid, Users, Settings, ClipboardList, Bell, LifeBuoy, Activity, Handshake, Send, Menu, X } from 'lucide-react'
+import { LayoutGrid, Users, Settings, ClipboardList, Bell, LifeBuoy, Activity, Handshake, Send, Menu, X, BarChart3, Inbox } from 'lucide-react'
 import { Logo } from './Logo'
 
 const NAV = [
   { href: '/', label: 'Dashboard', icon: LayoutGrid },
+  { href: '/leads', label: 'Leads', icon: Inbox },
   { href: '/clients', label: 'Clients', icon: Users },
   { href: '/partners', label: 'Partners', icon: Handshake },
   { href: '/onboarding', label: 'Submissions', icon: ClipboardList },
   { href: '/outreach', label: 'Outreach', icon: Send },
+  { href: '/analytics', label: 'Analytics', icon: BarChart3 },
   { href: '/status', label: 'Status', icon: Activity },
   { href: '/support', label: 'Support', icon: LifeBuoy },
   { href: '/settings', label: 'Settings', icon: Settings },

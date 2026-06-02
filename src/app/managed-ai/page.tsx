@@ -44,7 +44,7 @@ export default function ManagedAIPage() {
                   </a>
                   <a
                     className="btn ghost lg"
-                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Managed%20AI"
+                    href="/contact"
                   >
                     Book a 20-min call
                   </a>
@@ -463,7 +463,7 @@ export default function ManagedAIPage() {
                   </Link>
                   <a
                     className="btn ghost"
-                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                    href="/contact"
                   >
                     Book the discovery call
                   </a>

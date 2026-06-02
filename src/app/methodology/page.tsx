@@ -333,7 +333,7 @@ export default function MethodologyPage() {
                   Start with the Assessment. Three weeks, fixed-fee, refundable against Build.
                 </p>
               </div>
-              <a className="btn primary lg" href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment">
+              <a className="btn primary lg" href="/contact">
                 Book the call <span className="arr">→</span>
               </a>
             </div>

@@ -47,7 +47,7 @@ export default function OnboardPage() {
             Filling this out before our discovery call is great — but if you&apos;d
             rather walk through it together, just{' '}
             <a
-              href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+              href="/contact"
               className="text-signal hover:underline underline-offset-[3px]"
             >
               book a call

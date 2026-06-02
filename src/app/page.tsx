@@ -465,7 +465,7 @@ export default function HomePage() {
                 <div className="hero-ctas">
                   <a
                     className="btn primary lg"
-                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                    href="/contact"
                   >
                     Book the discovery call <span className="arr">→</span>
                   </a>

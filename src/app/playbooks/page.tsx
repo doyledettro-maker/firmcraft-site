@@ -594,7 +594,7 @@ export default function PlaybooksPage() {
               <div className="flex gap-3 flex-wrap">
                 <a
                   className="btn btn-primary btn-lg"
-                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery%20Call"
+                  href="/contact"
                 >
                   Book a 20-min call →
                 </a>

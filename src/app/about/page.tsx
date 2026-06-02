@@ -34,7 +34,7 @@ export default function AboutPage() {
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   <a
                     className="btn primary"
-                    href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Discovery"
+                    href="/contact"
                   >
                     Talk to Doyle <span className="arr">→</span>
                   </a>

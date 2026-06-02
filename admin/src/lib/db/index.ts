@@ -31,6 +31,8 @@ export {
   getCorrespondenceForCompany,
   deleteCorrespondence,
 } from './correspondence'
+export { getAnalyticsSummary } from './analytics'
+export { getLeads, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
 
 export type { ClientCreateInput, ClientUpdateInput } from './mappers'
 export type { UsageEvent, UsageSummary, DateRange } from './usage'
@@ -46,3 +48,10 @@ export type {
   ContactWithCompany,
 } from './contacts'
 export type { Correspondence, CorrespondenceInput, CorrespondenceType } from './correspondence'
+export type {
+  AnalyticsSummary,
+  DailyVisits,
+  PathCount,
+  ReferrerCount,
+} from './analytics'
+export type { Lead, LeadStatus, LeadSegment, LeadUpdate, LeadStats } from './leads'

@@ -188,7 +188,7 @@ export default function PricingPage() {
                 </div>
                 <a
                   className="btn primary lg"
-                  href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                  href="/contact"
                 >
                   Book the discovery call <span className="arr">→</span>
                 </a>
@@ -254,7 +254,7 @@ export default function PricingPage() {
                   <span>Recommended next step · book the discovery call</span>
                   <a
                     className="btn primary sm"
-                    href="mailto:hello@firmcraft.ai?subject=Assessment"
+                    href="/contact"
                   >
                     Book it <span className="arr">→</span>
                   </a>
@@ -574,7 +574,7 @@ export default function PricingPage() {
               </div>
               <a
                 className="btn primary lg"
-                href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment"
+                href="/contact"
               >
                 Book the call <span className="arr">→</span>
               </a>

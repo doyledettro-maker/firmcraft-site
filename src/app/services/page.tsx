@@ -440,7 +440,7 @@ export default function ServicesPage() {
                   retainer, no implementation, no agency-style upsell. The model is &ldquo;the Director of AI you
                   can&rsquo;t justify hiring, on a few days a month.&rdquo;
                 </p>
-                <a className="btn primary" href="mailto:hello@firmcraft.ai?subject=Fractional%20AI%20Advisory">
+                <a className="btn primary" href="/contact">
                   Talk to Doyle <span className="arr">→</span>
                 </a>
               </div>
@@ -479,7 +479,7 @@ export default function ServicesPage() {
               <h2>
                 Start where every engagement starts — <em>the Assessment.</em>
               </h2>
-              <a className="btn primary lg" href="mailto:hello@firmcraft.ai?subject=Firmcraft%20Assessment">
+              <a className="btn primary lg" href="/contact">
                 Book the discovery call <span className="arr">→</span>
               </a>
             </div>

@@ -38,11 +38,12 @@ import type { Contact, ContactStatus, ContactWithCompany } from '@/lib/db/contac
 import type { Correspondence, CorrespondenceType } from '@/lib/db/correspondence'
 
 const COMPANY_STATUS_OPTIONS: CompanyStatus[] = ['active', 'engaged', 'customer', 'archived']
-const COMPANY_SEGMENT_OPTIONS: CompanySegment[] = ['small', 'midmarket', 'enterprise']
+const COMPANY_SEGMENT_OPTIONS: CompanySegment[] = ['small', 'midmarket', 'enterprise', 'pe']
 const SEGMENT_LABELS: Record<CompanySegment, string> = {
   small: 'Small',
   midmarket: 'Mid-market',
   enterprise: 'Enterprise',
+  pe: 'PE',
 }
 const CONTACT_STATUS_OPTIONS: ContactStatus[] = [
   'draft', 'queued', 'sent', 'opened', 'clicked', 'replied', 'bounced', 'unsubscribed',
@@ -362,6 +363,7 @@ const SEGMENT_BADGE_CLASS: Record<CompanySegment, string> = {
   small: 'bg-paper-2 text-ink-2 border-line-2',
   midmarket: 'bg-accent/10 text-accent border-accent/30',
   enterprise: 'bg-[#2D2410] text-[#E8C07B] border-[#E8C07B]/30',
+  pe: 'bg-[#10261C] text-[#7BE8B0] border-[#7BE8B0]/30',
 }
 
 function SegmentBadge({ segment }: { segment: CompanySegment }) {

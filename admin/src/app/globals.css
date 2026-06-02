@@ -4,17 +4,19 @@
 
 :root {
   color-scheme: dark;
-  --paper: #14110D;
-  --paper-2: #1F1A12;
-  --ink: #F4ECDD;
-  --ink-2: #C9BBA4;
-  --muted: #8A7560;
-  --line: rgba(244, 236, 221, 0.10);
-  --line-2: rgba(244, 236, 221, 0.22);
-  --accent: #D97757;
-  --accent-2: #8FB17C;
-  --accent-3: #5DA6BA;
-  --hi: #3A2D1E;
+  /* Firmcraft dark-console palette — cool navy base, signal-blue primary,
+     operator-orange secondary. */
+  --paper: #0B1220;
+  --paper-2: #1E293B;
+  --ink: #F1F5F9;
+  --ink-2: #CBD5E1;
+  --muted: #94A3B8;
+  --line: rgba(148, 163, 184, 0.12);
+  --line-2: rgba(148, 163, 184, 0.24);
+  --accent: #2C6BF0;
+  --accent-2: #FB7C50;
+  --accent-3: #38BDF8;
+  --hi: #16233B;
 }
 
 html {
@@ -61,7 +63,7 @@ body {
 .serif-h em,
 .serif-h-warm em {
   font-style: italic;
-  color: var(--accent);
+  color: var(--accent-2);
 }
 
 /* Native form widgets adopt the dark palette where possible. */

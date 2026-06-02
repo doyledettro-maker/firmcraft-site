@@ -1,12 +1,13 @@
 import type { Config } from 'tailwindcss'
 
 /**
- * admin.firmcraft.ai — dark "backstage" theme.
+ * admin.firmcraft.ai — dark "console" theme.
  *
- * The token names mirror the marketing site (paper / ink / accent / sage),
- * but the paper↔ink relationship is inverted so the same component classes
- * (`bg-paper`, `text-ink`, `bg-paper-2`) automatically render as a dark UI.
- * Brand accent (terracotta) carries through unchanged.
+ * Built on the Firmcraft dark-console palette: a cool navy base (#0B1220),
+ * signal-blue (#2C6BF0) primary accent, and operator-orange (#FB7C50)
+ * secondary accent. Token names (paper / ink / accent) mirror the marketing
+ * site so the same component classes (`bg-paper`, `text-ink`, `bg-paper-2`)
+ * render a professional dark dashboard.
  */
 const config: Config = {
   content: [
@@ -16,22 +17,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        paper: '#14110D',
-        'paper-2': '#1F1A12',
-        ink: '#F4ECDD',
-        'ink-2': '#C9BBA4',
-        muted: '#8A7560',
-        line: 'rgba(244, 236, 221, 0.10)',
-        'line-2': 'rgba(244, 236, 221, 0.22)',
-        accent: '#D97757',
-        'accent-2': '#8FB17C',
-        'accent-3': '#5DA6BA',
-        hi: '#3A2D1E',
-        // Status palette tuned for dark backgrounds.
-        'status-up': '#7FB870',
-        'status-warn': '#E8B255',
-        'status-down': '#E8704F',
-        danger: '#E8704F',
+        paper: '#0B1220',
+        'paper-2': '#1E293B',
+        ink: '#F1F5F9',
+        'ink-2': '#CBD5E1',
+        muted: '#94A3B8',
+        line: 'rgba(148, 163, 184, 0.12)',
+        'line-2': 'rgba(148, 163, 184, 0.24)',
+        accent: '#2C6BF0',
+        'accent-2': '#FB7C50',
+        'accent-3': '#38BDF8',
+        hi: '#16233B',
+        // Status palette — semantic, shifted to cooler tones for the navy base.
+        'status-up': '#34D399',
+        'status-warn': '#FBBF24',
+        'status-down': '#F87171',
+        danger: '#F87171',
       },
       fontFamily: {
         sans: ['Geist', 'var(--font-inter)', 'system-ui', 'sans-serif'],

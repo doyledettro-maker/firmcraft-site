@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-[#0E0B08] sticky top-0 self-start h-screen">
+      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-[#070C16] sticky top-0 self-start h-screen">
         <div className="px-5 h-16 flex items-center border-b border-line">
           <Link href="/" className="no-underline">
             <Logo />
@@ -81,7 +81,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <aside className="relative w-[260px] max-w-[80vw] flex flex-col border-r border-line bg-[#0E0B08] h-full">
+          <aside className="relative w-[260px] max-w-[80vw] flex flex-col border-r border-line bg-[#070C16] h-full">
             <div className="px-5 h-16 flex items-center justify-between border-b border-line">
               <Link href="/" className="no-underline" onClick={() => setMobileOpen(false)}>
                 <Logo />

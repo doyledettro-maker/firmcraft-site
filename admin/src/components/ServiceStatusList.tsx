@@ -82,7 +82,7 @@ export function ServiceStatusList({
       ) : null}
 
       {error ? (
-        <div className="rounded-lg border border-[#E8704F]/30 bg-[#2D1410] px-4 py-3 text-[13.5px] text-[#E8907B] mb-4">
+        <div className="rounded-lg border border-[#F87171]/30 bg-[#2A1520] px-4 py-3 text-[13.5px] text-[#FCA5A5] mb-4">
           Couldn’t reach health API: {error}
         </div>
       ) : null}

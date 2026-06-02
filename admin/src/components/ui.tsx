@@ -22,7 +22,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   const sizing =
     size === 'sm' ? 'h-8 px-3 text-[13px]' : size === 'lg' ? 'h-12 px-6 text-[15px]' : 'h-10 px-5 text-sm'
   const variants: Record<NonNullable<ButtonProps['variant']>, string> = {
-    primary: 'bg-accent text-white border-accent hover:bg-[#C56546] hover:border-[#C56546]',
+    primary: 'bg-accent text-white border-accent hover:bg-[#2155CC] hover:border-[#2155CC]',
     ghost: 'bg-transparent text-ink border-line-2 hover:border-ink hover:bg-paper-2',
     danger: 'bg-transparent text-danger border-danger/60 hover:bg-danger hover:text-paper hover:border-danger',
     subtle: 'bg-paper-2 text-ink border-transparent hover:border-line-2',
@@ -164,10 +164,10 @@ export function Badge({
 }) {
   const tones: Record<string, string> = {
     neutral: 'bg-paper text-ink-2 border-line-2',
-    green: 'bg-[#1A2D14] text-[#A8D08A] border-[#A8D08A]/25',
-    amber: 'bg-[#2D2010] text-[#E8C580] border-[#E8C580]/25',
-    red: 'bg-[#2D1410] text-[#E8907B] border-[#E8907B]/25',
-    blue: 'bg-[#10242D] text-[#7DC3D8] border-[#7DC3D8]/25',
+    green: 'bg-[#0F2A1E] text-[#6EE7B7] border-[#6EE7B7]/25',
+    amber: 'bg-[#2A2410] text-[#FCD34D] border-[#FCD34D]/25',
+    red: 'bg-[#2A1520] text-[#FCA5A5] border-[#FCA5A5]/25',
+    blue: 'bg-[#0E2148] text-[#93C5FD] border-[#93C5FD]/25',
   }
   return (
     <span

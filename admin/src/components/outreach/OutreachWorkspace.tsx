@@ -362,8 +362,8 @@ function Th({ children, className }: { children: React.ReactNode; className?: st
 const SEGMENT_BADGE_CLASS: Record<CompanySegment, string> = {
   small: 'bg-paper-2 text-ink-2 border-line-2',
   midmarket: 'bg-accent/10 text-accent border-accent/30',
-  enterprise: 'bg-[#2D2410] text-[#E8C07B] border-[#E8C07B]/30',
-  pe: 'bg-[#10261C] text-[#7BE8B0] border-[#7BE8B0]/30',
+  enterprise: 'bg-[#2A2410] text-[#FCD34D] border-[#FCD34D]/30',
+  pe: 'bg-[#0F2A1E] text-[#6EE7B7] border-[#6EE7B7]/30',
 }
 
 function SegmentBadge({ segment }: { segment: CompanySegment }) {
@@ -555,7 +555,7 @@ function CompanyDrawer({
           </Field>
 
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}
@@ -824,7 +824,7 @@ function ContactDrawer({
           </Field>
 
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}
@@ -1052,7 +1052,7 @@ function AddCorrespondenceModal({
             />
           </Field>
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}
@@ -1167,7 +1167,7 @@ function AddContactModal({
             />
           </Field>
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}
@@ -1283,7 +1283,7 @@ function NewCompanyModal({
             </Field>
           </div>
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}
@@ -1381,7 +1381,7 @@ function ImportModal({
             className="min-h-[280px] font-mono-warm text-[12.5px]"
           />
           {error ? (
-            <div className="text-[13px] text-danger bg-[#2D1410] border border-[#E8907B]/25 rounded-lg px-3 py-2">
+            <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">
               {error}
             </div>
           ) : null}

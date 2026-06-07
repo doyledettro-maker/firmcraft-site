@@ -204,6 +204,13 @@ export function ContactForm({
             className="text-signal hover:underline underline-offset-[3px]"
           >
             hello@firmcraft.ai
+          </a>{' '}
+          or call{' '}
+          <a
+            href="tel:+12173038319"
+            className="text-signal hover:underline underline-offset-[3px]"
+          >
+            (217) 303-8319
           </a>
           .
         </span>

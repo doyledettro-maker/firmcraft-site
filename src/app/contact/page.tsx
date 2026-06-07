@@ -49,6 +49,23 @@ export default function ContactPage() {
             Tell us a little about what you do and what you&apos;re hoping AI can take off your
             plate. Doyle reads every message personally and replies within one business day.
           </p>
+          <p className="text-[16px] leading-[1.55] text-ink-2 max-w-[640px] mt-4 mb-0">
+            Prefer to talk? Call us at{' '}
+            <a
+              href="tel:+12173038319"
+              className="text-signal hover:underline underline-offset-[3px]"
+            >
+              (217) 303-8319
+            </a>{' '}
+            or email{' '}
+            <a
+              href="mailto:hello@firmcraft.ai"
+              className="text-signal hover:underline underline-offset-[3px]"
+            >
+              hello@firmcraft.ai
+            </a>
+            .
+          </p>
         </div>
       </section>
 

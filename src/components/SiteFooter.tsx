@@ -36,6 +36,7 @@ const COLUMNS: FooterColumn[] = [
     heading: 'Contact',
     links: [
       { label: 'hello@firmcraft.ai', href: 'mailto:hello@firmcraft.ai', external: true },
+      { label: '(217) 303-8319', href: 'tel:+12173038319', external: true },
       {
         label: 'Book a call',
         href: '/contact',

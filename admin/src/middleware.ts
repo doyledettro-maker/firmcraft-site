@@ -6,6 +6,9 @@ const isPublicRoute = createRouteMatcher([
   '/sign-in(.*)',
   '/api/health',
   '/api/health/beacon',
+  // Public in middleware, but the route enforces Clerk-session-or-bearer-token
+  // itself (so the Hermes client-health skill can read it server-to-server).
+  '/api/health/clients',
   '/api/stripe/webhook',
   '/api/outreach/track/(.*)',
   '/api/outreach/unsubscribe/(.*)',

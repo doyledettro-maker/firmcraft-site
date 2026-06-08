@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   },
 }
 
-const DOES: { k: string; v: string }[] = [
+const DOES: [string, string][] = [
   ['Answers your phones', 'Every call picked up in your business voice — booked, qualified, or messaged. No more lost jobs to voicemail.'],
   ['Remembers every client', 'Knows the address, the last service, the unit on the roof, what you quoted. It never forgets a customer you do.'],
   ['Schedules & dispatches', 'Books the job, routes the crew, sends the confirmation and the reminder. Your calendar runs itself.'],

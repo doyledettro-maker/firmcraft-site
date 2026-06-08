@@ -123,7 +123,7 @@ export async function POST(req: Request) {
     }
     const contactStatusRaw = r.status as ContactStatus | undefined
     const contactStatus =
-      contactStatusRaw && CONTACT_STATUSES.includes(contactStatusRaw) ? contactStatusRaw : 'draft'
+      contactStatusRaw && CONTACT_STATUSES.includes(contactStatusRaw) ? contactStatusRaw : 'targeted'
     buckets.get(key)!.contacts.push({
       contactName: (r.contactName ?? r.contact_name) as string | null | undefined ?? null,
       title: (r.title as string | null | undefined) ?? null,
@@ -204,6 +204,6 @@ function parseContact(raw: unknown, companyId: string): ContactInput | null {
     subjectLine: (r.subjectLine ?? r.subject_line) as string | null | undefined ?? null,
     emailBody: (r.emailBody ?? r.email_body) as string | null | undefined ?? null,
     notes: (r.notes as string | null | undefined) ?? null,
-    status: status && CONTACT_STATUSES.includes(status) ? status : 'draft',
+    status: status && CONTACT_STATUSES.includes(status) ? status : 'targeted',
   }
 }

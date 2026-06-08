@@ -2,6 +2,7 @@ import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase'
 import type { Company } from './companies'
 
 export type ContactStatus =
+  | 'targeted'
   | 'draft'
   | 'queued'
   | 'sent'
@@ -12,6 +13,7 @@ export type ContactStatus =
   | 'unsubscribed'
 
 export const CONTACT_STATUSES: ContactStatus[] = [
+  'targeted',
   'draft',
   'queued',
   'sent',

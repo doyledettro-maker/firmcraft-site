@@ -159,7 +159,7 @@ export function Badge({
   className,
 }: {
   children: ReactNode
-  tone?: 'neutral' | 'green' | 'amber' | 'red' | 'blue'
+  tone?: 'neutral' | 'green' | 'amber' | 'red' | 'blue' | 'teal'
   className?: string
 }) {
   const tones: Record<string, string> = {
@@ -168,6 +168,7 @@ export function Badge({
     amber: 'bg-[#2A2410] text-[#FCD34D] border-[#FCD34D]/25',
     red: 'bg-[#2A1520] text-[#FCA5A5] border-[#FCA5A5]/25',
     blue: 'bg-[#0E2148] text-[#93C5FD] border-[#93C5FD]/25',
+    teal: 'bg-[#0C2A2A] text-[#5EEAD4] border-[#5EEAD4]/25',
   }
   return (
     <span

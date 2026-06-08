@@ -2,7 +2,8 @@ import { Badge } from '@/components/ui'
 import type { ContactStatus } from '@/lib/db/contacts'
 import type { CompanyStatus } from '@/lib/db/companies'
 
-const CONTACT_TONE: Record<ContactStatus, 'neutral' | 'amber' | 'green' | 'red' | 'blue'> = {
+const CONTACT_TONE: Record<ContactStatus, 'neutral' | 'amber' | 'green' | 'red' | 'blue' | 'teal'> = {
+  targeted: 'teal',
   draft: 'neutral',
   queued: 'amber',
   sent: 'blue',
@@ -14,6 +15,7 @@ const CONTACT_TONE: Record<ContactStatus, 'neutral' | 'amber' | 'green' | 'red' 
 }
 
 const CONTACT_LABEL: Record<ContactStatus, string> = {
+  targeted: 'Targeted',
   draft: 'Draft',
   queued: 'Queued',
   sent: 'Sent',

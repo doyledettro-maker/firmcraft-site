@@ -63,7 +63,7 @@ export async function POST(req: Request) {
       subjectLine: (r.subjectLine as string | null | undefined) ?? null,
       emailBody: (r.emailBody as string | null | undefined) ?? null,
       notes: (r.notes as string | null | undefined) ?? null,
-      status: status && CONTACT_STATUSES.includes(status) ? status : 'draft',
+      status: status && CONTACT_STATUSES.includes(status) ? status : 'targeted',
     })
   })
 

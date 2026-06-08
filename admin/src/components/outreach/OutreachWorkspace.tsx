@@ -46,8 +46,20 @@ const SEGMENT_LABELS: Record<CompanySegment, string> = {
   pe: 'PE',
 }
 const CONTACT_STATUS_OPTIONS: ContactStatus[] = [
-  'draft', 'queued', 'sent', 'opened', 'clicked', 'replied', 'bounced', 'unsubscribed',
+  'targeted', 'draft', 'queued', 'sent', 'opened', 'clicked', 'replied', 'bounced', 'unsubscribed',
 ]
+
+const CONTACT_STATUS_LABELS: Record<ContactStatus, string> = {
+  targeted: 'Targeted',
+  draft: 'Draft',
+  queued: 'Queued',
+  sent: 'Sent',
+  opened: 'Opened',
+  clicked: 'Clicked',
+  replied: 'Replied',
+  bounced: 'Bounced',
+  unsubscribed: 'Unsubscribed',
+}
 
 type CompanyFilter = 'all' | CompanyStatus
 
@@ -68,6 +80,7 @@ const ENGAGEMENT_RANK: Record<ContactStatus, number> = {
   bounced: 1,
   unsubscribed: 1,
   draft: 0,
+  targeted: -1,
 }
 
 export type OutreachWorkspaceProps = {
@@ -81,6 +94,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
   const [industry, setIndustry] = useState<string>('all')
   const [city, setCity] = useState<string>('all')
   const [segment, setSegment] = useState<'all' | CompanySegment>('all')
+  const [contactStatus, setContactStatus] = useState<'all' | ContactStatus>('all')
   const [query, setQuery] = useState('')
   const [openCompanyId, setOpenCompanyId] = useState<string | null>(null)
   const [openContactId, setOpenContactId] = useState<string | null>(null)
@@ -119,6 +133,10 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
       if (industry !== 'all' && c.industry !== industry) return false
       if (city !== 'all' && c.city !== city) return false
       if (segment !== 'all' && c.segment !== segment) return false
+      if (contactStatus !== 'all') {
+        const companyContacts = contactsByCompany.get(c.id) ?? []
+        if (!companyContacts.some((ct) => ct.status === contactStatus)) return false
+      }
       if (q) {
         const companyContacts = contactsByCompany.get(c.id) ?? []
         const contactHay = companyContacts
@@ -129,7 +147,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
       }
       return true
     })
-  }, [companies, filter, industry, city, segment, query, contactsByCompany])
+  }, [companies, filter, industry, city, segment, contactStatus, query, contactsByCompany])
 
   const queuedCount = useMemo(
     () => contacts.filter((c) => c.status === 'queued').length,
@@ -196,6 +214,16 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
           <Select value={city} onChange={(e) => setCity(e.target.value)} className="h-9 py-0 w-[140px]">
             <option value="all">All cities</option>
             {cities.map((v) => <option key={v} value={v}>{v}</option>)}
+          </Select>
+          <Select
+            value={contactStatus}
+            onChange={(e) => setContactStatus(e.target.value as 'all' | ContactStatus)}
+            className="h-9 py-0 w-[150px]"
+          >
+            <option value="all">All statuses</option>
+            {CONTACT_STATUS_OPTIONS.map((v) => (
+              <option key={v} value={v}>{CONTACT_STATUS_LABELS[v]}</option>
+            ))}
           </Select>
         </div>
         <div className="flex gap-2">

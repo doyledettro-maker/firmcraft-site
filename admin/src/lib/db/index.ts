@@ -33,6 +33,12 @@ export {
 } from './correspondence'
 export { getAnalyticsSummary } from './analytics'
 export { getLeads, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
+export {
+  recordBeacon,
+  getLatestBeacons,
+  getClientHealthOverview,
+  evaluateHealth,
+} from './health-beacons'
 
 export type { ClientCreateInput, ClientUpdateInput } from './mappers'
 export type { UsageEvent, UsageSummary, DateRange } from './usage'
@@ -55,3 +61,11 @@ export type {
   ReferrerCount,
 } from './analytics'
 export type { Lead, LeadStatus, LeadSegment, LeadUpdate, LeadStats } from './leads'
+export type {
+  Beacon,
+  BeaconInput,
+  ClientHealth,
+  HealthLight,
+  ContainerStatus,
+  GatewayState,
+} from './health-beacons'

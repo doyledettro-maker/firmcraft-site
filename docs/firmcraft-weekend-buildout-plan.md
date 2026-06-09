@@ -211,6 +211,8 @@ One git repo (`firmcraft-site`) with three Next.js apps deployed as separate Ver
 | Admin | `admin/` | admin.firmcraft.ai | Dark mode, terracotta accent | Cloudflare Access (email whitelist) | 3001 |
 | Partner | `partner/` | partners.firmcraft.ai | Light, sage green (#6B8E5A) accent, money green (#2F4A22) for financial | Clerk (publicMetadata.partnerSlug) | 3002 |
 
+**Internal vs. client-facing — the key distinction (Phase 2 onward):** `admin.firmcraft.ai` is **Firmcraft's own internal back office** (our staff: tenant/client management, MRR, usage, outreach CRM). It is never a customer surface. The **contractor-facing** product — the dispatch board, job management, scheduling — is white-labeled per tenant at **`{slug}.firmcraft.ai`** (e.g. `rumblebee.firmcraft.ai`), served by the *same* admin deployment via a Cloudflare wildcard (`*.firmcraft.ai → Vercel`) and Next.js subdomain middleware that resolves `{slug}` → `tenant_id` (RLS enforces isolation). `app.firmcraft.ai` is a generic login that redirects each user to their own subdomain. Custom client domains (e.g. `app.rumblebeeac.com`) are a future Pro-tier upsell, out of Phase 2 scope. Full design: [scheduling-dispatch-architecture.md §1.6](scheduling-dispatch-architecture.md).
+
 ### Partner/Reseller Model
 
 Not all clients have partners — some are direct sales. Partners get 30% commission as long as they remain the assigned partner (no sunset):

@@ -121,7 +121,7 @@ The scheduling module is built around five principles that reflect Firmcraft's c
 
 **Tech Mobile App** — React Native + Expo application with PowerSync for offline-first data sync. Provides the technician's daily schedule, job details, navigation, time tracking, photo/signature capture, and real-time status updates.
 
-**Dispatch Board** — a web interface within the existing admin.firmcraft.ai Next.js app. Built on FullCalendar Premium (resource timeline view) with a Mapbox map overlay showing live tech locations. Connected to Supabase Realtime for live updates.
+**Dispatch Board** — the contractor's web interface, served from the white-labeled client app at `{slug}.firmcraft.ai` (e.g. `rumblebee.firmcraft.ai`). It is **not** part of Firmcraft's internal `admin.firmcraft.ai` panel — that distinction is foundational (see Section 1.6). The board shares the same Next.js codebase and Vercel deployment as the admin panel; Next.js middleware resolves the host to a `tenant_id` and renders the contractor's view. Built on FullCalendar Premium (resource timeline view) with a Mapbox map overlay showing live tech locations. Connected to Supabase Realtime for live updates.
 
 **Location Service** — ingests GPS coordinates from the mobile app, stores current positions in Redis for fast lookup, writes history to Postgres for analytics, and manages Radar.io geofence events for automatic arrival/departure detection.
 
@@ -137,7 +137,7 @@ The scheduling module integrates with every existing Firmcraft component:
 |---|---|
 | **Hermes Agent** (Hetzner VPS) | Dispatch Optimizer runs on the same VPS. Hermes calls scheduling skills via function calling |
 | **Supabase** (PostgreSQL) | Scheduling tables live in the same Supabase project, same multi-tenant schema |
-| **Next.js admin panel** (admin.firmcraft.ai) | Dispatch board is a new route group within the existing app |
+| **Next.js admin/client app** (admin.firmcraft.ai + `*.firmcraft.ai`) | Same deployment serves Firmcraft's internal panel (`admin.firmcraft.ai`) and every contractor's white-labeled dispatch board (`{slug}.firmcraft.ai`); middleware resolves the host to a tenant. Dispatch board is a new route group within this app |
 | **Clerk auth** | Same Clerk project, same JWT flow. New roles: dispatcher, technician |
 | **Twilio** | Existing SMS channel reused for appointment notifications |
 | **Resend** | Existing email service reused for confirmations and summaries |
@@ -154,6 +154,48 @@ Every contractor is a tenant. Tenancy is enforced at three layers:
 2. **Application (Clerk JWT)** — Clerk JWTs include a `tenant_id` claim set during organization setup. Supabase validates this JWT and uses the claim in RLS policies. No API request executes without a valid tenant-scoped token.
 
 3. **Infrastructure (logical isolation)** — all tenants share the same Supabase project and database. This keeps costs low for the 5-50 tech target market. If a tenant exceeds 100 technicians, they can be migrated to a dedicated Supabase project without application changes (connection string swap).
+
+### 1.6 Tenant-Facing Surfaces & Subdomain Routing
+
+**Decision (June 9, 2026): client dashboards are white-labeled per tenant on a wildcard subdomain.** Each contractor gets their own dashboard at `{slug}.firmcraft.ai` (e.g. `rumblebee.firmcraft.ai`). This is the contractor's product surface — the dispatch board, job management, technician and customer admin, schedule configuration. It is distinct from Firmcraft's own internal panel.
+
+**Three surfaces, one deployment:**
+
+| Surface | Audience | Purpose |
+|---|---|---|
+| `admin.firmcraft.ai` | **Firmcraft staff (internal)** | The company's own back office — tenant/client management, MRR, token usage, outreach CRM, provisioning. Never customer-facing. |
+| `{slug}.firmcraft.ai` | **The contractor (one tenant)** | The white-labeled client app — dispatch board, jobs, techs, customers, scheduling config. Scoped to exactly one tenant by the subdomain. |
+| `app.firmcraft.ai` | **Any contractor user, pre-auth** | Generic login/landing. After authentication, redirects the user to their own `{slug}.firmcraft.ai`. Useful when a user doesn't remember their subdomain or arrives via a bare link. |
+
+The client app and the internal admin panel share the **same codebase, same Vercel deployment, and same database**. There is no separate app to maintain per tenant. Tenant isolation is enforced by Postgres RLS (Section 1.5), not by deploying separate instances.
+
+**Wildcard DNS.** A single Cloudflare wildcard record — `*.firmcraft.ai → Vercel` — routes every tenant subdomain to the one deployment. Adding a new tenant requires **no DNS change**: the moment a `slug` exists in the `tenants` table, `{slug}.firmcraft.ai` resolves and works. (Reserved subdomains like `admin`, `app`, `www`, `llm`, `langfuse`, `partners` are carved out and handled by their own routes/projects.)
+
+**Next.js middleware resolves the tenant.** A middleware runs on every request to the client app:
+
+```typescript
+// middleware.ts (client app)
+export function middleware(req: NextRequest) {
+  const host = req.headers.get('host') ?? ''
+  const sub = host.split('.')[0]                 // "rumblebee" from "rumblebee.firmcraft.ai"
+
+  // Reserved/non-tenant hosts pass through to their own handling.
+  if (['admin', 'app', 'www', ''].includes(sub) || !host.endsWith('firmcraft.ai')) {
+    return NextResponse.next()
+  }
+
+  // Look up the tenant by slug (cached). Unknown slug → 404 / marketing redirect.
+  // The resolved tenant_id is injected as a request header for downstream
+  // route handlers and forwarded into the Clerk → Supabase JWT flow (Section 9.3).
+  const res = NextResponse.next()
+  res.headers.set('x-tenant-slug', sub)
+  return res
+}
+```
+
+The middleware extracts the subdomain, maps `slug → tenant_id` (lookup cached at the edge), and sets the tenant on the request context. Downstream, the resolved tenant must agree with the `tenant_id` claim in the authenticated user's Clerk JWT — a user authenticated for Tenant A who somehow lands on Tenant B's subdomain is rejected (see Section 9.3). The subdomain is a **routing and white-labeling mechanism, not a security boundary**; RLS remains the hard boundary.
+
+**Custom domains (future Pro-tier upsell).** Contractors on a higher tier can point their own domain at their dashboard — e.g. `app.rumblebeeac.com` instead of `rumblebee.firmcraft.ai`. Vercel supports custom domains with automatic SSL, but each one requires per-client setup: the contractor adds a CNAME/A record, Vercel provisions and renews the TLS certificate, and the domain is verified and attached to the project. Because that provisioning is manual per client, custom domains are **out of scope for Phase 2** — the wildcard `{slug}.firmcraft.ai` covers every tenant on day one. Custom domains are an explicit later enhancement and a natural Pro-tier differentiator (see [ROADMAP.md](../ROADMAP.md) Future Considerations). The middleware already supports it conceptually: the host → tenant resolution simply falls back to a `custom_domain` lookup on the `tenants` table when the host is not a `*.firmcraft.ai` subdomain.
 
 ---
 
@@ -174,6 +216,8 @@ CREATE TABLE tenants (
     id              UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     clerk_org_id    TEXT UNIQUE NOT NULL,
     name            TEXT NOT NULL,
+    slug            TEXT UNIQUE NOT NULL,              -- subdomain for the white-labeled client app: {slug}.firmcraft.ai
+    custom_domain   TEXT UNIQUE,                       -- future Pro-tier upsell, e.g. "app.rumblebeeac.com"; null until provisioned
     timezone        TEXT NOT NULL DEFAULT 'America/Chicago',
     business_hours  JSONB NOT NULL DEFAULT '{"mon":{"start":"08:00","end":"17:00"},"tue":{"start":"08:00","end":"17:00"},"wed":{"start":"08:00","end":"17:00"},"thu":{"start":"08:00","end":"17:00"},"fri":{"start":"08:00","end":"17:00"}}',
     settings        JSONB NOT NULL DEFAULT '{}',
@@ -1459,6 +1503,14 @@ All API requests require a Clerk JWT in the Authorization header. The JWT includ
 
 Supabase validates the JWT using Clerk's JWKS endpoint. RLS policies use `auth.tenant_id()` (extracted from the JWT) to scope all queries. Technician-role JWTs additionally restrict job visibility to jobs assigned to that tech.
 
+**Subdomain ↔ JWT consistency.** On the client app (`{slug}.firmcraft.ai`), the Next.js middleware resolves the subdomain to a `tenant_id` (Section 1.6) *before* any data access. That resolved tenant must match the `tenant_id` claim in the user's Clerk JWT. The two are reconciled as follows:
+
+1. **Middleware** extracts the subdomain slug and looks up its `tenant_id` (edge-cached).
+2. **Clerk** authenticates the user; the active organization's `tenant_id` is in the JWT.
+3. If the JWT's `tenant_id` ≠ the subdomain's `tenant_id`, the request is rejected (403) and the user is redirected to `app.firmcraft.ai`, which sends them to *their* correct `{slug}` subdomain. This guards against a user authenticated for one tenant landing on another tenant's URL.
+
+The subdomain is convenience and white-labeling, not authorization: even if the consistency check were bypassed, Postgres RLS (keyed on the JWT's `tenant_id`, never on the subdomain) is the hard boundary that prevents cross-tenant reads or writes. `app.firmcraft.ai` is a tenant-agnostic login surface — it authenticates the user, reads the `tenant_id`/`slug` from Clerk, and 302-redirects to the right dashboard. Firmcraft staff hitting `admin.firmcraft.ai` are authenticated as the internal organization and see the cross-tenant back office rather than any single tenant's view.
+
 ### 9.4 Webhook Events
 
 The scheduling system emits webhook events that downstream systems (Phase 4 invoicing, Phase 5 Digital Ops, external integrations) can subscribe to:
@@ -1553,6 +1605,8 @@ Margins improve with scale because Supabase, Hetzner, Redis, and ML infrastructu
 **Database layer (hard boundary):** PostgreSQL Row-Level Security policies on every table ensure a tenant can never access another tenant's data, regardless of application-layer bugs. The `tenant_id` is extracted from the Clerk JWT, not from user input. RLS policies use `USING` and `WITH CHECK` clauses to enforce both read and write isolation.
 
 **Application layer:** API routes validate the JWT before any database access. Edge Functions run in isolated V8 workers per request. No shared state between requests from different tenants.
+
+**Subdomain is not a boundary:** the white-labeled `{slug}.firmcraft.ai` host (Section 1.6) is a routing and white-labeling convenience, never an authorization mechanism. Tenant scoping always derives from the Clerk JWT's `tenant_id` claim and is enforced by RLS — a forged or mismatched subdomain cannot widen access. The middleware's subdomain ↔ JWT consistency check (Section 9.3) is defense-in-depth on top of RLS, not a substitute for it.
 
 **Testing:** integration tests verify that a JWT for Tenant A cannot read, write, or modify data belonging to Tenant B. These tests run in CI on every deployment.
 

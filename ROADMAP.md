@@ -92,6 +92,7 @@
 - Customer reminders: "Your tech arrives between 2-4pm"
 - Dispatcher commands via Hermes: "Assign the 3pm to Dave" or AI auto-assigns based on location + skills
 - Drive-time awareness using Google Maps API
+- **White-labeled client dashboards on a wildcard subdomain** — each contractor's dispatch board lives at `{slug}.firmcraft.ai` (e.g. `rumblebee.firmcraft.ai`). One Cloudflare wildcard (`*.firmcraft.ai → Vercel`), one Next.js deployment, one database; middleware maps the subdomain to a `tenant_id` and RLS enforces isolation. `admin.firmcraft.ai` stays Firmcraft's *internal* panel; `app.firmcraft.ai` is the generic login that redirects users to their own subdomain. (Architecture: [scheduling-dispatch-architecture.md §1.6](docs/scheduling-dispatch-architecture.md))
 
 **MVP scope:**
 - Job creation from phone calls (Phase 1) or manual entry
@@ -99,6 +100,7 @@
 - Tech assignment (manual via Hermes command)
 - Customer appointment reminders (SMS)
 - Job completion logging
+- White-labeled `{slug}.firmcraft.ai` dashboard per tenant (wildcard DNS + subdomain-routing middleware)
 
 **Growth scope:**
 - Multi-day scheduling with drag-and-drop web UI
@@ -268,6 +270,7 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 
 ### Technology
 - **White-labeled Hermes Desktop** — Firmcraft-branded desktop app for clients
+- **Custom domains for client dashboards (Pro-tier upsell)** — a contractor points their own domain (e.g. `app.rumblebeeac.com`) at their dashboard instead of the default `{slug}.firmcraft.ai`. Requires per-client SSL cert provisioning + DNS verification; Vercel supports it but each one is manual setup. Deliberately **out of Phase 2 scope** — the wildcard `{slug}.firmcraft.ai` covers every tenant on day one. A natural Pro-tier differentiator once there's demand. (See [architecture §1.6](docs/scheduling-dispatch-architecture.md).)
 - **Mobile app** — native iOS/Android for technicians
 - **Offline mode** — job details cached for areas with poor connectivity
 - **Multi-language** — Spanish-first (large portion of trade workforce)
@@ -282,7 +285,7 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 |------|-------|--------|-----------------|
 | Solo | $399/mo + $1K setup | 1-2 person shops | 1 workflow, 3 integrations, $100 token allowance |
 | Team | $799/mo + $2K setup | 3-5 person teams | 8 workflows, unlimited integrations, $200 tokens |
-| Pro | $1,499/mo + $3K setup | 6-10 person operations | Unlimited, dedicated lead, priority SLA |
+| Pro | $1,499/mo + $3K setup | 6-10 person operations | Unlimited, dedicated lead, priority SLA, custom dashboard domain *(roadmap — see Future Considerations)* |
 
 **Token overages:** Billed 1 month in arrears at 1.2x cost (20% markup)
 

@@ -48,8 +48,9 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Job lifecycle state machine with Postgres trigger enforcing valid transitions
 - Edge Functions: job CRUD (create, read, update, cancel, complete), technician CRUD, customer CRUD
 - Hermes skills: `create_job`, `update_job`, `cancel_job`, `complete_job`, `list_jobs`, `get_job`
-- Seed data: demo tenant with 5 techs, 10 customers, 3 job types, sample skill definitions
+- Seed data: demo tenant (with `slug`) with 5 techs, 10 customers, 3 job types, sample skill definitions
 - Clerk role configuration: add `dispatcher` and `technician` roles
+- White-label routing: Cloudflare wildcard DNS (`*.firmcraft.ai`) + Next.js subdomain middleware resolving `{slug}` → `tenant_id` for the client app
 
 **Estimated duration:** 3 weeks
 
@@ -219,7 +220,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 | Component | Location | Notes |
 |---|---|---|
 | Supabase schema + Edge Functions | `firmcraft-site/admin/supabase/` | Extend existing Supabase project. Migrations go in `supabase/migrations/`. Edge Functions in `supabase/functions/`. |
-| Dispatch board UI | `firmcraft-site/admin/src/app/dispatch/` | New route group in existing admin Next.js app (admin.firmcraft.ai) |
+| Dispatch board UI | `firmcraft-site/admin/src/app/dispatch/` | New route group in the existing Next.js app. Served to contractors at `{slug}.firmcraft.ai` (client-facing, host-routed by middleware) — **not** under `admin.firmcraft.ai`, which stays Firmcraft's internal panel. Same codebase/deployment serves both (architecture doc §1.6) |
 | Dispatch optimizer | `firmcraft-site/voice-agent/` or new `dispatch-optimizer/` dir on Hetzner | Python/FastAPI service, lives alongside Hermes on the VPS |
 | Hermes scheduling skills | Hermes agent codebase (Hetzner VPS) | New skill files added to existing Hermes skill registry |
 | Mobile app | **New directory:** `firmcraft-mobile/` | Expo project, separate from web codebase. Could be a new repo or a top-level directory. Recommend new repo `firmcraft-mobile` for clean EAS build config. |
@@ -361,7 +362,7 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
 
 ### Sprint 1 (Week 1): Schema + RLS + Seed Data
 
-**Goal:** All database tables exist with correct constraints, indexes, RLS policies, and demo data.
+**Goal:** All database tables exist with correct constraints, indexes, RLS policies, and demo data. The white-labeled client app resolves per tenant via wildcard DNS + subdomain middleware (~half a day on top of the schema work).
 
 **Tasks:**
 
@@ -373,6 +374,7 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
    - File: `supabase/migrations/20260616_scheduling_core.sql`
    - Tables: `tenants`, `service_areas`, `technicians`, `skills`, `technician_skills`, `technician_zones`
    - Include all columns, types, constraints, indexes exactly as specified in architecture doc Section 2.1
+   - **Include `tenants.slug` (TEXT UNIQUE NOT NULL — the subdomain for `{slug}.firmcraft.ai`) and `tenants.custom_domain` (TEXT UNIQUE, nullable — future Pro-tier upsell).** Both get a unique index for fast host → tenant lookups by the routing middleware (see architecture doc §1.6)
    - Include PostGIS geometry columns for `service_areas.boundary`
 
 3. **Create Supabase migration: customer + equipment tables**
@@ -412,7 +414,7 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
 
 8. **Create seed script for demo tenant**
    - File: `supabase/seed.sql` or `scripts/seed-scheduling.sql`
-   - Create 1 demo tenant (timezone: America/Chicago, business hours Mon-Fri 8am-5pm)
+   - Create 1 demo tenant (timezone: America/Chicago, business hours Mon-Fri 8am-5pm, **`slug` = `demo`** so the dashboard is reachable at `demo.firmcraft.ai` once middleware is wired; leave `custom_domain` null)
    - Create 5 technicians with names, skills, home addresses (Houston area), work hours
    - Create 3 skills: "EPA 608 Universal", "Journeyman Electrician", "Licensed Plumber"
    - Create skill assignments (not every tech has every skill)
@@ -427,6 +429,14 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
    - Verify: query each table and confirm data exists
    - Verify: RLS test — query jobs as wrong tenant returns empty
    - Verify: status transition test — attempt invalid transition, confirm rejection
+
+10. **Wildcard DNS + subdomain-routing middleware** *(~half a day on top of the schema work)*
+    - Add a Cloudflare wildcard DNS record: `*.firmcraft.ai → Vercel` (CNAME to the Vercel deployment). Confirm reserved hosts (`admin`, `app`, `www`, `llm`, `langfuse`, `partners`) keep their existing records and are not shadowed by the wildcard
+    - Add the wildcard domain (`*.firmcraft.ai`) to the client app's Vercel project so Vercel serves and issues TLS for arbitrary subdomains
+    - Create `middleware.ts` in the client app: extract the subdomain from the `host` header, skip reserved/non-tenant hosts, look up `slug → tenant_id` against the `tenants` table (cache the lookup), and set `x-tenant-slug` / resolved `tenant_id` on the request context (see architecture doc §1.6)
+    - Wire the subdomain ↔ Clerk-JWT consistency check: if the authenticated user's `tenant_id` ≠ the subdomain's `tenant_id`, return 403 and redirect to `app.firmcraft.ai` (architecture doc §9.3). Treat the subdomain as routing/white-labeling only — RLS remains the hard boundary
+    - Verify: `demo.firmcraft.ai` resolves and loads scoped to the demo tenant; an unknown slug (`nope.firmcraft.ai`) 404s or redirects to marketing; `admin.firmcraft.ai` still serves the internal panel
+    - **Defer:** `custom_domain` resolution (point a contractor's own domain at their dashboard) is a future Pro-tier upsell, not Phase 2 — the column exists so middleware can add the fallback lookup later without a schema change
 
 ### Sprint 2 (Week 2): Edge Functions + API Layer
 

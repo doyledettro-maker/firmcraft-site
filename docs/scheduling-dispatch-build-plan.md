@@ -180,7 +180,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
   - 2-hour reminder
   - "Tech is on the way" with ETA when status changes to `en_route`
   - Delay notification when job runs 30+ min over estimate
-  - Post-job review request (2-hour delay, link to Google review)
+- **Review flywheel (late-sprint scope, originally a Digital Ops feature):** the full loop, not just the request — `job.completed` → 2-hour-delay SMS review request → Google review link → inbound review matched back to `job_id` → AI-drafted response queued for one-tap approval. This ships here because it only depends on job-completion events, and it seeds the reputation dashboard the Digital Ops module (roadmap Phase 5) builds out later.
 - Email confirmation via Resend (existing): branded HTML template with job details, tech name, what-to-expect
 - Customer reschedule/cancel page: Next.js public route, short-lived token (no login), see available slots, pick new time or cancel with reason
 - Hermes notification skills: `send_confirmation`, `send_eta`, `send_delay`, `send_reminder`
@@ -204,8 +204,9 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Rescheduling releases the old slot and books the new one
 - Cancellation updates customer's cancel count and notifies dispatcher
 - Proactive alerts fire in Hermes when jobs run long or techs go idle
+- Review flywheel runs end to end: completed job triggers the review request, an inbound review is matched to its job, and an AI-drafted response is queued for approval
 - No unhandled errors or blank screens in dispatch board or mobile app
-- End-to-end demo: phone call (Phase 1) → job created → dispatched → tech drives → arrives → completes → customer notified → review requested
+- End-to-end demo: phone call (Phase 1) → job created → dispatched → tech drives → arrives → completes → customer notified → review requested → AI-drafted review response queued
 
 ---
 
@@ -464,7 +465,7 @@ Phase 1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI age
    - Input: `{ job_id, tech_notes?, parts_used?, photos?, customer_signature? }`
    - Sets `actual_end` to now(), calculates actual duration
    - Stores photos URLs and signature URL
-   - Assembles invoice-ready data package (for Phase 3): `{ services, parts, labor_hours, labor_rate, travel_time }`
+   - Assembles invoice-ready data package (for Phase 4 Invoicing): `{ services, parts, labor_hours, labor_rate, travel_time }`
    - Transitions status to `completed`
    - Returns the completed job with assembled invoice data
 
@@ -734,9 +735,22 @@ These hooks must exist for the phone agent to create jobs:
 }
 ```
 
-### 6.2 Phase 2 (Scheduling) → Phase 3 (Invoicing)
+### 6.2 Phase 2 (Scheduling) → Phase 3 (Online Booking Widget)
 
-These hooks Phase 2 must expose for Phase 3:
+Online booking is the next module after scheduling — it depends on the availability engine, **not** on invoicing. Phase 2 must expose a public-safe availability API so an embeddable widget can check slots and self-book without an end-user login.
+
+| Hook | Direction | Implementation | Status |
+|---|---|---|---|
+| Public availability check | Booking → Scheduling | `check-availability` Edge Function callable with a tenant-scoped **public widget key** (no end-user auth), rate-limited | Build in Phase 2 Sprint 2; harden for public use before Phase 3 ships |
+| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Build in Phase 2 Sprint 3 |
+| Self-booked job creation | Booking → Scheduling | Widget calls the same `create-job` path as the phone agent with `source: "online_booking"` | Build in Phase 2 Sprint 2 |
+| Customer self-service reads | Booking → Scheduling | Portal reads `jobs` by `customer_id`; "Where's My Tech" subscribes to `technician_current_location` via short-lived token; reschedule via `update-job` | Reuses Phase 2 Sprint 2–3 endpoints |
+
+**Forward-compatibility requirement:** the `check-availability` and `create-job` Edge Functions must support a **public widget-key auth path** (tenant-scoped, rate-limited) alongside the service-credential path the phone agent uses. Build this into the auth layer from the start so Phase 3 needs no schema or contract changes.
+
+### 6.3 Phase 2 (Scheduling) → Phase 4 (Invoicing)
+
+These hooks Phase 2 must expose for Phase 4:
 
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
@@ -744,7 +758,7 @@ These hooks Phase 2 must expose for Phase 3:
 | `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Build in Phase 2 Sprint 3 |
 | Time tracking feeds labor hours | Scheduling → Invoicing | `actual_start`, `actual_end`, and drive time calculated from location history | Build in Phase 2 Sprint 2 |
 | Parts used tracked per job | Scheduling → Invoicing | `parts_used` JSONB field on jobs table, populated by tech via mobile app | Build in Phase 4 |
-| Invoice ID written back to job | Invoicing → Scheduling | Phase 3 sets `jobs.invoice_id` when invoice is generated, transitions status to `invoiced` | Phase 3 responsibility |
+| Invoice ID written back to job | Invoicing → Scheduling | Phase 4 sets `jobs.invoice_id` when invoice is generated, transitions status to `invoiced` | Phase 4 responsibility |
 
 **Invoice data contract (Scheduling → Invoicing):**
 
@@ -780,29 +794,35 @@ These hooks Phase 2 must expose for Phase 3:
 }
 ```
 
-### 6.3 Phase 2 (Scheduling) → Future Phases
+### 6.4 Phase 2 (Scheduling) → Later Phases & Cross-Cutting Surfaces
 
-**Phase 4 (Customer Portal):**
+**Customer self-service portal (Phase 3 growth scope):**
 
-- Portal reads `jobs` table filtered by `customer_id` (upcoming appointments)
+- Portal reads `jobs` table filtered by `customer_id` (upcoming appointments + history)
 - Portal calls `check-availability` for self-scheduling
 - Portal calls `update-job` for rescheduling
 - "Where's My Tech" page subscribes to `technician_current_location` via Supabase Realtime
 - Short-lived tracking tokens generated by an Edge Function, scoped to one customer + one job
 
-**Phase 5 (Dashboard):**
+**Office Dashboard (cross-cutting — built incrementally, not a standalone phase):**
 
-- All KPIs derived from existing scheduling tables via Postgres views
+- The dashboard is assembled tab-by-tab as each module ships; scheduling contributes the Job Board and Tech Utilization tabs
+- All scheduling KPIs derived from existing scheduling tables via Postgres views
 - Create materialized views for expensive aggregations (refresh on schedule via pg_cron)
 - Views: `jobs_per_tech_per_day`, `drive_time_percentage`, `first_time_fix_rate`, `on_time_arrival_rate`, `schedule_fill_rate`
 
-**Phase 6 (Digital Ops):**
+**Review flywheel (ships within Phase 2 — see §1 Phase 5 sprint):**
+
+- `job.completed` webhook triggers the review request flow (2-hour delay), Google review link, and AI-drafted response capture
+- This loop is live at the end of Phase 2 and is later absorbed into the Digital Ops reputation dashboard
+
+**Digital Ops (roadmap Phase 5):**
 
 - Expose capacity signal: Edge Function that returns daily capacity percentage, available hours by skill, saturated zones
-- `job.completed` webhook triggers review request flow (2-hour delay)
+- Reuses the Phase 2 review-flywheel hooks rather than rebuilding them
 - `schedule.capacity_changed` webhook fires when daily fill rate crosses 60% or 90% thresholds
 
-### 6.4 Webhook Events to Implement
+### 6.5 Webhook Events to Implement
 
 Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later.
 

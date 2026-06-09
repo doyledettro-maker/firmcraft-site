@@ -211,7 +211,7 @@ The field service management (FSM) market is $2.34B in 2026, growing at 10-21% C
 
 **Verdict: It doesn't do field service scheduling.** GoHighLevel is a CRM and marketing automation platform. No job estimation, no dispatch, no field operations. The recommended contractor stack is GoHighLevel for marketing + CRM paired with Jobber/HCP/ServiceTitan for operations, connected via Zapier.
 
-**Relevance to Firmcraft:** GoHighLevel's AI call answering, automated SMS follow-up, and lead capture are directly relevant to Phase 1 (AI Phone) and Phase 6 (Digital Ops). Their HVAC-specific "Snapshots" (pre-built campaigns) show there's appetite for vertical-specific marketing automation.
+**Relevance to Firmcraft:** GoHighLevel's AI call answering, automated SMS follow-up, and lead capture are directly relevant to Phase 1 (AI Phone) and Phase 5 (Digital Ops). Their HVAC-specific "Snapshots" (pre-built campaigns) show there's appetite for vertical-specific marketing automation.
 
 ---
 
@@ -615,7 +615,24 @@ When a customer calls and the AI phone agent handles it:
 - Emergency calls must trigger re-optimization (VROOM re-solves in <1 second)
 - Customer preferences stored in CRM must be accessible during phone booking
 
-### 7.2 Phase 2 → Phase 3: Scheduling → Invoicing
+### 7.2 Phase 2 → Phase 3: Scheduling → Online Booking Widget
+
+Online booking is pulled forward as the next module after scheduling — it depends on the availability engine, not on invoicing. Customers self-book from an embeddable widget:
+
+1. **Self-scheduling:** Customer books from available time slots (filtered by service type, zone, skill requirements) via an embeddable widget on the contractor's site or a QR code
+2. **Appointment status:** Scheduled, tech en route, tech arrived, in progress, complete
+3. **ETA updates:** "Your technician Dave is 20 minutes away" with live map tracking
+4. **Rescheduling:** Customer can reschedule non-emergency appointments through the self-service portal
+5. **History:** Past appointments, technician assigned, work performed, photos
+
+**Critical integration points:**
+- Scheduling must expose a public-safe availability API (tenant-scoped widget key) so the widget can check slots without an end-user login
+- Self-scheduling only shows genuinely available slots (capacity-aware, not just calendar gaps)
+- Rescheduling triggers re-optimization of affected techs' routes
+- Real-time tech location (with customer consent) feeds into "tech is X minutes away"
+- Automated notifications at key status transitions
+
+### 7.3 Phase 2 → Phase 4: Scheduling → Invoicing
 
 When a tech completes a job:
 
@@ -631,25 +648,24 @@ When a tech completes a job:
 - Membership/warranty status affects pricing automatically
 - Warranty callbacks marked as $0 invoice with internal tracking
 
-### 7.3 Phase 2 → Phase 4: Scheduling → Customer Portal
+### 7.4 Phase 2 → Phase 5: Scheduling → Digital Ops
 
-Customers need to see:
+The scheduling system must talk to the marketing system:
 
-1. **Appointment status:** Scheduled, tech en route, tech arrived, in progress, complete
-2. **ETA updates:** "Your technician Dave is 20 minutes away" with live map tracking
-3. **Self-scheduling:** Customer books from available time slots (filtered by service type, zone, skill requirements)
-4. **Rescheduling:** Customer can reschedule non-emergency appointments through portal
-5. **History:** Past appointments, technician assigned, work performed, photos
+1. **Capacity-aware marketing:** When schedule is 90%+ full, throttle ad spend and lead generation. When schedule is <60% full, increase marketing. ServiceTitan's Atlas already does this.
+2. **Maintenance campaign timing:** When scheduling capacity is available in slow months, trigger maintenance reminder campaigns to fill the schedule
+3. **Review solicitation:** The review flywheel already ships within Phase 2 (job complete → SMS review request → Google review link → AI-drafted response); Digital Ops absorbs it into its reputation dashboard rather than rebuilding it
+4. **Service area marketing:** Digital Ops knows which ZIP codes have capacity for new customers vs. which are saturated
 
 **Critical integration points:**
-- Real-time tech location (with customer consent) feeds into "tech is X minutes away"
-- Self-scheduling only shows genuinely available slots (capacity-aware, not just calendar gaps)
-- Rescheduling triggers re-optimization of affected techs' routes
-- Automated notifications at key status transitions
+- Real-time capacity signal (% schedule filled) exposed to Digital Ops
+- Completed job events trigger post-service marketing workflows (review requests are already wired in Phase 2)
+- Service area utilization data informs geographic ad targeting
+- Maintenance agreement status drives renewal campaign timing
 
-### 7.4 Phase 2 → Phase 5: Scheduling → Dashboard
+### 7.5 Scheduling → Office Dashboard (cross-cutting — built incrementally)
 
-Key scheduling KPIs that matter:
+The office dashboard is no longer a standalone phase; each module ships its dashboard tabs into the admin panel as it lands. Scheduling contributes the Job Board and Tech Utilization tabs. Key scheduling KPIs that matter:
 
 | KPI | What It Measures | Target |
 |---|---|---|
@@ -669,21 +685,6 @@ Key scheduling KPIs that matter:
 - Real-time dashboard updates via Supabase Realtime
 - Historical trending for seasonal planning
 - Per-tech performance breakdowns for coaching
-
-### 7.5 Phase 2 → Phase 6: Scheduling → Digital Ops
-
-The scheduling system must talk to the marketing system:
-
-1. **Capacity-aware marketing:** When schedule is 90%+ full, throttle ad spend and lead generation. When schedule is <60% full, increase marketing. ServiceTitan's Atlas already does this.
-2. **Maintenance campaign timing:** When scheduling capacity is available in slow months, trigger maintenance reminder campaigns to fill the schedule
-3. **Review solicitation:** After job completion, trigger review request via Digital Ops module
-4. **Service area marketing:** Digital Ops knows which ZIP codes have capacity for new customers vs. which are saturated
-
-**Critical integration points:**
-- Real-time capacity signal (% schedule filled) exposed to Digital Ops
-- Completed job events trigger post-service marketing workflows
-- Service area utilization data informs geographic ad targeting
-- Maintenance agreement status drives renewal campaign timing
 
 ---
 
@@ -746,7 +747,7 @@ The scheduling system must talk to the marketing system:
 
 **Phase 2d (Months 7-10): Advanced Optimization**
 - Demand forecasting (seasonal, weather-based)
-- Capacity-aware marketing integration (Phase 6 connection)
+- Capacity-aware marketing integration (Phase 5 Digital Ops connection)
 - Multi-day project scheduling
 - On-call rotation management
 - Revenue-optimizing dispatch (match high-value tech to high-value job)

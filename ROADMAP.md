@@ -5,6 +5,8 @@
 
 **The stack at a glance:** Every module except one is *reactive* — it handles work as it comes in (calls, jobs, invoices, bookings). **Digital Ops is the only *proactive* module: it generates demand.** That makes it the front of the funnel for everything else in the platform.
 
+**The dependency chain (why the phases are ordered this way):** Phone creates jobs → Scheduling manages them → Booking lets customers self-create them → Invoicing closes them out → Digital Ops drives more of them. Each module is unblocked by the one before it. The **office dashboard is not a phase** — it's assembled incrementally, a tab at a time, as each module ships. The **review flywheel** ships early, at the tail of Phase 2, because it only needs to know when a job is done.
+
 📄 **Cross-cutting docs:** [Weekend Buildout Plan](docs/firmcraft-weekend-buildout-plan.md) · [Site Copy Audit](docs/site-copy-vs-hermes-audit.md) · [Brand Strategy Actions](docs/brand-strategy-actions.md) · [Alternative Funding Research](alternative-funding-research.md) · [Houston HVAC Prospects](docs/houston-hvac-prospect-research.md)
 
 📄 **Infrastructure docs:** [Cloudflare Access Setup](cloudflare-access-setup.md) · [Google Workspace Setup](docs/firmcraft-google-workspace-setup.md) · [Resend Mail Setup](docs/resend-firmcraft-mail-setup.md) · [Credentials Template](docs/firmcraft-credentials-template.md)
@@ -105,13 +107,52 @@
 - Recurring maintenance scheduling
 - Customer "where's my tech" real-time tracking
 
+**Review flywheel (late-Phase-2 add-on):** Because scheduling is the first module that knows when a job is *done*, the review flywheel ships at the tail end of Phase 2 — job complete → SMS review request → Google review link → AI-drafted response. This was originally scoped under Digital Ops, but it only depends on job-completion events, so it lands here first and feeds the full Digital Ops module (Phase 5) once that's built.
+
 **Success metric:** 5 contractors with active daily job boards
 
 ---
 
-## Phase 3: Invoicing + Payments (Target: Oct 2026)
+## Phase 3: Online Booking Widget (Target: Oct 2026)
+
+**Priority: pulled forward — it's a customer-acquisition tool, and it's unblocked the moment scheduling ships.**
+
+**What it does:** A white-labeled, embeddable booking widget. Customers self-book appointments from the contractor's own website (or a QR code on a yard sign / truck wrap), checking real availability and landing straight in the job board.
+
+**Why before invoicing:** Online booking depends on Phase 2's availability engine, **not** on invoicing. Contractors already have ways to invoice (QuickBooks, paper, manual) — what they *don't* have is a way for customers to book themselves at 11pm without a phone call. Booking grows the top of the funnel; invoicing closes the bottom. We ship demand capture first.
+
+**Displaces:** Jobber's online booking, ServiceTitan's customer-facing scheduling
+
+**Technical approach:**
+- Next.js booking app, white-labeled per contractor (subdomain or embed)
+- Service selection → availability check (Phase 2 scheduler's availability API) → booking
+- Embeddable widget for the contractor's existing website
+- QR code for yard signs / truck wraps → booking page
+- Booking creates a job record directly in the Phase 2 scheduling system
+- SMS confirmation reusing the Phase 1/2 messaging stack
+
+**MVP scope:**
+- Service selection + booking page
+- Real-time availability check against the scheduler
+- SMS confirmation
+- Embed code for contractor's website
+- QR code generation
+
+**Growth scope (customer self-service portal):**
+- Customer login + job history + upcoming appointments
+- "Where's my tech" real-time tracking on job day
+- Referral program mechanics
+- Online payment portal (unlocks once Invoicing ships in Phase 4)
+
+**Success metric:** 5 contractors embedding the booking widget, with at least one self-booked job per contractor per week.
+
+---
+
+## Phase 4: Invoicing + Payments (Target: Nov 2026)
 
 **What it does:** Generate invoices from completed jobs, send payment links, auto-follow-up on unpaid invoices, sync to accounting.
+
+**Why here:** Invoicing still comes after scheduling — it needs completed jobs to invoice against. It moved one slot back so online booking (a growth lever) could ship first; contractors already have stopgap invoicing today, so this closes the loop rather than gating it.
 
 **Displaces:** QuickBooks invoicing ($30-90/mo), manual invoicing
 
@@ -136,57 +177,31 @@
 - Parts and materials markup
 - Multi-payment (deposit + final)
 - Late payment fees
+- Customer-facing payment portal (lights up the Phase 3 self-service portal)
 
 **Success metric:** $50K+ in customer payments processed through the platform
 
 ---
 
-## Phase 4: Customer Portal + Online Booking (Target: Nov 2026)
+## The Office Dashboard (cross-cutting — built incrementally, no longer a standalone phase)
 
-**What it does:** White-labeled booking page per contractor. Customer self-service for scheduling, payment, and job tracking.
+The single pane of glass for the office manager / owner is **no longer a numbered phase**. Instead of waiting for a big-bang "Dashboard" build at the end, each module ships its own dashboard tab into the admin panel as it lands. By the time scheduling, booking, and invoicing are all running, the dashboard already exists — assembled incrementally rather than deferred.
 
-**Displaces:** Jobber's online booking, ServiceTitan's customer-facing features
+**Tabs accrue alongside the phases that feed them:**
+- **Job Board** — today's schedule, unassigned jobs, tech status *(ships with Phase 2)*
+- **Call Log** — missed calls, AI-handled calls, transfer requests *(ships with Phase 1)*
+- **Booking Activity** — self-booked jobs, widget conversion *(ships with Phase 3)*
+- **AR Aging** — unpaid invoices, follow-up queue, total outstanding *(ships with Phase 4)*
+- **Unsigned Contracts** — pending signatures, days outstanding *(already live via admin panel)*
+- **Tech Utilization** — jobs per tech, completion rates, average ticket *(ships with Phase 2 growth scope)*
+- **Customer Pipeline** — estimates sent, close rates, revenue forecast *(ships with Phase 4)*
+- **Weekly/Monthly P&L** — revenue, expenses, margin by service type *(ships with Phase 4 / Phase 5)*
 
-**Technical approach:**
-- Next.js booking app, white-labeled per contractor (subdomain or embed)
-- Service selection → availability check (Phase 2 scheduler) → booking
-- Customer account with job history, invoices, upcoming appointments
-- "Where's my tech" real-time tracking on job day
-- Embeddable widget for contractor's existing website
-- QR code for yard signs / truck wraps → booking page
-
-**MVP scope:**
-- Service selection + booking page
-- SMS confirmation
-- Embed code for contractor's website
-
-**Growth scope:**
-- Customer login + job history
-- Online payment portal
-- Real-time tech tracking
-- Review request after job completion
-- Referral program mechanics
+**Could be:** Hermes Desktop app with custom views, or the existing admin web app, or both. Either way, it's stitched together tab-by-tab, not built as a separate milestone.
 
 ---
 
-## Phase 5: Office Dashboard (Target: Dec 2026 - Q1 2027)
-
-**What it does:** The single pane of glass for the office manager / owner. Everything from Phases 1-4 in one view.
-
-**Could be:** Hermes Desktop app with custom views, or dedicated web app, or both
-
-**Views:**
-- **Job Board** — today's schedule, unassigned jobs, tech status
-- **AR Aging** — unpaid invoices, follow-up queue, total outstanding
-- **Unsigned Contracts** — pending signatures, days outstanding
-- **Call Log** — missed calls, AI-handled calls, transfer requests
-- **Tech Utilization** — jobs per tech, completion rates, average ticket
-- **Customer Pipeline** — estimates sent, close rates, revenue forecast
-- **Weekly/Monthly P&L** — revenue, expenses, margin by service type
-
----
-
-## Phase 6: Digital Ops (API application: NOW — Build target: Q1 2027)
+## Phase 5: Digital Ops (API application: NOW — Build target: Q1 2027)
 
 📄 **Docs:** [Digital Ops Research](docs/digital-ops-research.md) · [GBP Setup Plan](docs/gbp-setup-plan.md) · [GBP API Checklist](docs/gbp-api-application-checklist.md)
 
@@ -213,7 +228,7 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 - **Capacity-aware marketing** — auto-throttle campaigns based on live scheduling data (don't advertise when booked solid). Scorpion charges $10K+/mo for this concept; we deliver it for $149.
 - **AI content optimized for Google AI Overviews (GEO/AEO)** — 45% of homeowners now use AI tools to find contractors; 68% of local queries surface an AI Overview.
 - **Fully autonomous "set and forget"** with weekly reports — built for non-marketers in the second-least-digitized industry.
-- **Closed-loop integration with the rest of the Firmcraft stack** — scheduling (Phase 2), invoicing (Phase 3), and phone (Phase 1) feed marketing decisions and attribution.
+- **Closed-loop integration with the rest of the Firmcraft stack** — scheduling (Phase 2), booking (Phase 3), invoicing (Phase 4), and phone (Phase 1) feed marketing decisions and attribution.
 
 **Technical approach (open source first):**
 - **Postiz** (31.5k stars) — self-hosted social scheduling, 14+ platforms
@@ -227,10 +242,11 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 **Pricing:** $149/mo, a la carte. No contracts, transparent pricing — available as an add-on to any Operator Plan or as a standalone product for contractors not yet on Hermes.
 
 **MVP scope:**
-- Review flywheel: job complete → SMS review request → Google review link → AI-drafted responses
+- Review flywheel — **already live from Phase 2** (job complete → SMS review request → Google review link → AI-drafted responses); Digital Ops folds it into the unified reputation dashboard and cross-channel reporting
 - GBP posting + profile optimization
 - Social post generation + scheduling queue
 - One seasonal campaign template, contractor-approved
+- Capacity-aware marketing throttle (reads Phase 2 scheduling load)
 - Weekly report email
 
 **Success metric:** 5 contractors with Digital Ops running autonomously and at least one review-driven booking attributed.
@@ -278,9 +294,9 @@ Modules can be added to any Operator Plan, or sold standalone for contractors no
 |--------|-------|-------|----------------------|
 | AI Phone Answering | (bundled in plan) | Phase 1 | Reactive |
 | Scheduling + Dispatch | (bundled in plan) | Phase 2 | Reactive |
-| Invoicing + Payments | (bundled in plan) | Phase 3 | Reactive |
-| Customer Portal + Online Booking | (bundled in plan) | Phase 4 | Reactive |
-| **Digital Ops** | **$149/mo** | Phase 6 | **Proactive (demand gen)** |
+| Online Booking Widget | (bundled in plan) | Phase 3 | Reactive |
+| Invoicing + Payments | (bundled in plan) | Phase 4 | Reactive |
+| **Digital Ops** | **$149/mo** | Phase 5 | **Proactive (demand gen)** |
 
 **Full-stack pricing:** A contractor on the **Team plan ($799/mo) + Digital Ops ($149/mo) = $948/mo** for the complete reactive-plus-proactive operating system — still well below a single ServiceTitan seat ($1,500-3,500/mo) before its $400-800/mo marketing add-on. The **Solo plan + Digital Ops = $548/mo**; **Pro plan + Digital Ops = $1,648/mo**.
 
@@ -325,8 +341,8 @@ The marketing-tool market is even more fragmented and predatory than field-servi
 - [ ] Scheduling + dispatch in production (Sep 2026)
 - [ ] 25 paying clients
 - [ ] $10K MRR
-- [ ] Invoicing + payments in production (Oct 2026)
-- [ ] Customer portal in production (Nov 2026)
+- [ ] Online booking widget in production (Oct 2026)
+- [ ] Invoicing + payments in production (Nov 2026)
 - [ ] $50K MRR
 - [ ] Digital Ops in production (Q1 2027)
 - [ ] 100 paying clients

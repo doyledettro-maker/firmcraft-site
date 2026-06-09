@@ -361,7 +361,7 @@ CREATE TYPE job_status AS ENUM (
     'arrived',          -- tech is on site (geofence or manual check-in)
     'in_progress',      -- tech has started work
     'completed',        -- work finished, pending paperwork
-    'invoiced',         -- invoice generated (transition to Phase 3)
+    'invoiced',         -- invoice generated (transition to Phase 4)
     'cancelled',        -- cancelled by customer or contractor
     'on_hold'           -- paused (waiting for parts, permit, etc.)
 );
@@ -411,7 +411,7 @@ CREATE TABLE jobs (
     -- Financial
     estimated_revenue   NUMERIC(10,2),
     actual_revenue      NUMERIC(10,2),
-    invoice_id          UUID,                               -- Phase 3 reference
+    invoice_id          UUID,                               -- Phase 4 reference
 
     -- Relationships
     parent_job_id       UUID REFERENCES jobs(id),           -- for multi-visit / callback tracking
@@ -623,7 +623,7 @@ CREATE INDEX idx_dispatch_logs_tenant ON dispatch_logs(tenant_id, created_at DES
               │     ┌────▼─────┐
               │     │completed │ ← photos captured, signature collected
               │     └────┬─────┘
-              │          │ invoice generated (Phase 3)
+              │          │ invoice generated (Phase 4)
               │     ┌────▼────┐
               └─────│invoiced │
                     └─────────┘
@@ -936,7 +936,7 @@ Hermes doesn't just respond — it initiates. The Scheduling Service triggers pr
 | Certification expiring in 30 days | "Dave's EPA 608 Universal certification expires on July 15. He has 8 refrigerant jobs scheduled after that date. Should I reassign those?" | Admin |
 | Weather forecast: extreme heat | "Houston forecast: 105°F on Thursday. Historically, you see 40% more AC calls on days above 100°F. Consider opening overtime slots." | Admin |
 | Customer no-show pattern detected | "Mrs. Garcia has no-showed 3 of her last 5 appointments. Her tune-up tomorrow at 10am has a high cancellation risk. Should I add a confirmation call?" | Dispatcher |
-| Schedule capacity below 50% | "Next Tuesday is only 45% booked. Want me to trigger a maintenance reminder campaign to fill the day?" | Admin (→ Phase 6 Digital Ops) |
+| Schedule capacity below 50% | "Next Tuesday is only 45% booked. Want me to trigger a maintenance reminder campaign to fill the day?" | Admin (→ Phase 5 Digital Ops) |
 
 ---
 
@@ -1016,7 +1016,7 @@ Full context for the current job, designed for gloved operation with 56dp touch 
 - "Add Parts" button on job detail screen
 - Search from tenant's parts catalog (cached offline)
 - Quantity selector, notes field
-- Parts logged to job record → flows to invoice in Phase 3
+- Parts logged to job record → flows to invoice in Phase 4
 
 ### 5.3 Offline-First Architecture
 
@@ -1144,7 +1144,7 @@ After a job is marked "completed," the system waits a configurable delay (defaul
 
 **SMS:** "Hi [Name], thanks for choosing [Company]. How was your experience with [Tech Name]? Leave a quick review: [Google Review Link]. It means a lot to our team!"
 
-The review link points to the contractor's Google Business Profile. This triggers the review flywheel that feeds into Phase 6 (Digital Ops). The delay is configurable because sending immediately after the tech leaves feels pushy; 2 hours lets the customer settle back into their day.
+The review link points to the contractor's Google Business Profile. This is the review flywheel — it ships as part of Phase 2 (see §8.4) and later feeds the full Digital Ops module (Phase 5). The delay is configurable because sending immediately after the tech leaves feels pushy; 2 hours lets the customer settle back into their day.
 
 If the customer responds with a low rating (detected via reply analysis or a feedback form), the system routes the feedback to the contractor for follow-up before it becomes a public review.
 
@@ -1260,7 +1260,19 @@ The AI phone agent uses Hermes as its brain. When the phone agent detects a serv
 
 For emergency calls, the phone agent detects urgency cues ("my AC is out and it's 100 degrees", "water is flooding my kitchen") and sets priority = 'emergency', which triggers the emergency dispatch flow immediately after job creation. The customer is told: "I'm dispatching a technician to you right now. You'll receive a text with their name and ETA within 5 minutes."
 
-### 8.2 Phase 2 (Scheduling) → Phase 3 (Invoicing)
+### 8.2 Phase 2 (Scheduling) → Phase 3 (Online Booking Widget)
+
+Online booking is the next module after scheduling, and it depends entirely on the scheduler — **not** on invoicing. The widget lets customers self-book against real availability and drops the resulting job straight into the dispatch board.
+
+**Forward-compatibility requirement (Phase 2 must ship this):** Phase 2 has to expose a stable, documented **availability API** that an unauthenticated, embeddable widget can call. Concretely:
+
+- **`check_availability` endpoint** — takes service type + customer location/zip, returns the same slot suggestions Hermes computes (VROOM-backed). It must be callable from a public, embeddable context (no end-user login), rate-limited and tenant-scoped via a **public widget key** rather than a service credential.
+- **`create_job` from booking** — a confirmed slot calls the same job-creation path the phone agent uses (§8.1), so a self-booked job is indistinguishable from a phone-booked one downstream.
+- **Idempotency + hold tokens** — the widget needs a short-lived slot "hold" so two customers can't grab the same slot mid-form. Phase 2 exposes a hold/confirm two-step on `check_availability` → `create_job`.
+
+**Customer self-service portal (Phase 3 growth scope):** logged-in customers query `jobs` where `customer_id = X` for history and upcoming appointments; "Where's My Tech" subscribes to `technician_current_location` for the assigned tech, scoped by a short-lived token; rescheduling calls the same `update_job` endpoint Hermes uses, triggering re-optimization of affected routes.
+
+### 8.3 Phase 2 (Scheduling) → Phase 4 (Invoicing)
 
 When a tech marks a job "completed," the system assembles an invoice-ready data package:
 
@@ -1285,34 +1297,23 @@ When a tech marks a job "completed," the system assembles an invoice-ready data 
 }
 ```
 
-This package is stored in the job record. Phase 3's invoicing service reads it and generates a Stripe invoice. The transition from "completed" to "invoiced" is the handoff point.
+This package is stored in the job record. Phase 4's invoicing service reads it and generates a Stripe invoice. The transition from "completed" to "invoiced" is the handoff point.
 
-### 8.3 Phase 2 (Scheduling) → Phase 4 (Customer Portal)
+### 8.4 Review Flywheel (Phase 2 scope)
 
-The customer portal reads scheduling data via the same Supabase tables:
+The review flywheel ships at the **tail end of Phase 2**, not with Digital Ops. It only depends on one thing the scheduler already knows — *when a job is done* — so it lands here first and later folds into the full Digital Ops module (Phase 5).
 
-- **Upcoming appointments:** query `jobs` where `customer_id = X` and `status IN ('scheduled', 'dispatched')` and `scheduled_start > now()`
-- **Self-scheduling:** the portal calls `check_availability` with service type and customer location, receiving the same slot suggestions Hermes would provide
-- **Real-time tracking:** the "Where's My Tech" page subscribes to `technician_current_location` for the assigned tech, scoped by a short-lived token
-- **Rescheduling:** the portal calls the same `update_job` endpoint that Hermes uses, triggering re-optimization of affected routes
+The flow: job marked `completed` → (configurable delay, default 2h) → SMS review request → Google review link → AI-drafted response to whatever review the customer leaves.
 
-### 8.4 Phase 2 (Scheduling) → Phase 5 (Dashboard)
+**Hooks Phase 2 must expose for the flywheel (and that Digital Ops later reuses):**
 
-The dashboard derives all scheduling KPIs from the scheduling tables:
+- **`job.completed` event** — the same webhook/event that feeds invoicing (§8.3) also triggers the review request, after the configurable delay. The delay is a setting because firing the instant the tech leaves feels pushy; a short wait lets the customer settle.
+- **Review-request send** — reuses the Phase 1/2 SMS stack (Twilio); the message carries the contractor's Google review link.
+- **Review capture + AI draft** — inbound reviews are matched back to the `job_id`, and an AI-drafted response is queued for one-tap approval. This is the seed of the reputation dashboard Digital Ops builds out in Phase 5.
 
-| KPI | Query Source |
-|---|---|
-| Jobs per tech per day | `COUNT(jobs) GROUP BY technician_id, DATE(scheduled_start)` |
-| Drive time % | `SUM(drive_time) / SUM(work_hours)` from location + job timestamps |
-| First-time fix rate | `COUNT(jobs WHERE parent_job_id IS NULL AND status='completed') / COUNT(jobs WHERE status='completed')` |
-| Revenue per tech | `SUM(actual_revenue) GROUP BY technician_id` |
-| On-time arrival % | `COUNT(WHERE actual_start <= arrival_window_end) / COUNT(completed jobs)` |
-| Schedule fill rate | `SUM(booked_hours) / SUM(available_hours)` |
-| Avg job duration accuracy | `AVG(ABS(actual_duration - estimated_duration))` |
+Because these hooks live in Phase 2, Digital Ops (Phase 5) inherits a working review loop on day one and only has to add the reputation dashboard, multi-platform monitoring, and cross-channel reporting around it.
 
-These are computed as Postgres views or materialized views, refreshed on a schedule. The dashboard subscribes to Supabase Realtime on the views for live updates during the workday.
-
-### 8.5 Phase 2 (Scheduling) → Phase 6 (Digital Ops)
+### 8.5 Phase 2 (Scheduling) → Phase 5 (Digital Ops)
 
 The scheduling system exposes a capacity signal to the Digital Ops module:
 
@@ -1337,7 +1338,25 @@ Digital Ops uses this signal to:
 - **Target geographically** — advertise in zones with availability, suppress in saturated zones
 - **Time campaigns** — send maintenance reminders during slow weeks, not peak weeks
 
-### 8.6 Google Calendar Integration
+### 8.6 Office Dashboard (cross-cutting — built incrementally)
+
+The office dashboard is **no longer a standalone phase**. Each module ships its own dashboard tab into the admin panel as it lands, so the single pane of glass assembles itself tab-by-tab rather than waiting for a dedicated build. Scheduling contributes the Job Board and Tech Utilization tabs.
+
+The scheduling KPIs below are derived directly from the scheduling tables and surface in those tabs:
+
+| KPI | Query Source |
+|---|---|
+| Jobs per tech per day | `COUNT(jobs) GROUP BY technician_id, DATE(scheduled_start)` |
+| Drive time % | `SUM(drive_time) / SUM(work_hours)` from location + job timestamps |
+| First-time fix rate | `COUNT(jobs WHERE parent_job_id IS NULL AND status='completed') / COUNT(jobs WHERE status='completed')` |
+| Revenue per tech | `SUM(actual_revenue) GROUP BY technician_id` |
+| On-time arrival % | `COUNT(WHERE actual_start <= arrival_window_end) / COUNT(completed jobs)` |
+| Schedule fill rate | `SUM(booked_hours) / SUM(available_hours)` |
+| Avg job duration accuracy | `AVG(ABS(actual_duration - estimated_duration))` |
+
+These are computed as Postgres views or materialized views, refreshed on a schedule. The dashboard subscribes to Supabase Realtime on the views for live updates during the workday. Later phases add their own tabs (Booking Activity in Phase 3, AR Aging in Phase 4, reputation in Phase 5) against the same pattern.
+
+### 8.7 Google Calendar Integration
 
 **Strategy: one-way push, scheduling system is source of truth.**
 
@@ -1349,7 +1368,7 @@ This avoids the complexity of true two-way sync. The scheduling system always wi
 
 **Rate limit management:** Google Calendar API allows 500 requests/100 seconds per user. For 50 techs, batch operations (bulk schedule updates) use the Calendar API's batch endpoint (up to 50 requests per batch). Webhook subscriptions use push notifications (Calendar API watch) rather than polling.
 
-### 8.7 Google Maps/Routes Integration
+### 8.8 Google Maps/Routes Integration
 
 | Use Case | API | Endpoint | Cost |
 |---|---|---|---|
@@ -1359,14 +1378,14 @@ This avoids the complexity of true two-way sync. The scheduling system always wi
 | Geocoding addresses | Geocoding API | Geocode | $5/1K requests |
 | Dispatch board map | Mapbox GL JS | Tiles + Markers | Free tier (50K loads/mo) |
 
-### 8.8 QuickBooks Integration
+### 8.9 QuickBooks Integration
 
-Phase 3 handles QuickBooks invoice sync, but Phase 2 contributes time tracking data:
+Phase 4 handles QuickBooks invoice sync, but Phase 2 contributes time tracking data:
 
 - Tech clock-in/clock-out times (from geofence + manual entries) → work hours per day per tech
 - Drive time between jobs → tracked separately from on-site time
 - Break time → deducted from billable hours
-- This data feeds Phase 3's payroll export and is available for QuickBooks Time (formerly TSheets) sync
+- This data feeds Phase 4's payroll export and is available for QuickBooks Time (formerly TSheets) sync
 
 ---
 
@@ -1442,7 +1461,7 @@ Supabase validates the JWT using Clerk's JWKS endpoint. RLS policies use `auth.t
 
 ### 9.4 Webhook Events
 
-The scheduling system emits webhook events that downstream systems (Phase 3 invoicing, Phase 6 Digital Ops, external integrations) can subscribe to:
+The scheduling system emits webhook events that downstream systems (Phase 4 invoicing, Phase 5 Digital Ops, external integrations) can subscribe to:
 
 | Event | Payload | Triggered When |
 |---|---|---|
@@ -1640,7 +1659,7 @@ These are the components that create Firmcraft's competitive differentiation and
 | **2a: Smart Dispatch MVP** | Months 1-3 (Aug-Oct 2026) | Dispatch board (FullCalendar), map view (Mapbox), VROOM route optimization, basic skill matching, Supabase Realtime updates, mobile app (schedule view, job status, navigation, photos), offline mode (PowerSync) |
 | **2b: Predictive Intelligence** | Months 3-5 (Oct-Dec 2026) | Job duration prediction (XGBoost), dynamic re-routing on job overrun, emergency dispatch re-optimization, automated customer notifications (ETA, delays), geofencing auto-clock (Radar.io) |
 | **2c: Voice & Natural Language** | Months 5-7 (Dec 2026-Feb 2027) | Voice-to-schedule (Whisper + Claude structured outputs), NL dispatch commands via Hermes, AI dispatch suggestions (assist mode → auto mode), warranty callback auto-routing |
-| **2d: Advanced Optimization** | Months 7-10 (Feb-May 2027) | Demand forecasting (Prophet), capacity-aware marketing signal (Phase 6), multi-day project scheduling, on-call rotation management, revenue-optimizing dispatch, full Phase 1/3/4/5 integrations |
+| **2d: Advanced Optimization** | Months 7-10 (Feb-May 2027) | Demand forecasting (Prophet), capacity-aware marketing signal (Phase 5 Digital Ops), multi-day project scheduling, on-call rotation management, revenue-optimizing dispatch, full integrations with Phase 1 (phone), Phase 3 (booking), Phase 4 (invoicing), Phase 5 (Digital Ops) |
 
 ## Appendix B: Key Technical Decisions Log
 

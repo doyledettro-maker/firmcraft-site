@@ -6,7 +6,7 @@
 
 ---
 
-**Related docs:** [ROADMAP.md](../ROADMAP.md) (Phase 6) · [GBP Setup Plan](gbp-setup-plan.md) · [GBP API Checklist](gbp-api-application-checklist.md) · [Houston HVAC Prospects](houston-hvac-prospect-research.md)
+**Related docs:** [ROADMAP.md](../ROADMAP.md) (Phase 5) · [GBP Setup Plan](gbp-setup-plan.md) · [GBP API Checklist](gbp-api-application-checklist.md) · [Houston HVAC Prospects](houston-hvac-prospect-research.md)
 
 ---
 

@@ -1,6 +1,6 @@
 # Google Business Profile API Access — Application Checklist
 
-**Related docs:** [GBP Setup Plan](gbp-setup-plan.md) · [Digital Ops Research](digital-ops-research.md) · [ROADMAP.md](../ROADMAP.md) (Phase 6)
+**Related docs:** [GBP Setup Plan](gbp-setup-plan.md) · [Digital Ops Research](digital-ops-research.md) · [ROADMAP.md](../ROADMAP.md) (Phase 5)
 
 _Created 2026-06-08. Execute-ready reference for getting Firmcraft approved for GBP API access._
 

@@ -8,7 +8,7 @@ All internal documentation for the Firmcraft platform. The [ROADMAP.md](../ROADM
 
 | Document | Description |
 |----------|-------------|
-| [ROADMAP.md](../ROADMAP.md) | Central product roadmap — Phases 1-6, pricing, competitive positioning, milestones |
+| [ROADMAP.md](../ROADMAP.md) | Central product roadmap — Phases 1-5, pricing, competitive positioning, milestones |
 | [billing-spec.md](billing-spec.md) | Billing model — Spark/Flow/Forge tiers, Stripe product/price IDs, metered overages |
 | [brand-strategy-actions.md](brand-strategy-actions.md) | Action items from brand strategy review — trademark filings, brand architecture, marketing |
 | [site-copy-vs-hermes-audit.md](site-copy-vs-hermes-audit.md) | Audit of site copy claims vs. actual Hermes capabilities — oversells, undersells, gaps |
@@ -31,7 +31,7 @@ All internal documentation for the Firmcraft platform. The [ROADMAP.md](../ROADM
 | [scheduling-dispatch-market-research.md](scheduling-dispatch-market-research.md) | Competitive intelligence — ServiceTitan, Jobber, HCP teardowns, contractor needs, AI strategy |
 | [ai-scheduling-dispatch-research.md](ai-scheduling-dispatch-research.md) | AI/ML research — VRP solvers (VROOM, OR-Tools, PyVRP), predictive scheduling, smart dispatching |
 
-## Phase 6: Digital Ops
+## Phase 5: Digital Ops
 
 | Document | Description |
 |----------|-------------|

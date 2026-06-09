@@ -1,8 +1,8 @@
 # Google Business Profile Setup Plan — Firmcraft
 
-**Related docs:** [ROADMAP.md](../ROADMAP.md) (Phase 6) · [GBP API Checklist](gbp-api-application-checklist.md) · [Digital Ops Research](digital-ops-research.md)
+**Related docs:** [ROADMAP.md](../ROADMAP.md) (Phase 5) · [GBP API Checklist](gbp-api-application-checklist.md) · [Digital Ops Research](digital-ops-research.md)
 
-_Sub-doc of [ROADMAP.md](../ROADMAP.md) → **Phase 6: Digital Ops**. Created 2026-06-08._
+_Sub-doc of [ROADMAP.md](../ROADMAP.md) → **Phase 5: Digital Ops**. Created 2026-06-08._
 
 This is the end-to-end plan for standing up Firmcraft's own Google Business Profile (GBP), getting approved for GBP API access, and building the integration that powers the Digital Ops module. The single most time-sensitive item is **Phase 1 below — the 60-day verification clock must start now (June 2026)**, because GBP API approval requires a verified profile that has been active for 60+ days.
 
@@ -90,7 +90,7 @@ Once API access is live, wire GBP into Hermes as a Digital Ops skill.
 | **September 2026** | Begin integration build (GBP MCP server → Hermes skill) |
 | **Q4 2026** | Digital Ops beta with GBP live for first contractors |
 
-> The full Digital Ops module build target is **Q1 2027** (per ROADMAP Phase 6). This GBP track is the critical-path dependency that must lead it.
+> The full Digital Ops module build target is **Q1 2027** (per ROADMAP Phase 5). This GBP track is the critical-path dependency that must lead it.
 
 ---
 

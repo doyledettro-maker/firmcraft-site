@@ -76,6 +76,11 @@ router_settings:
   fallbacks:
     - firmcraft-deep: ["firmcraft-standard"]
     - firmcraft-standard: ["firmcraft-fast"]
+    # OpenAI model groups fall back to Anthropic when OpenAI errors (429s, quota, rate limits)
+    - firmcraft-gpt5: ["firmcraft-standard"]
+    - gpt-5.5: ["firmcraft-standard"]
+    - firmcraft-gpt4o: ["firmcraft-standard"]
+    - firmcraft-gpt4o-mini: ["firmcraft-fast"]
   context_window_fallbacks:
     - firmcraft-standard: ["firmcraft-deep"]
 

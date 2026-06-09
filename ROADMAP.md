@@ -183,6 +183,8 @@
 A fully autonomous AI marketing agent that manages a contractor's entire digital presence on a recurring, "set-and-forget" basis. The contractor answers ~5 questions at setup, connects their accounts, and the agent runs their reviews, social, listings, and campaigns — sending a weekly report and asking for approval only when it matters.
 
 > ⚠️ **CRITICAL PATH BLOCKER — act immediately:** The Google Business Profile API has a **60+ day approval waitlist**. The application must go in *now* (June 2026), well ahead of the build, or it becomes the gating dependency for the whole module. This is the single most time-sensitive item on the roadmap.
+>
+> 📋 **Full setup plan:** [docs/gbp-setup-plan.md](docs/gbp-setup-plan.md) — phased plan to create & verify the GBP listing (starts the 60-day clock), submit the API application (~Aug 2026), and build the integration (see also [docs/gbp-api-application-checklist.md](docs/gbp-api-application-checklist.md)).
 
 **What it does:**
 - **Google Business Profile management** — monitor and respond to reviews, post updates, keep the profile optimized

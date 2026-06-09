@@ -23,7 +23,7 @@ The architecture document ([scheduling-dispatch-architecture.md](scheduling-disp
 
 1. [Build Phases](#1-build-phases)
 2. [Technology Setup](#2-technology-setup)
-3. [Sprint-Level Breakdown (Phase 1)](#3-sprint-level-breakdown-phase-1)
+3. [Sprint-Level Breakdown (Phase 2.1)](#3-sprint-level-breakdown-phase-21)
 4. [Risk Register](#4-risk-register)
 5. [Testing Strategy](#5-testing-strategy)
 6. [Integration Checklist](#6-integration-checklist)
@@ -33,11 +33,11 @@ The architecture document ([scheduling-dispatch-architecture.md](scheduling-disp
 
 ## 1. Build Phases
 
-The build is structured as five phases, each delivering a usable increment that can be demoed and tested with real contractors. Total timeline: 14 weeks (June 16 — September 19, 2026).
+The build is structured as five sub-phases of roadmap **Phase 2 (Scheduling + Dispatch)** — numbered **Phase 2.1 – Phase 2.5** to keep them distinct from the global roadmap phase numbers — each delivering a usable increment that can be demoed and tested with real contractors. Total timeline: 14 weeks (June 16 — September 19, 2026).
 
 The timeline is aggressive but achievable because: (a) the architecture is already defined, (b) AI coding agents can execute well-scoped tasks fast, and (c) we are building on an existing stack (Supabase, Next.js, Vercel, Hermes) rather than starting from zero.
 
-### Phase 1: Data Foundation + Core API (Weeks 1–3)
+### Phase 2.1: Data Foundation + Core API (Weeks 1–3)
 
 **What's being built:** The Supabase schema, RLS policies, Edge Functions for job CRUD, and the basic Hermes skills for job management. This is the boring-but-essential foundation that everything else depends on.
 
@@ -66,7 +66,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Hermes can create a job, list jobs by date, and complete a job via natural language
 - Seed script populates a demo tenant for testing
 
-### Phase 2: Dispatch Board + Map View (Weeks 4–6)
+### Phase 2.2: Dispatch Board + Map View (Weeks 4–6)
 
 **What's being built:** The web-based dispatch board inside admin.firmcraft.ai, with a FullCalendar resource timeline view (technicians as rows, time as columns), drag-and-drop job assignment, and a Mapbox map overlay showing job locations.
 
@@ -83,7 +83,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 
 **Estimated duration:** 3 weeks
 
-**Dependencies:** Phase 1 (schema + API must exist).
+**Dependencies:** Phase 2.1 (schema + API must exist).
 
 **Deliverable:** Doyle opens admin.firmcraft.ai/dispatch and sees today's schedule laid out as a timeline. He can drag an unassigned job onto Dave's row at 2pm. The map shows where each job is located. Changes made via Hermes appear on the board in real-time.
 
@@ -97,7 +97,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Conflict warning appears when scheduling overlapping jobs for the same tech
 - Day and week views both work correctly
 
-### Phase 3: Dispatch Optimizer + Hermes Dispatch Skills (Weeks 7–9)
+### Phase 2.3: Dispatch Optimizer + Hermes Dispatch Skills (Weeks 7–9)
 
 **What's being built:** The Python/FastAPI dispatch optimizer service wrapping VROOM, the multi-objective scoring engine, the distance matrix cache, and the Hermes skills for dispatch commands. This is where the AI intelligence lives.
 
@@ -117,7 +117,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 
 **Estimated duration:** 3 weeks
 
-**Dependencies:** Phase 1 (data model), Phase 2 (dispatch board for displaying suggestions). The optimizer can be developed in parallel with late Phase 2 work — the API is independent of the UI.
+**Dependencies:** Phase 2.1 (data model), Phase 2.2 (dispatch board for displaying suggestions). The optimizer can be developed in parallel with late Phase 2.2 work — the API is independent of the UI.
 
 **Deliverable:** Doyle says "Assign the unassigned jobs for tomorrow" in Hermes. The optimizer runs VROOM, scores assignments, and returns ranked suggestions: "Dave (score 0.87): 12 min drive, EPA certified. Mike (score 0.72): 8 min drive, 6 jobs already." In assist mode, the dispatch board shows a pulsing notification; clicking "Accept" assigns the jobs. Emergency: "Emergency AC out at 123 Oak, needs someone now" triggers instant re-optimization.
 
@@ -132,7 +132,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Dispatch logs capture every optimization run with full input/output snapshot
 - All three dispatch modes (manual/assist/auto) work end-to-end
 
-### Phase 4: Mobile App MVP (Weeks 10–13)
+### Phase 2.4: Mobile App MVP (Weeks 10–13)
 
 **What's being built:** The React Native + Expo technician app with PowerSync offline-first sync. This is the app techs use in the field every day.
 
@@ -152,7 +152,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 
 **Estimated duration:** 4 weeks
 
-**Dependencies:** Phase 1 (API), Phase 3 (push notifications from dispatch events). The mobile app can start development at week 8 in parallel with final Phase 3 work — it consumes the same API.
+**Dependencies:** Phase 2.1 (API), Phase 2.3 (push notifications from dispatch events). The mobile app can start development at week 8 in parallel with final Phase 2.3 work — it consumes the same API.
 
 **Deliverable:** A tech installs the app on their phone, logs in, and sees today's jobs. They tap "Start Drive," the app opens Google Maps navigation. On arrival they tap "Arrived," take photos, complete the checklist, collect a signature, and tap "Complete." In a basement with no signal, everything still works — photos and status changes sync when they surface.
 
@@ -168,7 +168,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Cold start under 3 seconds on a mid-range Android device
 - 56dp touch targets on all primary action buttons
 
-### Phase 5: Customer Notifications + Polish (Weeks 13–14)
+### Phase 2.5: Customer Notifications + Polish (Weeks 13–14)
 
 **What's being built:** Automated customer communications (SMS confirmations, reminders, ETA updates, delay notifications), the customer self-service reschedule/cancel flow, and final polish across all surfaces.
 
@@ -191,9 +191,9 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Dispatch board polish: loading states, error handling, empty states, keyboard shortcuts
 - Mobile app polish: error boundaries, retry logic, haptic feedback on status changes
 
-**Estimated duration:** 2 weeks (overlaps with final week of Phase 4)
+**Estimated duration:** 2 weeks (overlaps with final week of Phase 2.4)
 
-**Dependencies:** Phase 1 (job data), Phase 3 (ETA calculations from dispatch engine), Phase 4 (mobile status changes trigger notifications).
+**Dependencies:** Phase 2.1 (job data), Phase 2.3 (ETA calculations from dispatch engine), Phase 2.4 (mobile status changes trigger notifications).
 
 **Deliverable:** A customer receives an SMS: "Your AC repair with CoolAir HVAC is confirmed for Thursday 2-4pm. Your technician will be Dave." The day of, they get: "Your technician Dave is on the way! ETA: 15 minutes." If Dave runs late: "We're sorry — your technician is running about 30 minutes behind. Updated arrival: 2:30pm." After the job: "Thanks for choosing CoolAir! How was your experience with Dave? [Review link]"
 
@@ -297,7 +297,7 @@ react-native-maps (or mapbox-react-native)
 - Connect to existing Supabase Postgres instance
 - Free tier supports development; $49/mo for production
 
-**Radar.io (new — Phase 5 or post-launch):**
+**Radar.io (new — Phase 2.5 or post-launch):**
 
 - Create account, get API keys
 - Not needed for MVP — geofencing is a polish feature. Manual "Arrived" button works for launch.
@@ -355,9 +355,9 @@ For a Claude Code agent session to work on this project, it needs:
 
 ---
 
-## 3. Sprint-Level Breakdown (Phase 1)
+## 3. Sprint-Level Breakdown (Phase 2.1)
 
-Phase 1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI agent work sessions. Tasks are ordered by dependency — later tasks may depend on earlier ones within the same sprint.
+Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI agent work sessions. Tasks are ordered by dependency — later tasks may depend on earlier ones within the same sprint.
 
 ### Sprint 1 (Week 1): Schema + RLS + Seed Data
 
@@ -586,11 +586,11 @@ Phase 1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI age
 
 | Risk | Likelihood | Impact | Mitigation |
 |---|---|---|---|
-| **pyvroom build fails on Hetzner VPS** — VROOM requires C++20 compiler and CMake. The Hetzner VPS may have an older toolchain. | Medium | High (blocks Phase 3) | Test pyvroom install on VPS in Week 1. Fallback: run VROOM in a Docker container. Alternative: use OpenRouteService API (uses VROOM internally) as a managed service. |
+| **pyvroom build fails on Hetzner VPS** — VROOM requires C++20 compiler and CMake. The Hetzner VPS may have an older toolchain. | Medium | High (blocks Phase 2.3) | Test pyvroom install on VPS in Week 1. Fallback: run VROOM in a Docker container. Alternative: use OpenRouteService API (uses VROOM internally) as a managed service. |
 | **PowerSync sync conflicts** — Field-level merge with last-write-wins may produce unexpected results when dispatcher reassigns a job while tech is offline and working on it. | Medium | Medium | Design sync rules to avoid conflicting writes: techs can only write to `status`, `tech_notes`, `checklist`, `parts_used`, `photos`. Dispatchers write to `technician_id`, `scheduled_start/end`. Non-overlapping fields = no conflicts. Surface true conflicts to dispatcher for resolution. |
 | **Google Routes API costs exceed estimate** — Heavy re-optimization or cache misses could drive costs above $300/month. | Low | Low | Grid-cell caching (0.01° ≈ 1km) with 24h TTL reduces calls by 80%+ after first week. Monitor daily API spend. Add circuit breaker: if daily cost exceeds $15, fall back to cached-only (no fresh API calls for non-emergency optimizations). |
 | **FullCalendar Premium resource timeline performance** — Rendering 50+ techs × 200+ jobs could be sluggish. | Low | Medium | Paginate technicians (show 15 at a time with "load more"). Use FullCalendar's `lazyFetching` and `eventSourceSuccess` for efficient loading. Virtualize the resource list if needed. For MVP with 5-10 techs, this isn't a concern. |
-| **Expo/React Native offline GPS tracking drains battery** — Background location tracking is notorious for battery drain on both platforms. | Medium | Medium | Use iOS significant location changes API (low power, ~500m accuracy) as baseline. Switch to high-accuracy GPS only when approaching a job site or during `en_route` status. Target <5% battery drain per work hour. Test on real devices early in Phase 4. |
+| **Expo/React Native offline GPS tracking drains battery** — Background location tracking is notorious for battery drain on both platforms. | Medium | Medium | Use iOS significant location changes API (low power, ~500m accuracy) as baseline. Switch to high-accuracy GPS only when approaching a job site or during `en_route` status. Target <5% battery drain per work hour. Test on real devices early in Phase 2.4. |
 | **Clerk JWT → Supabase RLS integration** — Custom JWT claims (`tenant_id`, `role`, `tech_id`) must be correctly configured in Clerk and correctly parsed in Supabase. | Medium | High (data leakage if wrong) | Set up and test the JWT integration in Sprint 1. Write explicit RLS tests: query as wrong tenant, query as tech for another tech's jobs. This is a security-critical path. |
 
 ### 4.2 Schedule Risks
@@ -608,7 +608,7 @@ Phase 1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI age
 | **Google Routes API pricing changes** — Google has changed Maps pricing before (2018 was a major disruption). | Low | Medium | Cache aggressively. Monitor the OSRM + Valhalla open-source routing stack as a fallback. OSRM provides distance/duration matrices without traffic awareness — acceptable for non-real-time planning. |
 | **PowerSync service availability** — PowerSync is a startup; outages or pricing changes could affect the mobile app. | Low | High | PowerSync's architecture means the app works offline even if PowerSync's cloud service is down — syncs just queue. For long-term mitigation, WatermelonDB is a self-hosted alternative (more work to set up, but no vendor dependency). |
 | **Supabase Realtime limits** — Free/Pro tier may throttle at high connection counts or message volumes. | Low | Low | At launch volumes (5 tenants, 2-3 dispatchers each, 25 techs total), this is well within limits. Supabase Pro supports 500 concurrent connections and 2M Realtime messages/month. Monitor and upgrade if needed. |
-| **App Store review delays** — First-time app submission to Apple App Store can take 1-2 weeks with potential rejections. | Medium | Medium | Submit to TestFlight early (end of Phase 4 Week 2). Use TestFlight for pilot contractors initially. Submit to App Store during the polish phase. Prepare privacy policy, data handling disclosures (location tracking, photo capture) in advance. |
+| **App Store review delays** — First-time app submission to Apple App Store can take 1-2 weeks with potential rejections. | Medium | Medium | Submit to TestFlight early (end of Phase 2.4 Week 2). Use TestFlight for pilot contractors initially. Submit to App Store during the polish phase. Prepare privacy policy, data handling disclosures (location tracking, photo capture) in advance. |
 
 ---
 
@@ -711,11 +711,11 @@ These hooks must exist for the phone agent to create jobs:
 
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
-| Phone call extracts service request → creates job | Phone → Scheduling | Phone agent calls `create-job` Edge Function with extracted entities (customer, service type, urgency, time preference) | Build during Phase 2 Sprint 2; wire up when Phase 1 is ready |
-| Real-time availability check during phone call | Phone → Scheduling | Phone agent calls `check-availability` Edge Function. Target: <3 second response including VROOM availability solve | Build during Phase 2 Sprint 2 |
-| Emergency call triggers immediate dispatch | Phone → Scheduling | Phone agent sets `priority: 'emergency'`, which triggers the emergency dispatch flow in the optimizer | Build during Phase 3 |
-| Customer lookup during phone call | Phone → Scheduling | Phone agent queries `customers` table by phone number (caller ID match) | Build during Phase 2 Sprint 2 |
-| New customer creation during phone call | Phone → Scheduling | If no customer match, phone agent calls customer creation endpoint | Build during Phase 2 Sprint 2 |
+| Phone call extracts service request → creates job | Phone → Scheduling | Phone agent calls `create-job` Edge Function with extracted entities (customer, service type, urgency, time preference) | Build during Phase 2.1 Sprint 2; wire up when Phase 1 is ready |
+| Real-time availability check during phone call | Phone → Scheduling | Phone agent calls `check-availability` Edge Function. Target: <3 second response including VROOM availability solve | Build during Phase 2.1 Sprint 2 |
+| Emergency call triggers immediate dispatch | Phone → Scheduling | Phone agent sets `priority: 'emergency'`, which triggers the emergency dispatch flow in the optimizer | Build during Phase 2.3 |
+| Customer lookup during phone call | Phone → Scheduling | Phone agent queries `customers` table by phone number (caller ID match) | Build during Phase 2.1 Sprint 2 |
+| New customer creation during phone call | Phone → Scheduling | If no customer match, phone agent calls customer creation endpoint | Build during Phase 2.1 Sprint 2 |
 
 **API contract (Phone → Scheduling):**
 
@@ -741,10 +741,10 @@ Online booking is the next module after scheduling — it depends on the availab
 
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
-| Public availability check | Booking → Scheduling | `check-availability` Edge Function callable with a tenant-scoped **public widget key** (no end-user auth), rate-limited | Build in Phase 2 Sprint 2; harden for public use before Phase 3 ships |
-| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Build in Phase 2 Sprint 3 |
-| Self-booked job creation | Booking → Scheduling | Widget calls the same `create-job` path as the phone agent with `source: "online_booking"` | Build in Phase 2 Sprint 2 |
-| Customer self-service reads | Booking → Scheduling | Portal reads `jobs` by `customer_id`; "Where's My Tech" subscribes to `technician_current_location` via short-lived token; reschedule via `update-job` | Reuses Phase 2 Sprint 2–3 endpoints |
+| Public availability check | Booking → Scheduling | `check-availability` Edge Function callable with a tenant-scoped **public widget key** (no end-user auth), rate-limited | Build in Phase 2.1 Sprint 2; harden for public use before Phase 3 ships |
+| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Build in Phase 2.1 Sprint 3 |
+| Self-booked job creation | Booking → Scheduling | Widget calls the same `create-job` path as the phone agent with `source: "online_booking"` | Build in Phase 2.1 Sprint 2 |
+| Customer self-service reads | Booking → Scheduling | Portal reads `jobs` by `customer_id`; "Where's My Tech" subscribes to `technician_current_location` via short-lived token; reschedule via `update-job` | Reuses Phase 2.1 Sprint 2–3 endpoints |
 
 **Forward-compatibility requirement:** the `check-availability` and `create-job` Edge Functions must support a **public widget-key auth path** (tenant-scoped, rate-limited) alongside the service-credential path the phone agent uses. Build this into the auth layer from the start so Phase 3 needs no schema or contract changes.
 
@@ -754,10 +754,10 @@ These hooks Phase 2 must expose for Phase 4:
 
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
-| Job completion assembles invoice data | Scheduling → Invoicing | `complete-job` Edge Function returns `invoice_data` JSON package | Build in Phase 2 Sprint 2 |
-| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Build in Phase 2 Sprint 3 |
-| Time tracking feeds labor hours | Scheduling → Invoicing | `actual_start`, `actual_end`, and drive time calculated from location history | Build in Phase 2 Sprint 2 |
-| Parts used tracked per job | Scheduling → Invoicing | `parts_used` JSONB field on jobs table, populated by tech via mobile app | Build in Phase 4 |
+| Job completion assembles invoice data | Scheduling → Invoicing | `complete-job` Edge Function returns `invoice_data` JSON package | Build in Phase 2.1 Sprint 2 |
+| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Build in Phase 2.1 Sprint 3 |
+| Time tracking feeds labor hours | Scheduling → Invoicing | `actual_start`, `actual_end`, and drive time calculated from location history | Build in Phase 2.1 Sprint 2 |
+| Parts used tracked per job | Scheduling → Invoicing | `parts_used` JSONB field on jobs table, populated by tech via mobile app | Build in Phase 2.4 |
 | Invoice ID written back to job | Invoicing → Scheduling | Phase 4 sets `jobs.invoice_id` when invoice is generated, transitions status to `invoiced` | Phase 4 responsibility |
 
 **Invoice data contract (Scheduling → Invoicing):**
@@ -811,7 +811,7 @@ These hooks Phase 2 must expose for Phase 4:
 - Create materialized views for expensive aggregations (refresh on schedule via pg_cron)
 - Views: `jobs_per_tech_per_day`, `drive_time_percentage`, `first_time_fix_rate`, `on_time_arrival_rate`, `schedule_fill_rate`
 
-**Review flywheel (ships within Phase 2 — see §1 Phase 5 sprint):**
+**Review flywheel (ships within Phase 2 — see §1 Phase 2.5 sprint):**
 
 - `job.completed` webhook triggers the review request flow (2-hour delay), Google review link, and AI-drafted response capture
 - This loop is live at the end of Phase 2 and is later absorbed into the Digital Ops reputation dashboard
@@ -955,22 +955,22 @@ If a contractor wants ONLY scheduling (not the full Hermes operator), consider a
 ```
 Week  1  2  3  4  5  6  7  8  9  10 11 12 13 14
       ├──────────┤
-      Phase 1: Data Foundation + Core API
+      Phase 2.1: Data Foundation + Core API
                ├──────────────┤
-               Phase 2: Dispatch Board + Map
+               Phase 2.2: Dispatch Board + Map
                         ├──────────────┤
-                        Phase 3: Dispatch Optimizer
+                        Phase 2.3: Dispatch Optimizer
                                     ├────────────────┤
-                                    Phase 4: Mobile App MVP
+                                    Phase 2.4: Mobile App MVP
                                                 ├──────┤
-                                                Phase 5: Notifications + Polish
+                                                Phase 2.5: Notifications + Polish
       |                                                |
    Jun 16                                          Sep 19
 ```
 
-**Critical path:** Phase 1 → Phase 3 (optimizer needs data model) → Phase 4 (mobile app needs optimizer for push notifications) → Phase 5 (notifications need mobile status changes).
+**Critical path:** Phase 2.1 → Phase 2.3 (optimizer needs data model) → Phase 2.4 (mobile app needs optimizer for push notifications) → Phase 2.5 (notifications need mobile status changes).
 
-**Parallel work:** Phase 2 (dispatch board) can start in Week 3 while Phase 1 finishes. Phase 4 (mobile app) can start in Week 8 while Phase 3 finishes. This overlap is what makes 14 weeks achievable.
+**Parallel work:** Phase 2.2 (dispatch board) can start in Week 3 while Phase 2.1 finishes. Phase 2.4 (mobile app) can start in Week 8 while Phase 2.3 finishes. This overlap is what makes 14 weeks achievable.
 
 ## Appendix C: First Day Checklist
 

@@ -1,0 +1,12 @@
+-- Scheduling & Dispatch (Phase 2.1, Sprint 1) — extensions
+--
+-- Enables PostGIS, required by the scheduling schema for geometry columns
+-- (service_areas.boundary polygons, customers/jobs/technician location points)
+-- and geo queries (GIST indexes, ST_DWithin proximity, polygon containment).
+--
+-- PostGIS is installed into the `extensions` schema to match the existing
+-- Supabase convention (uuid-ossp, pgcrypto, pg_stat_statements all live there).
+-- `extensions` is on the database default search_path, so the architecture
+-- doc's unqualified GEOMETRY(...) / ST_* references resolve without schema
+-- qualification.
+create extension if not exists postgis with schema extensions;

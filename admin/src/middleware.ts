@@ -46,6 +46,14 @@ const isPublicRoute = createRouteMatcher([
   '/api/outreach/unsubscribe/(.*)',
   '/status',
   '/unsubscribe',
+  // Dispatch board (Phase 2.2): the client-facing white-labeled board served at
+  // {slug}.firmcraft.ai. Tenant scoping comes from the subdomain → x-tenant-id
+  // header and explicit tenant filters in the /api/dispatch data layer. The
+  // Clerk-org ↔ tenant binding (and RLS hardening) is a later task; until it
+  // lands these are open so the demo board is reachable. MUST be gated before
+  // real tenants onboard.
+  '/dispatch(.*)',
+  '/api/dispatch/(.*)',
 ])
 
 const clerkConfigured = Boolean(

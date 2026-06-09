@@ -1,0 +1,95 @@
+/* Dark-console theme for FullCalendar inside the dispatch board. FullCalendar v6
+   ships its base styles via JS; here we only re-map its CSS custom properties to
+   the Firmcraft navy palette and tighten a few surfaces. Scoped under
+   .dispatch-calendar so it never leaks into other FullCalendar usage. */
+
+.dispatch-calendar {
+  --fc-border-color: rgba(148, 163, 184, 0.14);
+  --fc-page-bg-color: #0b1220;
+  --fc-neutral-bg-color: #131c2e;
+  --fc-neutral-text-color: #94a3b8;
+  --fc-today-bg-color: rgba(44, 107, 240, 0.08);
+  --fc-now-indicator-color: #fb7c50;
+  --fc-event-border-color: transparent;
+  --fc-highlight-color: rgba(44, 107, 240, 0.16);
+  height: 100%;
+  font-size: 13px;
+}
+
+.dispatch-calendar .fc {
+  height: 100%;
+  color: #cbd5e1;
+}
+
+.dispatch-calendar .fc .fc-scrollgrid,
+.dispatch-calendar .fc table {
+  border-color: var(--fc-border-color);
+}
+
+.dispatch-calendar .fc .fc-col-header-cell-cushion,
+.dispatch-calendar .fc .fc-timeline-slot-cushion,
+.dispatch-calendar .fc .fc-datagrid-cell-cushion {
+  color: #94a3b8;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.dispatch-calendar .fc .fc-datagrid-cell-cushion {
+  padding: 8px 12px;
+}
+
+/* Resource (technician) rows */
+.dispatch-calendar .fc .fc-datagrid-cell-frame {
+  display: flex;
+  align-items: center;
+}
+
+.dispatch-calendar .fc-resource-lane {
+  background: transparent;
+}
+
+.dispatch-calendar .fc .fc-timeline-slot-frame {
+  color: #64748b;
+}
+
+/* Events */
+.dispatch-calendar .fc-event {
+  border: none;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px -3px rgba(0, 0, 0, 0.6);
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.dispatch-calendar .fc-event.fc-event-selected,
+.dispatch-calendar .fc-event:focus {
+  outline: 2px solid #f1f5f9;
+  outline-offset: 1px;
+}
+
+.dispatch-calendar .fc-event-main {
+  padding: 0;
+}
+
+.dispatch-calendar .fc-timeline-event {
+  padding: 0;
+}
+
+/* Toolbar is rendered by our own React component, so hide FC's. */
+.dispatch-calendar .fc .fc-toolbar.fc-header-toolbar {
+  display: none;
+}
+
+/* Conflict highlight applied to events that overlap on the same tech. */
+.dispatch-calendar .fc-event.dispatch-conflict::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border: 2px solid #f87171;
+  border-radius: 6px;
+  pointer-events: none;
+}
+
+.dispatch-calendar .fc-event.dispatch-dimmed {
+  opacity: 0.5;
+}

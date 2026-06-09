@@ -1,0 +1,29 @@
+project_id = "qvocmbqgcdambvslmula"
+
+# Scheduling & Dispatch (Phase 2.1, Sprint 2) Edge Functions.
+#
+# verify_jwt = false on every scheduling function: the Supabase API gateway's
+# built-in JWT check only understands Supabase-issued anon/service JWTs. These
+# functions authenticate callers THEMSELVES (Clerk session JWT via JWKS, the
+# trusted service-credential path, or a public widget key — see _shared/auth.ts),
+# so the gateway check must be disabled or it would reject every legitimate Clerk
+# and widget-key request before our code runs. Tenant isolation is enforced in the
+# function body + Postgres RLS, never by the gateway.
+
+[functions.create-job]
+verify_jwt = false
+
+[functions.update-job]
+verify_jwt = false
+
+[functions.transition-job]
+verify_jwt = false
+
+[functions.complete-job]
+verify_jwt = false
+
+[functions.check-availability]
+verify_jwt = false
+
+[functions.tech-location]
+verify_jwt = false

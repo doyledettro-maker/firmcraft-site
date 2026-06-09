@@ -1,0 +1,30 @@
+# Local dev stack: Redis (distance-matrix cache) + the optimizer service.
+#
+#   docker compose up --build
+#
+# The optimizer reads its config from a local .env (copy from .env.example).
+# REDIS_URL is overridden here to point at the compose-networked redis service.
+services:
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--save", "", "--appendonly", "no"]
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  optimizer:
+    build: .
+    env_file:
+      - .env
+    environment:
+      # Point at the compose redis regardless of what .env says.
+      REDIS_URL: redis://redis:6379/0
+    ports:
+      - "8080:8080"
+    depends_on:
+      redis:
+        condition: service_healthy

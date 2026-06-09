@@ -1,0 +1,18 @@
+# Firmcraft Dispatch Optimizer — runtime dependencies
+# Python 3.11+ required (pyvroom needs a C++20 toolchain to build the wheel)
+
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+pydantic==2.10.4
+pydantic-settings==2.7.1
+httpx==0.28.1
+redis==5.2.1
+supabase==2.11.0
+pyvroom==1.15.2
+numpy==2.4.6
+
+# dev / test (kept here so a single `pip install -r requirements.txt` gives a
+# working test environment; split into requirements-dev.txt if you want a
+# slimmer production image)
+pytest==8.3.4
+pytest-asyncio==0.25.2

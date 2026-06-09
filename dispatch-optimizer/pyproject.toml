@@ -1,0 +1,33 @@
+[project]
+name = "firmcraft-dispatch-optimizer"
+version = "0.1.0"
+description = "AI-first dispatch optimizer for the Firmcraft scheduling module — wraps VROOM, scores assignments, exposes a FastAPI service."
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi==0.115.6",
+    "uvicorn[standard]==0.34.0",
+    "pydantic==2.10.4",
+    "pydantic-settings==2.7.1",
+    "httpx==0.28.1",
+    "redis==5.2.1",
+    "supabase==2.11.0",
+    "pyvroom==1.15.2",
+    "numpy==2.4.6",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest==8.3.4",
+    "pytest-asyncio==0.25.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+markers = [
+    "benchmark: performance benchmarks (may be slower)",
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*"]

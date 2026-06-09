@@ -1,5 +1,7 @@
 # Firmcraft Billing Model
 
+**Related docs:** [ROADMAP.md](../ROADMAP.md) (Pricing Tiers) · [Credentials Template](firmcraft-credentials-template.md) (Stripe keys)
+
 ## Subscription Tiers (monthly, billed in advance)
 
 | Tier | Monthly | Setup Fee | Included AI Usage |

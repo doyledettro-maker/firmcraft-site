@@ -5,6 +5,12 @@
 
 **The stack at a glance:** Every module except one is *reactive* — it handles work as it comes in (calls, jobs, invoices, bookings). **Digital Ops is the only *proactive* module: it generates demand.** That makes it the front of the funnel for everything else in the platform.
 
+📄 **Cross-cutting docs:** [Weekend Buildout Plan](docs/firmcraft-weekend-buildout-plan.md) · [Site Copy Audit](docs/site-copy-vs-hermes-audit.md) · [Brand Strategy Actions](docs/brand-strategy-actions.md) · [Alternative Funding Research](alternative-funding-research.md) · [Houston HVAC Prospects](docs/houston-hvac-prospect-research.md)
+
+📄 **Infrastructure docs:** [Cloudflare Access Setup](cloudflare-access-setup.md) · [Google Workspace Setup](docs/firmcraft-google-workspace-setup.md) · [Resend Mail Setup](docs/resend-firmcraft-mail-setup.md) · [Credentials Template](docs/firmcraft-credentials-template.md)
+
+📄 **Full docs index:** [docs/README.md](docs/README.md)
+
 ---
 
 ## Current State (Shipped)
@@ -37,6 +43,8 @@
 
 ## Phase 1: AI Phone Answering (Target: July 2026)
 
+📄 **Docs:** [Technical Spec](docs/PHASE1-AI-PHONE-ANSWERING-SPEC.md) · [Decision Log](docs/PHASE1-DECISIONS.md)
+
 **Priority: HIGHEST — single biggest competitive differentiator**
 
 **What it does:** AI answers the contractor's business phone, handles customer requests, books appointments, sends confirmations, creates job records.
@@ -67,6 +75,8 @@
 ---
 
 ## Phase 2: Scheduling + Dispatch (Target: Aug-Sep 2026)
+
+📄 **Docs:** [System Architecture](docs/scheduling-dispatch-architecture.md) · [Build Plan](docs/scheduling-dispatch-build-plan.md) · [Market Research](docs/scheduling-dispatch-market-research.md) · [AI/ML Research](docs/ai-scheduling-dispatch-research.md)
 
 **What it does:** Job board, technician assignment, availability management, customer reminders, real-time status updates.
 
@@ -178,6 +188,8 @@
 
 ## Phase 6: Digital Ops (API application: NOW — Build target: Q1 2027)
 
+📄 **Docs:** [Digital Ops Research](docs/digital-ops-research.md) · [GBP Setup Plan](docs/gbp-setup-plan.md) · [GBP API Checklist](docs/gbp-api-application-checklist.md)
+
 **The only proactive module in the stack — it generates demand instead of reacting to it.**
 
 A fully autonomous AI marketing agent that manages a contractor's entire digital presence on a recurring, "set-and-forget" basis. The contractor answers ~5 questions at setup, connects their accounts, and the agent runs their reviews, social, listings, and campaigns — sending a weekly report and asking for approval only when it matters.
@@ -247,6 +259,8 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 ---
 
 ## Pricing Tiers (Current)
+
+📄 **Docs:** [Billing Spec](docs/billing-spec.md) (Stripe product/price IDs, metering, overage model)
 
 | Tier | Price | Target | What's Included |
 |------|-------|--------|-----------------|

@@ -21,10 +21,15 @@ declare
     demo uuid := '00000000-0000-0000-0000-0000000000d0';
 begin
     if exists (select 1 from public.tenants where id = demo) then
+        -- Tables that reference jobs (technician_current_location.current_job_id,
+        -- dispatch_logs.trigger_job_id are NO ACTION FKs) must be cleared BEFORE
+        -- jobs, and widget_keys before tenants — otherwise the second run dies
+        -- on FK violations (review H-1).
+        delete from public.widget_keys where tenant_id = demo;
+        delete from public.technician_current_location where tenant_id = demo;
+        delete from public.dispatch_logs where tenant_id = demo;
         delete from public.job_status_history where tenant_id = demo;
         delete from public.jobs where tenant_id = demo;
-        delete from public.dispatch_logs where tenant_id = demo;
-        delete from public.technician_current_location where tenant_id = demo;
         delete from public.technician_locations where tenant_id = demo;
         delete from public.technician_availability where tenant_id = demo;
         delete from public.on_call_rotations where tenant_id = demo;
@@ -271,4 +276,22 @@ insert into public.technician_current_location (technician_id, tenant_id, locati
 ('00000000-0000-0000-0000-00000000b003', '00000000-0000-0000-0000-0000000000d0', ST_SetSRID(ST_MakePoint(-95.4170, 29.6840), 4326), 6.0, 0.0,  0,   '00000000-0000-0000-0000-000000010009', 'on_job'),
 ('00000000-0000-0000-0000-00000000b004', '00000000-0000-0000-0000-0000000000d0', ST_SetSRID(ST_MakePoint(-95.3870, 29.6900), 4326), 5.0, 0.0,  0,   '00000000-0000-0000-0000-000000010008', 'on_job');
 
+-- ------------------------------------------------------------------
+-- Demo widget key (moved here from migration 008 — review M-9: on a fresh
+-- environment migrations run before the seed, so a migration-time insert
+-- guarded by demo-tenant existence was silently skipped).
+-- Plaintext key (test only): wk_test_demo_0000000000000000
+-- ------------------------------------------------------------------
+insert into public.widget_keys (tenant_id, key_hash, key_prefix, label, scopes, rate_limit_per_minute)
+values (
+    '00000000-0000-0000-0000-0000000000d0',
+    '58526c7ddeed8f1790cb32445826a127d0ec3a1ce56e868a502e3ef4197d80eb',
+    'wk_test_demo',
+    'Demo booking widget (test key)',
+    array['check_availability','create_job'],
+    120
+)
+on conflict (key_hash) do nothing;
+
 commit;
+

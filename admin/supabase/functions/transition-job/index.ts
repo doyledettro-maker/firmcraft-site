@@ -12,12 +12,12 @@
 // reason / metadata / changed_by are written onto the history row the AFTER
 // trigger just created, so the audit entry is fully attributed.
 
-import { z } from "zod";
+import { z } from "npm:zod";
 import { authenticate, type AuthContext } from "../_shared/auth.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { handlePreflight } from "../_shared/cors.ts";
 import { HttpError, ok, withErrors } from "../_shared/response.ts";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "npm:@supabase/supabase-js";
 
 const STATUSES = [
   "created", "scheduled", "dispatched", "en_route", "arrived",

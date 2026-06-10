@@ -34,10 +34,12 @@ returns uuid as $$
   select nullif(current_setting('request.jwt.claims', true)::jsonb ->> 'tenant_id', '')::uuid;
 $$ language sql stable;
 
--- role claim: 'admin' | 'dispatcher' | 'technician'.
+-- app_role claim: 'admin' | 'dispatcher' | 'technician'.
+-- The JWT's top-level role claim must remain the literal 'authenticated' for
+-- Supabase/PostgREST; Firmcraft authorization uses app_role instead.
 create or replace function public.user_role()
 returns text as $$
-  select current_setting('request.jwt.claims', true)::jsonb ->> 'role';
+  select current_setting('request.jwt.claims', true)::jsonb ->> 'app_role';
 $$ language sql stable;
 
 -- tech_id claim: the technicians.id this user maps to (null for office staff).

@@ -7,7 +7,7 @@
 //
 // Rate limit: max 2 updates/sec per tech (architecture §9.5, "Edge Function dedup").
 
-import { z } from "zod";
+import { z } from "npm:zod";
 import { authenticate } from "../_shared/auth.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { handlePreflight } from "../_shared/cors.ts";

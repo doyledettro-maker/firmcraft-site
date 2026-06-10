@@ -7,7 +7,7 @@
 // access used by the Clerk-authenticated client app — it is defense-in-depth here,
 // not the mechanism these functions rely on.
 
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "npm:@supabase/supabase-js";
 
 // Supabase injects SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY into the function
 // runtime automatically. Locally (deno test) they come from the loaded env.

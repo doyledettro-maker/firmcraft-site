@@ -5,12 +5,12 @@
 // invoice_data JSON contract (build plan §6.3) — persisted on jobs.invoice_data and
 // returned to the caller. A technician may only complete their own job.
 
-import { z } from "zod";
+import { z } from "npm:zod";
 import { authenticate, type AuthContext } from "../_shared/auth.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { handlePreflight } from "../_shared/cors.ts";
 import { HttpError, ok, withErrors } from "../_shared/response.ts";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "npm:@supabase/supabase-js";
 
 const PartSchema = z.object({
   name: z.string().optional(),

@@ -10,7 +10,7 @@
 // forward-compatibility hook for the Phase 3 embeddable booking widget (build
 // plan §6.2) — it needs no contract change to go live.
 
-import { z } from "zod";
+import { z } from "npm:zod";
 import { authenticate } from "../_shared/auth.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { handlePreflight } from "../_shared/cors.ts";

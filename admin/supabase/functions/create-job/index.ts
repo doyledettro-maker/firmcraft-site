@@ -9,7 +9,7 @@
 // default; address + location are denormalized from the customer record. If a
 // technician is supplied the job opens as `scheduled`, otherwise `created`.
 
-import { z } from "zod";
+import { z } from "npm:zod";
 import { authenticate } from "../_shared/auth.ts";
 import { getServiceClient } from "../_shared/supabase.ts";
 import { handlePreflight } from "../_shared/cors.ts";

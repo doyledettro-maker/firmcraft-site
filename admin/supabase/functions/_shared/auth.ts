@@ -5,7 +5,7 @@
 // declares which it accepts:
 //
 //   1. "jwt"     — a Clerk session JWT in `Authorization: Bearer <jwt>`. Verified
-//                  against Clerk's JWKS. Claims carry tenant_id / role / tech_id /
+//                  against Clerk's JWKS. Claims carry tenant_id / app_role / tech_id /
 //                  sub (set by the Clerk → Supabase JWT template, architecture §9.3).
 //                  This is the end-user path (dispatcher/admin/tech in the browser
 //                  or mobile app).
@@ -27,8 +27,8 @@
 // Tenant isolation always derives from this resolved tenantId, never from the
 // subdomain or any client-supplied value on the JWT/widget paths.
 
-import { createRemoteJWKSet, jwtVerify } from "jose";
-import type { SupabaseClient } from "@supabase/supabase-js";
+import { createRemoteJWKSet, jwtVerify } from "npm:jose";
+import type { SupabaseClient } from "npm:@supabase/supabase-js";
 import { HttpError } from "./response.ts";
 import { getServiceRoleKey } from "./supabase.ts";
 import { rateLimit } from "./ratelimit.ts";
@@ -112,7 +112,7 @@ async function verifyClerkJwt(token: string): Promise<AuthContext> {
   if (!tenantId) {
     throw new HttpError(403, "Token has no tenant_id claim; user is not bound to a tenant");
   }
-  const role = (payload.role as string | undefined) ?? "technician";
+  const role = (payload.app_role as string | undefined) ?? "technician";
   const techId = (payload.tech_id ?? payload.techId ?? null) as string | null;
   const subject = (payload.sub as string | undefined) ?? "unknown";
 

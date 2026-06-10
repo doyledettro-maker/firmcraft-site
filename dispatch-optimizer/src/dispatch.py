@@ -53,6 +53,7 @@ async def optimize(
     solution = solve(problem)
 
     drive_times = solution.drive_times()
+    arrivals = solution.arrivals()
     job_to_tech = solution.job_to_tech()
     tech_by_id = {t.id: t for t in techs}
     ctx = build_context(techs, jobs, drive_min=max(drive_times.values(), default=0.0))
@@ -65,6 +66,7 @@ async def optimize(
         tech = tech_by_id[tid]
         drive = drive_times.get(job.id, ctx.max_drive_min)
         b = score_one(job, tech, drive, weights, ctx)
+        arrival = arrivals.get(job.id)
         assignments.append(
             Assignment(
                 job_id=job.id,
@@ -74,6 +76,8 @@ async def optimize(
                 drive_time_min=round(drive, 2),
                 breakdown=b,
                 reason=f"{round(drive)} min drive, {tech.name}",
+                arrival_min=round(arrival, 2) if arrival is not None else None,
+                duration_min=job.duration_min,
             )
         )
 

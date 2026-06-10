@@ -95,6 +95,9 @@ class Job(BaseModel):
     zone_ids: set[str] = Field(default_factory=set)
     # Already-assigned tech (for reassign/emergency disruption accounting).
     technician_id: Optional[str] = None
+    # Current lifecycle status from the DB row (None for inline/synthetic jobs).
+    # apply_assignments uses it to respect the status state machine.
+    status: Optional[str] = None
 
     def window(self) -> tuple[int, int]:
         start = DAY_START_MIN if self.window_start_min is None else self.window_start_min
@@ -144,6 +147,10 @@ class Assignment(BaseModel):
     drive_time_min: float
     breakdown: ScoreBreakdown
     reason: str = ""
+    # Solver arrival time (minutes from midnight of the optimization day) and
+    # job duration — used to write scheduled_start/scheduled_end in auto mode.
+    arrival_min: Optional[float] = None
+    duration_min: Optional[int] = None
 
 
 class JobCandidates(BaseModel):
@@ -161,6 +168,8 @@ class OptimizationResult(BaseModel):
     solve_time_ms: int = 0
     total_drive_time_min: float = 0.0
     dispatch_log_id: Optional[str] = None
+    # Per-job DB write failures from auto-mode apply (empty in manual/assist).
+    apply_errors: list[str] = Field(default_factory=list)
 
 
 class EmergencyCandidate(BaseModel):

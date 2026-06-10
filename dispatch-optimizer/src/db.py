@@ -12,7 +12,7 @@ JSON instead. The seed data carries lat/lng on customer addresses.
 
 from __future__ import annotations
 
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import Any, Optional
 from zoneinfo import ZoneInfo
 
@@ -238,14 +238,31 @@ class Repository:
         res = (
             self.client()
             .table("jobs")
-            .select(self._JOB_SELECT)
+            .select(self._JOB_SELECT + ",scheduled_start")
             .eq("tenant_id", tenant_id)
             .is_("technician_id", "null")
             .in_("status", ["created", "scheduled"])
             .is_("deleted_at", "null")
             .execute()
         )
-        return [j for j in (self._job_from_row(r, tz) for r in res.data or []) if j]
+        jobs: list[Job] = []
+        for r in res.data or []:
+            # Day scoping: a job anchored to another day (its schedule or
+            # arrival window) must not enter this day's solve — _ts_to_min
+            # strips the date, so the window would be reinterpreted as
+            # `day`'s and auto mode would schedule it on the wrong day.
+            # Jobs with no timestamps at all are floating and always eligible.
+            anchor = (
+                r.get("scheduled_start")
+                or r.get("arrival_window_start")
+                or r.get("arrival_window_end")
+            )
+            if anchor and datetime.fromisoformat(anchor).astimezone(tz).date() != day:
+                continue
+            j = self._job_from_row(r, tz)
+            if j:
+                jobs.append(j)
+        return jobs
 
     def fetch_job(self, tenant_id: str, job_id: str, tenant: dict) -> Optional[Job]:
         """Fetch one job, SCOPED to the given tenant.
@@ -324,6 +341,7 @@ class Repository:
             priority=priority,
             preferred_tech_id=customer.get("preferred_tech_id"),
             technician_id=r.get("technician_id"),
+            status=r.get("status"),
         )
 
     # ---- writes ----------------------------------------------------------
@@ -354,10 +372,43 @@ class Repository:
         data = res.data or []
         return data[0]["id"] if data else None
 
-    def apply_assignments(self, assignments: list[dict]) -> None:
-        """Write tech assignments to jobs (auto mode / accepted suggestions)."""
+    def apply_assignments(
+        self,
+        tenant_id: str,
+        assignments: list[dict],
+        day: date,
+        tz: ZoneInfo,
+        job_statuses: dict[str, str],
+    ) -> list[str]:
+        """Write tech assignments to jobs (auto mode / accepted suggestions).
+
+        * scheduled_start/scheduled_end come from the solver's arrival time on
+          the optimization day — a job moved to `scheduled` with a NULL
+          scheduled_start would be invisible to the dispatch board and to
+          fetch_tech_jobs.
+        * status is only advanced for `created` jobs; the DB state machine
+          forbids dispatched -> scheduled, and already-scheduled jobs keep
+          their status.
+        * Each job is written independently; failures are collected and
+          returned (job_id: error) instead of aborting the loop mid-way.
+        """
         client = self.client()
+        midnight = datetime(day.year, day.month, day.day, tzinfo=tz)
+        errors: list[str] = []
         for a in assignments:
-            client.table("jobs").update(
-                {"technician_id": a["tech_id"], "status": "scheduled"}
-            ).eq("id", a["job_id"]).execute()
+            payload: dict[str, Any] = {"technician_id": a["tech_id"]}
+            arrival = a.get("arrival_min")
+            if arrival is not None:
+                start = midnight + timedelta(minutes=float(arrival))
+                duration = int(a.get("duration_min") or 60)
+                payload["scheduled_start"] = start.isoformat()
+                payload["scheduled_end"] = (start + timedelta(minutes=duration)).isoformat()
+            if job_statuses.get(a["job_id"]) == "created":
+                payload["status"] = "scheduled"
+            try:
+                client.table("jobs").update(payload).eq("tenant_id", tenant_id).eq(
+                    "id", a["job_id"]
+                ).execute()
+            except Exception as exc:
+                errors.append(f"{a['job_id']}: {exc}")
+        return errors

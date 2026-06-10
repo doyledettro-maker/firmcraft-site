@@ -77,6 +77,14 @@ class SolverSolution:
                 out[stop.job_id] = route.tech_id
         return out
 
+    def arrivals(self) -> dict[str, float]:
+        """job_id -> solver arrival time (minutes from midnight)."""
+        out: dict[str, float] = {}
+        for route in self.routes:
+            for stop in route.stops:
+                out[stop.job_id] = stop.arrival_min
+        return out
+
 
 @dataclass
 class Problem:

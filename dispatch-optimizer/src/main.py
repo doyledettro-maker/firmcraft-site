@@ -160,7 +160,7 @@ async def post_optimize(req: OptimizeRequest) -> dict:
     result.tenant_id = req.tenant_id
 
     log_id = await _log_and_apply(
-        repo, req.tenant_id, req.trigger_type, techs, jobs, result, mode
+        repo, req.tenant_id, req.trigger_type, techs, jobs, result, mode, day, tenant
     )
     result.dispatch_log_id = log_id
     return result.model_dump()
@@ -266,7 +266,7 @@ async def post_reassign(req: ReassignRequest) -> dict:
     result.tenant_id = req.tenant_id
 
     log_id = await _log_and_apply(
-        repo, req.tenant_id, "tech_unavailable", techs, tech_jobs, result, mode
+        repo, req.tenant_id, "tech_unavailable", techs, tech_jobs, result, mode, day, tenant
     )
     result.dispatch_log_id = log_id
     return result.model_dump()
@@ -292,6 +292,8 @@ async def _log_and_apply(
     jobs,
     result,
     mode: DispatchMode,
+    day: date,
+    tenant: dict,
 ) -> Optional[str]:
     """Write the dispatch log and, in auto mode, apply the assignments."""
     assignments = [a.model_dump() for a in result.assignments]
@@ -313,5 +315,9 @@ async def _log_and_apply(
         "system" if mode == DispatchMode.auto else None,
     )
     if mode == DispatchMode.auto and assignments:
-        await asyncio.to_thread(repo.apply_assignments, assignments)
+        tz = ZoneInfo(tenant.get("timezone", "America/Chicago"))
+        job_statuses = {j.id: j.status for j in jobs if j.status}
+        result.apply_errors = await asyncio.to_thread(
+            repo.apply_assignments, tenant_id, assignments, day, tz, job_statuses
+        )
     return log_id

@@ -24,7 +24,10 @@ services:
       # Point at the compose redis regardless of what .env says.
       REDIS_URL: redis://redis:6379/0
     ports:
-      - "8080:8080"
+      # Loopback only: the service does service-role DB writes, so it must be
+      # reachable solely via the Caddy reverse proxy (or SSH tunnel), never
+      # directly from the network.
+      - "127.0.0.1:8080:8080"
     depends_on:
       redis:
         condition: service_healthy

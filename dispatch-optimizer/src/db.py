@@ -88,15 +88,17 @@ class Repository:
 
     # ---- tenant ----------------------------------------------------------
     def fetch_tenant(self, tenant_id: str) -> dict:
+        # maybe_single, not single: zero rows must return {} so the API layer's
+        # 404 guard fires instead of an APIError → 500.
         res = (
             self.client()
             .table("tenants")
             .select("id,timezone,business_hours,settings")
             .eq("id", tenant_id)
-            .single()
+            .maybe_single()
             .execute()
         )
-        return res.data or {}
+        return (res.data if res else None) or {}
 
     def tenant_weights(self, tenant: dict) -> OptimizationWeights:
         w = (tenant.get("settings") or {}).get("optimization_weights")
@@ -245,21 +247,27 @@ class Repository:
         )
         return [j for j in (self._job_from_row(r, tz) for r in res.data or []) if j]
 
-    def fetch_job(self, job_id: str) -> tuple[Optional[Job], Optional[str], Optional[dict]]:
+    def fetch_job(self, tenant_id: str, job_id: str, tenant: dict) -> Optional[Job]:
+        """Fetch one job, SCOPED to the given tenant.
+
+        The tenant filter is the cross-tenant boundary: a job id belonging to a
+        different tenant returns None, exactly like a nonexistent id.
+        """
         res = (
             self.client()
             .table("jobs")
-            .select(self._JOB_SELECT + ",tenant_id")
+            .select(self._JOB_SELECT)
+            .eq("tenant_id", tenant_id)
             .eq("id", job_id)
-            .single()
+            .is_("deleted_at", "null")
+            .maybe_single()
             .execute()
         )
-        row = res.data
+        row = res.data if res else None
         if not row:
-            return None, None, None
-        tenant = self.fetch_tenant(row["tenant_id"])
+            return None
         tz = ZoneInfo(tenant.get("timezone", "America/Chicago"))
-        return self._job_from_row(row, tz), row["tenant_id"], tenant
+        return self._job_from_row(row, tz)
 
     def fetch_tech_jobs(self, tenant_id: str, tech_id: str, day: date, tenant: dict) -> list[Job]:
         tz = ZoneInfo(tenant.get("timezone", "America/Chicago"))

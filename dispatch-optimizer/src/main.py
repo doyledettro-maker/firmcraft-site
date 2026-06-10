@@ -14,11 +14,12 @@ mode-specific side effects:
 from __future__ import annotations
 
 import asyncio
+import secrets
 from datetime import date, datetime
 from typing import Optional
 from zoneinfo import ZoneInfo
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Depends, FastAPI, Header, HTTPException
 from pydantic import BaseModel
 
 from . import __version__
@@ -59,23 +60,39 @@ def _resolve_day(day: Optional[str], tenant: dict) -> date:
     return datetime.now(tz).date()
 
 
-def _resolve_mode(override: Optional[str], tenant: dict) -> DispatchMode:
-    if override:
-        return DispatchMode(override)
-    return _repo().tenant_mode(tenant)
+def require_api_key(authorization: str = Header(default="")) -> None:
+    """Bearer-token gate on every endpoint except /health.
+
+    The service writes to jobs with the service-role key, so it fails closed:
+    with DISPATCH_API_KEY unset, every request is rejected rather than letting
+    an unconfigured deployment run open.
+    """
+    expected = get_settings().dispatch_api_key
+    if not expected:
+        raise HTTPException(
+            503, "DISPATCH_API_KEY is not configured; refusing all requests"
+        )
+    scheme, _, token = authorization.partition(" ")
+    if scheme.lower() != "bearer" or not secrets.compare_digest(
+        token.strip(), expected
+    ):
+        raise HTTPException(401, "Missing or invalid bearer token")
 
 
 # --------------------------------------------------------------------------
 # Request models
 # --------------------------------------------------------------------------
+# Note: the dispatch mode (manual/assist/auto) deliberately has NO request
+# override — it always comes from tenants.settings.dispatch_mode, so a caller
+# can never escalate a manual-mode tenant into auto-applied writes.
 class OptimizeRequest(BaseModel):
     tenant_id: str
     date: Optional[str] = None
-    mode: Optional[str] = None
     trigger_type: str = "manual"
 
 
 class SuggestRequest(BaseModel):
+    tenant_id: str
     job_id: str
     top_n: int = 3
 
@@ -102,7 +119,6 @@ class ReassignRequest(BaseModel):
     tenant_id: str
     tech_id: str
     date: Optional[str] = None
-    mode: Optional[str] = None
 
 
 # --------------------------------------------------------------------------
@@ -126,7 +142,7 @@ async def health() -> dict:
 # --------------------------------------------------------------------------
 # Optimize
 # --------------------------------------------------------------------------
-@app.post("/optimize")
+@app.post("/optimize", dependencies=[Depends(require_api_key)])
 async def post_optimize(req: OptimizeRequest) -> dict:
     repo = _repo()
     _require_db(repo)
@@ -134,7 +150,7 @@ async def post_optimize(req: OptimizeRequest) -> dict:
     if not tenant:
         raise HTTPException(404, f"tenant {req.tenant_id} not found")
     day = _resolve_day(req.date, tenant)
-    mode = _resolve_mode(req.mode, tenant)
+    mode = repo.tenant_mode(tenant)
     weights = repo.tenant_weights(tenant)
 
     techs = await asyncio.to_thread(repo.fetch_technicians, req.tenant_id, day, tenant)
@@ -153,16 +169,21 @@ async def post_optimize(req: OptimizeRequest) -> dict:
 # --------------------------------------------------------------------------
 # Suggest (single job, top-N techs — no DB writes)
 # --------------------------------------------------------------------------
-@app.post("/suggest")
+@app.post("/suggest", dependencies=[Depends(require_api_key)])
 async def post_suggest(req: SuggestRequest) -> dict:
     repo = _repo()
     _require_db(repo)
-    job, tenant_id, tenant = await asyncio.to_thread(repo.fetch_job, req.job_id)
+    tenant = await asyncio.to_thread(repo.fetch_tenant, req.tenant_id)
+    if not tenant:
+        raise HTTPException(404, f"tenant {req.tenant_id} not found")
+    # Scoped to the caller's tenant: a job id belonging to another tenant is
+    # indistinguishable from a nonexistent one.
+    job = await asyncio.to_thread(repo.fetch_job, req.tenant_id, req.job_id, tenant)
     if job is None:
         raise HTTPException(404, f"job {req.job_id} not found")
     day = _resolve_day(None, tenant)
     weights = repo.tenant_weights(tenant)
-    techs = await asyncio.to_thread(repo.fetch_technicians, tenant_id, day, tenant)
+    techs = await asyncio.to_thread(repo.fetch_technicians, req.tenant_id, day, tenant)
     candidates = await suggest(job, techs, weights, _provider(), top_n=req.top_n)
     return candidates.model_dump()
 
@@ -170,7 +191,7 @@ async def post_suggest(req: SuggestRequest) -> dict:
 # --------------------------------------------------------------------------
 # Emergency
 # --------------------------------------------------------------------------
-@app.post("/emergency")
+@app.post("/emergency", dependencies=[Depends(require_api_key)])
 async def post_emergency(req: EmergencyRequest) -> dict:
     repo = _repo()
     _require_db(repo)
@@ -181,7 +202,7 @@ async def post_emergency(req: EmergencyRequest) -> dict:
     weights = repo.tenant_weights(tenant)
 
     if req.job_id:
-        job, _, _ = await asyncio.to_thread(repo.fetch_job, req.job_id)
+        job = await asyncio.to_thread(repo.fetch_job, req.tenant_id, req.job_id, tenant)
         if job is None:
             raise HTTPException(404, f"job {req.job_id} not found")
         job.priority = JobPriority.emergency
@@ -226,7 +247,7 @@ async def post_emergency(req: EmergencyRequest) -> dict:
 # --------------------------------------------------------------------------
 # Reassign
 # --------------------------------------------------------------------------
-@app.post("/reassign")
+@app.post("/reassign", dependencies=[Depends(require_api_key)])
 async def post_reassign(req: ReassignRequest) -> dict:
     repo = _repo()
     _require_db(repo)
@@ -234,7 +255,7 @@ async def post_reassign(req: ReassignRequest) -> dict:
     if not tenant:
         raise HTTPException(404, f"tenant {req.tenant_id} not found")
     day = _resolve_day(req.date, tenant)
-    mode = _resolve_mode(req.mode, tenant)
+    mode = repo.tenant_mode(tenant)
     weights = repo.tenant_weights(tenant)
 
     techs = await asyncio.to_thread(repo.fetch_technicians, req.tenant_id, day, tenant)

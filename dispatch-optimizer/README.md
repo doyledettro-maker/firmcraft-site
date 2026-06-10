@@ -46,12 +46,21 @@ See `docs/scheduling-dispatch-architecture.md` §3 and
 | `POST` | `/suggest` | Top-3 tech candidates for a single job, with reasoning |
 | `POST` | `/emergency` | Nearest qualified tech for an emergency job + disruption cost |
 | `POST` | `/reassign` | Redistribute one tech's jobs across the rest |
-| `GET`  | `/health` | Liveness + backend/config status |
+| `GET`  | `/health` | Liveness + backend/config status (no auth) |
+
+### Authentication
+
+Every endpoint except `/health` requires `Authorization: Bearer <DISPATCH_API_KEY>`.
+The service fails closed — with `DISPATCH_API_KEY` unset, all requests are
+rejected with 503. The service binds loopback only (`127.0.0.1`, and the
+compose file publishes the port on `127.0.0.1` likewise); in production it is
+reached exclusively through the Caddy reverse proxy on the VPS.
 
 ### Dispatch modes
 
-Resolved per tenant from `tenants.settings.dispatch_mode` (overridable per
-request):
+Resolved per tenant from `tenants.settings.dispatch_mode` — there is
+deliberately no per-request override, so a caller can never escalate a
+manual-mode tenant into auto-applied writes:
 
 - **manual** — suggestions only, no DB writes.
 - **assist** — every run logged to `dispatch_logs` (as a suggestion) for the
@@ -109,6 +118,8 @@ windows, and work hours — `GET /health` reports the active `solver_backend`.
 
 All via environment / `.env` (see `.env.example`). Notably:
 
+- `DISPATCH_API_KEY` — **required** bearer token for all endpoints except
+  `/health`; unset ⇒ every request rejected (fail closed).
 - `SUPABASE_URL` + `SUPABASE_SERVICE_ROLE_KEY` — server-side reads/writes
   (service-role key bypasses RLS, correct for a trusted backend service).
 - `GOOGLE_MAPS_API_KEY` — Routes API; blank ⇒ Haversine only.

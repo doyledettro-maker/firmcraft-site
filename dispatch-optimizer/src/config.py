@@ -19,6 +19,11 @@ class Settings(BaseSettings):
         env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
 
+    # Bearer token required on every endpoint except /health. The service does
+    # service-role DB writes, so it FAILS CLOSED: with this unset, all requests
+    # are rejected. Callers send `Authorization: Bearer <key>`.
+    dispatch_api_key: str = ""
+
     # Supabase (service-role key — bypasses RLS, server-side only).
     supabase_url: str = ""
     supabase_service_role_key: str = ""
@@ -38,8 +43,11 @@ class Settings(BaseSettings):
     # Haversine fallback driving speed (m/s). ~25 mph metro average.
     fallback_speed_mps: float = 11.176
 
-    # Service.
-    host: str = "0.0.0.0"
+    # Service. Bind loopback by default — in production the service sits behind
+    # the Caddy reverse proxy on the VPS and must not be reachable directly.
+    # (Inside Docker the container still listens on 0.0.0.0; the loopback
+    # restriction is applied at the published port in docker-compose.yml.)
+    host: str = "127.0.0.1"
     port: int = 8080
     log_level: str = "info"
 

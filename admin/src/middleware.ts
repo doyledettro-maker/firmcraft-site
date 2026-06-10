@@ -117,9 +117,27 @@ async function resolveTenantId(slug: string): Promise<string | null> {
   }
 }
 
+// The tenant headers are TRUSTED downstream (resolveTenant() in the dispatch
+// data layer reads them against the service-role client), so client-supplied
+// copies must never survive the middleware. Strip them from EVERY request,
+// on every surface, before any routing decision; only withTenantHeaders()
+// below may set them.
+const TENANT_HEADERS = ['x-tenant-id', 'x-tenant-slug']
+
+function sanitizedHeaders(req: NextRequest): Headers {
+  const headers = new Headers(req.headers)
+  for (const h of TENANT_HEADERS) headers.delete(h)
+  return headers
+}
+
+/** Forward the request with inbound tenant headers stripped and none set. */
+function passthrough(req: NextRequest): NextResponse {
+  return NextResponse.next({ request: { headers: sanitizedHeaders(req) } })
+}
+
 /** Build a NextResponse that forwards the resolved tenant to route handlers. */
 function withTenantHeaders(req: NextRequest, slug: string, tenantId: string): NextResponse {
-  const headers = new Headers(req.headers)
+  const headers = sanitizedHeaders(req)
   headers.set('x-tenant-slug', slug)
   headers.set('x-tenant-id', tenantId)
   return NextResponse.next({ request: { headers } })
@@ -136,18 +154,18 @@ async function handle(
     case 'reserved':
     case 'local':
       // Apex/www/llm/langfuse/partners/status and dev hosts: no tenant scoping.
-      return NextResponse.next()
+      return passthrough(req)
 
     case 'internal-admin':
       // Firmcraft's own panel — existing behavior, gated below by Clerk.
-      return NextResponse.next()
+      return passthrough(req)
 
     case 'login-app': {
       // Generic login/landing. After auth, bounce the user to their own
       // {slug}.firmcraft.ai if their JWT carries a tenant. (Slug-from-tenant
       // lookup is a Sprint-2 refinement; for now we only avoid trapping an
       // authenticated user on the generic host.)
-      return NextResponse.next()
+      return passthrough(req)
     }
 
     case 'tenant-client': {

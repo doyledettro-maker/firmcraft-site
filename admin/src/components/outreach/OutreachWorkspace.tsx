@@ -37,7 +37,7 @@ import type { Company, CompanyStatus, CompanySegment } from '@/lib/db/companies'
 import type { Contact, ContactStatus, ContactWithCompany } from '@/lib/db/contacts'
 import type { Correspondence, CorrespondenceType } from '@/lib/db/correspondence'
 
-const COMPANY_STATUS_OPTIONS: CompanyStatus[] = ['active', 'engaged', 'customer', 'archived']
+const COMPANY_STATUS_OPTIONS: CompanyStatus[] = ['active', 'opened', 'engaged', 'customer', 'archived']
 const COMPANY_SEGMENT_OPTIONS: CompanySegment[] = ['small', 'midmarket', 'enterprise', 'pe']
 const SEGMENT_LABELS: Record<CompanySegment, string> = {
   small: 'Small',
@@ -66,6 +66,7 @@ type CompanyFilter = 'all' | CompanyStatus
 const COMPANY_FILTERS: Array<{ key: CompanyFilter; label: string }> = [
   { key: 'all', label: 'All' },
   { key: 'active', label: 'Active' },
+  { key: 'opened', label: 'Opened' },
   { key: 'engaged', label: 'Engaged' },
   { key: 'customer', label: 'Customer' },
   { key: 'archived', label: 'Archived' },

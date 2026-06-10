@@ -32,6 +32,7 @@ export function ContactStatusBadge({ status }: { status: ContactStatus }) {
 
 const COMPANY_TONE: Record<CompanyStatus, 'neutral' | 'amber' | 'green' | 'red' | 'blue'> = {
   active: 'neutral',
+  opened: 'blue',
   engaged: 'blue',
   customer: 'green',
   archived: 'red',
@@ -39,6 +40,7 @@ const COMPANY_TONE: Record<CompanyStatus, 'neutral' | 'amber' | 'green' | 'red' 
 
 const COMPANY_LABEL: Record<CompanyStatus, string> = {
   active: 'Active',
+  opened: 'Opened',
   engaged: 'Engaged',
   customer: 'Customer',
   archived: 'Archived',

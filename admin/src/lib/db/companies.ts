@@ -1,9 +1,10 @@
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase'
 
-export type CompanyStatus = 'active' | 'engaged' | 'customer' | 'archived'
+export type CompanyStatus = 'active' | 'opened' | 'engaged' | 'customer' | 'archived'
 
 export const COMPANY_STATUSES: CompanyStatus[] = [
   'active',
+  'opened',
   'engaged',
   'customer',
   'archived',

@@ -12,6 +12,21 @@
 
 ---
 
+## Implementation Status & Known Deviations (June 10, 2026)
+
+The June 2026 build (Phase 2.1 Sprints 1–2, Phase 2.2, Phase 2.3 — see the [build plan's Implementation Status](scheduling-dispatch-build-plan.md#implementation-status-as-of-june-10-2026)) implemented this architecture with the following deviations. Where this document and the code disagree, the notes below are authoritative.
+
+1. **JWT-claim helpers live in `public`, not `auth`.** Hosted Supabase locks the `auth` schema (owned by `supabase_admin`), so `auth.tenant_id()` as written in earlier drafts of §2.3/§9.3 cannot be created. The shipped helpers are `public.tenant_id()`, `public.user_role()`, `public.tech_id()` (migration `20260609_006`). Same JWT plumbing, different schema.
+2. **Interim dispatch-board data path — RLS is not yet on the request path.** §7.2, §9.3, and §11.1 describe the browser holding a Clerk JWT and talking to Supabase directly (Realtime + RLS). What shipped instead: the board calls public Next.js API routes (`/api/dispatch/*`) that use the **service-role key** (RLS bypassed), with an SSE proxy relaying "something changed" pings. There is no Clerk→Supabase JWT bridge yet, and the dispatch routes are currently unauthenticated. **This must be gated (Clerk session + org→tenant binding) before any real tenant onboards** — review finding CRIT-1. The RLS policies themselves exist and were hardened post-review (migrations `006`, `011`); they become load-bearing when the JWT bridge lands.
+3. **The dispatch optimizer is a standalone FastAPI service** (`dispatch-optimizer/`, deployed to the Hetzner VPS), not Supabase Edge Functions as the §9.2 `/functions/v1/dispatch/*` entries imply.
+4. **§9.2 endpoint catalog is partly aspirational.** Shipped Edge Functions: `create-job`, `update-job`, `transition-job`, `complete-job`, `check-availability`, `tech-location`. Not built: `/dispatch/accept`, `/dispatch/suggestions`, `/schedule/slots`, `/tech-location/nearest`, `/jobs/cancel` (cancellation goes through `transition-job`).
+5. **Data-model additions not in §2.1:** `widget_keys` (18th table — tenant-scoped public API keys for the Phase 3 booking widget, migration `20260609_008`) and `jobs.invoice_data` (JSONB invoice package assembled by `complete-job`).
+6. **`technician_locations` is not partitioned** (the §2.1 comment was intent, not implementation), and the §11.2 30-day `pg_cron` purge job is **not yet enabled** — pg_cron is not turned on. Both are planned; until then retention is an operational task.
+7. **Status-transition matrix expanded** (migration `20260610_012`): cancellation is allowed from `en_route`/`arrived`/`in_progress`/`on_hold`, and the backward moves `scheduled → created` (un-schedule) and `dispatched → scheduled` (un-dispatch/reschedule) are legal. §2.2's diagram shows the original forward-only matrix.
+8. **Phase 2.1 Sprint 3 was skipped** (Hermes skills, slot-hold tokens, Storage buckets, webhook queue) — the §4 Hermes skill interface and §9.4 webhook events are designed but not built.
+
+---
+
 ## Table of Contents
 
 1. [System Architecture Overview](#1-system-architecture-overview)
@@ -575,7 +590,8 @@ CREATE TABLE technician_locations (
     recorded_at     TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
--- Partitioned by time for efficient cleanup (keep 30 days)
+-- Time-ordered index for trail rendering + 30-day cleanup. (Not partitioned
+-- in the shipped schema — partitioning is planned if write volume requires it.)
 CREATE INDEX idx_tech_loc_tech_time ON technician_locations(technician_id, recorded_at DESC);
 CREATE INDEX idx_tech_loc_tenant ON technician_locations(tenant_id);
 
@@ -675,6 +691,8 @@ CREATE INDEX idx_dispatch_logs_tenant ON dispatch_logs(tenant_id, created_at DES
 
 Status transitions are enforced by a Postgres trigger function. Invalid transitions (e.g., `created` → `completed`) are rejected. Every transition writes to `job_status_history` for the audit trail.
 
+> **Update (June 10, 2026, migration `20260610_012`):** the shipped matrix is a superset of the diagram above — cancellation is also legal from `en_route`, `arrived`, `in_progress`, and `on_hold`, and two backward moves exist: `scheduled → created` (un-schedule) and `dispatched → scheduled` (un-dispatch, used by board drag-drop rescheduling and the optimizer's reassign path). `cancelled` remains terminal. Jobs may be INSERTed in any status; an AFTER INSERT trigger writes the first `job_status_history` row (`previous_status = null`).
+
 ### 2.3 Row-Level Security
 
 Every table uses the same RLS pattern, keyed on the Clerk JWT:
@@ -683,23 +701,29 @@ Every table uses the same RLS pattern, keyed on the Clerk JWT:
 -- Enable RLS on all tables
 ALTER TABLE jobs ENABLE ROW LEVEL SECURITY;
 
--- Extract tenant_id from the Clerk JWT
-CREATE OR REPLACE FUNCTION auth.tenant_id()
+-- Extract tenant_id from the Clerk JWT.
+-- NOTE: lives in `public`, not `auth` — hosted Supabase locks the auth schema
+-- (owned by supabase_admin), so the helpers are public.tenant_id(),
+-- public.user_role(), public.tech_id(). See migration 20260609_006.
+CREATE OR REPLACE FUNCTION public.tenant_id()
 RETURNS UUID AS $$
   SELECT (current_setting('request.jwt.claims', true)::jsonb ->> 'tenant_id')::UUID;
 $$ LANGUAGE sql STABLE;
 
 -- Standard policy (applied to every table with tenant_id)
 CREATE POLICY tenant_isolation ON jobs
-    USING (tenant_id = auth.tenant_id())
-    WITH CHECK (tenant_id = auth.tenant_id());
+    USING (tenant_id = public.tenant_id())
+    WITH CHECK (tenant_id = public.tenant_id());
 
 -- Technician-specific: techs can only see their own jobs
+-- (Shipped as a RESTRICTIVE policy AND'd with tenant_isolation — two permissive
+-- policies would OR and fail to narrow tech reads. Write-side tightening for the
+-- technician role is in migration 20260610_011.)
 CREATE POLICY tech_own_jobs ON jobs
     FOR SELECT
     TO authenticated
     USING (
-        tenant_id = auth.tenant_id()
+        tenant_id = public.tenant_id()
         AND (
             -- dispatchers/admins see all
             current_setting('request.jwt.claims', true)::jsonb ->> 'role' IN ('admin', 'dispatcher')
@@ -816,7 +840,7 @@ def score_assignment(job, tech, vroom_route):
 
 ### 3.3 Dispatch Modes
 
-Configurable per tenant via Hermes ("Set dispatch to auto mode") or the admin panel:
+Configurable per tenant via Hermes ("Set dispatch to auto mode") or the contractor’s dashboard at `{slug}.firmcraft.ai`:
 
 **Manual mode** — the dispatch board shows unassigned jobs on the left. Dispatcher drags them onto technician rows. VROOM-powered suggestions appear as recommendations but are not auto-applied. This is the default for new tenants to build trust.
 
@@ -1210,7 +1234,7 @@ The real-time layer uses a hybrid approach, matching the right technology to eac
 
 ### 7.2 Dispatch Board Real-Time Updates
 
-The dispatch board (FullCalendar Premium in the admin panel) subscribes to three Supabase Realtime channels:
+The dispatch board (FullCalendar Premium, served at `{slug}.firmcraft.ai/dispatch`) subscribes to three Supabase Realtime channels:
 
 ```typescript
 // Channel 1: Job changes (creates, updates, deletes)
@@ -1443,6 +1467,8 @@ Phase 4 handles QuickBooks invoice sync, but Phase 2 contributes time tracking d
 
 ### 9.2 Key Endpoints
 
+> **Status note:** this catalog is the design target. See [Implementation Status](#implementation-status--known-deviations-june-10-2026) item 4 for which endpoints actually shipped in June 2026 and where the optimizer endpoints really live.
+
 **Jobs**
 
 | Method | Endpoint | Description |
@@ -1501,7 +1527,7 @@ All API requests require a Clerk JWT in the Authorization header. The JWT includ
 }
 ```
 
-Supabase validates the JWT using Clerk's JWKS endpoint. RLS policies use `auth.tenant_id()` (extracted from the JWT) to scope all queries. Technician-role JWTs additionally restrict job visibility to jobs assigned to that tech.
+Supabase validates the JWT using Clerk's JWKS endpoint. RLS policies use `public.tenant_id()` (extracted from the JWT; the helper lives in `public` because hosted Supabase locks the `auth` schema) to scope all queries. Technician-role JWTs additionally restrict job visibility to jobs assigned to that tech.
 
 **Subdomain ↔ JWT consistency.** On the client app (`{slug}.firmcraft.ai`), the Next.js middleware resolves the subdomain to a `tenant_id` (Section 1.6) *before* any data access. That resolved tenant must match the `tenant_id` claim in the user's Clerk JWT. The two are reconciled as follows:
 
@@ -1618,7 +1644,7 @@ Location data is the most sensitive data in the scheduling module. Protections:
 
 **Opt-in consent:** techs must explicitly enable location sharing during onboarding. The permission can be revoked at any time from the app settings. Revocation is immediate — the tech disappears from the dispatch map.
 
-**Retention policy:** `technician_locations` (history table) retains 30 days of data, then automatically purges via a Postgres cron job (`pg_cron`). `technician_current_location` (current position) is overwritten on each update and deleted when the tech goes offline.
+**Retention policy:** `technician_locations` (history table) retains 30 days of data, purged via a Postgres cron job (`pg_cron`). *(Planned — pg_cron is not yet enabled and the purge job is not in any migration; until it ships, retention is enforced operationally.)* `technician_current_location` (current position) is overwritten on each update and deleted when the tech goes offline.
 
 **Access control:** only users with the `dispatcher` or `admin` role can view tech locations. Techs cannot see other techs' locations. Customer tracking is limited to their assigned tech during the active job window.
 
@@ -1707,6 +1733,8 @@ These are the components that create Firmcraft's competitive differentiation and
 ---
 
 ## Appendix A: Phased Build Timeline
+
+> **SUPERSEDED (June 2026):** this 2a–2d / Aug 2026 → May 2027 phasing predates the [build plan](scheduling-dispatch-build-plan.md), which restructured the work as **Phase 2.1–2.5, June → September 2026**. All commits and code follow the build plan’s numbering. Kept for the deliverable groupings only.
 
 | Phase | Timeline | Deliverables |
 |---|---|---|

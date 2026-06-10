@@ -17,6 +17,25 @@ The architecture document ([scheduling-dispatch-architecture.md](scheduling-disp
 
 **Related docs:** [Market Research](scheduling-dispatch-market-research.md) · [AI/ML Research](ai-scheduling-dispatch-research.md) · [ROADMAP.md](../ROADMAP.md)
 
+> **Naming note:** the sub-phases below are numbered **Phase 2.1–2.5**. Earlier drafts of the architecture doc (Appendix A) and market research (§8.3) phased this work as "2a–2d" on an Aug 2026 → May 2027 timeline — that scheme is **superseded** by this document. All commits, code, and migrations use 2.1–2.5.
+
+---
+
+## Implementation Status (as of June 10, 2026)
+
+This section tracks what has actually shipped against the plan. The four build sprints landed as commits `97a4800`, `d65708e`, `7f3ba5f`, `5bb6346` on branch `phase-2.1-scheduling-foundation`, followed by a schema-hardening pass from the June 10 code review ([phase2-code-review.md](phase2-code-review.md)).
+
+| Sub-phase | Status | Notes |
+|---|---|---|
+| **2.1 Sprint 1** — Schema + RLS + seed + subdomain routing | ✅ Done (commit `97a4800`) | All 17 spec tables, RLS, lifecycle triggers, Houston seed data, wildcard-subdomain middleware. Migrations landed as `20260609_001`–`007` (the build started ahead of the planned June 16 kickoff, so the `20260616_*` filenames in §3 are stale). **Deviation:** JWT-claim helpers live in `public` (`public.tenant_id()` etc.), not `auth.*` as §3 Sprint 1 task 6 specifies — hosted Supabase locks the `auth` schema. |
+| **2.1 Sprint 2** — Edge Functions + API layer | ✅ Done (commit `d65708e`) | All six Edge Functions 1:1 with the task list, plus `widget_keys` (an 18th table, not in the §1 table list) and `jobs.invoice_data` (migration `20260609_008`). |
+| **2.1 Sprint 3** — Hermes skills + Realtime + Storage + webhooks | ⏸️ **Skipped / deferred** | **Not started.** Phases 2.2 and 2.3 were pulled forward instead so the board and optimizer could be demoed. Realtime publication config (Sprint 3 task 9) did land with Phase 2.2 (migration `20260609_009`); everything else is outstanding: the 8 Hermes scheduling skills, slot-hold tokens (§6.2), Supabase Storage buckets, and the `webhook_events` queue (§6.5). These remain prerequisites for Phase 1 phone-agent integration (skills), Phase 3 booking (hold tokens), Phase 2.4 mobile (storage buckets), and Phase 4 invoicing (webhook queue). |
+| **2.2** — Dispatch Board + Map | ✅ Done (commit `5bb6346`) | FullCalendar resource timeline + Mapbox + drag-drop + SSE realtime at `{slug}.firmcraft.ai/dispatch`. **Interim deviation:** the board reads through public service-role API routes with no Clerk→RLS bridge yet — must be gated before any real tenant onboards (review CRIT-1). FullCalendar Premium license not yet purchased (review M-25 — launch blocker). |
+| **2.3** — Dispatch Optimizer | 🟡 Partial (commit `7f3ba5f`) | FastAPI + VROOM service with scoring engine, three modes, emergency flow, dispatch logging — built and tested (23 tests). **Deferred from the DoD:** the board-side suggestions UI with accept/reject buttons (the SSE stream does not yet relay `dispatch_logs` and no suggestions panel exists), Hermes dispatch skills (blocked on Sprint 3), and the rolling re-optimization scheduler. |
+| **2.4** — Mobile App MVP | ❌ Not started | |
+| **2.5** — Notifications + Polish | ❌ Not started | |
+| Schema hardening (post-review) | ✅ Done (June 10) | Migrations `20260610_010`–`012`: `updated_at` triggers, technician write-policy tightening + column guard, expanded transition matrix, INSERT audit rows, CHECK constraints, FK indexes, tenant FKs, soft-delete fix in `check_availability()`. Seed made re-runnable. |
+
 ---
 
 ## Table of Contents
@@ -69,7 +88,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 
 ### Phase 2.2: Dispatch Board + Map View (Weeks 4–6)
 
-**What's being built:** The web-based dispatch board inside admin.firmcraft.ai, with a FullCalendar resource timeline view (technicians as rows, time as columns), drag-and-drop job assignment, and a Mapbox map overlay showing job locations.
+**What's being built:** The web-based dispatch board served to contractors at `{slug}.firmcraft.ai/dispatch` (client-facing, host-routed — **not** part of the internal admin panel; see §2.1 and architecture §1.6), with a FullCalendar resource timeline view (technicians as rows, time as columns), drag-and-drop job assignment, and a Mapbox map overlay showing job locations.
 
 **Features:**
 
@@ -86,7 +105,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 
 **Dependencies:** Phase 2.1 (schema + API must exist).
 
-**Deliverable:** Doyle opens admin.firmcraft.ai/dispatch and sees today's schedule laid out as a timeline. He can drag an unassigned job onto Dave's row at 2pm. The map shows where each job is located. Changes made via Hermes appear on the board in real-time.
+**Deliverable:** Doyle opens demo.firmcraft.ai/dispatch and sees today's schedule laid out as a timeline. He can drag an unassigned job onto Dave's row at 2pm. The map shows where each job is located. Changes made via Hermes appear on the board in real-time.
 
 **Definition of done:**
 
@@ -128,7 +147,7 @@ The timeline is aggressive but achievable because: (a) the architecture is alrea
 - Distance matrix cache achieves >50% hit rate after first optimization run of the day
 - Scoring engine produces different rankings when weights are changed
 - Emergency dispatch returns nearest qualified tech within 5 seconds
-- Dispatch board shows optimization suggestions with accept/reject buttons
+- Dispatch board shows optimization suggestions with accept/reject buttons *(deferred — not in the June 2026 build; the optimizer logs to `dispatch_logs` but the SSE stream does not relay them and no suggestions UI exists yet. See Implementation Status.)*
 - "Dave called in sick, reassign his jobs" via Hermes re-distributes all of Dave's jobs
 - Dispatch logs capture every optimization run with full input/output snapshot
 - All three dispatch modes (manual/assist/auto) work end-to-end
@@ -371,40 +390,40 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
    - Verify: `SELECT PostGIS_Version();` returns a version string
 
 2. **Create Supabase migration: core tenant + technician tables**
-   - File: `supabase/migrations/20260616_scheduling_core.sql`
+   - File: `supabase/migrations/20260609_002_scheduling_core.sql` *(extensions landed separately as `20260609_001_scheduling_extensions.sql`)*
    - Tables: `tenants`, `service_areas`, `technicians`, `skills`, `technician_skills`, `technician_zones`
    - Include all columns, types, constraints, indexes exactly as specified in architecture doc Section 2.1
    - **Include `tenants.slug` (TEXT UNIQUE NOT NULL — the subdomain for `{slug}.firmcraft.ai`) and `tenants.custom_domain` (TEXT UNIQUE, nullable — future Pro-tier upsell).** Both get a unique index for fast host → tenant lookups by the routing middleware (see architecture doc §1.6)
    - Include PostGIS geometry columns for `service_areas.boundary`
 
 3. **Create Supabase migration: customer + equipment tables**
-   - File: `supabase/migrations/20260617_scheduling_customers.sql`
+   - File: `supabase/migrations/20260609_003_scheduling_customers.sql`
    - Tables: `customers`, `equipment`
    - Include PostGIS point column for `customers.location`
    - Include all indexes from architecture doc
 
 4. **Create Supabase migration: job tables**
-   - File: `supabase/migrations/20260618_scheduling_jobs.sql`
+   - File: `supabase/migrations/20260609_004_scheduling_jobs.sql`
    - Create enums: `job_status`, `job_priority`
    - Tables: `job_types`, `jobs`, `job_status_history`, `recurring_schedules`
    - Include all indexes, especially the composite `idx_jobs_dispatch` index
    - Include the `deleted_at` soft-delete columns
 
 5. **Create Supabase migration: availability + location + dispatch tables**
-   - File: `supabase/migrations/20260619_scheduling_operations.sql`
+   - File: `supabase/migrations/20260609_005_scheduling_operations.sql`
    - Tables: `technician_availability`, `technician_locations`, `technician_current_location`, `on_call_rotations`, `dispatch_logs`
    - Include the partitioning index on `technician_locations`
 
 6. **Create Supabase migration: RLS policies**
-   - File: `supabase/migrations/20260620_scheduling_rls.sql`
-   - Create `auth.tenant_id()` function that reads from Clerk JWT
+   - File: `supabase/migrations/20260609_006_scheduling_rls.sql`
+   - Create `public.tenant_id()` function that reads from Clerk JWT *(originally specced as `auth.tenant_id()`, but hosted Supabase locks the `auth` schema — the helpers live in `public`; see architecture §2.3)*
    - Enable RLS on every table
    - Create `tenant_isolation` policy on every table with `tenant_id`
    - Create `tech_own_jobs` policy on `jobs` table (techs see only their assigned jobs)
    - Create similar role-scoped policies on `technician_locations`, `dispatch_logs`
 
 7. **Create Supabase migration: job status transition trigger**
-   - File: `supabase/migrations/20260621_scheduling_triggers.sql`
+   - File: `supabase/migrations/20260609_007_scheduling_triggers.sql`
    - Create function `validate_job_status_transition()` that enforces valid state transitions per the lifecycle diagram in architecture doc Section 2.2
    - Valid transitions: `created→scheduled`, `scheduled→dispatched`, `dispatched→en_route`, `en_route→arrived`, `arrived→in_progress`, `in_progress→completed`, `in_progress→on_hold`, `on_hold→in_progress`, `scheduled→cancelled`, `dispatched→cancelled`, `created→cancelled`, `completed→invoiced`
    - Invalid transitions are rejected with a descriptive error
@@ -515,7 +534,7 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
      - RLS: create job as Tenant A, query as Tenant B → verify empty result
      - Location update → verify `technician_current_location` is updated
 
-### Sprint 3 (Week 3): Hermes Skills + Realtime Setup
+### Sprint 3 (Week 3): Hermes Skills + Realtime Setup — ⏸️ DEFERRED (see Implementation Status)
 
 **Goal:** Hermes can manage the full job lifecycle via natural language. Supabase Realtime is configured and tested.
 
@@ -752,7 +771,7 @@ Online booking is the next module after scheduling — it depends on the availab
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
 | Public availability check | Booking → Scheduling | `check-availability` Edge Function callable with a tenant-scoped **public widget key** (no end-user auth), rate-limited | Build in Phase 2.1 Sprint 2; harden for public use before Phase 3 ships |
-| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Build in Phase 2.1 Sprint 3 |
+| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Phase 2.1 Sprint 3 — **deferred, not built** |
 | Self-booked job creation | Booking → Scheduling | Widget calls the same `create-job` path as the phone agent with `source: "online_booking"` | Build in Phase 2.1 Sprint 2 |
 | Customer self-service reads | Booking → Scheduling | Portal reads `jobs` by `customer_id`; "Where's My Tech" subscribes to `technician_current_location` via short-lived token; reschedule via `update-job` | Reuses Phase 2.1 Sprint 2–3 endpoints |
 
@@ -765,7 +784,7 @@ These hooks Phase 2 must expose for Phase 4:
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
 | Job completion assembles invoice data | Scheduling → Invoicing | `complete-job` Edge Function returns `invoice_data` JSON package | Build in Phase 2.1 Sprint 2 |
-| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Build in Phase 2.1 Sprint 3 |
+| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Phase 2.1 Sprint 3 — **deferred, not built** |
 | Time tracking feeds labor hours | Scheduling → Invoicing | `actual_start`, `actual_end`, and drive time calculated from location history | Build in Phase 2.1 Sprint 2 |
 | Parts used tracked per job | Scheduling → Invoicing | `parts_used` JSONB field on jobs table, populated by tech via mobile app | Build in Phase 2.4 |
 | Invoice ID written back to job | Invoicing → Scheduling | Phase 4 sets `jobs.invoice_id` when invoice is generated, transitions status to `invoiced` | Phase 4 responsibility |
@@ -834,7 +853,7 @@ These hooks Phase 2 must expose for Phase 4:
 
 ### 6.5 Webhook Events to Implement
 
-Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later.
+Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later. **Status: not yet built — this was Sprint 3 scope, which is deferred (see Implementation Status).**
 
 | Event | Trigger | Payload |
 |---|---|---|

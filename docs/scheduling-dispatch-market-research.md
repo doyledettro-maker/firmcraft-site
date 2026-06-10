@@ -722,6 +722,8 @@ The office dashboard is no longer a standalone phase; each module ships its dash
 
 ### 8.3 Phased Build Recommendation
 
+> **SUPERSEDED (June 2026):** this 2a–2d phasing was the original recommendation. The [build plan](scheduling-dispatch-build-plan.md) restructured the work as **Phase 2.1–2.5 (June → September 2026)**, and all commits and code follow that numbering. Kept for the feature groupings only.
+
 **Phase 2a (Months 1-3): Smart Dispatch MVP**
 - Dispatch board with drag-and-drop (FullCalendar Premium)
 - Map view with tech locations (Mapbox)

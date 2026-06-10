@@ -1,6 +1,6 @@
 # Firmcraft Product Roadmap
 
-**Last updated:** June 8, 2026
+**Last updated:** June 10, 2026
 **Vision:** The AI-powered operating system for trade contractors — one platform that replaces the 5-6 disconnected SaaS tools every contractor pays for today.
 
 **The stack at a glance:** Every module except one is *reactive* — it handles work as it comes in (calls, jobs, invoices, bookings). **Digital Ops is the only *proactive* module: it generates demand.** That makes it the front of the funnel for everything else in the platform.
@@ -86,9 +86,9 @@
 
 **Technical approach:**
 - Supabase-backed job/appointment data model
-- Google Calendar sync for each technician
 - Hermes skill for job CRUD — create, assign, reschedule, complete
-- Technician interface via text/Telegram: "Here are your jobs today"
+- Technician mobile app (React Native + Expo, offline-first via PowerSync) — build plan Phase 2.4, ships with Phase 2 *(supersedes the earlier text/Telegram tech interface idea)*
+- Google Calendar sync for each technician *(post-launch — not required for production-ready; see build plan §7.2)*
 - Customer reminders: "Your tech arrives between 2-4pm"
 - Dispatcher commands via Hermes: "Assign the 3pm to Dave" or AI auto-assigns based on location + skills
 - Drive-time awareness using Google Maps API
@@ -271,8 +271,6 @@ A fully autonomous AI marketing agent that manages a contractor's entire digital
 ### Technology
 - **White-labeled Hermes Desktop** — Firmcraft-branded desktop app for clients
 - **Custom domains for client dashboards (Pro-tier upsell)** — a contractor points their own domain (e.g. `app.rumblebeeac.com`) at their dashboard instead of the default `{slug}.firmcraft.ai`. Requires per-client SSL cert provisioning + DNS verification; Vercel supports it but each one is manual setup. Deliberately **out of Phase 2 scope** — the wildcard `{slug}.firmcraft.ai` covers every tenant on day one. A natural Pro-tier differentiator once there's demand. (See [architecture §1.6](docs/scheduling-dispatch-architecture.md).)
-- **Mobile app** — native iOS/Android for technicians
-- **Offline mode** — job details cached for areas with poor connectivity
 - **Multi-language** — Spanish-first (large portion of trade workforce)
 
 ---

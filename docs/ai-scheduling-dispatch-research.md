@@ -583,7 +583,9 @@ Academic research is advancing rapidly:
 
 ### 8.1 Phased Build Plan
 
-**Phase 1 — Smart Dispatch (Months 1-3)**
+> **Naming note (June 2026):** the four steps below are labeled **Stage 1–4** (previously "Phase 1–4") to avoid colliding with the global roadmap phases and the build plan’s Phase 2.1–2.5 numbering. Stage 1 roughly maps to build-plan Phase 2.3; Stages 2–4 are post-launch ML work.
+
+**Stage 1 — Smart Dispatch (Months 1-3)**
 - Integrate VROOM solver for route optimization
 - Google Routes API for distance/duration matrix with traffic
 - Basic skill-matching: tech certifications vs. job requirements
@@ -591,20 +593,20 @@ Academic research is advancing rapidly:
 - Display optimization score: "This assignment saves 45 min of drive time"
 - **Tech:** Python/FastAPI service wrapping pyvroom, Redis for event queue
 
-**Phase 2 — Predictive Duration + Dynamic Re-routing (Months 3-5)**
+**Stage 2 — Predictive Duration + Dynamic Re-routing (Months 3-5)**
 - Train XGBoost model on historical job data for duration prediction
 - Replace fixed duration estimates with ML predictions
 - Implement rolling re-optimization on 15-min cadence
 - Emergency job injection: auto-re-route when new urgent job arrives
 - **Tech:** MLflow for model management, scheduled retraining pipeline
 
-**Phase 3 — Voice/NL Job Creation (Months 5-7)**
+**Stage 3 — Voice/NL Job Creation (Months 5-7)**
 - Whisper V4 or Deepgram for speech-to-text
 - Claude/GPT-4o with structured outputs for intent + entity extraction
 - Validation engine: CRM lookup, availability check, conflict detection
 - **Tech:** WebSocket for real-time voice streaming, LLM function calling
 
-**Phase 4 — Demand Forecasting + Proactive Scheduling (Months 7-10)**
+**Stage 4 — Demand Forecasting + Proactive Scheduling (Months 7-10)**
 - Prophet/ARIMA for seasonal demand forecasting
 - Cancellation prediction model (XGBoost classifier)
 - IoT integration pilot: smart thermostat runtime data
@@ -632,7 +634,7 @@ This is dramatically less than commercial route optimization APIs ($1,000-$10,00
 - Job types with estimated durations
 - Working hours and service area boundaries
 
-**Data needed for ML features (Phase 2+):**
+**Data needed for ML features (Stage 2+):**
 - 6+ months of historical job records (type, duration, tech, outcome)
 - Customer appointment history (for no-show prediction)
 - 2+ years of call volume data (for demand forecasting)

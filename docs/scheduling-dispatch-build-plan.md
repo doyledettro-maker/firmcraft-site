@@ -29,7 +29,7 @@ This section tracks what has actually shipped against the plan. The four build s
 |---|---|---|
 | **2.1 Sprint 1** — Schema + RLS + seed + subdomain routing | ✅ Done (commit `97a4800`) | All 17 spec tables, RLS, lifecycle triggers, Houston seed data, wildcard-subdomain middleware. Migrations landed as `20260609_001`–`007` (the build started ahead of the planned June 16 kickoff, so the `20260616_*` filenames in §3 are stale). **Deviation:** JWT-claim helpers live in `public` (`public.tenant_id()` etc.), not `auth.*` as §3 Sprint 1 task 6 specifies — hosted Supabase locks the `auth` schema. |
 | **2.1 Sprint 2** — Edge Functions + API layer | ✅ Done (commit `d65708e`) | All six Edge Functions 1:1 with the task list, plus `widget_keys` (an 18th table, not in the §1 table list) and `jobs.invoice_data` (migration `20260609_008`). |
-| **2.1 Sprint 3** — Hermes skills + Realtime + Storage + webhooks | ⏸️ **Skipped / deferred** | **Not started.** Phases 2.2 and 2.3 were pulled forward instead so the board and optimizer could be demoed. Realtime publication config (Sprint 3 task 9) did land with Phase 2.2 (migration `20260609_009`); everything else is outstanding: the 8 Hermes scheduling skills, slot-hold tokens (§6.2), Supabase Storage buckets, and the `webhook_events` queue (§6.5). These remain prerequisites for Phase 1 phone-agent integration (skills), Phase 3 booking (hold tokens), Phase 2.4 mobile (storage buckets), and Phase 4 invoicing (webhook queue). |
+| **2.1 Sprint 3** — Hermes skills + Realtime + Storage + webhooks | ✅ Done (June 10) | Built out of order (after 2.2/2.3 were pulled forward). All 8 Hermes scheduling skills live in `hermes-skills/scheduling/` as zero-dependency Node modules (tool definitions + CLI + fuzzy entity resolution + tenant-timezone NL date parsing); they call the Sprint 2 Edge Functions when deployed and fall back to equivalent direct PostgREST operations until then (`SCHEDULING_EDGE_MODE`). Realtime publication had landed with 2.2 (migration `20260609_009`) and is now verified live (subscription test in `hermes-skills/scheduling/test/realtime.cjs`). Storage buckets `job-photos` (5MB) + `signatures` (1MB) with tenant-scoped path RLS (migration `20260610_014`). `webhook_events` queue + jobs lifecycle triggers emitting `job.created/scheduled/status_changed/completed/cancelled` (migration `20260610_013`); consumers arrive in Phase 2.5. End-to-end lifecycle test passes against the live DB (`test/integration.mjs`, 27 checks). **Still deferred:** slot-hold tokens (§6.2, Phase 3 prerequisite) and the optimizer-facing dispatch skills (`auto_assign`, `reassign_tech_jobs`, `emergency_dispatch` — blocked on optimizer deployment). Skills not yet installed into the dogfood Hermes registry. |
 | **2.2** — Dispatch Board + Map | ✅ Done (commit `5bb6346`) | FullCalendar resource timeline + Mapbox + drag-drop + SSE realtime at `{slug}.firmcraft.ai/dispatch`. **Interim deviation:** the board reads through public service-role API routes with no Clerk→RLS bridge yet — must be gated before any real tenant onboards (review CRIT-1). FullCalendar Premium license not yet purchased (review M-25 — launch blocker). |
 | **2.3** — Dispatch Optimizer | 🟡 Partial (commit `7f3ba5f`) | FastAPI + VROOM service with scoring engine, three modes, emergency flow, dispatch logging — built and tested (23 tests). **Deferred from the DoD:** the board-side suggestions UI with accept/reject buttons (the SSE stream does not yet relay `dispatch_logs` and no suggestions panel exists), Hermes dispatch skills (blocked on Sprint 3), and the rolling re-optimization scheduler. |
 | **2.4** — Mobile App MVP | ❌ Not started | |
@@ -534,7 +534,7 @@ Phase 2.1 spans 3 weeks. Each "sprint" below is roughly one week of focused AI a
      - RLS: create job as Tenant A, query as Tenant B → verify empty result
      - Location update → verify `technician_current_location` is updated
 
-### Sprint 3 (Week 3): Hermes Skills + Realtime Setup — ⏸️ DEFERRED (see Implementation Status)
+### Sprint 3 (Week 3): Hermes Skills + Realtime Setup — ✅ DONE June 10 (see Implementation Status)
 
 **Goal:** Hermes can manage the full job lifecycle via natural language. Supabase Realtime is configured and tested.
 
@@ -771,7 +771,7 @@ Online booking is the next module after scheduling — it depends on the availab
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
 | Public availability check | Booking → Scheduling | `check-availability` Edge Function callable with a tenant-scoped **public widget key** (no end-user auth), rate-limited | Build in Phase 2.1 Sprint 2; harden for public use before Phase 3 ships |
-| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | Phase 2.1 Sprint 3 — **deferred, not built** |
+| Slot hold / confirm | Booking → Scheduling | Two-step hold token on `check-availability` → `create-job` so two customers can't grab the same slot mid-form | **Deferred — not built** (dropped from the Sprint 3 build; needed before Phase 3 booking) |
 | Self-booked job creation | Booking → Scheduling | Widget calls the same `create-job` path as the phone agent with `source: "online_booking"` | Build in Phase 2.1 Sprint 2 |
 | Customer self-service reads | Booking → Scheduling | Portal reads `jobs` by `customer_id`; "Where's My Tech" subscribes to `technician_current_location` via short-lived token; reschedule via `update-job` | Reuses Phase 2.1 Sprint 2–3 endpoints |
 
@@ -784,7 +784,7 @@ These hooks Phase 2 must expose for Phase 4:
 | Hook | Direction | Implementation | Status |
 |---|---|---|---|
 | Job completion assembles invoice data | Scheduling → Invoicing | `complete-job` Edge Function returns `invoice_data` JSON package | Build in Phase 2.1 Sprint 2 |
-| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | Phase 2.1 Sprint 3 — **deferred, not built** |
+| `job.completed` webhook event | Scheduling → Invoicing | Webhook fires with full job record + parts + labor when job is completed | ✅ Queued by trigger (migration `20260610_013`, payload includes `invoice_data`); delivery worker is Phase 2.5 |
 | Time tracking feeds labor hours | Scheduling → Invoicing | `actual_start`, `actual_end`, and drive time calculated from location history | Build in Phase 2.1 Sprint 2 |
 | Parts used tracked per job | Scheduling → Invoicing | `parts_used` JSONB field on jobs table, populated by tech via mobile app | Build in Phase 2.4 |
 | Invoice ID written back to job | Invoicing → Scheduling | Phase 4 sets `jobs.invoice_id` when invoice is generated, transitions status to `invoiced` | Phase 4 responsibility |
@@ -853,7 +853,7 @@ These hooks Phase 2 must expose for Phase 4:
 
 ### 6.5 Webhook Events to Implement
 
-Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later. **Status: not yet built — this was Sprint 3 scope, which is deferred (see Implementation Status).**
+Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later. **Status: queue built (June 10) — the `webhook_events` table + jobs lifecycle triggers landed as migration `20260610_013`, emitting `job.created` / `job.scheduled` / `job.status_changed` / `job.completed` / `job.cancelled`. The delivery worker (tenant-configured URLs, at-least-once with backoff) is Phase 2.5 scope; the remaining §9.4 event types are queued by their producers when those ship.**
 
 | Event | Trigger | Payload |
 |---|---|---|

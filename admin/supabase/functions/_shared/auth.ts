@@ -68,25 +68,20 @@ function jwksForIssuer(issuer: string): ReturnType<typeof createRemoteJWKSet> {
   return set;
 }
 
-// Guards against an attacker pointing `iss` at a JWKS they control. If CLERK_ISSUER
-// is configured we pin to it exactly; otherwise we only trust Clerk-owned issuers.
+// Guards against an attacker pointing `iss` at a JWKS they control. The token
+// signature is verified against the ISSUER'S OWN JWKS, so accepting any issuer
+// not operated by us would let anyone with a Clerk account mint valid tokens
+// with arbitrary tenant_id/role claims. CLERK_ISSUER is therefore REQUIRED:
+// with it unset, every JWT is rejected (fail closed) — there is no fallback.
 function assertTrustedIssuer(issuer: string): void {
   const pinned = Deno.env.get("CLERK_ISSUER");
-  if (pinned) {
-    if (issuer !== pinned.replace(/\/$/, "")) {
-      throw new HttpError(401, "Untrusted token issuer");
-    }
-    return;
+  if (!pinned) {
+    throw new HttpError(
+      500,
+      "JWT auth is not configured: set the CLERK_ISSUER function secret",
+    );
   }
-  let host: string;
-  try {
-    host = new URL(issuer).host;
-  } catch {
-    throw new HttpError(401, "Malformed token issuer");
-  }
-  const trusted = host.endsWith(".clerk.accounts.dev") || host.endsWith(".clerk.com") ||
-    host === (Deno.env.get("CLERK_ALLOWED_ISSUER_HOST") ?? "");
-  if (!trusted) {
+  if (issuer !== pinned.replace(/\/$/, "")) {
     throw new HttpError(401, "Untrusted token issuer");
   }
 }

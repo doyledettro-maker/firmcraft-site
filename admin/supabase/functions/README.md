@@ -37,9 +37,12 @@ would reject Clerk/widget callers, so auth is done in-function.
 Auto-injected by the Supabase runtime: `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY`.
 Set as function secrets for the Clerk JWT path:
 
-- `CLERK_ISSUER` (recommended) — pins the accepted token issuer, e.g.
-  `https://clerk.your-domain.com`. If unset, only `*.clerk.accounts.dev` /
-  `*.clerk.com` issuers are trusted (override with `CLERK_ALLOWED_ISSUER_HOST`).
+- `CLERK_ISSUER` (**required** for the JWT path) — pins the accepted token
+  issuer, e.g. `https://clerk.your-domain.com`. If unset, ALL Clerk JWTs are
+  rejected (fail closed): tokens are verified against the issuer's own JWKS,
+  so trusting any issuer we don't operate would let an arbitrary Clerk account
+  mint tokens with any tenant_id/role claims. Service-key and widget-key auth
+  paths are unaffected.
 
 ```bash
 supabase secrets set CLERK_ISSUER="https://clerk.firmcraft.ai" --project-ref qvocmbqgcdambvslmula

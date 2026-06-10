@@ -50,3 +50,73 @@ async def test_grid_cell_dedup(provider):
 
 def test_grid_cell_rounding(provider):
     assert provider._cell((29.8049, -95.4151)) == (29.80, -95.42)
+
+
+# ---------------------------------------------------------------------------
+# Google Routes 625-element chunking
+# ---------------------------------------------------------------------------
+
+def test_chunks_respect_element_cap_and_cover_all_missing_pairs():
+    # 40 cells, every off-diagonal pair missing => 1560 elements, far over 625.
+    missing = {i: [j for j in range(40) if j != i] for i in range(40)}
+    needed = {(i, j) for i, dests in missing.items() for j in dests}
+    covered = set()
+    for o_chunk, d_chunk in DistanceProvider._chunks(missing):
+        assert len(o_chunk) * len(d_chunk) <= 625
+        assert len(o_chunk) <= 25
+        covered |= {(i, j) for i in o_chunk for j in d_chunk}
+    assert needed <= covered
+
+
+def test_chunks_request_only_origins_with_missing_pairs():
+    # One cold pair must not re-bill the whole matrix.
+    missing = {3: [7]}
+    blocks = list(DistanceProvider._chunks(missing))
+    assert blocks == [([3], [7])]
+
+
+async def test_large_matrix_chunked_through_api(monkeypatch):
+    # 30 distinct cells = 900 elements: must be split into <=625-element calls
+    # and still fill the full matrix with API (not Haversine) values.
+    from src.config import Settings
+
+    p = DistanceProvider(Settings(redis_url="", google_maps_api_key="key"))
+    calls: list[tuple[int, int]] = []
+
+    async def fake_call(origins, destinations):
+        calls.append((len(origins), len(destinations)))
+        return [
+            {"originIndex": oi, "destinationIndex": di, "seconds": 111, "meters": 999}
+            for oi in range(len(origins))
+            for di in range(len(destinations))
+        ]
+
+    monkeypatch.setattr(p, "_call_routes_api", fake_call)
+    points = [(29.0 + i * 0.1, -95.0) for i in range(30)]
+    res = await p.matrix(points)
+
+    assert len(calls) > 1
+    assert all(o * d <= 625 for o, d in calls)
+    assert res.used_fallback is False
+    assert res.api_elements == sum(o * d for o, d in calls)
+    for i in range(30):
+        for j in range(30):
+            assert res.durations[i][j] == (0 if i == j else 111)
+            assert res.distances[i][j] == (0 if i == j else 999)
+
+
+async def test_api_failure_is_logged_not_silent(monkeypatch, caplog):
+    from src.config import Settings
+
+    p = DistanceProvider(Settings(redis_url="", google_maps_api_key="key"))
+
+    async def boom(origins, destinations):
+        raise RuntimeError("400 from Google")
+
+    monkeypatch.setattr(p, "_call_routes_api", boom)
+    with caplog.at_level("ERROR", logger="dispatch_optimizer.distance"):
+        res = await p.matrix([(29.80, -95.41), (29.67, -95.32)])
+
+    # Falls back to Haversine and says so, instead of swallowing the error.
+    assert res.used_fallback is True
+    assert any("computeRouteMatrix failed" in r.message for r in caplog.records)

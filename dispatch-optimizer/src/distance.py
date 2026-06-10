@@ -19,14 +19,17 @@ first solve of the day most cell-pairs in a metro are already warm.
 
 from __future__ import annotations
 
+import logging
 import math
 from dataclasses import dataclass, field
 from datetime import date
-from typing import Optional, Sequence
+from typing import Iterator, Optional, Sequence
 
 import httpx
 
 from .config import Settings, get_settings
+
+logger = logging.getLogger("dispatch_optimizer.distance")
 
 try:  # redis is optional at runtime — a missing/broken Redis degrades to no-cache
     import redis.asyncio as aioredis
@@ -35,6 +38,13 @@ except Exception:  # pragma: no cover
 
 EARTH_RADIUS_M = 6_371_000.0
 ROUTES_MATRIX_URL = "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix"
+
+# computeRouteMatrix caps a TRAFFIC_AWARE request at 625 elements
+# (origins × destinations) — larger requests 400. Real fleets exceed this fast
+# (5 techs + 20 jobs = 25 cells = 625 elements is already the edge), so missing
+# pairs are fetched in sub-625-element blocks.
+MAX_MATRIX_ELEMENTS = 625
+MAX_MATRIX_SIDE = 25
 
 
 @dataclass
@@ -214,51 +224,96 @@ class DistanceProvider:
             else:
                 result.cache_misses += 1
 
+    @staticmethod
+    def _chunks(
+        missing_by_origin: dict[int, list[int]],
+    ) -> Iterator[tuple[list[int], list[int]]]:
+        """Split missing pairs into ≤MAX_MATRIX_ELEMENTS origin×destination blocks.
+
+        Origins are grouped (≤25 per block, the per-side cap), each group's
+        needed destinations unioned, and the destination list sliced so the
+        block's cross product stays under the element cap. Only origins with
+        missing pairs are requested — one cold pair no longer re-bills k².
+        """
+        origins = sorted(missing_by_origin)
+        for a in range(0, len(origins), MAX_MATRIX_SIDE):
+            o_chunk = origins[a : a + MAX_MATRIX_SIDE]
+            dests = sorted({j for i in o_chunk for j in missing_by_origin[i]})
+            per = max(1, MAX_MATRIX_ELEMENTS // len(o_chunk))
+            for b in range(0, len(dests), per):
+                yield o_chunk, dests[b : b + per]
+
     async def _fill_missing(self, uniq, dur, dist, result: MatrixResult) -> None:
         """Fetch unresolved cell-pairs from Google Routes, honoring the breaker."""
         if not self.settings.google_maps_api_key:
             return  # no key => Haversine handles the rest
         k = len(uniq)
-        # computeRouteMatrix returns the full origins×destinations cross product;
-        # request the whole unique-cell matrix and cache every pair.
-        elements = k * k
-        cost = elements * self.settings.distance_cost_per_element
-        if await self._today_spend() + cost > self.settings.distance_daily_budget_usd:
-            # Circuit breaker tripped: stay on cached + Haversine for the day.
+        missing_by_origin: dict[int, list[int]] = {}
+        for i in range(k):
+            dests = [j for j in range(k) if j != i and dur[i][j] is None]
+            if dests:
+                missing_by_origin[i] = dests
+        if not missing_by_origin:
             return
-        try:
-            rows = await self._call_routes_api(uniq)
-        except Exception:
-            return
-        result.api_elements += elements
-        await self._add_spend(cost)
-        r = await self._get_redis()
-        pipe = r.pipeline() if r is not None else None
-        ttl = self.settings.distance_cache_ttl
-        for cell in rows:
-            i, j = cell["originIndex"], cell["destinationIndex"]
-            if i == j:
-                continue
-            d_s = cell["seconds"]
-            m = cell["meters"]
-            dur[i][j] = d_s
-            dist[i][j] = m
-            if pipe is not None:
-                pipe.set(self._pair_key(uniq[i], uniq[j]), f"{d_s},{m}", ex=ttl)
-        if pipe is not None:
-            try:
-                await pipe.execute()
-            except Exception:
-                pass
 
-    async def _call_routes_api(self, uniq) -> list[dict]:
-        """POST computeRouteMatrix and normalize the response rows."""
+        r = await self._get_redis()
+        ttl = self.settings.distance_cache_ttl
+
+        for o_chunk, d_chunk in self._chunks(missing_by_origin):
+            elements = len(o_chunk) * len(d_chunk)
+            cost = elements * self.settings.distance_cost_per_element
+            if await self._today_spend() + cost > self.settings.distance_daily_budget_usd:
+                # Circuit breaker tripped: stay on cached + Haversine for the day.
+                logger.warning(
+                    "distance budget exhausted; skipping %d-element Routes chunk "
+                    "(Haversine fallback)",
+                    elements,
+                )
+                return
+            try:
+                rows = await self._call_routes_api(
+                    [uniq[i] for i in o_chunk], [uniq[j] for j in d_chunk]
+                )
+            except Exception:
+                logger.exception(
+                    "Google Routes computeRouteMatrix failed for a %dx%d chunk; "
+                    "those pairs fall back to Haversine",
+                    len(o_chunk),
+                    len(d_chunk),
+                )
+                continue
+            result.api_elements += elements
+            await self._add_spend(cost)
+            pipe = r.pipeline() if r is not None else None
+            for cell in rows:
+                gi = o_chunk[cell["originIndex"]]
+                gj = d_chunk[cell["destinationIndex"]]
+                if gi == gj:
+                    continue
+                d_s = cell["seconds"]
+                m = cell["meters"]
+                dur[gi][gj] = d_s
+                dist[gi][gj] = m
+                if pipe is not None:
+                    pipe.set(self._pair_key(uniq[gi], uniq[gj]), f"{d_s},{m}", ex=ttl)
+            if pipe is not None:
+                try:
+                    await pipe.execute()
+                except Exception:
+                    logger.warning("Redis pipeline write failed; chunk not cached")
+
+    async def _call_routes_api(self, origins, destinations) -> list[dict]:
+        """POST computeRouteMatrix and normalize the response rows.
+
+        originIndex/destinationIndex in the result are positions in the
+        *request* lists — the caller maps them back to global cell indices.
+        """
         def wp(cell):
             return {"waypoint": {"location": {"latLng": {"latitude": cell[0], "longitude": cell[1]}}}}
 
         body = {
-            "origins": [wp(c) for c in uniq],
-            "destinations": [wp(c) for c in uniq],
+            "origins": [wp(c) for c in origins],
+            "destinations": [wp(c) for c in destinations],
             "travelMode": "DRIVE",
             "routingPreference": "TRAFFIC_AWARE",
         }

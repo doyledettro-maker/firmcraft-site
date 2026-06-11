@@ -851,6 +851,13 @@ These hooks Phase 2 must expose for Phase 4:
 - Reuses the Phase 2 review-flywheel hooks rather than rebuilding them
 - `schedule.capacity_changed` webhook fires when daily fill rate crosses 60% or 90% thresholds
 
+**DocuSeal contract bridge (Phase 3/4 — sales-to-scheduling handoff):**
+
+- DocuSeal (`sign.firmcraft.ai`, live for Rumble Bee, replaces DocuSign) is the upstream sales/agreement layer — contracts, estimates, proposals
+- A future integration auto-creates a job from a signed contract: DocuSeal `submission.completed` webhook → parse customer, address, job type, and scope → `create-job`
+- Keeps the boundary clean: DocuSeal owns the *contract* signature (agreement approval); scheduling owns the *completion* signature (on-site confirmation of work done)
+- Not built in Phase 2 — see §6.6 for the integration contract
+
 ### 6.5 Webhook Events to Implement
 
 Build these webhook events into the scheduling system from the start, even though consumers don't exist yet. This prevents painful retrofit later. **Status: queue built (June 10) — the `webhook_events` table + jobs lifecycle triggers landed as migration `20260610_013`, emitting `job.created` / `job.scheduled` / `job.status_changed` / `job.completed` / `job.cancelled`. The delivery worker (tenant-configured URLs, at-least-once with backoff) is Phase 2.5 scope; the remaining §9.4 event types are queued by their producers when those ship.**
@@ -866,6 +873,21 @@ Build these webhook events into the scheduling system from the start, even thoug
 | `schedule.capacity_changed` | Daily capacity crosses 60% or 90% | tenant_id + date + capacity % + available hours by skill |
 
 **Implementation:** Postgres triggers → insert into a `webhook_events` queue table → Edge Function processes the queue on a 30-second cadence (or Supabase Realtime subscription fires a processing Edge Function).
+
+### 6.6 DocuSeal (Sales/Agreement Layer) → Phase 2 (Scheduling)
+
+DocuSeal (`sign.firmcraft.ai`, already deployed for Rumble Bee — it replaces DocuSign) handles the **sales/agreement layer**: contracts, estimates, and proposals that a customer signs *before* the work is scheduled. It sits **upstream** of scheduling, the same way the AI phone agent (§6.1) does — both are job *producers*. The scheduling platform owns everything downstream: dispatch, routing, job completion, and invoicing.
+
+Two distinct signatures, easy to conflate, live in different systems:
+
+- **Contract signature** (DocuSeal): the customer approves the agreement/proposal. Sales layer. *Not* part of scheduling.
+- **Completion signature** (this module): the on-site signature a customer gives the technician to confirm the work was done (§2.2 mobile app, stored in the `signatures` bucket). Operations layer.
+
+The bridge between the two — auto-creating a job from a signed contract — is a **future integration (Phase 3 or Phase 4), not Phase 2**. Until it ships, jobs originating from a signed contract are created manually (via Hermes or the dispatch board).
+
+| Hook | Direction | Implementation | Status |
+|---|---|---|---|
+| Signed contract creates job | DocuSeal → Scheduling | DocuSeal completion webhook (`submission.completed`) → bridge service parses contract fields (customer, service address, job type, scope of work) → calls the `create-job` Edge Function with `source: "docuseal"` | **Phase 3/4 — future integration, not Phase 2.** No build in Phase 2; jobs from signed contracts are entered manually for now |
 
 ---
 

@@ -46,15 +46,21 @@ const isPublicRoute = createRouteMatcher([
   '/api/outreach/unsubscribe/(.*)',
   '/status',
   '/unsubscribe',
-  // Dispatch board (Phase 2.2): the client-facing white-labeled board served at
-  // {slug}.firmcraft.ai. Tenant scoping comes from the subdomain → x-tenant-id
-  // header and explicit tenant filters in the /api/dispatch data layer. The
-  // Clerk-org ↔ tenant binding (and RLS hardening) is a later task; until it
-  // lands these are open so the demo board is reachable. MUST be gated before
-  // real tenants onboard.
-  '/dispatch(.*)',
-  '/api/dispatch/(.*)',
 ])
+
+// Sign-in routes that must stay reachable on a tenant subdomain so an
+// unauthenticated visitor can authenticate in place (Clerk <SignIn> uses
+// routing="path" path="/login"). These render before the tenant auth gate and
+// the white-label board fence — otherwise /login would be bounced to /dispatch,
+// which redirects back to /login (loop). Kept narrow on purpose.
+function isTenantAuthRoute(path: string): boolean {
+  return (
+    path === '/login' ||
+    path.startsWith('/login/') ||
+    path === '/sign-in' ||
+    path.startsWith('/sign-in/')
+  )
+}
 
 const clerkConfigured = Boolean(
   process.env.CLERK_SECRET_KEY && process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY,
@@ -83,17 +89,23 @@ function classifyHost(host: string): { surface: Surface; sub: string } {
   return { surface: 'local', sub: '' }
 }
 
-// In-memory slug→tenantId cache, scoped to a single edge instance. `null` is a
+interface TenantRecord {
+  id: string
+  /** The Clerk organization this tenant maps to 1:1 (tenants.clerk_org_id). */
+  clerkOrgId: string
+}
+
+// In-memory slug→tenant cache, scoped to a single edge instance. `null` is a
 // cached "unknown slug" so we don't re-hit the DB for bogus hosts on every
 // request. Short TTL so a freshly-provisioned tenant resolves within a minute.
-const tenantCache = new Map<string, { id: string | null; exp: number }>()
+const tenantCache = new Map<string, { record: TenantRecord | null; exp: number }>()
 const TENANT_TTL_MS = 60_000
 
-/** Resolve a tenant slug to its id via the Supabase REST API (service key, server-only). */
-async function resolveTenantId(slug: string): Promise<string | null> {
+/** Resolve a tenant slug to its id + Clerk org via the Supabase REST API (service key, server-only). */
+async function lookupTenant(slug: string): Promise<TenantRecord | null> {
   const now = Date.now()
   const hit = tenantCache.get(slug)
-  if (hit && hit.exp > now) return hit.id
+  if (hit && hit.exp > now) return hit.record
 
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -101,19 +113,20 @@ async function resolveTenantId(slug: string): Promise<string | null> {
 
   try {
     const res = await fetch(
-      `${url}/rest/v1/tenants?slug=eq.${encodeURIComponent(slug)}&select=id&limit=1`,
+      `${url}/rest/v1/tenants?slug=eq.${encodeURIComponent(slug)}&select=id,clerk_org_id&limit=1`,
       {
         headers: { apikey: serviceKey, Authorization: `Bearer ${serviceKey}` },
         cache: 'no-store',
       },
     )
-    if (!res.ok) return hit?.id ?? null // soft-fail to last known value
-    const rows = (await res.json()) as Array<{ id: string }>
-    const id = rows[0]?.id ?? null
-    tenantCache.set(slug, { id, exp: now + TENANT_TTL_MS })
-    return id
+    if (!res.ok) return hit?.record ?? null // soft-fail to last known value
+    const rows = (await res.json()) as Array<{ id: string; clerk_org_id: string }>
+    const row = rows[0]
+    const record: TenantRecord | null = row ? { id: row.id, clerkOrgId: row.clerk_org_id } : null
+    tenantCache.set(slug, { record, exp: now + TENANT_TTL_MS })
+    return record
   } catch {
-    return hit?.id ?? null
+    return hit?.record ?? null
   }
 }
 
@@ -159,7 +172,7 @@ function withTenantHeaders(
 
 async function handle(
   req: NextRequest,
-  authState: { userId: string | null; tenantClaim: string | null } | null,
+  authState: { userId: string | null; orgId: string | null } | null,
 ): Promise<NextResponse> {
   const host = req.headers.get('host') ?? ''
   const { surface, sub } = classifyHost(host)
@@ -183,45 +196,71 @@ async function handle(
     }
 
     case 'tenant-client': {
-      const tenantId = await resolveTenantId(sub)
-      if (!tenantId) {
+      const tenant = await lookupTenant(sub)
+      if (!tenant) {
         // Unknown slug → send to marketing rather than render a broken app.
         return NextResponse.redirect(`https://${ROOT_DOMAIN}`)
       }
 
-      // Subdomain ↔ Clerk-JWT consistency (§9.3): a user authenticated for one
-      // tenant must not operate on another tenant's subdomain. Enforced only
-      // when a tenant claim is actually present; RLS is the hard backstop.
-      if (
-        authState?.userId &&
-        authState.tenantClaim &&
-        authState.tenantClaim !== tenantId
-      ) {
-        return NextResponse.redirect(`https://app.${ROOT_DOMAIN}`)
+      const path = req.nextUrl.pathname
+
+      // Next internals / static files not already excluded by the matcher: pass
+      // through untouched so assets resolve (no tenant data, no gate needed).
+      if (path.startsWith('/_next') || /\.[a-zA-Z0-9]+$/.test(path)) {
+        return withTenantHeaders(req, sub, tenant.id)
       }
 
+      // Sign-in renders in place on the white-label host (see isTenantAuthRoute).
+      // Must precede the auth gate and the board fence.
+      if (isTenantAuthRoute(path)) {
+        return withTenantHeaders(req, sub, tenant.id)
+      }
+
+      // AUTH GATE (CRIT-1) — the dispatch board and its API are tenant-private.
+      // Require a signed-in Clerk user whose ACTIVE organization maps 1:1 to
+      // this subdomain's tenant (tenants.clerk_org_id ↔ Clerk orgId). RLS is the
+      // hard backstop; this is the front-door gate so an unauthenticated (or
+      // wrong-tenant) visitor never reaches another contractor's jobs. Skipped
+      // only when Clerk isn't configured (local/dev without keys), where the
+      // wrapper runs as a no-op anyway.
+      if (clerkConfigured) {
+        if (!authState?.userId) {
+          // Unauthenticated → Clerk sign-in on THIS host, returning to the
+          // originally requested board URL after auth (redirect_url is honored
+          // by <SignIn> over the provider's signInFallbackRedirectUrl).
+          const signIn = req.nextUrl.clone()
+          const returnTo = `${req.nextUrl.pathname}${req.nextUrl.search}`
+          signIn.pathname = '/login'
+          signIn.search = ''
+          signIn.searchParams.set('redirect_url', returnTo)
+          return NextResponse.redirect(signIn)
+        }
+        // Subdomain ↔ Clerk-org consistency (§9.3): signed in, but the active
+        // org isn't this tenant's (a user from another contractor, or with no
+        // org selected). Bounce to the generic host to pick the right org rather
+        // than leak this tenant's board.
+        if (authState.orgId !== tenant.clerkOrgId) {
+          return NextResponse.redirect(`https://app.${ROOT_DOMAIN}`)
+        }
+      }
+
+      // Authenticated and bound to this tenant below.
+      //
       // White-label fencing (§1.6): a tenant subdomain exposes ONLY the dispatch
       // board and its API. Every internal-admin page (/clients, /leads,
       // /outreach, /partners, /playbook, /analytics, /settings, /roadmap,
       // /status, /support, /health, …) must never render on a customer host.
       // An allowlist — rather than a denylist of today's admin routes — fences
       // future admin pages too, with no further changes here.
-      const path = req.nextUrl.pathname
-
-      // Next internals / static files not already excluded by the matcher: pass
-      // through untouched so assets resolve.
-      if (path.startsWith('/_next') || /\.[a-zA-Z0-9]+$/.test(path)) {
-        return withTenantHeaders(req, sub, tenantId)
-      }
 
       // Tenant root → render the board in place (clean white-label URL).
       if (path === '/') {
-        return withTenantHeaders(req, sub, tenantId, '/dispatch')
+        return withTenantHeaders(req, sub, tenant.id, '/dispatch')
       }
 
       // The board route and its data API forward normally with tenant headers.
       if (path === '/dispatch' || path.startsWith('/dispatch/') || path.startsWith('/api/')) {
-        return withTenantHeaders(req, sub, tenantId)
+        return withTenantHeaders(req, sub, tenant.id)
       }
 
       // Anything else is an internal-admin surface — bounce to the board rather
@@ -237,12 +276,9 @@ async function handle(
 
 export default clerkConfigured
   ? clerkMiddleware(async (auth, req) => {
-      const { userId, sessionClaims } = await auth()
-      const tenantClaim =
-        ((sessionClaims as Record<string, unknown> | null)?.tenant_id as string | undefined) ??
-        null
+      const { userId, orgId } = await auth()
 
-      const routed = await handle(req, { userId, tenantClaim })
+      const routed = await handle(req, { userId, orgId: orgId ?? null })
 
       // If handle() already decided to redirect (white-label fencing, unknown
       // slug, cross-tenant mismatch), honor it — the admin auth gate must not
@@ -250,9 +286,10 @@ export default clerkConfigured
       if (routed.headers.get('location')) return routed
 
       // Admin auth gate: Firmcraft's own surfaces require a signed-in user.
-      // Tenant subdomains serve the (currently public) dispatch board and are
-      // fenced inside handle(); applying the /login gate here would trap the
-      // white-label root (which is rewritten to /dispatch, not itself public).
+      // Tenant subdomains run their OWN auth gate (Clerk-org ↔ tenant) inside
+      // handle() and have already returned by here if they needed to redirect;
+      // re-applying the admin /login bounce would send a wrong-tenant user to
+      // the internal sign-in instead of handle()'s tenant-scoped flow.
       const { surface } = classifyHost(req.headers.get('host') ?? '')
       if (surface !== 'tenant-client' && !isPublicRoute(req) && !userId) {
         return NextResponse.redirect(new URL('/login', req.url))

@@ -278,16 +278,34 @@ export async function updateJob(tenantId: string, jobId: string, patch: JobPatch
   const sb = getSupabaseAdmin()
   const update: Record<string, unknown> = { ...patch, updated_at: new Date().toISOString() }
 
-  // Assigning a tech to an unscheduled `created` job promotes it to scheduled,
-  // mirroring the update-job Edge Function (build plan Sprint 2 task 2).
-  if (patch.technician_id && patch.status === undefined) {
+  // Assignment changes ripple into status, mirroring the update-job Edge Function:
+  //   • assigning a tech to an unscheduled `created` job promotes it to scheduled
+  //   • clearing the tech (— Unassigned —) returns the job to the `created`
+  //     backlog and drops its schedule, so it reappears in the sidebar instead
+  //     of orphaning at `scheduled`/`dispatched` with no technician (which renders
+  //     on neither the calendar nor the sidebar).
+  // Only do this when the caller isn't already setting status explicitly.
+  if ('technician_id' in patch && patch.status === undefined) {
     const { data: existing } = await sb
       .from('jobs')
       .select('status')
       .eq('tenant_id', tenantId)
       .eq('id', jobId)
       .maybeSingle()
-    if (existing?.status === 'created') update.status = 'scheduled'
+    const current = existing?.status as Job['status'] | undefined
+    if (patch.technician_id) {
+      if (current === 'created') update.status = 'scheduled'
+    } else {
+      // Unassigning. The lifecycle trigger allows created from scheduled/dispatched;
+      // a job already in the field can't be dropped back to the backlog this way.
+      if (current === 'scheduled' || current === 'dispatched') {
+        update.status = 'created'
+        update.scheduled_start = null
+        update.scheduled_end = null
+      } else if (current && current !== 'created') {
+        throw new Error(`Cannot unassign a job that is ${current}. Change its status first.`)
+      }
+    }
   }
 
   const { data, error } = await sb

@@ -83,20 +83,36 @@ export const handler = withErrors(async (req: Request): Promise<Response> => {
     throw new HttpError(400, "scheduled_start must be before scheduled_end");
   }
 
-  // If a tech is being assigned to a still-`created` job, promote it to scheduled.
-  const assigningTech = "technician_id" in input && input.technician_id;
-  if (assigningTech) {
-    const { data: tech, error: techErr } = await db
-      .from("technicians")
-      .select("id")
-      .eq("id", input.technician_id as string)
-      .eq("tenant_id", auth.tenantId)
-      .maybeSingle();
-    if (techErr) throw new HttpError(500, `Technician lookup failed: ${techErr.message}`);
-    if (!tech) throw new HttpError(404, "Technician not found in this tenant");
+  // Assignment changes ripple into status (status itself is otherwise owned by
+  // transition-job):
+  //   • assigning a tech to a still-`created` job promotes it to scheduled
+  //   • clearing the tech (technician_id: null) returns the job to the `created`
+  //     backlog and drops its schedule, so it doesn't orphan at scheduled/
+  //     dispatched with no technician (renders on neither board surface).
+  if ("technician_id" in input) {
+    if (input.technician_id) {
+      const { data: tech, error: techErr } = await db
+        .from("technicians")
+        .select("id")
+        .eq("id", input.technician_id as string)
+        .eq("tenant_id", auth.tenantId)
+        .maybeSingle();
+      if (techErr) throw new HttpError(500, `Technician lookup failed: ${techErr.message}`);
+      if (!tech) throw new HttpError(404, "Technician not found in this tenant");
 
-    if (existing.status === "created") {
-      update.status = "scheduled";
+      if (existing.status === "created") {
+        update.status = "scheduled";
+      }
+    } else {
+      // Unassigning. The lifecycle trigger allows created from scheduled/dispatched;
+      // a job already in the field can't be dropped back to the backlog this way.
+      if (existing.status === "scheduled" || existing.status === "dispatched") {
+        update.status = "created";
+        update.scheduled_start = null;
+        update.scheduled_end = null;
+      } else if (existing.status !== "created") {
+        throw new HttpError(409, `Cannot unassign a job that is ${existing.status}. Change its status first.`);
+      }
     }
   }
 

@@ -257,7 +257,9 @@ export function JobDetailPanel({ jobId, technicians, timeZone, onClose, onPatche
         {detail ? (
           <div className="px-5 py-3.5 border-t border-line flex flex-wrap gap-2">
             {transitions
-              .filter((s) => s !== 'cancelled')
+              // `created` is the un-assign/backlog revert — done via the
+              // technician dropdown (which also clears the schedule), not here.
+              .filter((s) => s !== 'cancelled' && s !== 'created')
               .map((s) => (
                 <button
                   key={s}

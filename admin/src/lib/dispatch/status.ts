@@ -39,17 +39,19 @@ export function statusColor(status: JobStatus): string {
   return statusStyle(status).color
 }
 
-// Valid transitions, mirrored from the Postgres trigger
-// (20260609_007_scheduling_triggers.sql). Kept here so the UI can disable
-// invalid quick-actions before the DB rejects them.
+// Valid transitions, mirrored from the Postgres trigger (migrations 007 → 012 →
+// 016). Kept here so the UI can disable invalid quick-actions before the DB
+// rejects them. Backward `*:created` moves are the un-assign path and are driven
+// by the technician dropdown, not the "Mark …" quick actions (which filter them
+// out), so the dropdown and these stay in sync with the trigger.
 export const VALID_TRANSITIONS: Record<JobStatus, JobStatus[]> = {
   created: ['scheduled', 'cancelled'],
-  scheduled: ['dispatched', 'cancelled'],
-  dispatched: ['en_route', 'cancelled'],
-  en_route: ['arrived'],
-  arrived: ['in_progress'],
-  in_progress: ['completed', 'on_hold'],
-  on_hold: ['in_progress'],
+  scheduled: ['dispatched', 'created', 'cancelled'],
+  dispatched: ['en_route', 'scheduled', 'created', 'cancelled'],
+  en_route: ['arrived', 'cancelled'],
+  arrived: ['in_progress', 'cancelled'],
+  in_progress: ['completed', 'on_hold', 'cancelled'],
+  on_hold: ['in_progress', 'cancelled'],
   completed: ['invoiced'],
   invoiced: [],
   cancelled: [],

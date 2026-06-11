@@ -135,11 +135,25 @@ function passthrough(req: NextRequest): NextResponse {
   return NextResponse.next({ request: { headers: sanitizedHeaders(req) } })
 }
 
-/** Build a NextResponse that forwards the resolved tenant to route handlers. */
-function withTenantHeaders(req: NextRequest, slug: string, tenantId: string): NextResponse {
+/**
+ * Build a NextResponse that forwards the resolved tenant to route handlers.
+ * When `rewritePath` is given, the request is internally rewritten to that path
+ * (URL bar unchanged) — used to render the dispatch board at the tenant root.
+ */
+function withTenantHeaders(
+  req: NextRequest,
+  slug: string,
+  tenantId: string,
+  rewritePath?: string,
+): NextResponse {
   const headers = sanitizedHeaders(req)
   headers.set('x-tenant-slug', slug)
   headers.set('x-tenant-id', tenantId)
+  if (rewritePath) {
+    const url = req.nextUrl.clone()
+    url.pathname = rewritePath
+    return NextResponse.rewrite(url, { request: { headers } })
+  }
   return NextResponse.next({ request: { headers } })
 }
 
@@ -186,7 +200,37 @@ async function handle(
         return NextResponse.redirect(`https://app.${ROOT_DOMAIN}`)
       }
 
-      return withTenantHeaders(req, sub, tenantId)
+      // White-label fencing (§1.6): a tenant subdomain exposes ONLY the dispatch
+      // board and its API. Every internal-admin page (/clients, /leads,
+      // /outreach, /partners, /playbook, /analytics, /settings, /roadmap,
+      // /status, /support, /health, …) must never render on a customer host.
+      // An allowlist — rather than a denylist of today's admin routes — fences
+      // future admin pages too, with no further changes here.
+      const path = req.nextUrl.pathname
+
+      // Next internals / static files not already excluded by the matcher: pass
+      // through untouched so assets resolve.
+      if (path.startsWith('/_next') || /\.[a-zA-Z0-9]+$/.test(path)) {
+        return withTenantHeaders(req, sub, tenantId)
+      }
+
+      // Tenant root → render the board in place (clean white-label URL).
+      if (path === '/') {
+        return withTenantHeaders(req, sub, tenantId, '/dispatch')
+      }
+
+      // The board route and its data API forward normally with tenant headers.
+      if (path === '/dispatch' || path.startsWith('/dispatch/') || path.startsWith('/api/')) {
+        return withTenantHeaders(req, sub, tenantId)
+      }
+
+      // Anything else is an internal-admin surface — bounce to the board rather
+      // than leak it. (This redirect carries a Location header, so the wrapper's
+      // admin auth gate below intentionally does not override it.)
+      const boardUrl = req.nextUrl.clone()
+      boardUrl.pathname = '/dispatch'
+      boardUrl.search = ''
+      return NextResponse.redirect(boardUrl)
     }
   }
 }
@@ -200,9 +244,17 @@ export default clerkConfigured
 
       const routed = await handle(req, { userId, tenantClaim })
 
-      // Auth gate: protected routes require a signed-in user (unchanged from the
-      // prior middleware). Tenant headers from `routed` are preserved.
-      if (!isPublicRoute(req) && !userId) {
+      // If handle() already decided to redirect (white-label fencing, unknown
+      // slug, cross-tenant mismatch), honor it — the admin auth gate must not
+      // override a routing redirect with a /login bounce.
+      if (routed.headers.get('location')) return routed
+
+      // Admin auth gate: Firmcraft's own surfaces require a signed-in user.
+      // Tenant subdomains serve the (currently public) dispatch board and are
+      // fenced inside handle(); applying the /login gate here would trap the
+      // white-label root (which is rewritten to /dispatch, not itself public).
+      const { surface } = classifyHost(req.headers.get('host') ?? '')
+      if (surface !== 'tenant-client' && !isPublicRoute(req) && !userId) {
         return NextResponse.redirect(new URL('/login', req.url))
       }
       return routed

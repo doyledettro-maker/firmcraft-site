@@ -25,8 +25,8 @@ export default async function OutreachPage() {
       <div className="flex items-end justify-between gap-6 mb-8">
         <div>
           <div className="eyebrow">Outreach</div>
-          <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Cold <em className="text-accent italic">outbound</em>
+          <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Cold <em className="text-signal not-italic">outbound</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
             Companies, contacts, and every touch — all in one place.
@@ -70,9 +70,9 @@ function Kpi({
       <CardBody className="px-5 py-5">
         <div className="flex items-center gap-2 text-muted">
           <Icon className="w-4 h-4" />
-          <div className="font-mono-warm text-[11px] uppercase tracking-[0.16em]">{label}</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.16em]">{label}</div>
         </div>
-        <div className="font-serif-warm text-[32px] tracking-[-0.02em] mt-2 leading-none">{value}</div>
+        <div className="font-sans font-semibold text-[32px] tracking-[-0.02em] mt-2 leading-none">{value}</div>
         <div className="text-[12.5px] text-ink-2 mt-2">{sub}</div>
       </CardBody>
     </Card>

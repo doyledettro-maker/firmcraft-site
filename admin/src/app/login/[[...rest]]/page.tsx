@@ -11,8 +11,8 @@ export default function LoginPage() {
           <Logo />
         </div>
         <div className="eyebrow text-center mb-2">Internal admin</div>
-        <h1 className="font-serif-warm text-[32px] tracking-[-0.02em] text-center mb-1">
-          Sign <em className="text-accent italic">in</em>
+        <h1 className="font-sans font-semibold text-[32px] tracking-[-0.02em] text-center mb-1">
+          Sign <em className="text-signal not-italic">in</em>
         </h1>
         <p className="text-ink-2 text-[14px] leading-relaxed text-center mb-6 max-w-[360px] mx-auto">
           Restricted to Firmcraft staff.

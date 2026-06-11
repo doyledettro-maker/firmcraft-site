@@ -17,7 +17,7 @@ export default function StatusPage() {
         <Link href="/" className="no-underline">
           <Logo />
         </Link>
-        <div className="ml-auto text-[13px] text-muted font-mono-warm uppercase tracking-[0.12em] hidden sm:block">
+        <div className="ml-auto text-[13px] text-muted font-mono uppercase tracking-[0.12em] hidden sm:block">
           status.firmcraft.ai
         </div>
       </header>
@@ -26,8 +26,8 @@ export default function StatusPage() {
         <div className="max-w-[820px] mx-auto">
           <div className="mb-8">
             <div className="eyebrow">System status</div>
-            <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-              Firmcraft <em className="text-accent italic">live status</em>
+            <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+              Firmcraft <em className="text-signal not-italic">live status</em>
             </h1>
             <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
               Public health overview for every Firmcraft service. Auto-refreshes every 60 seconds.
@@ -52,7 +52,7 @@ export default function StatusPage() {
         </div>
       </main>
 
-      <footer className="border-t border-line px-6 py-6 text-[12px] text-muted font-mono-warm">
+      <footer className="border-t border-line px-6 py-6 text-[12px] text-muted font-mono">
         <div className="max-w-[820px] mx-auto flex justify-between">
           <span>firmcraft · status</span>
           <span>updates every 60s</span>

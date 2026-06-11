@@ -57,10 +57,10 @@ export function ServiceStatusList({
           <div className="flex items-center gap-3">
             <OverallDot status={data?.overall} />
             <div>
-              <div className="font-serif-warm text-[22px] tracking-[-0.01em] leading-tight">
+              <div className="font-sans font-semibold text-[22px] tracking-[-0.01em] leading-tight">
                 {overallLabel(data?.overall, loading && !data)}
               </div>
-              <div className="text-[12.5px] text-muted font-mono-warm">
+              <div className="text-[12.5px] text-muted font-mono">
                 {lastFetch
                   ? `Last checked ${lastFetch.toLocaleTimeString()}`
                   : loading
@@ -101,7 +101,7 @@ export function ServiceStatusList({
               </div>
             </div>
             <div className="flex items-center gap-3 flex-none">
-              <span className="font-mono-warm text-[11.5px] text-muted hidden sm:inline">
+              <span className="font-mono text-[11.5px] text-muted hidden sm:inline">
                 {s.latencyMs != null ? `${s.latencyMs}ms` : '—'}
               </span>
               <StatusBadge status={s.status} />

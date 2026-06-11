@@ -72,7 +72,7 @@ function S1Company({ data, update }: { data: SurveyData; update: Update }) {
         </Field>
       </FieldGroup>
       <div className="mt-6">
-        <h4 className="font-serif-warm text-[20px] tracking-[-0.01em]">Primary contact</h4>
+        <h4 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">Primary contact</h4>
         <Hint>The main person we&rsquo;ll work with during onboarding.</Hint>
       </div>
       <FieldGroup className="mt-3">
@@ -197,7 +197,7 @@ function ScaleField({
               key={n}
               type="button"
               onClick={() => onChange(n)}
-              className={`h-12 rounded-lg border font-mono-warm text-[13px] transition-colors ${
+              className={`h-12 rounded-lg border font-mono text-[13px] transition-colors ${
                 active ? 'bg-accent text-white border-accent' : 'bg-paper border-line-2 hover:border-accent text-ink'
               }`}
             >
@@ -206,7 +206,7 @@ function ScaleField({
           )
         })}
       </div>
-      <div className="flex justify-between text-[12px] text-muted mt-2 font-mono-warm uppercase tracking-[0.12em]">
+      <div className="flex justify-between text-[12px] text-muted mt-2 font-mono uppercase tracking-[0.12em]">
         <span>{lowLabel}</span>
         <span>{highLabel}</span>
       </div>
@@ -290,7 +290,7 @@ function S4Priorities({ data, update }: { data: SurveyData; update: Update }) {
             key={item}
             className="flex items-center gap-3 bg-paper-2 border border-line rounded-xl px-4 py-3"
           >
-            <span className="font-mono-warm text-[12px] text-accent w-6 text-center">
+            <span className="font-mono text-[12px] text-accent w-6 text-center">
               {String(i + 1).padStart(2, '0')}
             </span>
             <span className="flex-1 font-medium text-[14.5px]">{item}</span>
@@ -665,11 +665,11 @@ function S8Budget({ data, update }: { data: SurveyData; update: Update }) {
                   : 'bg-paper-2 border-line hover:border-accent'
               }`}
             >
-              <div className={`font-mono-warm text-[11px] uppercase tracking-[0.16em] ${active ? 'text-white/70' : 'text-muted'}`}>
+              <div className={`font-mono text-[11px] uppercase tracking-[0.16em] ${active ? 'text-white/70' : 'text-muted'}`}>
                 {key.toUpperCase()}
               </div>
-              <div className="mt-1 font-serif-warm italic text-[28px] leading-none">{meta.name}</div>
-              <div className="mt-2 font-serif-warm text-[34px] leading-none">{meta.price}</div>
+              <div className="mt-1 font-sans font-semibold text-[28px] leading-none">{meta.name}</div>
+              <div className="mt-2 font-sans font-semibold text-[34px] leading-none">{meta.price}</div>
               <div className={`mt-1 text-[13.5px] ${active ? 'text-white/85' : 'text-ink-2'}`}>{meta.tagline}</div>
               <ul className={`mt-4 grid gap-1.5 text-[13.5px] ${active ? 'text-white/85' : 'text-ink-2'}`}>
                 {features.map((f) => (
@@ -873,7 +873,7 @@ export function OnboardingWizard() {
             <div className="w-14 h-14 mx-auto rounded-full bg-accent-2 grid place-items-center text-white">
               <Check className="w-7 h-7" />
             </div>
-            <h1 className="font-serif-warm text-[34px] mt-5 tracking-[-0.02em]">
+            <h1 className="font-sans font-semibold text-[34px] mt-5 tracking-[-0.02em]">
               Marked <em className="not-italic text-accent">reviewed.</em>
             </h1>
             <p className="text-ink-2 mt-3 leading-relaxed">
@@ -905,7 +905,7 @@ export function OnboardingWizard() {
             <Logo />
           </Link>
           <div className="flex items-center gap-4 text-[13px] text-muted">
-            <span className="hidden md:inline font-mono-warm text-[11px] uppercase tracking-[0.14em] text-accent">
+            <span className="hidden md:inline font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
               Submission preview
             </span>
             <span className="hidden sm:inline">

@@ -2,78 +2,107 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ────────────────────────────────────────────────────────────────────────
+   admin.firmcraft.ai — Operator visual identity (dark console binding).
+   Source-of-truth tokens live in src/styles/tokens.css; the <html> element
+   is pinned to data-theme="dark", so surface/paper/ink rebind to the
+   console family. This file only bridges fonts, legacy aliases, and
+   app-level chrome.
+   ──────────────────────────────────────────────────────────────────────── */
+
 :root {
   color-scheme: dark;
-  /* Firmcraft dark-console palette — cool navy base, signal-blue primary,
-     operator-orange secondary. */
-  --paper: #0B1220;
-  --paper-2: #1E293B;
-  --ink: #F1F5F9;
-  --ink-2: #CBD5E1;
-  --muted: #94A3B8;
-  --line: rgba(148, 163, 184, 0.12);
-  --line-2: rgba(148, 163, 184, 0.24);
-  --accent: #2C6BF0;
-  --accent-2: #FB7C50;
-  --accent-3: #38BDF8;
-  --hi: #16233B;
+
+  /* Font bridges — next/font variables win over the raw family names that
+     tokens.css declares (this file loads after tokens.css). */
+  --font-sans: var(--font-geist-sans), 'Geist', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), 'JetBrains Mono', ui-monospace, monospace;
+  --font-display: var(--font-source-serif), 'Source Serif 4', Georgia, serif;
+
+  /* Legacy CSS variable aliases (old admin names → refresh tokens). */
+  --paper: var(--color-surface);
+  --paper-2: var(--color-paper);
+  --ink: var(--color-ink);
+  --ink-2: var(--color-ink-2);
+  --muted: var(--color-muted);
+  --line: var(--color-line);
+  --line-2: var(--color-line-strong);
+  --accent: var(--color-signal);
+  --accent-2: var(--color-operator);
+  --accent-3: var(--color-signal);
+  --hi: var(--color-console-3);
+
+  /* RGB companions so Tailwind alpha modifiers (bg-accent/10 etc.) keep
+     working with token-driven colors. Pinned to the dark console binding —
+     update if the admin ever leaves data-theme="dark". */
+  --rgb-console-2: 17 25 43;
+  --rgb-console-3: 27 36 64;
+  --rgb-paper: 17 25 43; /* console-2 */
+  --rgb-paper-2: 27 36 64; /* console-3 */
+  --rgb-ink: 244 246 250; /* inverse */
+  --rgb-ink-2: 148 163 184; /* inverse-2 */
+  --rgb-muted: 148 163 184;
+  --rgb-signal: 44 107 240;
+  --rgb-operator: 251 124 80;
+  /* Status palette — console-legible variants of ok/warn/err. */
+  --rgb-status-up: 52 211 153;
+  --rgb-status-warn: 251 191 36;
+  --rgb-status-down: 248 113 113;
 }
 
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
-  background-color: var(--paper);
+  background-color: var(--color-surface);
 }
 
 body {
-  background-color: var(--paper);
-  color: var(--ink);
-  font-family: "Geist", var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "ss01";
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-feature-settings: 'ss01';
   -webkit-font-smoothing: antialiased;
 }
 
-.font-serif-warm {
-  font-family: var(--font-serif), "Source Serif 4", Georgia, serif;
-}
-.font-mono-warm {
-  font-family: "Geist Mono", ui-monospace, monospace;
-}
-
+/* Eyebrow — mono uppercase 11px, signal color */
 .eyebrow {
-  font-family: "Geist Mono", monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
-  letter-spacing: 0.18em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--color-signal);
   font-weight: 500;
+}
+.eyebrow.muted {
+  color: var(--color-muted);
 }
 
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--color-signal);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar { width: 6px; height: 6px; }
-::-webkit-scrollbar-track { background: var(--paper); }
-::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 3px; }
+::-webkit-scrollbar-track { background: var(--color-surface); }
+::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 3px; }
 
-/* Headline italic-accent treatment */
+/* Headline emphasis — signal blue, upright. The italic gesture is reserved
+   for the wordmark's F. */
 .serif-h em,
 .serif-h-warm em {
-  font-style: italic;
-  color: var(--accent-2);
+  font-style: normal;
+  color: var(--color-signal);
 }
 
-/* Native form widgets adopt the dark palette where possible. */
+/* Native form widgets adopt the console palette where possible. */
 input::placeholder,
 textarea::placeholder {
-  color: var(--muted);
+  color: var(--color-muted);
   opacity: 0.7;
 }
 
 select option {
-  background-color: var(--paper-2);
-  color: var(--ink);
+  background-color: var(--color-console-2);
+  color: var(--color-ink);
 }

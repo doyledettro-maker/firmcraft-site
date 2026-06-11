@@ -17,8 +17,8 @@ export default function PlaybookPage() {
       {/* Header */}
       <div className="mb-8">
         <div className="eyebrow">Playbook · Houston contractor market</div>
-        <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-          Robert’s <em className="text-accent italic">sales playbook</em>
+        <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+          Robert’s <em className="text-signal not-italic">sales playbook</em>
         </h1>
         <p className="text-ink-2 mt-2 max-w-[620px] leading-relaxed">
           Your daily command center for outreach — the pricing calculator, scripts, objection handling, and who we
@@ -40,14 +40,14 @@ export default function PlaybookPage() {
             <span className="grid place-items-center w-10 h-10 rounded-2xl bg-accent/15 border border-accent/30 text-accent-3">
               <Sparkles className="w-5 h-5" />
             </span>
-            <span className="font-mono-warm text-[11px] uppercase tracking-[0.18em] text-accent-3">
+            <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent-3">
               Lead with this — it’s the hero
             </span>
           </div>
 
-          <h2 className="font-serif-warm text-[28px] md:text-[34px] leading-[1.1] tracking-[-0.02em] max-w-[760px]">
-            The a la carte tools are what they <em className="text-accent-2 italic">replace</em>. Hermes — the AI
-            operator — is what they <em className="text-accent-2 italic">can’t get anywhere else</em>.
+          <h2 className="font-sans font-semibold text-[28px] md:text-[34px] leading-[1.1] tracking-[-0.02em] max-w-[760px]">
+            The a la carte tools are what they <em className="text-operator not-italic">replace</em>. Hermes — the AI
+            operator — is what they <em className="text-operator not-italic">can’t get anywhere else</em>.
           </h2>
           <p className="text-ink-2 text-[15px] leading-relaxed mt-4 max-w-[720px]">
             Don’t open by listing features. Open with the operator. Hermes is an AI office manager that runs the whole

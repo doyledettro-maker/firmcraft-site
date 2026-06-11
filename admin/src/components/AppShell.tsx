@@ -62,7 +62,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   return (
     <div className="min-h-screen flex">
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-[#070C16] sticky top-0 self-start h-screen">
+      <aside className="hidden md:flex w-[240px] flex-none flex-col border-r border-line bg-console-2 sticky top-0 self-start h-screen">
         <div className="px-5 h-16 flex items-center border-b border-line">
           <Link href="/" className="no-underline">
             <Logo />
@@ -71,7 +71,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <nav className="flex-1 px-3 py-4 grid gap-1 content-start">
           {renderNavLinks()}
         </nav>
-        <div className="p-4 border-t border-line text-[12px] text-muted font-mono-warm">
+        <div className="p-4 border-t border-line text-[12px] text-muted font-mono">
           firmcraft-admin · v0.1
         </div>
       </aside>
@@ -84,7 +84,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             onClick={() => setMobileOpen(false)}
             aria-hidden="true"
           />
-          <aside className="relative w-[260px] max-w-[80vw] flex flex-col border-r border-line bg-[#070C16] h-full">
+          <aside className="relative w-[260px] max-w-[80vw] flex flex-col border-r border-line bg-console-2 h-full">
             <div className="px-5 h-16 flex items-center justify-between border-b border-line">
               <Link href="/" className="no-underline" onClick={() => setMobileOpen(false)}>
                 <Logo />
@@ -100,7 +100,7 @@ export function AppShell({ children }: { children: ReactNode }) {
             <nav className="flex-1 px-3 py-4 grid gap-1 content-start overflow-y-auto">
               {renderNavLinks(() => setMobileOpen(false))}
             </nav>
-            <div className="p-4 border-t border-line text-[12px] text-muted font-mono-warm">
+            <div className="p-4 border-t border-line text-[12px] text-muted font-mono">
               firmcraft-admin · v0.1
             </div>
           </aside>
@@ -123,14 +123,14 @@ export function AppShell({ children }: { children: ReactNode }) {
               <Logo />
             </Link>
           </div>
-          <div className="hidden md:block text-[13px] text-muted font-mono-warm uppercase tracking-[0.12em]">
+          <div className="hidden md:block text-[13px] text-muted font-mono uppercase tracking-[0.12em]">
             admin.firmcraft.ai
           </div>
           <div className="flex items-center gap-3">
             <button className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink transition-colors">
               <Bell className="w-4 h-4" />
             </button>
-            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-white font-mono-warm text-[12px]">
+            <div className="w-9 h-9 rounded-full bg-accent grid place-items-center text-white font-mono text-[12px]">
               DD
             </div>
           </div>

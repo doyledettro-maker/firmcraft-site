@@ -54,7 +54,7 @@ export function ClientHealthGrid({ intervalMs = 60_000 }: { intervalMs?: number 
           <CountPill light="green" n={counts.green} label="Healthy" />
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-[12.5px] text-muted font-mono-warm">
+          <span className="text-[12.5px] text-muted font-mono">
             {lastFetch
               ? `Updated ${lastFetch.toLocaleTimeString()}`
               : loading
@@ -81,7 +81,7 @@ export function ClientHealthGrid({ intervalMs = 60_000 }: { intervalMs?: number 
 
       {data && data.clients.length === 0 ? (
         <div className="rounded-xl border border-line bg-paper px-5 py-8 text-center text-muted text-[14px]">
-          No client beacons yet. Install <code className="font-mono-warm">health-beacon.sh</code> on a
+          No client beacons yet. Install <code className="font-mono">health-beacon.sh</code> on a
           client VPS to start receiving heartbeats.
         </div>
       ) : null}
@@ -111,7 +111,7 @@ function HealthCard({ c }: { c: ClientHealth }) {
             <Dot light={c.light} />
             <span className="font-medium text-ink truncate">{c.clientName}</span>
           </div>
-          <div className="text-[11.5px] text-muted font-mono-warm mt-0.5 truncate">
+          <div className="text-[11.5px] text-muted font-mono mt-0.5 truncate">
             {c.known ? (c.plan ? `${c.plan} plan` : 'client') : 'unregistered'}
             {c.beacon ? ` · ${heartbeatAgo(c.staleMs)}` : ' · never reported'}
           </div>
@@ -208,7 +208,7 @@ function Metric({
     <div className="flex items-center gap-2 min-w-0">
       <span className="text-muted flex-none">{icon}</span>
       <span className="text-muted flex-none">{label}</span>
-      <span className={`ml-auto font-mono-warm truncate ${valueCls}`}>{value}</span>
+      <span className={`ml-auto font-mono truncate ${valueCls}`}>{value}</span>
     </div>
   )
 }
@@ -233,7 +233,7 @@ function CountPill({ light, n, label }: { light: HealthLight; n: number; label: 
   return (
     <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-line bg-paper">
       <Dot light={light} />
-      <span className="font-mono-warm text-[14px] text-ink">{n}</span>
+      <span className="font-mono text-[14px] text-ink">{n}</span>
       <span className="text-[12px] text-muted">{label}</span>
     </div>
   )

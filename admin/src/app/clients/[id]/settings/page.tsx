@@ -24,8 +24,8 @@ export default async function ClientSettingsPage({ params }: { params: { id: str
       <div className="flex items-end justify-between gap-6 mb-7">
         <div>
           <div className="eyebrow">Client settings</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            {client.name} <em className="text-accent italic">/ settings</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            {client.name} <em className="text-signal not-italic">/ settings</em>
           </h1>
         </div>
         <StatusBadge status={client.status} />
@@ -34,7 +34,7 @@ export default async function ClientSettingsPage({ params }: { params: { id: str
       <div className="grid gap-6 max-w-[800px]">
         <Card>
           <div className="px-6 py-5 border-b border-line">
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em]">General</h3>
+            <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em]">General</h3>
             <p className="text-[13px] text-muted mt-1">Tenant identity and contacts.</p>
           </div>
           <CardBody>
@@ -61,7 +61,7 @@ export default async function ClientSettingsPage({ params }: { params: { id: str
 
         <Card>
           <div className="px-6 py-5 border-b border-line">
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em]">Subscription</h3>
+            <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em]">Subscription</h3>
             <p className="text-[13px] text-muted mt-1">Plan, billing, and limits.</p>
           </div>
           <CardBody>
@@ -96,7 +96,7 @@ export default async function ClientSettingsPage({ params }: { params: { id: str
 
         <Card>
           <div className="px-6 py-5 border-b border-line">
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em]">Tenant configuration</h3>
+            <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em]">Tenant configuration</h3>
             <p className="text-[13px] text-muted mt-1">
               Slack workspace, model routing, integrations. (Stubbed — wiring lands when LiteLLM + Stripe are connected.)
             </p>
@@ -145,7 +145,7 @@ export default async function ClientSettingsPage({ params }: { params: { id: str
 
         <Card className="border-danger/40">
           <div className="px-6 py-5 border-b border-danger/30">
-            <h3 className="font-serif-warm text-[20px] text-danger tracking-[-0.01em]">Danger zone</h3>
+            <h3 className="font-sans font-semibold text-[20px] text-danger tracking-[-0.01em]">Danger zone</h3>
             <p className="text-[13px] text-ink-2 mt-1">
               Irreversible actions. Confirmation will be required when wired up.
             </p>

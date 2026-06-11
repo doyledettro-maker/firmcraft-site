@@ -160,16 +160,16 @@ export default async function UsagePage({
       <div className="flex items-start justify-between gap-6 mb-7">
         <div>
           <div className="eyebrow">Usage</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Daily <em className="text-accent italic">consumption</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Daily <em className="text-signal not-italic">consumption</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[500px] leading-relaxed">
             AI spend for {client.name} in {periodLabel}.
           </p>
         </div>
         <div className="text-right flex-none">
-          <div className="font-mono-warm text-[11px] uppercase tracking-[0.16em] text-muted">Period total</div>
-          <div className="font-serif-warm text-[28px] tracking-[-0.02em] mt-1">{formatSpend(usage.totals.cost)}</div>
+          <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Period total</div>
+          <div className="font-sans font-semibold text-[28px] tracking-[-0.02em] mt-1">{formatSpend(usage.totals.cost)}</div>
           <div className="text-[12.5px] text-ink-2">{usage.totals.apiCalls.toLocaleString()} calls</div>
         </div>
       </div>
@@ -194,7 +194,7 @@ export default async function UsagePage({
         <div className="px-6 py-5 border-b border-line flex items-center justify-between gap-4">
           <div>
             <div className="eyebrow">Daily spend</div>
-            <h3 className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1">Cost by day</h3>
+            <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em] mt-1">Cost by day</h3>
           </div>
           <div className="flex items-center gap-1">
             <Link
@@ -204,7 +204,7 @@ export default async function UsagePage({
             >
               <ChevronLeft className="w-4 h-4" />
             </Link>
-            <div className="min-w-[150px] text-center text-[13px] font-medium font-mono-warm">
+            <div className="min-w-[150px] text-center text-[13px] font-medium font-mono">
               {periodLabel}
             </div>
             {canGoNext ? (
@@ -234,7 +234,7 @@ export default async function UsagePage({
               return (
                 <div key={day.date} className="group">
                   <div className="flex items-center gap-3">
-                    <div className="w-[72px] flex-none text-[12px] font-mono-warm text-muted">
+                    <div className="w-[72px] flex-none text-[12px] font-mono text-muted">
                       {day.label}
                       {isToday && <span className="text-accent ml-1">*</span>}
                     </div>
@@ -265,7 +265,7 @@ export default async function UsagePage({
         <Card>
           <div className="px-6 py-5 border-b border-line">
             <div className="eyebrow">Breakdown</div>
-            <h3 className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1">By model</h3>
+            <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em] mt-1">By model</h3>
           </div>
           <ul className="divide-y divide-line">
             {modelList.map(([model, stats]) => (

@@ -382,7 +382,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
 
 function Th({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
+    <th className={`px-4 py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
       {children}
     </th>
   )
@@ -521,7 +521,7 @@ function CompanyDrawer({
         <div className="sticky top-0 z-10 bg-paper border-b border-line px-6 py-4 flex items-center justify-between">
           <div className="min-w-0">
             <div className="eyebrow">Company</div>
-            <h2 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-0.5 truncate">
+            <h2 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-0.5 truncate">
               {company.companyName}
             </h2>
           </div>
@@ -593,7 +593,7 @@ function CompanyDrawer({
             <button
               type="button"
               onClick={deleteCompany}
-              className="text-[12px] text-muted hover:text-danger inline-flex items-center gap-1.5 font-mono-warm uppercase tracking-[0.12em]"
+              className="text-[12px] text-muted hover:text-danger inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.12em]"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Delete company
@@ -610,7 +610,7 @@ function CompanyDrawer({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-ink">
               <Users className="w-4 h-4 text-muted" />
-              <h3 className="font-mono-warm text-[11px] uppercase tracking-[0.16em] text-muted">
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
                 Contacts ({contacts.length})
               </h3>
             </div>
@@ -638,7 +638,7 @@ function CompanyDrawer({
                     <div className="text-[14px] text-ink font-medium truncate">
                       {c.contactName ?? c.email}
                     </div>
-                    <div className="text-[12.5px] text-muted truncate font-mono-warm">
+                    <div className="text-[12.5px] text-muted truncate font-mono">
                       {c.title ? `${c.title} · ` : ''}{c.email}
                     </div>
                   </div>
@@ -798,7 +798,7 @@ function ContactDrawer({
         <div className="sticky top-0 z-10 bg-paper border-b border-line px-6 py-4 flex items-center justify-between">
           <div className="min-w-0">
             <div className="eyebrow">Contact · {contact.company.companyName}</div>
-            <h2 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-0.5 truncate">
+            <h2 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-0.5 truncate">
               {contact.contactName ?? contact.email}
             </h2>
           </div>
@@ -841,7 +841,7 @@ function ContactDrawer({
               rows={12}
               value={form.emailBody}
               onChange={(e) => set('emailBody', e.target.value)}
-              className="min-h-[220px] font-mono-warm text-[13px]"
+              className="min-h-[220px] font-mono text-[13px]"
             />
           </Field>
           <Field label="Notes (internal)">
@@ -862,7 +862,7 @@ function ContactDrawer({
             <button
               type="button"
               onClick={deleteContact}
-              className="text-[12px] text-muted hover:text-danger inline-flex items-center gap-1.5 font-mono-warm uppercase tracking-[0.12em]"
+              className="text-[12px] text-muted hover:text-danger inline-flex items-center gap-1.5 font-mono uppercase tracking-[0.12em]"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Delete contact
@@ -888,7 +888,7 @@ function ContactDrawer({
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2 text-ink">
               <MessageSquare className="w-4 h-4 text-muted" />
-              <h3 className="font-mono-warm text-[11px] uppercase tracking-[0.16em] text-muted">
+              <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
                 Correspondence
               </h3>
             </div>
@@ -972,7 +972,7 @@ function TimelineRow({ entry }: { entry: Correspondence }) {
       </span>
       <div className="flex items-baseline justify-between gap-2">
         <div className="text-[13px] text-ink font-medium">{meta.label}</div>
-        <div className="text-[11.5px] text-muted font-mono-warm whitespace-nowrap">
+        <div className="text-[11.5px] text-muted font-mono whitespace-nowrap">
           {occurred.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
         </div>
       </div>
@@ -985,7 +985,7 @@ function TimelineRow({ entry }: { entry: Correspondence }) {
         </div>
       ) : null}
       {Object.keys(entry.metadata).length > 0 && (entry.type === 'email_clicked' && entry.metadata.link_url) ? (
-        <div className="text-[11.5px] text-muted font-mono-warm mt-1 truncate">
+        <div className="text-[11.5px] text-muted font-mono mt-1 truncate">
           → {String(entry.metadata.link_url)}
         </div>
       ) : null}
@@ -1044,7 +1044,7 @@ function AddCorrespondenceModal({
       <div className="absolute inset-0 bg-black/60" />
       <Card className="relative w-full max-w-[520px] mx-4" onClick={(e) => e.stopPropagation()}>
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">
-          <h3 className="font-serif-warm text-[20px] tracking-[-0.01em]">Log correspondence</h3>
+          <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">Log correspondence</h3>
           <button
             className="w-8 h-8 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink"
             onClick={onClose}
@@ -1154,7 +1154,7 @@ function AddContactModal({
       <div className="absolute inset-0 bg-black/60" />
       <Card className="relative w-full max-w-[560px] mx-4" onClick={(e) => e.stopPropagation()}>
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">
-          <h3 className="font-serif-warm text-[20px] tracking-[-0.01em]">Add contact</h3>
+          <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">Add contact</h3>
           <button
             className="w-8 h-8 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink"
             onClick={onClose}
@@ -1192,7 +1192,7 @@ function AddContactModal({
               rows={8}
               value={emailBody}
               onChange={(e) => setEmailBody(e.target.value)}
-              className="min-h-[160px] font-mono-warm text-[13px]"
+              className="min-h-[160px] font-mono text-[13px]"
             />
           </Field>
           {error ? (
@@ -1272,7 +1272,7 @@ function NewCompanyModal({
       <div className="absolute inset-0 bg-black/50" />
       <Card className="relative w-full max-w-[520px] mx-4" onClick={(e) => e.stopPropagation()}>
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">
-          <h3 className="font-serif-warm text-[20px] tracking-[-0.01em]">New company</h3>
+          <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">New company</h3>
           <button
             className="w-8 h-8 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink"
             onClick={onClose}
@@ -1385,7 +1385,7 @@ function ImportModal({
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">
           <div>
             <div className="eyebrow">Import</div>
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-0.5">Bulk import</h3>
+            <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-0.5">Bulk import</h3>
           </div>
           <button
             className="w-9 h-9 grid place-items-center rounded-full border border-line-2 hover:border-accent text-ink-2 hover:text-ink"
@@ -1397,9 +1397,9 @@ function ImportModal({
         <div className="px-6 py-5 grid gap-3 overflow-y-auto">
           <p className="text-[13.5px] text-ink-2">
             Paste a JSON array of contacts. Rows are auto-grouped into companies by{' '}
-            <span className="font-mono-warm text-[12px]">companyName</span>. Each entry needs{' '}
-            <span className="font-mono-warm text-[12px]">companyName</span> and{' '}
-            <span className="font-mono-warm text-[12px]">email</span>.
+            <span className="font-mono text-[12px]">companyName</span>. Each entry needs{' '}
+            <span className="font-mono text-[12px]">companyName</span> and{' '}
+            <span className="font-mono text-[12px]">email</span>.
           </p>
           <input type="file" accept=".json,application/json" onChange={handleFile} className="text-[13px] text-ink-2" />
           <Textarea
@@ -1407,7 +1407,7 @@ function ImportModal({
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder='[{"companyName":"Acme","contactName":"Jane","email":"jane@acme.com","industry":"HVAC","city":"Springfield","state":"IL"}]'
-            className="min-h-[280px] font-mono-warm text-[12.5px]"
+            className="min-h-[280px] font-mono text-[12.5px]"
           />
           {error ? (
             <div className="text-[13px] text-danger bg-[#2A1520] border border-[#FCA5A5]/25 rounded-lg px-3 py-2">

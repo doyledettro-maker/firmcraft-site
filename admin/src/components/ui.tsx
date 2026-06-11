@@ -18,11 +18,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
   ref,
 ) {
   const base =
-    'inline-flex items-center justify-center gap-2 rounded-full font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed border'
+    'inline-flex items-center justify-center gap-2 rounded-md font-medium transition-colors disabled:opacity-50 disabled:cursor-not-allowed border'
   const sizing =
     size === 'sm' ? 'h-8 px-3 text-[13px]' : size === 'lg' ? 'h-12 px-6 text-[15px]' : 'h-10 px-5 text-sm'
   const variants: Record<NonNullable<ButtonProps['variant']>, string> = {
-    primary: 'bg-accent text-white border-accent hover:bg-[#2155CC] hover:border-[#2155CC]',
+    primary: 'bg-signal text-white border-signal hover:bg-signal-hover hover:border-signal-hover',
     ghost: 'bg-transparent text-ink border-line-2 hover:border-ink hover:bg-paper-2',
     danger: 'bg-transparent text-danger border-danger/60 hover:bg-danger hover:text-paper hover:border-danger',
     subtle: 'bg-paper-2 text-ink border-transparent hover:border-line-2',
@@ -35,7 +35,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
 export function Card({ className, children, ...rest }: HTMLAttributes<HTMLDivElement>) {
   return (
     <div
-      className={cn('bg-paper-2 border border-line rounded-2xl', className)}
+      className={cn(
+        'bg-paper border border-line rounded-lg shadow-card transition-colors hover:border-signal',
+        className,
+      )}
       {...rest}
     >
       {children}
@@ -61,7 +64,7 @@ export function CardBody({ className, children, ...rest }: HTMLAttributes<HTMLDi
 
 export function CardTitle({ className, children, ...rest }: HTMLAttributes<HTMLHeadingElement>) {
   return (
-    <h3 className={cn('font-serif-warm text-2xl tracking-[-0.01em] m-0', className)} {...rest}>
+    <h3 className={cn('font-sans font-semibold text-2xl tracking-[-0.01em] m-0', className)} {...rest}>
       {children}
     </h3>
   )
@@ -105,7 +108,7 @@ export const Select = forwardRef<HTMLSelectElement, SelectHTMLAttributes<HTMLSel
       <select ref={ref} className={cn(inputBase, 'pr-9 appearance-none bg-no-repeat', className)}
         style={{
           backgroundImage:
-            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C9BBA4' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
+            "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2364748B' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E\")",
           backgroundPosition: 'right 12px center',
           backgroundSize: '12px 8px',
         }}
@@ -173,7 +176,7 @@ export function Badge({
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono-warm text-[10.5px] uppercase tracking-[0.12em]',
+        'inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 font-mono text-[10.5px] uppercase tracking-[0.12em]',
         tones[tone],
         className,
       )}
@@ -213,7 +216,7 @@ export function Stepper({
             >
               <span
                 className={cn(
-                  'flex-none grid place-items-center w-6 h-6 rounded-full font-mono-warm text-[11px] border',
+                  'flex-none grid place-items-center w-6 h-6 rounded-full font-mono text-[11px] border',
                   status === 'done' && 'bg-accent-2 border-accent-2 text-paper',
                   status === 'active' && 'bg-accent border-accent text-white',
                   status === 'pending' && 'bg-paper border-line-2 text-muted',
@@ -260,10 +263,72 @@ export function SectionHeading({
   return (
     <div className="mb-7">
       <div className="eyebrow">{eyebrow}</div>
-      <h2 className="font-serif-warm text-[34px] md:text-[40px] leading-[1.05] tracking-[-0.02em] mt-2">
+      <h2 className="font-sans font-semibold text-[34px] md:text-[40px] leading-[1.05] tracking-[-0.02em] mt-2 [&_em]:not-italic [&_em]:text-signal">
         {title}
       </h2>
       {description ? <p className="text-ink-2 text-[15.5px] leading-relaxed mt-3 max-w-[640px]">{description}</p> : null}
+    </div>
+  )
+}
+
+/* ---------- Eyebrow (mono uppercase, signal) ---------- */
+
+export function Eyebrow({ className, children }: { className?: string; children: ReactNode }) {
+  return <div className={cn('eyebrow', className)}>{children}</div>
+}
+
+/* ---------- Console card (operator dashboard widget) ---------- */
+
+export function ConsoleCard({
+  title,
+  live,
+  className,
+  children,
+}: {
+  /** Mono uppercase bar title, e.g. <>firmcraft · <b>ops</b></> */
+  title: ReactNode
+  /** Live indicator label; omit to hide */
+  live?: string
+  className?: string
+  children: ReactNode
+}) {
+  return (
+    <div
+      className={cn(
+        'bg-console-2 border border-line-console rounded-xl shadow-console text-inverse overflow-hidden',
+        className,
+      )}
+    >
+      <div className="px-[18px] py-3 flex items-center justify-between border-b border-line-console bg-console-3/40">
+        <span className="font-mono text-[10.5px] uppercase tracking-[0.08em] text-inverse-2 [&_b]:text-white [&_b]:font-medium">
+          {title}
+        </span>
+        {live ? (
+          <span className="inline-flex items-center gap-1.5 font-mono text-[10.5px] tracking-[0.1em] uppercase text-status-up">
+            <span className="w-[7px] h-[7px] rounded-full bg-ok shadow-[0_0_0_3px_rgba(16,185,129,0.16)]" />
+            {live}
+          </span>
+        ) : null}
+      </div>
+      <div className="p-[18px] flex flex-col gap-3">{children}</div>
+    </div>
+  )
+}
+
+export function Metric({
+  label,
+  value,
+  sub,
+}: {
+  label: string
+  value: ReactNode
+  sub?: ReactNode
+}) {
+  return (
+    <div className="bg-console-3/50 border border-line-console rounded-md px-3.5 py-3 flex flex-col gap-1">
+      <span className="font-mono text-[10px] uppercase tracking-[0.12em] text-inverse-2">{label}</span>
+      <span className="font-sans font-semibold text-[22px] text-white tracking-tight leading-[1.05]">{value}</span>
+      {sub ? <span className="font-mono text-[11px] text-inverse-2 tracking-[0.04em]">{sub}</span> : null}
     </div>
   )
 }

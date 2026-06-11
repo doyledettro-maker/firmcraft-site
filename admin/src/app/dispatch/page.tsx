@@ -27,7 +27,7 @@ export default async function DispatchPage({ searchParams }: { searchParams: Sea
     return (
       <div className="h-screen grid place-items-center bg-paper text-center p-8">
         <div>
-          <h1 className="font-serif-warm text-3xl text-ink mb-2">No workspace found</h1>
+          <h1 className="font-sans font-semibold text-3xl text-ink mb-2">No workspace found</h1>
           <p className="text-muted max-w-[420px]">
             This dispatch board could not resolve a tenant. Make sure Supabase is configured and the
             demo tenant is seeded (slug <code className="font-mono text-accent-3">demo</code>).

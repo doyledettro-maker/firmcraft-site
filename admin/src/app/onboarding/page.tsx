@@ -18,8 +18,8 @@ export default function SubmissionsPage() {
       <div className="flex items-end justify-between gap-6 mb-7 flex-wrap">
         <div>
           <div className="eyebrow">Onboarding submissions</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Review submitted <em className="text-accent italic">surveys</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Review submitted <em className="text-signal not-italic">surveys</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[640px] leading-relaxed">
             Clients fill out the onboarding survey on the public site. Once the
@@ -46,14 +46,14 @@ export default function SubmissionsPage() {
               <Inbox className="w-5 h-5 text-accent" />
             </div>
             <div className="flex-1 min-w-0">
-              <h3 className="font-serif-warm text-[20px] tracking-[-0.01em] m-0">
+              <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em] m-0">
                 {pending.length === 0
                   ? 'Inbox is empty.'
                   : `${pending.length} submission${pending.length === 1 ? '' : 's'} waiting for review.`}
               </h3>
               <p className="text-ink-2 text-[14px] leading-relaxed mt-1">
                 Surveys flow in from two places: clients filling out{' '}
-                <code className="font-mono-warm text-[12.5px] bg-paper-2 px-1.5 py-0.5 rounded">
+                <code className="font-mono text-[12.5px] bg-paper-2 px-1.5 py-0.5 rounded">
                   firmcraft.ai/get-started
                 </code>{' '}
                 directly, or partners submitting on a client&rsquo;s behalf
@@ -89,7 +89,7 @@ export default function SubmissionsPage() {
         <div className="px-6 py-5 border-b border-line flex items-center justify-between gap-3 flex-wrap">
           <div>
             <div className="eyebrow">Pending review</div>
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">
+            <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-1">
               Submission queue
             </h3>
           </div>
@@ -106,7 +106,7 @@ export default function SubmissionsPage() {
             <div className="w-12 h-12 rounded-full bg-paper-2 grid place-items-center mx-auto mb-4">
               <Inbox className="w-5 h-5 text-muted" />
             </div>
-            <h4 className="font-serif-warm text-[20px] tracking-[-0.01em] m-0">
+            <h4 className="font-sans font-semibold text-[20px] tracking-[-0.01em] m-0">
               No submissions yet.
             </h4>
             <p className="text-ink-2 text-[13.5px] leading-relaxed max-w-[420px] mx-auto mt-2">
@@ -158,7 +158,7 @@ export default function SubmissionsPage() {
                         <span className="text-muted">Note:</span> {s.partnerNote}
                       </p>
                     ) : null}
-                    <div className="text-[11.5px] text-muted mt-2 font-mono-warm">
+                    <div className="text-[11.5px] text-muted mt-2 font-mono">
                       submitted {formatDate(s.submittedAt)} · id {s.id}
                     </div>
                   </div>

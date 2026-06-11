@@ -91,13 +91,13 @@ export function JobDetailPanel({ jobId, technicians, timeZone, onClose, onPatche
                   <JobStatusBadge status={detail.status} />
                   <PriorityBadge priority={detail.priority} />
                 </div>
-                <h2 className="font-serif-warm text-[22px] leading-tight mt-2 text-ink truncate">{detail.title}</h2>
+                <h2 className="font-sans font-semibold text-[22px] leading-tight mt-2 text-ink truncate">{detail.title}</h2>
                 <div className="text-[12.5px] text-muted mt-0.5">
                   {detail.job_type_name ?? 'Job'}{detail.source ? ` · via ${detail.source}` : ''}
                 </div>
               </>
             ) : (
-              <h2 className="font-serif-warm text-[20px] text-ink">Job details</h2>
+              <h2 className="font-sans font-semibold text-[20px] text-ink">Job details</h2>
             )}
           </div>
           <button

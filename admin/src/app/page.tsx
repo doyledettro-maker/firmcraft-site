@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, ClipboardList, Users, DollarSign, Activity } from 'lucide-react'
+import { ArrowRight, ClipboardList } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
-import { Button, Card, CardBody } from '@/components/ui'
+import { Button, Card, ConsoleCard, Metric } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
 import { getClients, getAllUsageTotals } from '@/lib/db'
 import { formatCurrency, formatSpend, formatDate, formatNumber } from '@/lib/format'
@@ -35,42 +35,61 @@ export default async function DashboardPage() {
 
   return (
     <AppShell>
-      <div className="flex items-end justify-between gap-6 mb-8">
+      {/* Hero — status pill, Geist 600 headline w/ signal emphasis, dual CTA, console card */}
+      <div className="grid lg:grid-cols-[1.15fr_1fr] gap-10 items-center mb-10">
         <div>
-          <div className="eyebrow">Overview</div>
-          <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Firmcraft <em className="text-accent italic">control room</em>
+          <span className="inline-flex items-center gap-2.5 px-3 py-1.5 rounded-pill bg-paper border border-line font-mono text-[11px] tracking-[0.06em] text-ink-2">
+            <span className="w-[7px] h-[7px] rounded-full bg-ok shadow-[0_0_0_3px_rgba(16,185,129,0.18)]" />
+            admin · live · {active} active {active === 1 ? 'client' : 'clients'}
+          </span>
+          <h1 className="font-sans font-semibold text-[40px] md:text-[48px] leading-[1.04] tracking-tightest mt-4 text-balance">
+            Firmcraft <span className="text-signal">control room</span>
           </h1>
-          <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
+          <p className="text-ink-2 text-[16.5px] mt-3 max-w-[480px] leading-relaxed">
             Manage tenants, monitor usage, and onboard new clients.
           </p>
+          <div className="flex gap-2.5 mt-6 flex-wrap">
+            <Link href="/onboarding">
+              <Button>
+                <ClipboardList className="w-4 h-4" />
+                Review submissions
+              </Button>
+            </Link>
+            <Link href="/clients">
+              <Button variant="ghost">All clients</Button>
+            </Link>
+          </div>
+          <div className="flex gap-5 mt-7 flex-wrap font-mono text-[11px] uppercase tracking-eyebrow text-muted">
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-signal flex-none" />
+              {total} {total === 1 ? 'tenant' : 'tenants'}
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-signal flex-none" />
+              {onboarding} onboarding
+            </span>
+            <span className="flex items-center gap-2">
+              <span className="w-1.5 h-1.5 rounded-full bg-signal flex-none" />
+              {formatNumber(totalUsers)} active users
+            </span>
+          </div>
         </div>
-        <div className="flex gap-2 flex-none">
-          <Link href="/clients">
-            <Button variant="ghost">All clients</Button>
-          </Link>
-          <Link href="/onboarding">
-            <Button>
-              <ClipboardList className="w-4 h-4" />
-              Review submissions
-            </Button>
-          </Link>
-        </div>
-      </div>
 
-      {/* KPI grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <Kpi icon={Users} label="Total clients" value={String(total)} sub={`${active} active · ${onboarding} onboarding`} />
-        <Kpi icon={DollarSign} label="MRR" value={formatCurrency(mrr)} sub="across active clients" />
-        <Kpi icon={Users} label="Active users" value={formatNumber(totalUsers)} sub="across all tenants" />
-        <Kpi icon={Activity} label="AI spend / mo" value={spendDisplay} sub={callsSub} />
+        <ConsoleCard title={<>firmcraft · <b>ops</b></>} live="live">
+          <div className="grid grid-cols-2 gap-3">
+            <Metric label="Active clients" value={String(active)} sub={`${onboarding} onboarding`} />
+            <Metric label="MRR" value={formatCurrency(mrr)} sub="active clients" />
+            <Metric label="Active users" value={formatNumber(totalUsers)} sub="all tenants" />
+            <Metric label="AI spend / mo" value={spendDisplay} sub={callsSub} />
+          </div>
+        </ConsoleCard>
       </div>
 
       <Card>
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">
           <div>
             <div className="eyebrow">Recent activity</div>
-            <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">Recently added clients</h3>
+            <h3 className="font-sans font-semibold text-[20px] tracking-tight mt-1">Recently added clients</h3>
           </div>
           <Link href="/clients">
             <Button variant="ghost" size="sm">
@@ -94,7 +113,7 @@ export default async function DashboardPage() {
                 </div>
                 <div className="flex items-center gap-3 flex-none">
                   <StatusBadge status={c.status} />
-                  <span className="font-mono-warm text-[12px] text-muted uppercase tracking-[0.12em] hidden sm:inline">
+                  <span className="font-mono text-[12px] text-muted uppercase tracking-[0.12em] hidden sm:inline">
                     {c.planTier}
                   </span>
                 </div>
@@ -106,29 +125,3 @@ export default async function DashboardPage() {
     </AppShell>
   )
 }
-
-function Kpi({
-  icon: Icon,
-  label,
-  value,
-  sub,
-}: {
-  icon: React.ComponentType<{ className?: string }>
-  label: string
-  value: string
-  sub: string
-}) {
-  return (
-    <Card>
-      <CardBody className="px-5 py-5">
-        <div className="flex items-center gap-2 text-muted">
-          <Icon className="w-4 h-4" />
-          <div className="font-mono-warm text-[11px] uppercase tracking-[0.16em]">{label}</div>
-        </div>
-        <div className="font-serif-warm text-[32px] tracking-[-0.02em] mt-2 leading-none">{value}</div>
-        <div className="text-[12.5px] text-ink-2 mt-2">{sub}</div>
-      </CardBody>
-    </Card>
-  )
-}
-

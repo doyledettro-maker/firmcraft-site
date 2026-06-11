@@ -24,8 +24,8 @@ export default async function AnalyticsPage() {
       <div className="flex items-end justify-between gap-6 mb-8">
         <div>
           <div className="eyebrow">firmcraft.ai</div>
-          <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Site <em className="text-accent italic">analytics</em>
+          <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Site <em className="text-signal not-italic">analytics</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
             Last {WINDOW_DAYS} days · self-hosted, no third-party trackers.
@@ -37,8 +37,8 @@ export default async function AnalyticsPage() {
       {!summary.configured && (
         <Card className="mb-6 px-6 py-5 text-ink-2">
           Supabase is not configured for the admin app, so no data is loaded.
-          Set <code className="font-mono-warm">NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
-          <code className="font-mono-warm">SUPABASE_SERVICE_ROLE_KEY</code> in the
+          Set <code className="font-mono">NEXT_PUBLIC_SUPABASE_URL</code> and{' '}
+          <code className="font-mono">SUPABASE_SERVICE_ROLE_KEY</code> in the
           admin environment.
         </Card>
       )}
@@ -53,7 +53,7 @@ export default async function AnalyticsPage() {
       <Card className="mb-8">
         <div className="px-6 py-5 border-b border-line">
           <div className="eyebrow">Daily visitors</div>
-          <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">
+          <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-1">
             {summary.windowDays}-day trend
           </h3>
         </div>
@@ -71,7 +71,7 @@ export default async function AnalyticsPage() {
               )
             })}
           </div>
-          <div className="mt-3 flex justify-between text-[11px] text-muted font-mono-warm">
+          <div className="mt-3 flex justify-between text-[11px] text-muted font-mono">
             <span>{summary.daily[0]?.day ?? ''}</span>
             <span>{summary.daily.at(-1)?.day ?? ''}</span>
           </div>
@@ -109,11 +109,11 @@ function Kpi({
 }) {
   return (
     <Card className="px-5 py-4">
-      <div className="flex items-center gap-2 text-ink-2 text-[12px] font-mono-warm uppercase tracking-[0.1em]">
+      <div className="flex items-center gap-2 text-ink-2 text-[12px] font-mono uppercase tracking-[0.1em]">
         <Icon className="w-4 h-4" />
         {label}
       </div>
-      <div className="font-serif-warm text-[32px] leading-none mt-2">{value}</div>
+      <div className="font-sans font-semibold text-[32px] leading-none mt-2">{value}</div>
       <div className="text-[12px] text-muted mt-2">{sub}</div>
     </Card>
   )
@@ -135,7 +135,7 @@ function RankedList({
     <Card>
       <div className="px-6 py-5 border-b border-line">
         <div className="eyebrow">{eyebrow}</div>
-        <h3 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">{title}</h3>
+        <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-1">{title}</h3>
       </div>
       <div className="px-6 py-5">
         {rows.length === 0 ? (
@@ -150,7 +150,7 @@ function RankedList({
                     <span className="truncate text-ink" title={row.label}>
                       {row.label}
                     </span>
-                    <span className="font-mono-warm text-ink-2 flex-none">
+                    <span className="font-mono text-ink-2 flex-none">
                       {formatNumber(row.count)}
                     </span>
                   </div>

@@ -89,7 +89,7 @@ function PitchTab() {
               <div key={o.angle} className="rounded-xl border border-line-2 bg-paper px-4 py-3.5 flex items-start gap-3">
                 <Quote className="w-4 h-4 text-accent-2 mt-1 flex-none" />
                 <div className="flex-1 min-w-0">
-                  <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted mb-1">{o.angle}</div>
+                  <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted mb-1">{o.angle}</div>
                   <p className="text-[14px] text-ink leading-snug">{o.line}</p>
                 </div>
                 <CopyButton text={o.line} label="" className="flex-none" />
@@ -123,7 +123,7 @@ function PitchTab() {
                 </div>
                 <div className="px-4 py-3.5">
                   <div className="text-[12px] text-muted mb-2">
-                    <span className="font-mono-warm uppercase tracking-[0.12em] text-[10.5px]">Subject</span>{' '}
+                    <span className="font-mono uppercase tracking-[0.12em] text-[10.5px]">Subject</span>{' '}
                     <span className="text-ink-2">{t.subject}</span>
                   </div>
                   <pre className="whitespace-pre-wrap font-sans text-[13.5px] text-ink-2 leading-relaxed m-0">{t.body}</pre>
@@ -163,14 +163,14 @@ function ScriptCard({
             </span>
             <div>
               <div className="eyebrow">{eyebrow}</div>
-              <h3 className="font-serif-warm text-[22px] leading-tight tracking-[-0.01em]">{title}</h3>
+              <h3 className="font-sans font-semibold text-[22px] leading-tight tracking-[-0.01em]">{title}</h3>
             </div>
           </div>
           <CopyButton text={body} className="flex-none" />
         </div>
         <pre
           className={`whitespace-pre-wrap text-[13.5px] text-ink-2 leading-relaxed m-0 rounded-xl border border-line-2 bg-paper px-4 py-4 ${
-            mono ? 'font-mono-warm text-[12.5px]' : 'font-sans'
+            mono ? 'font-mono text-[12.5px]' : 'font-sans'
           }`}
         >
           {body}
@@ -195,11 +195,11 @@ function ObjectionsTab() {
           {OBJECTIONS.map((o) => (
             <div key={o.q} className="rounded-xl border border-line-2 bg-paper p-4">
               <div className="flex items-start gap-2 mb-2.5">
-                <span className="font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-accent-2 mt-0.5">They say</span>
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-accent-2 mt-0.5">They say</span>
               </div>
               <p className="text-[14.5px] text-ink font-medium leading-snug mb-3">“{o.q}”</p>
               <div className="pt-3 border-t border-line">
-                <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-accent-3 mb-1.5">You say</div>
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-accent-3 mb-1.5">You say</div>
                 <p className="text-[13.5px] text-ink-2 leading-relaxed">{o.a}</p>
               </div>
             </div>
@@ -225,7 +225,7 @@ function MarketTab() {
           <div className="grid sm:grid-cols-2 gap-3">
             {TARGET_TYPES.map((t, i) => (
               <div key={t.type} className="rounded-xl border border-line-2 bg-paper px-4 py-3.5 flex items-start gap-3">
-                <span className="flex-none grid place-items-center w-7 h-7 rounded-full bg-accent/10 border border-accent/25 text-accent-3 font-mono-warm text-[12px]">
+                <span className="flex-none grid place-items-center w-7 h-7 rounded-full bg-accent/10 border border-accent/25 text-accent-3 font-mono text-[12px]">
                   {i + 1}
                 </span>
                 <div>
@@ -243,7 +243,7 @@ function MarketTab() {
           <CardBody className="px-6 py-6">
             <div className="flex items-center gap-2 mb-4">
               <BadgeCheck className="w-5 h-5 text-status-up" />
-              <h3 className="font-serif-warm text-[20px] tracking-[-0.01em]">Ideal prospect signals</h3>
+              <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">Ideal prospect signals</h3>
             </div>
             <ul className="space-y-2.5">
               {IDEAL_SIGNALS.map((s) => (
@@ -260,7 +260,7 @@ function MarketTab() {
           <CardBody className="px-6 py-6">
             <div className="flex items-center gap-2 mb-4">
               <Ban className="w-5 h-5 text-status-down" />
-              <h3 className="font-serif-warm text-[20px] tracking-[-0.01em]">Who NOT to target</h3>
+              <h3 className="font-sans font-semibold text-[20px] tracking-[-0.01em]">Who NOT to target</h3>
             </div>
             <ul className="space-y-2.5">
               {AVOID_SIGNALS.map((s) => (
@@ -283,7 +283,7 @@ function SectionLabel({ eyebrow, title, desc }: { eyebrow: string; title: string
   return (
     <div className="mb-5">
       <div className="eyebrow">{eyebrow}</div>
-      <h2 className="font-serif-warm text-[26px] md:text-[30px] leading-tight tracking-[-0.02em] mt-1.5">{title}</h2>
+      <h2 className="font-sans font-semibold text-[26px] md:text-[30px] leading-tight tracking-[-0.02em] mt-1.5">{title}</h2>
       {desc ? <p className="text-ink-2 text-[14px] leading-relaxed mt-2 max-w-[680px]">{desc}</p> : null}
     </div>
   )

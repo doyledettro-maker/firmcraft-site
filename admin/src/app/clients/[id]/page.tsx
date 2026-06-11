@@ -45,7 +45,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
       <div className="flex items-start justify-between gap-6 mb-7 flex-wrap">
         <div>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="font-serif-warm text-[40px] leading-[1.05] tracking-[-0.02em]">
+            <h1 className="font-sans font-semibold text-[40px] leading-[1.05] tracking-[-0.02em]">
               {client.name}
             </h1>
             <StatusBadge status={client.status} />
@@ -109,7 +109,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           <Card>
             <div className="px-6 py-5 border-b border-line">
               <div className="eyebrow">Survey responses</div>
-              <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">Onboarding answers</h3>
+              <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">Onboarding answers</h3>
             </div>
             <CardBody className="p-0">
               <Section title="Company profile">
@@ -139,7 +139,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                   <ol className="grid gap-1.5 text-[14px]">
                     {survey.useCasePriorities.map((p, i) => (
                       <li key={p} className="flex gap-3">
-                        <span className="font-mono-warm text-[11.5px] text-accent w-5">{String(i + 1).padStart(2, '0')}</span>
+                        <span className="font-mono text-[11.5px] text-accent w-5">{String(i + 1).padStart(2, '0')}</span>
                         <span>{p}</span>
                       </li>
                     ))}
@@ -188,7 +188,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
           <Card>
             <div className="px-6 py-5 border-b border-line">
               <div className="eyebrow">Usage this month</div>
-              <h3 className="font-serif-warm text-[20px] mt-1 tracking-[-0.01em]">Live tenant stats</h3>
+              <h3 className="font-sans font-semibold text-[20px] mt-1 tracking-[-0.01em]">Live tenant stats</h3>
             </div>
             <CardBody className="grid gap-5">
               <SpendBar
@@ -250,13 +250,13 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         <Card id="ai-calls" className="scroll-mt-24">
           <div className="px-6 py-5 border-b border-line">
             <div className="eyebrow">AI calls</div>
-            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">Usage this month</h3>
+            <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">Usage this month</h3>
           </div>
           <CardBody>
             <div className="text-[14px] text-ink-2">
-              <span className="font-mono-warm text-ink">{formatNumber(client.usage.aiCallsThisMonth)}</span>{' '}
+              <span className="font-mono text-ink">{formatNumber(client.usage.aiCallsThisMonth)}</span>{' '}
               of {formatNumber(client.usage.aiCallsLimit)} calls used ({usagePct}%) ·{' '}
-              source: <span className="font-mono-warm text-ink">usage_events</span>
+              source: <span className="font-mono text-ink">usage_events</span>
             </div>
             <div className="text-[12.5px] text-muted mt-2">
               Per-day breakdown and model split coming soon. For now, totals are summed from LiteLLM
@@ -268,11 +268,11 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         <Card id="seats" className="scroll-mt-24">
           <div className="px-6 py-5 border-b border-line">
             <div className="eyebrow">Seats</div>
-            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">Active users</h3>
+            <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">Active users</h3>
           </div>
           <CardBody>
             <div className="text-[14px] text-ink-2">
-              <span className="font-mono-warm text-ink">{client.usage.activeUsers}</span>{' '}
+              <span className="font-mono text-ink">{client.usage.activeUsers}</span>{' '}
               of {client.usage.seats} seats in use
             </div>
             <div className="text-[12.5px] text-muted mt-2">
@@ -284,7 +284,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         <Card id="skills" className="scroll-mt-24">
           <div className="px-6 py-5 border-b border-line">
             <div className="eyebrow">Custom skills</div>
-            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+            <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">
               Skills installed on this tenant
             </h3>
           </div>
@@ -295,12 +295,12 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
               <ul className="divide-y divide-line">
                 {skills.map((s) => (
                   <li key={s.id} className="px-6 py-3.5 flex items-center justify-between gap-4">
-                    <span className="font-mono-warm text-[13.5px] text-ink">{s.skillName}</span>
+                    <span className="font-mono text-[13.5px] text-ink">{s.skillName}</span>
                     <span
                       className={
                         s.status === 'active'
-                          ? 'text-[12px] text-accent-2 font-mono-warm uppercase tracking-[0.12em]'
-                          : 'text-[12px] text-muted font-mono-warm uppercase tracking-[0.12em]'
+                          ? 'text-[12px] text-accent-2 font-mono uppercase tracking-[0.12em]'
+                          : 'text-[12px] text-muted font-mono uppercase tracking-[0.12em]'
                       }
                     >
                       {s.status}
@@ -315,7 +315,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
         <Card id="integrations" className="scroll-mt-24">
           <div className="px-6 py-5 border-b border-line">
             <div className="eyebrow">Integrations</div>
-            <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+            <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">
               Connected services
             </h3>
           </div>
@@ -329,7 +329,7 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                     <div>
                       <div className="text-[14px] text-ink">{i.serviceName}</div>
                       {i.endpoint ? (
-                        <div className="text-[12px] text-muted font-mono-warm mt-0.5 truncate">
+                        <div className="text-[12px] text-muted font-mono mt-0.5 truncate">
                           {i.endpoint}
                         </div>
                       ) : null}
@@ -337,10 +337,10 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
                     <span
                       className={
                         i.status === 'up'
-                          ? 'text-[12px] text-accent-2 font-mono-warm uppercase tracking-[0.12em]'
+                          ? 'text-[12px] text-accent-2 font-mono uppercase tracking-[0.12em]'
                           : i.status === 'down'
-                          ? 'text-[12px] text-status-down font-mono-warm uppercase tracking-[0.12em]'
-                          : 'text-[12px] text-muted font-mono-warm uppercase tracking-[0.12em]'
+                          ? 'text-[12px] text-status-down font-mono uppercase tracking-[0.12em]'
+                          : 'text-[12px] text-muted font-mono uppercase tracking-[0.12em]'
                       }
                     >
                       {i.status}
@@ -359,8 +359,8 @@ export default async function ClientDetailPage({ params }: { params: { id: strin
 function Stat({ label, value, sub, href }: { label: string; value: string; sub: string; href?: string }) {
   const body = (
     <CardBody className="px-5 py-5">
-      <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
-      <div className="font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none truncate">{value}</div>
+      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
+      <div className="font-sans font-semibold text-[26px] tracking-[-0.02em] mt-1.5 leading-none truncate">{value}</div>
       <div className="text-[12px] text-muted mt-2 truncate">{sub}</div>
     </CardBody>
   )
@@ -462,8 +462,8 @@ function SpendBar({ spend, allowance, pct, calls }: { spend: number; allowance: 
 function MiniStat({ label, value, href }: { label: string; value: string; href?: string }) {
   const body = (
     <>
-      <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted">{label}</div>
-      <div className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1 leading-none">{value}</div>
+      <div className="font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted">{label}</div>
+      <div className="font-sans font-semibold text-[20px] tracking-[-0.01em] mt-1 leading-none">{value}</div>
     </>
   )
   if (href) {

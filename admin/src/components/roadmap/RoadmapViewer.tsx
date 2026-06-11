@@ -84,12 +84,12 @@ function AnchorHeading({
 
 const markdownComponents = {
   h1: ({ id, children }: any) => (
-    <AnchorHeading level={1} id={id} className="font-serif-warm text-[30px] leading-tight tracking-[-0.02em] text-ink mt-10 mb-4 first:mt-0">
+    <AnchorHeading level={1} id={id} className="font-sans font-semibold text-[30px] leading-tight tracking-[-0.02em] text-ink mt-10 mb-4 first:mt-0">
       {children}
     </AnchorHeading>
   ),
   h2: ({ id, children }: any) => (
-    <AnchorHeading level={2} id={id} className="font-serif-warm text-[23px] leading-tight tracking-[-0.01em] text-ink mt-9 mb-3 pb-2 border-b border-line">
+    <AnchorHeading level={2} id={id} className="font-sans font-semibold text-[23px] leading-tight tracking-[-0.01em] text-ink mt-9 mb-3 pb-2 border-b border-line">
       {children}
     </AnchorHeading>
   ),
@@ -125,12 +125,12 @@ const markdownComponents = {
   hr: () => <hr className="my-8 border-line" />,
   code: ({ inline, className, children }: any) => {
     if (inline) {
-      return <code className="font-mono-warm text-[13px] bg-paper-2 text-accent-3 px-1.5 py-0.5 rounded border border-line">{children}</code>
+      return <code className="font-mono text-[13px] bg-paper-2 text-accent-3 px-1.5 py-0.5 rounded border border-line">{children}</code>
     }
-    return <code className={`font-mono-warm text-[13px] leading-[1.6] ${className || ''}`}>{children}</code>
+    return <code className={`font-mono text-[13px] leading-[1.6] ${className || ''}`}>{children}</code>
   },
   pre: ({ children }: any) => (
-    <pre className="bg-[#070C16] border border-line rounded-xl p-4 my-5 overflow-x-auto text-ink-2">{children}</pre>
+    <pre className="bg-console-2 border border-line rounded-xl p-4 my-5 overflow-x-auto text-ink-2">{children}</pre>
   ),
   table: ({ children }: any) => (
     <div className="my-5 overflow-x-auto rounded-xl border border-line">
@@ -211,7 +211,7 @@ export function RoadmapViewer() {
                   <FileText className="w-3.5 h-3.5 flex-none text-muted" />
                   <span className="flex-1 truncate">{d.title}</span>
                   {hits != null && (
-                    <span className="flex-none text-[11px] font-mono-warm text-accent-3 bg-accent/10 rounded px-1.5 py-0.5">
+                    <span className="flex-none text-[11px] font-mono text-accent-3 bg-accent/10 rounded px-1.5 py-0.5">
                       {hits}
                     </span>
                   )}
@@ -291,7 +291,7 @@ export function RoadmapViewer() {
       {treeOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setTreeOpen(false)} aria-hidden />
-          <div className="relative ml-auto w-[300px] max-w-[85vw] h-full bg-[#070C16] border-l border-line p-4 overflow-y-auto">
+          <div className="relative ml-auto w-[300px] max-w-[85vw] h-full bg-console-2 border-l border-line p-4 overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <span className="eyebrow">Documents</span>
               <button onClick={() => setTreeOpen(false)} className="text-ink-2 hover:text-ink" aria-label="Close">
@@ -314,7 +314,7 @@ export function RoadmapViewer() {
       {tocOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setTocOpen(false)} aria-hidden />
-          <div className="relative ml-auto w-[300px] max-w-[85vw] h-full bg-[#070C16] border-l border-line p-4 overflow-y-auto">
+          <div className="relative ml-auto w-[300px] max-w-[85vw] h-full bg-console-2 border-l border-line p-4 overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
               <span className="eyebrow">On this page</span>
               <button onClick={() => setTocOpen(false)} className="text-ink-2 hover:text-ink" aria-label="Close">
@@ -330,12 +330,12 @@ export function RoadmapViewer() {
       <article ref={contentRef} className="flex-1 min-w-0">
         {active && (
           <div className="rounded-2xl border border-line bg-paper-2/30 px-5 md:px-8 py-6 md:py-8">
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-muted font-mono-warm mb-1">
+            <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-muted font-mono mb-1">
               <span className="text-accent-3">{active.group}</span>
               <ChevronRight className="w-3 h-3" />
               <span>{active.title}</span>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted font-mono-warm mb-6">
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-[12px] text-muted font-mono mb-6">
               <span>{active.wordCount.toLocaleString()} words</span>
               <span>·</span>
               <span>{active.lineCount.toLocaleString()} lines</span>

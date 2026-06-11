@@ -49,8 +49,8 @@ export default async function UnsubscribePage({
         <div className="max-w-[520px] mx-auto w-full">
           <div className="mb-8">
             <div className="eyebrow">Email preferences</div>
-            <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-              You&apos;ve been <em className="text-accent italic">unsubscribed</em>
+            <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+              You&apos;ve been <em className="text-signal not-italic">unsubscribed</em>
             </h1>
           </div>
 
@@ -71,7 +71,7 @@ export default async function UnsubscribePage({
         </div>
       </main>
 
-      <footer className="border-t border-line px-6 py-6 text-[12px] text-muted font-mono-warm">
+      <footer className="border-t border-line px-6 py-6 text-[12px] text-muted font-mono">
         <div className="max-w-[520px] mx-auto flex justify-between">
           <span>firmcraft</span>
           <span>email preferences</span>

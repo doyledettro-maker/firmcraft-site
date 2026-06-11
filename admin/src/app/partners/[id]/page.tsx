@@ -40,7 +40,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
       <div className="flex items-start justify-between gap-6 mb-7 flex-wrap">
         <div>
           <div className="flex items-center gap-3 flex-wrap">
-            <h1 className="font-serif-warm text-[40px] leading-[1.05] tracking-[-0.02em]">
+            <h1 className="font-sans font-semibold text-[40px] leading-[1.05] tracking-[-0.02em]">
               {partner.name}
             </h1>
             <Badge tone={partner.status === 'active' ? 'green' : 'amber'}>{partner.status}</Badge>
@@ -93,7 +93,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
           <Card>
             <div className="px-6 py-5 border-b border-line">
               <div className="eyebrow">Commission breakdown</div>
-              <h3 className="font-serif-warm text-[22px] mt-1 tracking-[-0.01em]">
+              <h3 className="font-sans font-semibold text-[22px] mt-1 tracking-[-0.01em]">
                 This month, by client
               </h3>
             </div>
@@ -122,7 +122,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
                         </Link>
                         <div className="text-[12.5px] text-muted">{client.industry}</div>
                       </td>
-                      <td className="px-4 py-3 border-t border-line font-mono-warm text-[12px] uppercase tracking-[0.12em] text-ink-2">
+                      <td className="px-4 py-3 border-t border-line font-mono text-[12px] uppercase tracking-[0.12em] text-ink-2">
                         {client.planTier}
                       </td>
                       <td className="px-4 py-3 border-t border-line">
@@ -164,7 +164,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
                 {rows.length > 0 ? (
                   <tfoot>
                     <tr className="bg-paper-2/60">
-                      <td colSpan={3} className="px-4 py-3 border-t border-line font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">
+                      <td colSpan={3} className="px-4 py-3 border-t border-line font-mono text-[11px] uppercase tracking-[0.14em] text-muted">
                         Totals
                       </td>
                       <td className="px-4 py-3 border-t border-line text-right tabular-nums">
@@ -191,7 +191,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
           <Card>
             <div className="px-6 py-5 border-b border-line">
               <div className="eyebrow">Plan mix</div>
-              <h3 className="font-serif-warm text-[20px] mt-1 tracking-[-0.01em]">Book of business</h3>
+              <h3 className="font-sans font-semibold text-[20px] mt-1 tracking-[-0.01em]">Book of business</h3>
             </div>
             <CardBody className="grid gap-3">
               {planMix.map(({ tier, count }) => {
@@ -205,7 +205,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
                         {meta.price} · ${price.tokenInclusion} tokens
                       </div>
                     </div>
-                    <div className="font-serif-warm text-[24px] tracking-[-0.01em] tabular-nums text-ink">
+                    <div className="font-sans font-semibold text-[24px] tracking-[-0.01em] tabular-nums text-ink">
                       {count}
                     </div>
                   </div>
@@ -226,7 +226,7 @@ export default function PartnerDetailPage({ params }: { params: { id: string } }
                 </a>
               </div>
               <div className="text-[12.5px] text-muted">
-                Portal slug: <code className="font-mono-warm">{partner.slug}</code>
+                Portal slug: <code className="font-mono">{partner.slug}</code>
               </div>
             </CardBody>
           </Card>
@@ -240,8 +240,8 @@ function Stat({ label, value, sub }: { label: string; value: string; sub: string
   return (
     <Card>
       <CardBody className="px-5 py-5">
-        <div className="font-mono-warm text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
-        <div className="font-serif-warm text-[26px] tracking-[-0.02em] mt-1.5 leading-none">{value}</div>
+        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted">{label}</div>
+        <div className="font-sans font-semibold text-[26px] tracking-[-0.02em] mt-1.5 leading-none">{value}</div>
         <div className="text-[12px] text-muted mt-2 truncate">{sub}</div>
       </CardBody>
     </Card>
@@ -250,7 +250,7 @@ function Stat({ label, value, sub }: { label: string; value: string; sub: string
 
 function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
+    <th className={`px-4 py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
       {children}
     </th>
   )

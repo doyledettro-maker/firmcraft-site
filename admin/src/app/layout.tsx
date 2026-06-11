@@ -1,27 +1,23 @@
 import type { Metadata } from 'next'
-import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from 'next/font/google'
+import { JetBrains_Mono, Source_Serif_4 } from 'next/font/google'
+import { GeistSans } from 'geist/font/sans'
 import { ClerkProvider } from '@clerk/nextjs'
+import '../styles/tokens.css'
 import './globals.css'
 
-const inter = Inter({
+const mono = JetBrains_Mono({
   subsets: ['latin'],
-  variable: '--font-inter',
+  variable: '--font-jetbrains',
   display: 'swap',
 })
 
-const jakarta = Plus_Jakarta_Sans({
+// Wordmark only — never used in body copy or UI labels.
+const serif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-jakarta',
+  variable: '--font-source-serif',
   display: 'swap',
-  weight: ['400', '500', '600', '700', '800'],
-})
-
-const sourceSerif = Source_Serif_4({
-  subsets: ['latin'],
-  variable: '--font-serif',
-  display: 'swap',
-  weight: ['400', '500', '600'],
-  style: ['normal', 'italic'],
+  style: 'italic',
+  weight: '500',
 })
 
 export const metadata: Metadata = {
@@ -38,16 +34,9 @@ export default function RootLayout({
   const html = (
     <html
       lang="en"
-      className={`${inter.variable} ${jakarta.variable} ${sourceSerif.variable}`}
+      data-theme="dark"
+      className={`${GeistSans.variable} ${mono.variable} ${serif.variable}`}
     >
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap"
-          rel="stylesheet"
-        />
-      </head>
       <body className="antialiased">{children}</body>
     </html>
   )

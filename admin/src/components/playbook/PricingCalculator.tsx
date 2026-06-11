@@ -63,7 +63,7 @@ export function PricingCalculator() {
                   </span>
                   <div>
                     <div className="text-[14.5px] font-medium text-ink leading-tight">{m.name}</div>
-                    <div className="font-mono-warm text-[12px] text-accent-3 mt-0.5">{money(m.price)}/mo</div>
+                    <div className="font-mono text-[12px] text-accent-3 mt-0.5">{money(m.price)}/mo</div>
                   </div>
                 </div>
                 <span
@@ -92,7 +92,7 @@ export function PricingCalculator() {
       <div className="lg:sticky lg:top-24">
         <div className="rounded-2xl border border-line-2 bg-paper overflow-hidden">
           <div className="px-5 py-4 border-b border-line flex items-center justify-between">
-            <div className="font-mono-warm text-[11px] uppercase tracking-[0.16em] text-muted">Live quote</div>
+            <div className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">Live quote</div>
             <button
               type="button"
               onClick={() => setSelected(new Set(MODULES.map((m) => m.id)))}
@@ -107,7 +107,7 @@ export function PricingCalculator() {
 
             <div className="rounded-xl bg-accent/[0.07] border border-accent/20 px-4 py-3.5">
               <div className="text-[12px] text-ink-2">Firmcraft — one platform</div>
-              <div className="font-serif-warm text-[34px] leading-none text-ink mt-1 tabular-nums">
+              <div className="font-sans font-semibold text-[34px] leading-none text-ink mt-1 tabular-nums">
                 {money(totals.firmcraft)}
                 <span className="text-[15px] text-muted font-sans">/mo</span>
               </div>
@@ -128,7 +128,7 @@ export function PricingCalculator() {
                 <TrendingDown className="w-4 h-4 text-status-up mt-0.5 flex-none" />
                 <div>
                   <div className="text-[12px] text-ink-2">Estimated monthly savings</div>
-                  <div className="font-serif-warm text-[22px] leading-tight text-status-up tabular-nums mt-0.5">
+                  <div className="font-sans font-semibold text-[22px] leading-tight text-status-up tabular-nums mt-0.5">
                     {saveLow > 0 ? `${money(saveLow)}–${money(saveHigh)}` : `up to ${money(saveHigh)}`}
                   </div>
                   <div className="text-[11.5px] text-muted mt-0.5">

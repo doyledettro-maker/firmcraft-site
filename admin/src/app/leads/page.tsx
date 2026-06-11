@@ -17,8 +17,8 @@ export default async function LeadsPage() {
       <div className="flex items-end justify-between gap-6 mb-8">
         <div>
           <div className="eyebrow">Leads</div>
-          <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Inbound <em className="text-accent italic">leads</em>
+          <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Inbound <em className="text-signal not-italic">leads</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[560px] leading-relaxed">
             Everyone who reached out through the site — contact form, support, and CTAs.
@@ -67,9 +67,9 @@ function Kpi({
     <Card className="px-4 py-4">
       <div className="flex items-center gap-2 text-muted mb-2">
         <Icon className="w-4 h-4" />
-        <span className="font-mono-warm text-[10.5px] uppercase tracking-[0.12em]">{label}</span>
+        <span className="font-mono text-[10.5px] uppercase tracking-[0.12em]">{label}</span>
       </div>
-      <div className="text-[26px] font-serif-warm leading-none text-ink tabular-nums">{value}</div>
+      <div className="text-[26px] font-sans font-semibold leading-none text-ink tabular-nums">{value}</div>
       {sub ? <div className="text-[12.5px] text-muted mt-1">{sub}</div> : null}
     </Card>
   )

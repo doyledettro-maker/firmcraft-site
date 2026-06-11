@@ -180,7 +180,7 @@ function LeadRow({
             </div>
           </button>
         </td>
-        <td className="px-4 py-3 border-t border-line font-mono-warm text-[12px] uppercase tracking-[0.1em] text-ink-2">
+        <td className="px-4 py-3 border-t border-line font-mono text-[12px] uppercase tracking-[0.1em] text-ink-2">
           {lead.source || '—'}
         </td>
         <td className="px-4 py-3 border-t border-line">
@@ -246,17 +246,17 @@ function LeadRow({
                     </span>
                   ) : null}
                 </div>
-                <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.12em] text-muted mb-1.5">
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted mb-1.5">
                   Message
                 </div>
                 <div className="text-[14px] text-ink leading-relaxed whitespace-pre-wrap bg-paper border border-line rounded-lg px-4 py-3 min-h-[64px]">
-                  {lead.message?.trim() || <span className="text-muted italic">No message.</span>}
+                  {lead.message?.trim() || <span className="text-muted">No message.</span>}
                 </div>
               </div>
 
               {/* Internal notes */}
               <div>
-                <div className="font-mono-warm text-[10.5px] uppercase tracking-[0.12em] text-muted mb-1.5">
+                <div className="font-mono text-[10.5px] uppercase tracking-[0.12em] text-muted mb-1.5">
                   Internal notes
                 </div>
                 <Textarea
@@ -283,7 +283,7 @@ function LeadRow({
 function Th({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
     <th
-      className={`px-4 py-3 font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}
+      className={`px-4 py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}
     >
       {children}
     </th>

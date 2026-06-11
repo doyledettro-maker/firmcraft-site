@@ -51,7 +51,7 @@ export function UnsubscribeRunner({ contactId }: Props) {
 
   if (status === 'pending') {
     return (
-      <p className="text-[13px] text-muted font-mono-warm uppercase tracking-[0.12em]">
+      <p className="text-[13px] text-muted font-mono uppercase tracking-[0.12em]">
         Processing your request…
       </p>
     )

@@ -90,7 +90,7 @@ export function ClientsTable({ clients }: { clients: Client[] }) {
                   <td className="px-4 py-3 border-t border-line">
                     <StatusBadge status={c.status} />
                   </td>
-                  <td className="px-4 py-3 border-t border-line font-mono-warm text-[12px] uppercase tracking-[0.12em] text-ink-2">
+                  <td className="px-4 py-3 border-t border-line font-mono text-[12px] uppercase tracking-[0.12em] text-ink-2">
                     {c.planTier}
                   </td>
                   <td className="px-4 py-3 border-t border-line text-[13px]">
@@ -165,7 +165,7 @@ function SpendBar({ spend, allowance }: { spend: number; allowance: number }) {
 
 function Th({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
+    <th className={`px-4 py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
       {children}
     </th>
   )

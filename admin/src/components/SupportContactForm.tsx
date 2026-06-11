@@ -41,9 +41,9 @@ export function SupportContactForm() {
     return (
       <div className="rounded-2xl border border-[#6EE7B7]/25 bg-[#0F2A1E] px-6 py-8 text-center">
         <CheckCircle2 className="w-8 h-8 text-[#6EE7B7] mx-auto mb-3" />
-        <div className="font-serif-warm text-[24px] tracking-[-0.01em]">Message received</div>
+        <div className="font-sans font-semibold text-[24px] tracking-[-0.01em]">Message received</div>
         <p className="text-ink-2 mt-2 max-w-[440px] mx-auto">
-          A Firmcraft operator will reach out at <span className="font-mono-warm">{email || 'your email'}</span> shortly.
+          A Firmcraft operator will reach out at <span className="font-mono">{email || 'your email'}</span> shortly.
           For urgent production issues, also email{' '}
           <a href="mailto:support@firmcraft.ai" className="text-ink underline underline-offset-2">
             support@firmcraft.ai

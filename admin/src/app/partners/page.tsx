@@ -31,8 +31,8 @@ export default function PartnersPage() {
       <div className="flex items-end justify-between gap-6 mb-7 flex-wrap">
         <div>
           <div className="eyebrow">Partners</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            Resellers &amp; <em className="text-accent italic">referral partners</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            Resellers &amp; <em className="text-signal not-italic">referral partners</em>
           </h1>
           <p className="text-ink-2 mt-2 max-w-[640px]">
             {mockPartners.length} partners — managing {totals.clients} clients,{' '}
@@ -78,7 +78,7 @@ export default function PartnersPage() {
                       {partner.status}
                     </Badge>
                   </td>
-                  <td className="px-4 py-3 border-t border-line text-right tabular-nums font-mono-warm text-[12.5px] text-ink-2">
+                  <td className="px-4 py-3 border-t border-line text-right tabular-nums font-mono text-[12.5px] text-ink-2">
                     {Math.round(partner.commissionRate * 100)}%
                   </td>
                   <td className="px-4 py-3 border-t border-line text-right tabular-nums">
@@ -111,7 +111,7 @@ export default function PartnersPage() {
 
 function Th({ children, className }: { children?: React.ReactNode; className?: string }) {
   return (
-    <th className={`px-4 py-3 font-mono-warm text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
+    <th className={`px-4 py-3 font-mono text-[10.5px] uppercase tracking-[0.14em] text-muted font-medium ${className ?? ''}`}>
       {children}
     </th>
   )

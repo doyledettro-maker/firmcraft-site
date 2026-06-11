@@ -17,8 +17,8 @@ export default async function ClientsPage() {
       <div className="flex items-end justify-between gap-6 mb-7">
         <div>
           <div className="eyebrow">Clients</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            All <em className="text-accent italic">tenants</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            All <em className="text-signal not-italic">tenants</em>
           </h1>
           <p className="text-ink-2 mt-2">
             {clients.length} clients — {activeCount} active.

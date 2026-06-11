@@ -73,8 +73,8 @@ export default function SupportPage() {
     <AppShell>
       <div className="mb-8">
         <div className="eyebrow">Support center</div>
-        <h1 className="font-serif-warm text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
-          We’re here to <em className="text-accent italic">help</em>
+        <h1 className="font-sans font-semibold text-[42px] leading-[1.05] tracking-[-0.02em] mt-1">
+          We’re here to <em className="text-signal not-italic">help</em>
         </h1>
         <p className="text-ink-2 mt-2 max-w-[600px] leading-relaxed">
           Service health, common questions, documentation, and a direct line to the Firmcraft team.
@@ -91,7 +91,7 @@ export default function SupportPage() {
                 <ShieldCheck className="w-4 h-4 text-ink-2" />
                 <div>
                   <div className="eyebrow">System status</div>
-                  <h2 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">Firmcraft services</h2>
+                  <h2 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-1">Firmcraft services</h2>
                 </div>
               </div>
               <Link
@@ -113,7 +113,7 @@ export default function SupportPage() {
               <LifeBuoy className="w-4 h-4 text-ink-2" />
               <div>
                 <div className="eyebrow">Knowledge base</div>
-                <h2 className="font-serif-warm text-[22px] tracking-[-0.01em] mt-1">Frequently asked</h2>
+                <h2 className="font-sans font-semibold text-[22px] tracking-[-0.01em] mt-1">Frequently asked</h2>
               </div>
             </div>
             <CardBody className="px-6 py-2">
@@ -123,7 +123,7 @@ export default function SupportPage() {
                     <details className="group">
                       <summary className="flex items-start justify-between gap-4 cursor-pointer list-none">
                         <span className="font-medium text-ink leading-snug">{item.q}</span>
-                        <span className="font-mono-warm text-[12px] text-muted mt-0.5 group-open:rotate-180 transition-transform">
+                        <span className="font-mono text-[12px] text-muted mt-0.5 group-open:rotate-180 transition-transform">
                           ▾
                         </span>
                       </summary>
@@ -144,7 +144,7 @@ export default function SupportPage() {
               <BookOpen className="w-4 h-4 text-ink-2" />
               <div>
                 <div className="eyebrow">Documentation</div>
-                <h2 className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1">Resources</h2>
+                <h2 className="font-sans font-semibold text-[20px] tracking-[-0.01em] mt-1">Resources</h2>
               </div>
             </div>
             <ul className="divide-y divide-line">
@@ -184,7 +184,7 @@ export default function SupportPage() {
               <MessageSquare className="w-4 h-4 text-ink-2" />
               <div>
                 <div className="eyebrow">Direct line</div>
-                <h2 className="font-serif-warm text-[20px] tracking-[-0.01em] mt-1">Open a ticket</h2>
+                <h2 className="font-sans font-semibold text-[20px] tracking-[-0.01em] mt-1">Open a ticket</h2>
               </div>
             </div>
             <CardBody>

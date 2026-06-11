@@ -27,8 +27,8 @@ export default async function ClientConfigPage({ params }: { params: { id: strin
       <div className="flex items-end justify-between gap-6 mb-7">
         <div>
           <div className="eyebrow">Instance configuration</div>
-          <h1 className="font-serif-warm text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
-            {client.name} <em className="text-accent italic">/ config</em>
+          <h1 className="font-sans font-semibold text-[36px] leading-[1.05] tracking-[-0.02em] mt-1">
+            {client.name} <em className="text-signal not-italic">/ config</em>
           </h1>
           <p className="text-ink-2 mt-2 text-[14px]">
             Hermes instance settings{config.vpsIp ? ` · ${config.vpsIp}` : ''}{config.hermesPort ? `:${config.hermesPort}` : ''}
@@ -91,7 +91,7 @@ export default async function ClientConfigPage({ params }: { params: { id: strin
                     <ChannelDot enabled={ch.enabled} />
                     <span className="text-[14px] text-ink">{ch.platform}</span>
                   </div>
-                  <span className="text-[12px] text-muted font-mono-warm">{ch.enabled ? 'connected' : 'disabled'}</span>
+                  <span className="text-[12px] text-muted font-mono">{ch.enabled ? 'connected' : 'disabled'}</span>
                 </div>
               ))}
             </div>
@@ -235,7 +235,7 @@ function ConfigSection({ icon, title, description, children }: {
       <div className="px-6 py-5 border-b border-line">
         <div className="flex items-center gap-2">
           <span className="text-accent-2">{icon}</span>
-          <h3 className="font-serif-warm text-[22px] tracking-[-0.01em]">{title}</h3>
+          <h3 className="font-sans font-semibold text-[22px] tracking-[-0.01em]">{title}</h3>
         </div>
         <p className="text-[13px] text-muted mt-1">{description}</p>
       </div>
@@ -253,10 +253,10 @@ function ConfigRow({ label, value, sub, mono, muted, badge }: {
   badge?: 'up' | 'down'
 }) {
   return (
-    <div className="flex items-baseline justify-between py-1.5 border-b border-line/50 last:border-0">
+    <div className="flex items-baseline justify-between py-1.5 border-b border-line last:border-0">
       <span className="text-[13px] text-muted">{label}</span>
       <div className="text-right">
-        <span className={`text-[14px] ${mono ? 'font-mono-warm text-[12.5px]' : ''} ${muted ? 'text-muted' : 'text-ink'}`}>
+        <span className={`text-[14px] ${mono ? 'font-mono text-[12.5px]' : ''} ${muted ? 'text-muted' : 'text-ink'}`}>
           {badge && <StatusDot status={badge} />}
           {value}
         </span>

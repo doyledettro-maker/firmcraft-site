@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BrandMark } from './BrandMark'
+import { FirmcraftWordmark } from './FirmcraftWordmark'
 import { MobileMenu } from './MobileMenu'
 
 const NAV_ITEMS: { label: string; href: string; key: string }[] = [
@@ -22,9 +22,8 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
   return (
     <header className="site-header">
       <div className="wrap row">
-        <Link href="/" aria-label="Firmcraft home" className="wm-mark" style={{ color: 'var(--color-ink)' }}>
-          <BrandMark size={26} />
-          <span className="wm">Firmcraft</span>
+        <Link href="/" aria-label="Firmcraft home" className="wm-link">
+          <FirmcraftWordmark size={21} />
         </Link>
 
         <nav className="primary-nav" aria-label="Primary">

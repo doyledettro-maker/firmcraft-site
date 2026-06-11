@@ -209,25 +209,32 @@ body {
   color: var(--color-inverse-2);
 }
 
-/* Wordmark */
-.wm-mark {
+/* Wordmark — integrated lockup (mark refresh "1+4"): italic serif F + Geist 600 "irmcraft", no ring */
+.wm-link {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  text-decoration: none;
 }
-.wm-mark svg {
-  width: 26px;
-  height: 26px;
-  flex: 0 0 26px;
+.fc-lockup {
+  display: inline-flex;
+  align-items: baseline;
+  line-height: 1;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.024em;
+  color: var(--color-ink);
 }
-.wm-mark .wm {
+.fc-lockup.inverse {
+  color: #fff;
+}
+.fc-lockup .fc-lockup-f {
   font-family: var(--font-display);
   font-style: italic;
   font-weight: 500;
-  font-size: 21px;
-  letter-spacing: -0.012em;
-  color: var(--color-ink);
+  letter-spacing: -0.04em;
+  margin-right: -0.02em;
   line-height: 1;
+  color: var(--color-signal);
 }
 
 /* Site header (new firmcraft style) */
@@ -322,9 +329,6 @@ body {
 }
 .site-footer .col a:hover {
   opacity: 1;
-}
-.site-footer .brand .wm-mark .wm {
-  color: #fff;
 }
 .site-footer .brand p {
   margin: 14px 0 0;

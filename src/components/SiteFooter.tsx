@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { BrandMark } from './BrandMark'
+import { FirmcraftWordmark } from './FirmcraftWordmark'
 
 type FooterLink = { label: string; href: string; external?: boolean }
 type FooterColumn = { heading: string; links: FooterLink[] }
@@ -53,11 +53,8 @@ export function SiteFooter() {
       <div className="wrap">
         <div className="footer-grid">
           <div className="brand">
-            <Link href="/" aria-label="Firmcraft home" className="wm-mark" style={{ color: '#fff' }}>
-              <BrandMark size={26} className="brand-mark" />
-              <span className="wm" style={{ color: '#fff' }}>
-                Firmcraft
-              </span>
+            <Link href="/" aria-label="Firmcraft home" className="wm-link">
+              <FirmcraftWordmark size={21} variant="inverse" />
             </Link>
             <p>
               An AI implementation, integration, and enablement firm for finance- and

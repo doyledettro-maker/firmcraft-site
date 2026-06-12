@@ -42,6 +42,10 @@ const isPublicRoute = createRouteMatcher([
   // itself (so the Hermes client-health skill can read it server-to-server).
   '/api/health/clients',
   '/api/stripe/webhook',
+  // Employee-code sign-in for the Firmcraft Work mobile app — pre-auth by
+  // definition; the route does its own throttling and only mints short-lived
+  // Clerk sign-in tokens (see the route file for the threat model).
+  '/api/mobile/code-login',
   '/api/outreach/track/(.*)',
   '/api/outreach/unsubscribe/(.*)',
   '/status',

@@ -6,26 +6,6 @@
 
 const BASE = 'https://firmcraft.ai'
 export const ORG_ID = `${BASE}/#organization`
-export const FOUNDER_ID = `${BASE}/#doyle-dettro`
-
-export const FOUNDER_JSONLD = {
-  '@type': 'Person',
-  '@id': FOUNDER_ID,
-  name: 'Doyle Dettro',
-  jobTitle: 'Founder & Principal',
-  description:
-    'CPA and Microsoft Dynamics 365 Business Central consultant. Big-4 audit, industry controller, ERP implementation, and AI systems builder.',
-  worksFor: { '@id': ORG_ID },
-  sameAs: ['https://www.linkedin.com/company/firmcraft-ai/'],
-  knowsAbout: [
-    'AI implementation',
-    'Microsoft Dynamics 365 Business Central',
-    'ERP consulting',
-    'accounting',
-    'LLM evaluation',
-    'workflow automation',
-  ],
-}
 
 export const ORG_JSONLD = {
   '@context': 'https://schema.org',
@@ -41,7 +21,6 @@ export const ORG_JSONLD = {
   telephone: '+1-217-303-8319',
   email: 'hello@firmcraft.ai',
   priceRange: '$399/mo – $60,000+',
-  founder: FOUNDER_JSONLD,
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Springfield',

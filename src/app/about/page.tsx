@@ -2,8 +2,6 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import { JsonLd } from '@/components/JsonLd'
-import { FOUNDER_JSONLD } from '@/lib/structured-data'
 import './about.css'
 
 export const metadata: Metadata = {
@@ -16,7 +14,6 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <>
-      <JsonLd data={{ '@context': 'https://schema.org', ...FOUNDER_JSONLD }} />
       <SiteHeader current="about" />
       <main>
         {/* HERO */}

@@ -524,9 +524,9 @@ export default function HomePage() {
               managed AI operations, and Firmcraft Operator — a managed AI employee that works in
               Slack or Microsoft Teams, from $399/month. Clients range from owner-operated trades
               and practices — HVAC, plumbing, tree care, dental, legal, CPA firms — to
-              finance- and operations-led mid-market companies. Founded by Doyle Dettro, CPA and
-              ERP consultant. Sovereign by default: deployments run on the open-source Hermes
-              platform and your data stays in your environment.
+              finance- and operations-led mid-market companies. CPA-led, with deep ERP
+              implementation experience. Sovereign by default: deployments run on the open-source
+              Hermes platform and your data stays in your environment.
             </p>
           </div>
         </section>

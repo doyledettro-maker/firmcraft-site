@@ -1,6 +1,11 @@
+import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import './home.css'
+
+export const metadata: Metadata = {
+  alternates: { canonical: '/' },
+}
 
 export default function HomePage() {
   return (
@@ -497,6 +502,32 @@ export default function HomePage() {
                 </div>
               </aside>
             </div>
+          </div>
+        </section>
+
+        {/* ============ WHAT FIRMCRAFT IS (plain-language definition) ============ */}
+        <section className="sec" data-screen-label="07 Definition" style={{ paddingTop: 40, paddingBottom: 48 }}>
+          <div className="wrap">
+            <p
+              style={{
+                maxWidth: 860,
+                margin: 0,
+                fontSize: '15px',
+                lineHeight: 1.7,
+                color: 'var(--color-muted)',
+              }}
+            >
+              Firmcraft is an AI consulting firm based in the Springfield, Illinois area, serving
+              small and mid-sized businesses in central Illinois, Houston, Texas, and across the
+              United States. We provide fixed-fee AI readiness assessments, AI implementation and
+              ERP integration (Microsoft Dynamics 365 Business Central, NetSuite, Acumatica),
+              managed AI operations, and Firmcraft Operator — a managed AI employee that works in
+              Slack or Microsoft Teams, from $399/month. Clients range from owner-operated trades
+              and practices — HVAC, plumbing, tree care, dental, legal, CPA firms — to
+              finance- and operations-led mid-market companies. Founded by Doyle Dettro, CPA and
+              ERP consultant. Sovereign by default: deployments run on the open-source Hermes
+              platform and your data stays in your environment.
+            </p>
           </div>
         </section>
       </main>

@@ -18,6 +18,11 @@ const nextConfig = {
         destination: '/services',
         permanent: true,
       },
+      {
+        source: '/trust',
+        destination: '/security',
+        permanent: false,
+      },
     ]
   },
 }

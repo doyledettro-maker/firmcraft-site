@@ -3,17 +3,34 @@ import type { Metadata } from 'next'
 import './managed-ai.css'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { serviceJsonLd } from '@/lib/structured-data'
 import { OPERATOR_PLANS } from '@/lib/pricing'
 
 export const metadata: Metadata = {
-  title: 'Firmcraft Operator — Sovereign AI in your team chat',
+  title: 'Firmcraft Operator — Managed AI Employee in Slack or Teams from $399/mo',
   description:
-    'Firmcraft Operator. Solo, Team, and Pro plans from $399/mo, priced by who actually uses the agent. Lives in Slack or Teams, plugged into the tools you already use.',
+    'A managed AI employee for small business. Solo, Team, and Pro plans from $399/mo, priced by who actually uses the agent. Lives in Slack or Teams, plugged into the tools you already use, running by Friday.',
+  alternates: { canonical: '/managed-ai' },
 }
+
+const OPERATOR_JSONLD = serviceJsonLd({
+  name: 'Firmcraft Operator',
+  serviceType: 'Managed AI service',
+  url: '/managed-ai',
+  description:
+    'A managed AI employee that works in Slack or Microsoft Teams, integrated with the tools a small business already uses (accounting, CRM, scheduling, practice management). Onboarding, all integrations, and a monthly AI token allowance included; live within five business days.',
+  offers: [
+    { price: '399', description: 'Solo — 1–3 users, $399/month' },
+    { price: '799', description: 'Team — 4–7 users, $799/month' },
+    { price: '1499', description: 'Pro — 8–10 users, $1,499/month' },
+  ],
+})
 
 export default function ManagedAIPage() {
   return (
     <>
+      <JsonLd data={OPERATOR_JSONLD} />
       <SiteHeader current="managed-ai" />
       <main>
         {/* HERO */}

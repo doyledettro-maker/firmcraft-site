@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { serviceJsonLd } from '@/lib/structured-data'
 import { PricingCalculator } from './PricingCalculator'
 import './houston.css'
 
 export const metadata: Metadata = {
-  title: 'AI Office Manager for Houston Contractors | Firmcraft',
+  title: 'AI Office Manager for Houston Contractors',
   description:
     'An AI operator that runs your Houston contracting office — answering phones, scheduling, dispatch, invoicing, and booking in one. Replace Ruby, Jobber, Housecall Pro, and QuickBooks for a fraction of the cost. Built in Houston for HVAC, plumbing, and electrical contractors.',
   alternates: { canonical: '/houston' },
@@ -17,6 +19,7 @@ export const metadata: Metadata = {
     siteName: 'Firmcraft',
     locale: 'en_US',
     type: 'website',
+    images: ['/opengraph-image'],
   },
 }
 
@@ -29,9 +32,26 @@ const DOES: [string, string][] = [
   ['Learns your business', 'Your pricing, your service area, your rules. The longer it runs, the more it sounds like your best office manager.'],
 ]
 
+const HOUSTON_JSONLD = serviceJsonLd({
+  name: 'AI Office Manager for Houston Contractors',
+  serviceType: 'AI office management for contractors',
+  url: '/houston',
+  areaServed: 'Houston, Texas metro area',
+  description:
+    'An AI operator that runs a Houston contracting office — answers phones in your business voice, remembers every client, schedules and dispatches crews, sends invoices and collects payment, and books work 24/7. Built for HVAC, plumbing, electrical, and roofing contractors.',
+  offers: [
+    { price: '199', description: 'AI Receptionist — every call answered, $199/month' },
+    { price: '149', description: 'Scheduling & Dispatch — $149/month' },
+    { price: '99', description: 'Invoicing & Payments — $99/month' },
+    { price: '79', description: 'Portal & Booking — $79/month' },
+    { price: '49', description: 'Operations Dashboard — $49/month' },
+  ],
+})
+
 export default function HoustonPage() {
   return (
     <>
+      <JsonLd data={HOUSTON_JSONLD} />
       <SiteHeader />
 
       <main className="htx-page">

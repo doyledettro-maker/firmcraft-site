@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import './pricing.css'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { faqJsonLd } from '@/lib/structured-data'
 import {
   ASSESSMENT,
   BUILD_PACKAGES,
@@ -10,14 +12,43 @@ import {
 } from '@/lib/pricing'
 
 export const metadata: Metadata = {
-  title: 'Pricing — Firmcraft',
+  title: 'Pricing — Managed AI from $399/mo & Fixed-Fee AI Consulting',
   description:
-    'Two tracks. Firmcraft Operator (Solo/Team/Pro plans from $399/mo) and Firmcraft Services (Assessment + Build + Operate). Pick the one that fits.',
+    'Published pricing, two tracks: Firmcraft Operator managed AI (Solo $399, Team $799, Pro $1,499/mo) and Firmcraft Services (Assessment $4.5k–$8.5k, Build from $25k, retainers from $1.5k/mo).',
+  alternates: { canonical: '/pricing' },
 }
+
+const PRICING_FAQ: { q: string; a: string }[] = [
+  {
+    q: 'Which track is right for me?',
+    a: "If 10 or fewer people will work with the agent and you're happy with the standard workflows, the Operator is exactly the product you want. If you need ERP-deep integration, a multi-department rollout, or anything custom, that's a Services engagement.",
+  },
+  {
+    q: 'Can I start on Operator and graduate to Services?',
+    a: "Yes — that's the bridge. Every Operator client can move into a scoped Build whenever the workflows get heavy enough to need it. Same engineer, same Hermes substrate, no rebuild.",
+  },
+  {
+    q: 'Why fixed-fee instead of T&M?',
+    a: "Time-and-materials makes the buyer the project manager. We're paid to estimate scope correctly, not to bill until we get it right. Fixed-fee aligns us with shipping.",
+  },
+  {
+    q: 'What if scope changes mid-Build?',
+    a: "Change requests are scoped and quoted at the hourly rate before any work happens. We don't do quiet scope creep — and we don't burn through buffer at the end.",
+  },
+  {
+    q: 'Do you white-label / sub for other firms?',
+    a: "Selectively. Usually for ERP or accounting firms whose clients are asking for AI and who don't want to staff it. Ask on the call.",
+  },
+  {
+    q: 'Do you have minimums?',
+    a: 'The Build minimum is Foundation ($25k). The Operator starts at $399/mo. The Assessment is the only "small" Services entry point — and it pays for itself when it kills the wrong project.',
+  },
+]
 
 export default function PricingPage() {
   return (
     <>
+      <JsonLd data={faqJsonLd(PRICING_FAQ)} />
       <SiteHeader current="pricing" />
 
       <main>
@@ -458,59 +489,12 @@ export default function PricingPage() {
               </h2>
             </div>
             <div className="faq">
-              <div className="q">
-                <h4>Which track is right for me?</h4>
-                <p>
-                  If 10 or fewer people will work with the agent and
-                  you&apos;re happy with the standard workflows, the
-                  Operator is exactly the product you want. If you
-                  need ERP-deep integration, a multi-department
-                  rollout, or anything custom, that&apos;s a Services
-                  engagement.
-                </p>
-              </div>
-              <div className="q">
-                <h4>Can I start on Operator and graduate to Services?</h4>
-                <p>
-                  Yes — that&apos;s the bridge. Every Operator client
-                  can move into a scoped Build whenever the workflows
-                  get heavy enough to need it. Same engineer, same
-                  Hermes substrate, no rebuild.
-                </p>
-              </div>
-              <div className="q">
-                <h4>Why fixed-fee instead of T&amp;M?</h4>
-                <p>
-                  Time-and-materials makes the buyer the project manager.
-                  We&apos;re paid to estimate scope correctly, not to bill
-                  until we get it right. Fixed-fee aligns us with shipping.
-                </p>
-              </div>
-              <div className="q">
-                <h4>What if scope changes mid-Build?</h4>
-                <p>
-                  Change requests are scoped and quoted at the hourly rate
-                  before any work happens. We don&apos;t do quiet scope creep
-                  — and we don&apos;t burn through buffer at the end.
-                </p>
-              </div>
-              <div className="q">
-                <h4>Do you white-label / sub for other firms?</h4>
-                <p>
-                  Selectively. Usually for ERP or accounting firms whose
-                  clients are asking for AI and who don&apos;t want to staff
-                  it. Ask on the call.
-                </p>
-              </div>
-              <div className="q">
-                <h4>Do you have minimums?</h4>
-                <p>
-                  The Build minimum is Foundation ($25k). The Operator
-                  starts at $399/mo. The Assessment is the only
-                  &ldquo;small&rdquo; Services entry point — and it
-                  pays for itself when it kills the wrong project.
-                </p>
-              </div>
+              {PRICING_FAQ.map((item) => (
+                <div className="q" key={item.q}>
+                  <h4>{item.q}</h4>
+                  <p>{item.a}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>

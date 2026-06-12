@@ -4,9 +4,10 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './methodology.css'
 
 export const metadata: Metadata = {
-  title: 'Methodology — Firmcraft',
+  title: 'Methodology — How We Implement AI',
   description:
-    'Five phases inherited from ERP, re-tuned for AI: discovery, fit-gap, configure, train & eval, hypercare.',
+    'How Firmcraft implements AI for small and mid-sized businesses: five phases inherited from ERP discipline — discovery, fit-gap, configure, train & eval, hypercare.',
+  alternates: { canonical: '/methodology' },
 }
 
 export default function MethodologyPage() {

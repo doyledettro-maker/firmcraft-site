@@ -1,17 +1,57 @@
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { serviceJsonLd } from '@/lib/structured-data'
 import './services.css'
 
 export const metadata: Metadata = {
-  title: 'Services — Firmcraft',
+  title: 'AI Consulting Services — Assessment, Implementation, Managed AI',
   description:
-    'Assess → Build → Operate → Advisory. Four service lines for finance- and operations-driven SMBs running ERPs.',
+    'Fixed-fee AI consulting for small and mid-sized businesses: AI readiness assessment ($4.5k–$8.5k), implementation packages, managed AI operations, and fractional advisory. Assess → Build → Operate.',
+  alternates: { canonical: '/services' },
 }
+
+const SERVICES_JSONLD = [
+  serviceJsonLd({
+    name: 'AI Readiness Assessment',
+    serviceType: 'AI consulting',
+    url: '/services#assess',
+    description:
+      'Fixed-fee 2–3 week diagnostic: stakeholder interviews, system inventory, use-case prioritization scorecard, data and integration audit, 12-month AI roadmap with TCO model.',
+    offers: [{ price: '4500', description: 'Fixed fee, $4,500–$8,500, scoped on the discovery call. Refundable against any Build engagement.' }],
+  }),
+  serviceJsonLd({
+    name: 'AI Implementation (Build packages)',
+    serviceType: 'AI implementation',
+    url: '/services#build',
+    description:
+      'Four fixed-fee, fixed-scope implementation packages with dated delivery: Foundation (managed Hermes, RAG, messaging gateway, evals), Finance (AP/AR automation against the ERP), Operations (workflow agents), and Voice + Support.',
+    offers: [{ price: '25000', description: 'Foundation package from $25,000; vertical packages $35,000–$60,000+.' }],
+  }),
+  serviceJsonLd({
+    name: 'Managed AI Operations',
+    serviceType: 'Managed AI services',
+    url: '/services#operate',
+    description:
+      'Monthly retainer covering model monitoring, eval regression, prompt tuning, and new workflow development — Essential, Standard, and Comprehensive tiers.',
+    offers: [{ price: '1500', description: 'Retainers from $1,500 to $10,000 per month by tier.' }],
+  }),
+  serviceJsonLd({
+    name: 'Fractional AI Advisory',
+    serviceType: 'AI strategy consulting',
+    url: '/services#advisory',
+    description:
+      'Strategy and oversight without implementation — a fractional head of AI, usually 2–4 days per month.',
+  }),
+]
 
 export default function ServicesPage() {
   return (
     <>
+      {SERVICES_JSONLD.map((s, i) => (
+        <JsonLd key={i} data={s} />
+      ))}
       <SiteHeader current="services" />
       <main>
         {/* HERO */}

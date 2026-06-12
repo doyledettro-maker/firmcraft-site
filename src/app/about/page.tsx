@@ -2,17 +2,21 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { FOUNDER_JSONLD } from '@/lib/structured-data'
 import './about.css'
 
 export const metadata: Metadata = {
-  title: 'About — Firmcraft',
+  title: 'About — A CPA-Led AI Consulting Firm',
   description:
-    "Founder, thesis, and the sovereign AI story. CPA + ERP consultant + AI builder building one of the first AI consulting firms native to the post-ChatGPT era.",
+    'Founder, thesis, and the sovereign AI story. CPA + ERP consultant + AI builder, based in the Springfield, Illinois area — building one of the first AI consulting firms native to the post-ChatGPT era.',
+  alternates: { canonical: '/about' },
 }
 
 export default function AboutPage() {
   return (
     <>
+      <JsonLd data={{ '@context': 'https://schema.org', ...FOUNDER_JSONLD }} />
       <SiteHeader current="about" />
       <main>
         {/* HERO */}
@@ -29,7 +33,8 @@ export default function AboutPage() {
                   Firmcraft was started by a CPA who became an ERP consultant who became an AI
                   builder — in that order. The differentiator isn&apos;t the technology. It&apos;s
                   the path through the technology that someone who&apos;s been on the other side of
-                  the table can see.
+                  the table can see. We&apos;re based in the Springfield, Illinois area and work
+                  with clients across central Illinois, Houston, Texas, and the rest of the US.
                 </p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   <a

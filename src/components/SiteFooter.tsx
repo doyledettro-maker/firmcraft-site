@@ -29,6 +29,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'Playbooks', href: '/playbooks' },
       { label: 'Integrations', href: '/integrations' },
       { label: 'Security & sovereignty', href: '/security' },
+      { label: 'Houston contractors', href: '/houston' },
       { label: 'Workforce training ↗', href: 'https://skillcalibrate.com', external: true },
     ],
   },
@@ -57,8 +58,9 @@ export function SiteFooter() {
               <FirmcraftWordmark size={21} variant="inverse" />
             </Link>
             <p>
-              An AI implementation, integration, and enablement firm for finance- and
-              operations-driven SMBs running ERPs.
+              An AI consulting firm for small and mid-sized businesses — AI assessment,
+              implementation, ERP integration, and managed AI. Based in the Springfield,
+              Illinois area, serving central Illinois, Houston, Texas, and clients nationwide.
             </p>
           </div>
 

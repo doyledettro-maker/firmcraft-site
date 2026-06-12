@@ -6,7 +6,8 @@ import { StatusBanner } from './StatusBanner'
 import { SupportForm } from './SupportForm'
 
 export const metadata: Metadata = {
-  title: 'Support | Firmcraft',
+  title: 'Support',
+  alternates: { canonical: '/support' },
   description:
     'Get help with your Firmcraft AI operator — system status, common questions, and a direct line to our team.',
 }

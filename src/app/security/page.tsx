@@ -2,11 +2,14 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { faqJsonLd } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
-  title: 'Firmcraft — Your data. Your environment. Your audit log.',
+  title: 'Security & Sovereignty — Your Data, Your Environment, Your Audit Log',
   description:
     'Per-firm deployment, enterprise-grade encryption, full audit log, partner approvals on sensitive actions. The default posture is paranoid.',
+  alternates: { canonical: '/security' },
 }
 
 const PRINCIPLES: { n: string; title: React.ReactNode; body: string }[] = [
@@ -73,37 +76,37 @@ const COMPLIANCE: { stat: string; nm: string; body: string }[] = [
   { stat: 'Future', nm: 'ISO 27001', body: 'On the roadmap once customer demand warrants formal certification.' },
 ]
 
-const FAQ: { q: React.ReactNode; a: string }[] = [
+const FAQ: { q: string; a: string }[] = [
   {
-    q: <>Will my client data be used to train models?</>,
+    q: "Will my client data be used to train models?",
     a: "No. Your firm's data — chats, documents, charts, audit logs — is never used for model training. Not by us, not by the model providers we route through. This is enforced contractually with our model providers and architecturally by the per-firm deployment.",
   },
   {
-    q: <>Where is my data physically stored?</>,
+    q: "Where is my data physically stored?",
     a: "By default, US-East-1 (Northern Virginia) for managed deployments. We can deploy to US-West, EU regions, or your own AWS / GCP / Azure account. On-prem deployment is available for firms with that requirement; we'll quote the engagement separately.",
   },
   {
-    q: <>What happens to my data if we churn?</>,
+    q: "What happens to my data if we churn?",
     a: "You get a full export within 5 business days — every chat, document, audit log entry, and playbook configuration in open formats (CSV, JSON, Markdown, PDF). Your deployment is then destroyed and we hold a 30-day backup for emergency recovery, after which it's also destroyed. We notify you when the final destruction completes.",
   },
   {
-    q: <>Who at Firmcraft can see my data?</>,
+    q: "Who at Firmcraft can see my data?",
     a: "Three engineers, named in our DPA. Access is logged, scoped to the specific issue, and time-boxed. Routine support and onboarding don't require access to your data — they work from telemetry and your screen-share.",
   },
   {
-    q: <>What if a model provider has an outage or breach?</>,
+    q: "What if a model provider has an outage or breach?",
     a: "The operator routes across 45+ supported LLM providers, with built-in automatic failover and credential pools that distribute load across keys. If Anthropic has an outage, we route to OpenAI, Bedrock, or Gemini without you noticing. In the case of a security incident at a provider, we have contractual notification obligations and our own 24-hour incident SLA — we'd notify you, isolate any affected workflows, and switch routing.",
   },
   {
-    q: <>Do you offer a BAA?</>,
+    q: "Do you offer a BAA?",
     a: "Yes — BAAs are part of standard onboarding for healthcare deployments (dental, medical, behavioral health). Signed before any patient data flows.",
   },
   {
-    q: <>Can I see your security documentation or pen test?</>,
+    q: "Can I see your security documentation or pen test?",
     a: "Yes, under NDA. Email security@firmcraft and we'll share our security architecture overview, controls documentation, and pen test summary within one business day.",
   },
   {
-    q: <>What happens if Firmcraft goes out of business?</>,
+    q: "What happens if Firmcraft goes out of business?",
     a: "The operator runs on Hermes Agent, an MIT-licensed open-source platform maintained by Nous Research. Your skills, memory files, integrations, and audit logs are all stored in standard formats on infrastructure you can take with you. You — or another vendor — can pick them up and run a Hermes deployment elsewhere on day one. We don't own the runtime. We operate it for you. No lock-in, by design.",
   },
 ]
@@ -147,6 +150,7 @@ function VRow({
 export default function SecurityPage() {
   return (
     <>
+      <JsonLd data={faqJsonLd(FAQ)} />
       <SiteHeader />
 
       {/* HERO */}

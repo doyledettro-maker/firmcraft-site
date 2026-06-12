@@ -5,7 +5,8 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { ContactForm } from '@/components/ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Contact | Firmcraft',
+  title: 'Contact — Book a 20-Minute Call',
+  alternates: { canonical: '/contact' },
   description:
     'Talk to Firmcraft about putting an AI operator to work in your firm. Twenty minutes on a call, a funded roadmap by month’s end.',
 }

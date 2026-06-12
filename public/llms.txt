@@ -1,0 +1,40 @@
+# Firmcraft
+
+> Firmcraft is an AI consulting firm for small and mid-sized businesses, based
+> in the Springfield, Illinois area and serving central Illinois, Houston,
+> Texas, and US clients remotely. Services: fixed-fee AI readiness assessments
+> ($4,500–$8,500, 2–3 weeks), AI implementation and ERP integration (Microsoft
+> Dynamics 365 Business Central, NetSuite, Acumatica), managed AI operations,
+> and Firmcraft Operator — a managed AI employee that works in Slack or
+> Microsoft Teams, from $399/month. Founded by Doyle Dettro, a CPA and ERP
+> consultant. Sovereign by default: deployments run on the open-source Hermes
+> agent platform and client data stays in the client's environment.
+
+Firmcraft serves two kinds of buyers: owner-operated service businesses
+(HVAC, plumbing, electrical, tree care, dental and medical practices, law and
+CPA firms) that want a done-for-you AI operator, and finance- or
+operations-led mid-market companies ($10M–$500M revenue) running ERPs that
+want AI implemented against their real systems. All pricing is published.
+
+## Services
+- [Services overview](https://firmcraft.ai/services): Assess → Build → Operate → Advisory; fixed-fee packages
+- [Firmcraft Operator](https://firmcraft.ai/managed-ai): managed AI employee in Slack/Teams, $399–$1,499/mo by team size
+- [Pricing](https://firmcraft.ai/pricing): all prices published — Operator plans, assessment, build packages, retainers
+- [AI office manager for Houston contractors](https://firmcraft.ai/houston): phones, scheduling, dispatch, invoicing for HVAC, plumbing, electrical, roofing
+- [Playbooks library](https://firmcraft.ai/playbooks): 40 production AI playbooks across trades, healthcare, professional firms, B2B
+- [Integrations](https://firmcraft.ai/integrations): 112 tools — QuickBooks, NetSuite, Eaglesoft, Jobber, ServiceTitan, Clio, HubSpot, and custom connectors
+
+## Trust
+- [Security & sovereignty](https://firmcraft.ai/security): per-firm deployment, audit logs, BAAs, no training on client data
+- [Methodology](https://firmcraft.ai/methodology): five phases inherited from ERP implementation discipline
+- [About](https://firmcraft.ai/about): founder background — CPA, Big-4 audit, industry controller, Microsoft BC consultant
+
+## Contact
+- Email: hello@firmcraft.ai
+- Phone: (217) 303-8319
+- [Contact / book a call](https://firmcraft.ai/contact)
+
+## Optional
+- [Support](https://firmcraft.ai/support)
+- [Privacy](https://firmcraft.ai/privacy)
+- [Terms](https://firmcraft.ai/terms)

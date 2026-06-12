@@ -112,12 +112,18 @@ if [ -n "$CONTAINER_NAME" ] && docker inspect "$CONTAINER_NAME" >/dev/null 2>&1;
     [ -n "$norm" ] && LAST_ACTIVITY="$norm"
   fi
 
-  # Gateway heuristic: running container is assumed connected unless recent logs
-  # show auth-revocation or disconnect signals (the known Google-OAuth failure
-  # mode and websocket drops).
+  # Gateway heuristic: a running container is assumed connected unless recent
+  # logs show a genuine gateway/transport failure (websocket drop, refused
+  # connection, explicit gateway-disconnect).
+  #
+  # NOTE: Google-OAuth token revocation (invalid_grant / token revoked /
+  # RefreshError) is deliberately NOT matched here. It breaks COI/email but the
+  # gateway itself stays connected (Telegram + LLM keep working), so matching it
+  # produced false "Gateway disconnected" alarms (the token is revoked roughly
+  # weekly — see runbook). Google auth is a separate concern tracked elsewhere.
   if [ "$CONTAINER_STATUS" = "running" ]; then
     recent_logs="$(docker logs --tail 60 "$CONTAINER_NAME" 2>&1)"
-    if printf '%s' "$recent_logs" | grep -qiE 'invalid_grant|token.*revok|RefreshError|websocket.*clos|gateway.*disconnect|ECONNREFUSED|connection refused'; then
+    if printf '%s' "$recent_logs" | grep -qiE 'websocket.*clos|gateway.*disconnect|ECONNREFUSED|connection refused'; then
       GATEWAY_STATE="disconnected"
     else
       GATEWAY_STATE="connected"

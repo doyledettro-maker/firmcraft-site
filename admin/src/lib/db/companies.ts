@@ -25,6 +25,7 @@ export type Company = {
   state: string | null
   status: CompanyStatus
   segment: CompanySegment
+  assignedTo: string | null
   notes: string | null
   createdAt: string
   updatedAt: string
@@ -41,6 +42,7 @@ type CompanyRow = {
   state: string | null
   status: CompanyStatus
   segment: CompanySegment
+  assigned_to: string | null
   notes: string | null
   created_at: string
   updated_at: string
@@ -56,6 +58,7 @@ export type CompanyInput = {
   state?: string | null
   status?: CompanyStatus
   segment?: CompanySegment
+  assignedTo?: string | null
   notes?: string | null
 }
 
@@ -73,6 +76,7 @@ function rowToCompany(row: CompanyRow): Company {
     state: row.state,
     status: row.status,
     segment: row.segment,
+    assignedTo: row.assigned_to,
     notes: row.notes,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -90,6 +94,7 @@ function inputToRow(input: CompanyInput | CompanyUpdate): Record<string, unknown
   if ('state' in input && input.state !== undefined) row.state = input.state
   if ('status' in input && input.status !== undefined) row.status = input.status
   if ('segment' in input && input.segment !== undefined) row.segment = input.segment
+  if ('assignedTo' in input && input.assignedTo !== undefined) row.assigned_to = input.assignedTo
   if ('notes' in input && input.notes !== undefined) row.notes = input.notes
   return row
 }

@@ -155,6 +155,7 @@ function rowToContactWithCompany(row: ContactRowWithCompany): ContactWithCompany
       state: (c.state as string | null) ?? null,
       status: (c.status as Company['status']) ?? 'active',
       segment: (c.segment as Company['segment']) ?? 'small',
+      assignedTo: (c.assigned_to as string | null) ?? null,
       notes: (c.notes as string | null) ?? null,
       createdAt: (c.created_at as string) ?? row.created_at,
       updatedAt: (c.updated_at as string) ?? row.updated_at,
@@ -169,7 +170,7 @@ const CONTACT_WITH_COMPANY_SELECT = `
   sent_at, opened_at, clicked_at, replied_at, bounced_at, unsubscribed_at,
   companies (
     id, company_name, industry, employee_count, phone, website,
-    city, state, status, segment, notes, created_at, updated_at
+    city, state, status, segment, assigned_to, notes, created_at, updated_at
   )
 `
 

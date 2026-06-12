@@ -95,6 +95,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
   const [industry, setIndustry] = useState<string>('all')
   const [city, setCity] = useState<string>('all')
   const [segment, setSegment] = useState<'all' | CompanySegment>('all')
+  const [assignedTo, setAssignedTo] = useState<string>('all')
   const [contactStatus, setContactStatus] = useState<'all' | ContactStatus>('all')
   const [query, setQuery] = useState('')
   const [openCompanyId, setOpenCompanyId] = useState<string | null>(null)
@@ -116,6 +117,12 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
     return Array.from(s).sort()
   }, [companies])
 
+  const assignees = useMemo(() => {
+    const s = new Set<string>()
+    companies.forEach((c) => { if (c.assignedTo) s.add(c.assignedTo) })
+    return Array.from(s).sort((a, b) => a.localeCompare(b))
+  }, [companies])
+
   // Group contacts by companyId for fast lookup
   const contactsByCompany = useMemo(() => {
     const map = new Map<string, ContactWithCompany[]>()
@@ -134,6 +141,11 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
       if (industry !== 'all' && c.industry !== industry) return false
       if (city !== 'all' && c.city !== city) return false
       if (segment !== 'all' && c.segment !== segment) return false
+      if (assignedTo === '__unassigned__') {
+        if (c.assignedTo) return false
+      } else if (assignedTo !== 'all' && c.assignedTo !== assignedTo) {
+        return false
+      }
       if (contactStatus !== 'all') {
         const companyContacts = contactsByCompany.get(c.id) ?? []
         if (!companyContacts.some((ct) => ct.status === contactStatus)) return false
@@ -143,12 +155,12 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
         const contactHay = companyContacts
           .map((ct) => `${ct.contactName ?? ''} ${ct.email}`)
           .join(' ')
-        const hay = `${c.companyName} ${c.industry ?? ''} ${c.city ?? ''} ${contactHay}`
+        const hay = `${c.companyName} ${c.industry ?? ''} ${c.city ?? ''} ${c.assignedTo ?? ''} ${contactHay}`
         if (!hay.toLowerCase().includes(q)) return false
       }
       return true
     })
-  }, [companies, filter, industry, city, segment, contactStatus, query, contactsByCompany])
+  }, [companies, filter, industry, city, segment, assignedTo, contactStatus, query, contactsByCompany])
 
   const queuedCount = useMemo(
     () => contacts.filter((c) => c.status === 'queued').length,
@@ -217,6 +229,15 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
             {cities.map((v) => <option key={v} value={v}>{v}</option>)}
           </Select>
           <Select
+            value={assignedTo}
+            onChange={(e) => setAssignedTo(e.target.value)}
+            className="h-9 py-0 w-[150px]"
+          >
+            <option value="all">All assignees</option>
+            <option value="__unassigned__">Unassigned</option>
+            {assignees.map((v) => <option key={v} value={v}>{v}</option>)}
+          </Select>
+          <Select
             value={contactStatus}
             onChange={(e) => setContactStatus(e.target.value as 'all' | ContactStatus)}
             className="h-9 py-0 w-[150px]"
@@ -267,6 +288,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
               <Th>Industry</Th>
               <Th>Segment</Th>
               <Th>Location</Th>
+              <Th>Assigned</Th>
               <Th>Contacts</Th>
               <Th>Status</Th>
               <Th>Last touch</Th>
@@ -304,6 +326,9 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">
                     {[c.city, c.state].filter(Boolean).join(', ') || '—'}
                   </td>
+                  <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2 whitespace-nowrap">
+                    {c.assignedTo ? <AssigneeBadge name={c.assignedTo} /> : <span className="text-muted">—</span>}
+                  </td>
                   <td className="px-4 py-3 border-t border-line text-[13px] text-ink-2">
                     {companyContacts.length}
                   </td>
@@ -321,7 +346,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
             })}
             {visible.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-4 py-10 text-center text-muted border-t border-line">
+                <td colSpan={9} className="px-4 py-10 text-center text-muted border-t border-line">
                   No companies match.
                 </td>
               </tr>
@@ -405,6 +430,14 @@ function SegmentBadge({ segment }: { segment: CompanySegment }) {
   )
 }
 
+function AssigneeBadge({ name }: { name: string }) {
+  return (
+    <span className="inline-flex items-center px-2 py-0.5 rounded-full border border-accent/30 bg-accent/10 text-accent text-[11px] font-medium whitespace-nowrap">
+      {name}
+    </span>
+  )
+}
+
 function latestTouch(c: Contact): string | null {
   const times = [c.sentAt, c.openedAt, c.clickedAt, c.repliedAt, c.bouncedAt, c.unsubscribedAt]
     .filter((t): t is string => Boolean(t))
@@ -451,6 +484,7 @@ function CompanyDrawer({
     city: company.city ?? '',
     state: company.state ?? '',
     notes: company.notes ?? '',
+    assignedTo: company.assignedTo ?? '',
     status: company.status,
     segment: company.segment,
   })
@@ -475,6 +509,7 @@ function CompanyDrawer({
         city: form.city || null,
         state: form.state || null,
         notes: form.notes || null,
+        assignedTo: form.assignedTo.trim() || null,
         status: form.status,
         segment: form.segment,
       }
@@ -573,6 +608,13 @@ function CompanyDrawer({
                   <option key={s} value={s}>{SEGMENT_LABELS[s]}</option>
                 ))}
               </Select>
+            </Field>
+            <Field label="Assigned to">
+              <Input
+                value={form.assignedTo}
+                onChange={(e) => set('assignedTo', e.target.value)}
+                placeholder="Robert"
+              />
             </Field>
           </div>
           <Field label="Notes">
@@ -1231,6 +1273,7 @@ function NewCompanyModal({
   const [website, setWebsite] = useState('')
   const [city, setCity] = useState('')
   const [state, setState] = useState('')
+  const [assignedTo, setAssignedTo] = useState('')
   const [segment, setSegment] = useState<CompanySegment>('small')
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -1253,6 +1296,7 @@ function NewCompanyModal({
             state: state || null,
             status: 'active',
             segment,
+            assignedTo: assignedTo.trim() || null,
           },
           contacts: [],
         }),
@@ -1302,6 +1346,9 @@ function NewCompanyModal({
             </Field>
             <Field label="Employees">
               <Input type="number" value={employeeCount} onChange={(e) => setEmployeeCount(e.target.value)} />
+            </Field>
+            <Field label="Assigned to">
+              <Input value={assignedTo} onChange={(e) => setAssignedTo(e.target.value)} placeholder="Robert" />
             </Field>
             <Field label="Segment">
               <Select value={segment} onChange={(e) => setSegment(e.target.value as CompanySegment)}>

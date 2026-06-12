@@ -116,6 +116,7 @@ export async function POST(req: Request) {
           state: (r.state as string | null | undefined) ?? null,
           status: 'active',
           segment: parseSegment(r.segment),
+          assignedTo: typeof r.assignedTo === 'string' ? r.assignedTo.trim() || null : typeof r.assigned_to === 'string' ? r.assigned_to.trim() || null : null,
           notes: null,
         },
         contacts: [],
@@ -185,6 +186,7 @@ function parseCompany(raw: unknown): CompanyInput | null {
     state: (r.state as string | null | undefined) ?? null,
     status: status && COMPANY_STATUSES.includes(status) ? status : 'active',
     segment: parseSegment(r.segment),
+    assignedTo: typeof r.assignedTo === 'string' ? r.assignedTo.trim() || null : typeof r.assigned_to === 'string' ? r.assigned_to.trim() || null : null,
     notes: (r.notes as string | null | undefined) ?? null,
   }
 }

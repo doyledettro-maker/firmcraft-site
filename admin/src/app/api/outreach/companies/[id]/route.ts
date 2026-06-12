@@ -50,6 +50,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   if ('city' in r) update.city = r.city == null ? null : String(r.city)
   if ('state' in r) update.state = r.state == null ? null : String(r.state)
   if ('notes' in r) update.notes = r.notes == null ? null : String(r.notes)
+  if ('assignedTo' in r) update.assignedTo = r.assignedTo == null || String(r.assignedTo).trim() === '' ? null : String(r.assignedTo).trim()
   if ('status' in r) {
     const s = r.status as CompanyStatus
     if (!COMPANY_STATUSES.includes(s)) {

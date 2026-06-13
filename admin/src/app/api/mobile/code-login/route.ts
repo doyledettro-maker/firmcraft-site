@@ -21,6 +21,25 @@ const TOKEN_TTL_SECONDS = 60
 // reveal whether a guessed code exists.
 const MIN_RESPONSE_MS = 400
 
+// CORS. Native Expo builds use React Native networking and ignore CORS
+// entirely, but the same code runs under Expo web (and any browser-based test
+// harness), where the preflight must pass or fetch() throws before the request
+// is ever sent. The endpoint only mints a 60-second single-use sign-in token
+// from a body-supplied code — no cookies, no Authorization header, nothing
+// ambient — so `*` is safe here (and required, since credentials aren't used).
+const CORS_HEADERS: Record<string, string> = {
+  'access-control-allow-origin': '*',
+  'access-control-allow-methods': 'POST, OPTIONS',
+  'access-control-allow-headers': 'content-type',
+  'access-control-max-age': '86400',
+}
+
+// Explicit preflight handler so the response carries the CORS headers above.
+// (Next's auto-generated OPTIONS answers 204 but without them.)
+export function OPTIONS() {
+  return new NextResponse(null, { status: 204, headers: CORS_HEADERS })
+}
+
 // Sliding-window throttle. In-memory, so it's per serverless instance and
 // resets on cold start — best-effort, not a hard guarantee. Good enough while
 // the code space (4–6 digits) only has a handful of live codes; the durable
@@ -68,7 +87,7 @@ export async function POST(req: Request) {
     }
     return NextResponse.json(body, {
       status,
-      headers: { 'cache-control': 'no-store, max-age=0' },
+      headers: { 'cache-control': 'no-store, max-age=0', ...CORS_HEADERS },
     })
   }
 

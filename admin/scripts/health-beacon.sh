@@ -166,6 +166,213 @@ if [ -n "$LITELLM_BASE_URL" ] && [ -n "$LITELLM_KEY" ] && [ "$HAS_PY" -eq 1 ]; t
   fi
 fi
 
+# ===========================================================================
+# Security signals (post-incident upgrade). All best-effort: any probe that
+# can't run leaves its field null/empty and the beacon still POSTs cleanly.
+# ===========================================================================
+
+# json_escape <string> -> JSON-safe (no surrounding quotes)
+json_escape() { printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g; s/\t/ /g'; }
+
+# --- P0: public listeners -------------------------------------------------
+# Anything bound to 0.0.0.0 / :: / a non-loopback IP, excluding 22 and 443.
+# Emits a JSON array of {port, bind_addr, proc}.
+PUBLIC_LISTENERS_JSON="null"
+collect_public_listeners() {
+  local raw=""
+  if command -v ss >/dev/null 2>&1; then
+    raw="$(ss -tlnp 2>/dev/null)"
+  elif command -v netstat >/dev/null 2>&1; then
+    raw="$(netstat -tlnp 2>/dev/null)"
+  fi
+  [ -n "$raw" ] || return
+
+  # Parse "<bind_addr>:<port>" out of the local-address column and the process
+  # name out of the trailing users:(("name",...)) field. Loopback and the two
+  # allowed ports are filtered out.
+  PUBLIC_LISTENERS_JSON="$(printf '%s\n' "$raw" | awk '
+    NR == 1 && /State|Proto/ { next }   # header line (ss prints one; netstat too)
+    {
+      laddr=""; proc="";
+      # Find the local address: the column containing a ":" that is not the
+      # peer/foreign one. For ss -tlnp it is column 4; for netstat column 4 too.
+      laddr=$4;
+      # process name (best effort)
+      if (match($0, /users:\(\("[^"]+/)) {
+        proc=substr($0, RSTART, RLENGTH);
+        sub(/users:\(\("/, "", proc);
+      } else if ($7 ~ /\//) {
+        # netstat: pid/name
+        split($7, a, "/"); proc=a[2];
+      }
+      # split bind_addr / port on the LAST colon (handles IPv6 [::]:port and
+      # plain a.b.c.d:port).
+      n=split(laddr, parts, ":");
+      port=parts[n];
+      bind=laddr; sub(":" port "$", "", bind);
+      gsub(/[\[\]]/, "", bind);
+      if (port !~ /^[0-9]+$/) next;
+      if (port == 22 || port == 443) next;
+      # public if bound to wildcard or a non-loopback address.
+      is_public=0;
+      if (bind == "0.0.0.0" || bind == "*" || bind == "::" || bind == "[::]") is_public=1;
+      else if (bind ~ /^127\./ || bind == "::1") is_public=0;
+      else is_public=1;
+      if (!is_public) next;
+      print port "\t" bind "\t" proc;
+    }
+  ' | sort -u | awk -F'\t' '
+    BEGIN { printf "[" }
+    {
+      if (NR > 1) printf ",";
+      gsub(/\\/, "\\\\", $3); gsub(/"/, "\\\"", $3);
+      gsub(/\\/, "\\\\", $2); gsub(/"/, "\\\"", $2);
+      procval = ($3 == "" ? "null" : "\"" $3 "\"");
+      printf "{\"port\":%s,\"bind_addr\":\"%s\",\"proc\":%s}", $1, $2, procval;
+    }
+    END { printf "]" }
+  ')"
+  # An empty result is a valid (and good) signal: no public listeners.
+  [ -n "$PUBLIC_LISTENERS_JSON" ] || PUBLIC_LISTENERS_JSON="[]"
+}
+collect_public_listeners
+
+# --- P1a: CPU% + load average --------------------------------------------
+CPU_PERCENT=""
+CPU_CORES="$(nproc 2>/dev/null || getconf _NPROCESSORS_ONLN 2>/dev/null)"
+LOAD_ONE=""; LOAD_FIVE=""; LOAD_FIFTEEN=""
+
+if [ -r /proc/loadavg ]; then
+  read -r LOAD_ONE LOAD_FIVE LOAD_FIFTEEN _ < /proc/loadavg 2>/dev/null
+fi
+
+# CPU% from two /proc/stat samples ~1s apart (busy delta / total delta).
+if [ -r /proc/stat ]; then
+  read -r _ u1 n1 s1 i1 w1 irq1 sirq1 st1 _ < /proc/stat 2>/dev/null
+  sleep 1
+  read -r _ u2 n2 s2 i2 w2 irq2 sirq2 st2 _ < /proc/stat 2>/dev/null
+  if [ -n "${i2:-}" ] && [ -n "${i1:-}" ]; then
+    busy1=$(( ${u1:-0} + ${n1:-0} + ${s1:-0} + ${irq1:-0} + ${sirq1:-0} + ${st1:-0} ))
+    busy2=$(( ${u2:-0} + ${n2:-0} + ${s2:-0} + ${irq2:-0} + ${sirq2:-0} + ${st2:-0} ))
+    tot1=$(( busy1 + ${i1:-0} + ${w1:-0} ))
+    tot2=$(( busy2 + ${i2:-0} + ${w2:-0} ))
+    dtot=$(( tot2 - tot1 ))
+    dbusy=$(( busy2 - busy1 ))
+    if [ "$dtot" -gt 0 ]; then
+      CPU_PERCENT="$(awk -v b="$dbusy" -v t="$dtot" 'BEGIN{ printf "%.2f", (b/t)*100 }')"
+    fi
+  fi
+fi
+# Fallback: top -bn1 if /proc/stat sampling failed.
+if [ -z "$CPU_PERCENT" ] && command -v top >/dev/null 2>&1; then
+  idle="$(top -bn1 2>/dev/null | awk -F'[,%]+' '/Cpu\(s\)/{ for(i=1;i<=NF;i++) if($i ~ /id/){ gsub(/[^0-9.]/,"",$(i-1)); print $(i-1); exit } }')"
+  case "$idle" in ''|*[!0-9.]*) ;; *) CPU_PERCENT="$(awk -v id="$idle" 'BEGIN{ printf "%.2f", 100-id }')" ;; esac
+fi
+
+# --- P1b: agent config integrity -----------------------------------------
+# Read the container's config.yaml (docker exec, falling back to a host mount),
+# hash it, and flag dangerous keys that grant code execution.
+CONFIG_HASH=""
+DANGEROUS_KEYS_JSON="null"
+CONFIG_TEXT=""
+
+if [ -n "$CONTAINER_NAME" ]; then
+  for p in /opt/data/config.yaml /opt/data/hermes/config.yaml /app/config.yaml /config.yaml; do
+    CONFIG_TEXT="$(docker exec "$CONTAINER_NAME" cat "$p" 2>/dev/null)"
+    [ -n "$CONFIG_TEXT" ] && break
+  done
+fi
+# Host-mounted fallback (common bind-mount locations).
+if [ -z "$CONFIG_TEXT" ]; then
+  for p in /opt/data/config.yaml /opt/flex-pattern/hermes-agent/config.yaml /opt/hermes/config.yaml; do
+    if [ -r "$p" ]; then CONFIG_TEXT="$(cat "$p" 2>/dev/null)"; [ -n "$CONFIG_TEXT" ] && break; fi
+  done
+fi
+
+if [ -n "$CONFIG_TEXT" ]; then
+  if command -v sha256sum >/dev/null 2>&1; then
+    CONFIG_HASH="$(printf '%s' "$CONFIG_TEXT" | sha256sum 2>/dev/null | awk '{print $1}')"
+  elif command -v shasum >/dev/null 2>&1; then
+    CONFIG_HASH="$(printf '%s' "$CONFIG_TEXT" | shasum -a 256 2>/dev/null | awk '{print $1}')"
+  fi
+
+  # A key is "dangerous" only if present AND non-empty (top-level YAML key with a
+  # value, or a non-empty block/list under it).
+  DANGEROUS_KEYS_JSON="$(printf '%s\n' "$CONFIG_TEXT" | awk '
+    BEGIN { split("startup_hooks mcp_servers shell_hooks post_start_script", keys, " ") }
+    {
+      line=$0;
+      # current top-level key (no leading space, "key:")
+      if (line ~ /^[A-Za-z0-9_]+:/) {
+        curkey=line; sub(/:.*/, "", curkey);
+        # inline value on same line?
+        rest=line; sub(/^[A-Za-z0-9_]+:[ \t]*/, "", rest);
+        gsub(/[ \t\r]+$/, "", rest);
+        inline[curkey]=(rest != "" && rest != "[]" && rest != "{}" && rest != "null" && rest != "~");
+        haschild[curkey]=0;
+      } else if (line ~ /^[ \t]+[^ \t#]/ && curkey != "") {
+        # indented non-comment content under the current key
+        haschild[curkey]=1;
+      }
+    }
+    END {
+      first=1; printf "[";
+      for (i in keys) {
+        k=keys[i];
+        if (inline[k] || haschild[k]) {
+          if (!first) printf ",";
+          printf "\"%s\"", k; first=0;
+        }
+      }
+      printf "]";
+    }
+  ')"
+  [ -n "$DANGEROUS_KEYS_JSON" ] || DANGEROUS_KEYS_JSON="[]"
+fi
+
+# --- P2: outbound established endpoints -----------------------------------
+# Dedup {ip,port} of ESTABLISHED outbound connections, excluding loopback,
+# private ranges, and known-good destinations.
+OUTBOUND_JSON="null"
+ADMIN_HOST="$(printf '%s' "${ADMIN_URL#*://}" | cut -d/ -f1 | cut -d: -f1)"
+LITELLM_HOST="$(printf '%s' "${LITELLM_BASE_URL#*://}" | cut -d/ -f1 | cut -d: -f1)"
+
+if command -v ss >/dev/null 2>&1; then
+  OUTBOUND_JSON="$(ss -tnp state established 2>/dev/null | awk '
+    NR == 1 && /Peer|Address/ { next }
+    {
+      peer=$NF;
+      # ss established layout: ... <local> <peer>. Peer is the last addr-like col.
+      # find the column that is the remote endpoint (has a port via last colon)
+      for (c=NF; c>=1; c--) { if ($c ~ /:[0-9]+$/) { peer=$c; break } }
+      n=split(peer, parts, ":"); port=parts[n];
+      ip=peer; sub(":" port "$", "", ip); gsub(/[\[\]]/, "", ip);
+      if (port !~ /^[0-9]+$/) next;
+      # exclude loopback / link-local / private ranges
+      if (ip ~ /^127\./ || ip == "::1") next;
+      if (ip ~ /^10\./) next;
+      if (ip ~ /^192\.168\./) next;
+      if (ip ~ /^172\.(1[6-9]|2[0-9]|3[0-1])\./) next;
+      if (ip ~ /^169\.254\./) next;
+      if (ip ~ /^fe80:/ || ip ~ /^fc/ || ip ~ /^fd/) next;
+      print ip "\t" port;
+    }
+  ' | sort -u | awk -F'\t' -v admin="$ADMIN_HOST" -v litellm="$LITELLM_HOST" '
+    BEGIN { printf "[" }
+    {
+      ip=$1; port=$2;
+      # drop obvious known-good infra by IP/host where we have it; hostnames are
+      # resolved server-side, so we keep endpoints and let IOC matching decide.
+      if (ip == admin || ip == litellm) next;
+      if (printed) printf ",";
+      printf "{\"ip\":\"%s\",\"port\":%s}", ip, port;
+      printed=1;
+    }
+    END { printf "]" }
+  ')"
+  [ -n "$OUTBOUND_JSON" ] || OUTBOUND_JSON="[]"
+fi
+
 # ---------------------------------------------------------------------------
 # Build JSON payload (no jq dependency — emit fields, nulling empties)
 # ---------------------------------------------------------------------------
@@ -176,6 +383,15 @@ AGENT_VERSION=""
 # jnum: numeric value or null; jstr: quoted string or null
 jnum() { case "$1" in ''|*[!0-9.-]*) printf 'null' ;; *) printf '%s' "$1" ;; esac; }
 jstr() { [ -z "$1" ] && { printf 'null'; return; }; printf '"%s"' "$(printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g')"; }
+# jraw: pre-built JSON (array/object) or null if empty
+jraw() { [ -z "$1" ] && { printf 'null'; return; }; printf '%s' "$1"; }
+
+# load_avg object (null if we couldn't read any of it)
+if [ -n "$LOAD_ONE$LOAD_FIVE$LOAD_FIFTEEN" ]; then
+  LOAD_AVG_JSON="{\"one\":$(jnum "$LOAD_ONE"),\"five\":$(jnum "$LOAD_FIVE"),\"fifteen\":$(jnum "$LOAD_FIFTEEN")}"
+else
+  LOAD_AVG_JSON="null"
+fi
 
 PAYLOAD=$(cat <<JSON
 {
@@ -190,6 +406,13 @@ PAYLOAD=$(cat <<JSON
   "last_activity_at": $(jstr "$LAST_ACTIVITY"),
   "token_spend_today": $(jnum "$TOKEN_SPEND_TODAY"),
   "token_spend_month": $(jnum "$TOKEN_SPEND_MONTH"),
+  "public_listeners": $(jraw "$PUBLIC_LISTENERS_JSON"),
+  "cpu_percent": $(jnum "$CPU_PERCENT"),
+  "load_avg": $(jraw "$LOAD_AVG_JSON"),
+  "cpu_cores": $(jnum "$CPU_CORES"),
+  "config_hash": $(jstr "$CONFIG_HASH"),
+  "dangerous_config_keys": $(jraw "$DANGEROUS_KEYS_JSON"),
+  "outbound_remotes": $(jraw "$OUTBOUND_JSON"),
   "extra": {
     "hostname": $(jstr "$HOSTNAME_VAL"),
     "container_name": $(jstr "$CONTAINER_NAME"),
@@ -210,7 +433,8 @@ rc=$?
 
 ts="$(now_iso)"
 if [ $rc -eq 0 ]; then
-  echo "[beacon] $ts ok status=$CONTAINER_STATUS gw=$GATEWAY_STATE disk=${DISK_PERCENT:-?}% mem=${MEMORY_PERCENT:-?}% -> $resp"
+  pub_count="$(printf '%s' "$PUBLIC_LISTENERS_JSON" | grep -o '"port"' | wc -l | tr -d ' ')"
+  echo "[beacon] $ts ok status=$CONTAINER_STATUS gw=$GATEWAY_STATE disk=${DISK_PERCENT:-?}% mem=${MEMORY_PERCENT:-?}% cpu=${CPU_PERCENT:-?}% load=${LOAD_ONE:-?} public_listeners=${pub_count:-0} -> $resp"
 else
   echo "[beacon] $ts POST failed (rc=$rc): $resp" >&2
   exit 1

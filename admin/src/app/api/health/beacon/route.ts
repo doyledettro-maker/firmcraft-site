@@ -1,5 +1,14 @@
 import { NextResponse } from 'next/server'
-import { recordBeacon, evaluateHealth, type BeaconInput } from '@/lib/db/health-beacons'
+import {
+  recordBeacon,
+  evaluateHealth,
+  getRecentBeaconsByClient,
+  type Beacon,
+  type BeaconInput,
+  type PublicListener,
+  type LoadAvg,
+} from '@/lib/db/health-beacons'
+import type { OutboundRemote } from '@/lib/health-iocs'
 import { getClient } from '@/lib/db/clients'
 import { maybeAlertRed, noteRecovered } from '@/lib/health-alerts'
 
@@ -26,6 +35,54 @@ function asIso(v: unknown): string | null {
   if (typeof v !== 'string' || !v.trim()) return null
   const t = Date.parse(v)
   return Number.isNaN(t) ? null : new Date(t).toISOString()
+}
+
+function asStr(v: unknown): string | null {
+  return typeof v === 'string' && v.trim() ? v.trim() : null
+}
+
+/** Coerce the beacon's public_listeners array into PublicListener[]. */
+function asPublicListeners(v: unknown): PublicListener[] | null {
+  if (!Array.isArray(v)) return null
+  const out: PublicListener[] = []
+  for (const item of v) {
+    if (!item || typeof item !== 'object') continue
+    const o = item as Record<string, unknown>
+    const port = asInt(o.port)
+    if (port == null) continue
+    out.push({
+      port,
+      bindAddr: asStr(o.bind_addr ?? o.bindAddr) ?? '',
+      proc: asStr(o.proc),
+    })
+  }
+  return out
+}
+
+function asLoadAvg(v: unknown): LoadAvg | null {
+  if (!v || typeof v !== 'object') return null
+  const o = v as Record<string, unknown>
+  return { one: asNum(o.one), five: asNum(o.five), fifteen: asNum(o.fifteen) }
+}
+
+function asStrArray(v: unknown): string[] | null {
+  if (!Array.isArray(v)) return null
+  return v.filter((x): x is string => typeof x === 'string' && x.length > 0)
+}
+
+/** Coerce the beacon's outbound_remotes array into OutboundRemote[]. */
+function asOutboundRemotes(v: unknown): OutboundRemote[] | null {
+  if (!Array.isArray(v)) return null
+  const out: OutboundRemote[] = []
+  for (const item of v) {
+    if (!item || typeof item !== 'object') continue
+    const o = item as Record<string, unknown>
+    const ip = asStr(o.ip)
+    const port = asInt(o.port)
+    if (ip == null || port == null) continue
+    out.push({ ip, port, host: asStr(o.host) })
+  }
+  return out
 }
 
 export async function POST(req: Request) {
@@ -69,6 +126,13 @@ export async function POST(req: Request) {
     lastActivityAt: asIso(pick('last_activity_at', 'lastActivityAt')),
     tokenSpendToday: asNum(pick('token_spend_today', 'tokenSpendToday')),
     tokenSpendMonth: asNum(pick('token_spend_month', 'tokenSpendMonth')),
+    publicListeners: asPublicListeners(pick('public_listeners', 'publicListeners')),
+    cpuPercent: asNum(pick('cpu_percent', 'cpuPercent')),
+    loadAvg: asLoadAvg(pick('load_avg', 'loadAvg')),
+    cpuCores: asInt(pick('cpu_cores', 'cpuCores')),
+    configHash: asStr(pick('config_hash', 'configHash')),
+    dangerousConfigKeys: asStrArray(pick('dangerous_config_keys', 'dangerousConfigKeys')),
+    outboundRemotes: asOutboundRemotes(pick('outbound_remotes', 'outboundRemotes')),
     extra: extraRaw && typeof extraRaw === 'object' ? (extraRaw as Record<string, unknown>) : {},
   }
 
@@ -96,7 +160,17 @@ export async function POST(req: Request) {
     // ignore — clientId may not be a DB uuid
   }
 
-  const evald = evaluateHealth(beacon, Date.now(), budgetPercent)
+  // Prior beacons (newest-first, excluding the one we just wrote) feed the
+  // sustained-load and config-change rules. Best-effort — never block ingest.
+  let prior: Beacon[] = []
+  try {
+    const history = await getRecentBeaconsByClient()
+    prior = (history.get(clientId) ?? []).filter((b) => b.id !== beacon.id)
+  } catch {
+    // ignore — fall back to single-beacon evaluation
+  }
+
+  const evald = evaluateHealth(beacon, Date.now(), budgetPercent, prior)
   let alerted = false
   if (evald.light === 'red') {
     const r = await maybeAlertRed(clientId, clientName, evald.reasons, beacon)

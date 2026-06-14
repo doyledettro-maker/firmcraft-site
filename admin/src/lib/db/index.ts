@@ -36,8 +36,13 @@ export { getLeads, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
 export {
   recordBeacon,
   getLatestBeacons,
+  getRecentBeaconsByClient,
   getClientHealthOverview,
   evaluateHealth,
+  DANGEROUS_CONFIG_KEYS,
+  ALLOWED_PUBLIC_PORTS,
+  SUSTAINED_LOAD_PER_CORE,
+  SUSTAINED_LOAD_HISTORY,
 } from './health-beacons'
 
 export type { ClientCreateInput, ClientUpdateInput } from './mappers'
@@ -68,4 +73,13 @@ export type {
   HealthLight,
   ContainerStatus,
   GatewayState,
+  PublicListener,
+  LoadAvg,
+  DangerousConfigKey,
 } from './health-beacons'
+export { getSecurityIncidents } from './security-incidents'
+export type {
+  SecurityIncident,
+  IncidentSeverity,
+  IncidentStatus,
+} from './security-incidents'

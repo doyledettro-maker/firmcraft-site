@@ -1,9 +1,38 @@
 import { getSupabaseAdmin, isSupabaseConfigured } from '@/lib/supabase'
 import { getClients } from './clients'
+import {
+  matchIocs,
+  describeIocMatches,
+  classifyPublicListeners,
+  type OutboundRemote,
+} from '@/lib/health-iocs'
 
 export type ContainerStatus = 'running' | 'stopped' | 'restarting' | 'unknown'
 export type GatewayState = 'connected' | 'disconnected' | 'unknown'
 export type HealthLight = 'green' | 'yellow' | 'red'
+
+/** A service bound to a public network interface (P0 exposure signal). */
+export type PublicListener = {
+  port: number
+  bindAddr: string
+  proc: string | null
+}
+
+/** System load averages (P1a cryptominer signal). */
+export type LoadAvg = {
+  one: number | null
+  five: number | null
+  fifteen: number | null
+}
+
+/** Agent-config keys that grant arbitrary code execution. */
+export const DANGEROUS_CONFIG_KEYS = [
+  'startup_hooks',
+  'mcp_servers',
+  'shell_hooks',
+  'post_start_script',
+] as const
+export type DangerousConfigKey = (typeof DANGEROUS_CONFIG_KEYS)[number]
 
 /** A single heartbeat as written by a client's beacon script. */
 export type BeaconInput = {
@@ -17,6 +46,14 @@ export type BeaconInput = {
   lastActivityAt?: string | null
   tokenSpendToday?: number | null
   tokenSpendMonth?: number | null
+  // Security signals (post-incident upgrade) — all optional/nullable.
+  publicListeners?: PublicListener[] | null
+  cpuPercent?: number | null
+  loadAvg?: LoadAvg | null
+  cpuCores?: number | null
+  configHash?: string | null
+  dangerousConfigKeys?: string[] | null
+  outboundRemotes?: OutboundRemote[] | null
   extra?: Record<string, unknown>
 }
 
@@ -33,6 +70,13 @@ export type Beacon = {
   lastActivityAt: string | null
   tokenSpendToday: number | null
   tokenSpendMonth: number | null
+  publicListeners: PublicListener[] | null
+  cpuPercent: number | null
+  loadAvg: LoadAvg | null
+  cpuCores: number | null
+  configHash: string | null
+  dangerousConfigKeys: string[] | null
+  outboundRemotes: OutboundRemote[] | null
   extra: Record<string, unknown>
 }
 
@@ -49,6 +93,13 @@ type BeaconRow = {
   last_activity_at: string | null
   token_spend_today: number | string | null
   token_spend_month: number | string | null
+  public_listeners: unknown
+  cpu_percent: number | string | null
+  load_avg: unknown
+  cpu_cores: number | null
+  config_hash: string | null
+  dangerous_config_keys: unknown
+  outbound_remotes: unknown
   extra: Record<string, unknown> | null
 }
 
@@ -56,6 +107,56 @@ function num(v: number | string | null): number | null {
   if (v == null) return null
   const n = typeof v === 'string' ? Number(v) : v
   return Number.isFinite(n) ? n : null
+}
+
+/** Coerce a stored jsonb value into a PublicListener[] (resilient to junk). */
+function toPublicListeners(v: unknown): PublicListener[] | null {
+  if (!Array.isArray(v)) return null
+  const out: PublicListener[] = []
+  for (const item of v) {
+    if (!item || typeof item !== 'object') continue
+    const o = item as Record<string, unknown>
+    const port = num(o.port as number | string | null)
+    if (port == null) continue
+    out.push({
+      port,
+      bindAddr: typeof o.bind_addr === 'string' ? o.bind_addr : String(o.bindAddr ?? ''),
+      proc: typeof o.proc === 'string' && o.proc ? o.proc : null,
+    })
+  }
+  return out
+}
+
+function toLoadAvg(v: unknown): LoadAvg | null {
+  if (!v || typeof v !== 'object') return null
+  const o = v as Record<string, unknown>
+  return {
+    one: num(o.one as number | string | null),
+    five: num(o.five as number | string | null),
+    fifteen: num(o.fifteen as number | string | null),
+  }
+}
+
+function toStringArray(v: unknown): string[] | null {
+  if (!Array.isArray(v)) return null
+  return v.filter((x): x is string => typeof x === 'string')
+}
+
+function toOutboundRemotes(v: unknown): OutboundRemote[] | null {
+  if (!Array.isArray(v)) return null
+  const out: OutboundRemote[] = []
+  for (const item of v) {
+    if (!item || typeof item !== 'object') continue
+    const o = item as Record<string, unknown>
+    const port = num(o.port as number | string | null)
+    if (typeof o.ip !== 'string' || port == null) continue
+    out.push({
+      ip: o.ip,
+      port,
+      host: typeof o.host === 'string' && o.host ? o.host : null,
+    })
+  }
+  return out
 }
 
 function rowToBeacon(row: BeaconRow): Beacon {
@@ -72,6 +173,13 @@ function rowToBeacon(row: BeaconRow): Beacon {
     lastActivityAt: row.last_activity_at,
     tokenSpendToday: num(row.token_spend_today),
     tokenSpendMonth: num(row.token_spend_month),
+    publicListeners: toPublicListeners(row.public_listeners),
+    cpuPercent: num(row.cpu_percent),
+    loadAvg: toLoadAvg(row.load_avg),
+    cpuCores: row.cpu_cores,
+    configHash: row.config_hash,
+    dangerousConfigKeys: toStringArray(row.dangerous_config_keys),
+    outboundRemotes: toOutboundRemotes(row.outbound_remotes),
     extra: row.extra ?? {},
   }
 }
@@ -100,6 +208,13 @@ export async function recordBeacon(input: BeaconInput): Promise<Beacon> {
     last_activity_at: input.lastActivityAt ?? null,
     token_spend_today: input.tokenSpendToday ?? null,
     token_spend_month: input.tokenSpendMonth ?? null,
+    public_listeners: input.publicListeners ?? null,
+    cpu_percent: input.cpuPercent ?? null,
+    load_avg: input.loadAvg ?? null,
+    cpu_cores: input.cpuCores ?? null,
+    config_hash: input.configHash ?? null,
+    dangerous_config_keys: input.dangerousConfigKeys ?? null,
+    outbound_remotes: input.outboundRemotes ?? null,
     extra: input.extra ?? {},
   }
   const { data, error } = await db
@@ -133,15 +248,72 @@ export async function getLatestBeacons(): Promise<Beacon[]> {
   return Array.from(latest.values())
 }
 
+/**
+ * Recent beacons grouped per client, newest-first. Powers the sustained-load and
+ * config-change rules which need each client's last few heartbeats, not just the
+ * latest one. Pulls the same recent window as getLatestBeacons.
+ */
+export async function getRecentBeaconsByClient(perClient = 6): Promise<Map<string, Beacon[]>> {
+  const byClient = new Map<string, Beacon[]>()
+  if (!isSupabaseConfigured()) return byClient
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('client_health_beacons')
+    .select('*')
+    .order('reported_at', { ascending: false })
+    .limit(2000)
+  if (error) throw new Error(`getRecentBeaconsByClient failed: ${error.message}`)
+
+  for (const r of (data ?? []) as BeaconRow[]) {
+    const list = byClient.get(r.client_id)
+    if (list) {
+      if (list.length < perClient) list.push(rowToBeacon(r))
+    } else {
+      byClient.set(r.client_id, [rowToBeacon(r)])
+    }
+  }
+  return byClient
+}
+
 export const RED_AFTER_MS = 15 * 60 * 1000
 export const DISK_WARN_PCT = 80
 export const MEM_WARN_PCT = 90
 export const BUDGET_WARN_PCT = 80
 
+// --- Security thresholds (post-incident upgrade) ---
+// Ports that legitimately bind to a public interface on a Hermes VPS.
+export const ALLOWED_PUBLIC_PORTS = [22, 443]
+// Sustained high load (per-core) that flags a possible cryptominer. Requires the
+// current beacon AND the previous SUSTAINED_LOAD_HISTORY beacons to exceed it,
+// so a brief spike (e.g. a deploy) doesn't trip the alarm.
+export const SUSTAINED_LOAD_PER_CORE = 1.5
+export const SUSTAINED_LOAD_HISTORY = 2
+
 export type HealthEval = {
   light: HealthLight
   staleMs: number
   reasons: string[]
+  /** Reasons that are security findings (rendered prominently in the UI). */
+  securityReasons?: string[]
+  /**
+   * Public listeners that were allowed (proxy/system/known-good) — not a
+   * security concern, surfaced as an informational note in the UI. Rendered
+   * strings like "8765 (print_bridge.py) — known-good".
+   */
+  allowedPublicNotes?: string[]
+}
+
+/** Per-core load for a beacon, or null when load data is unavailable. */
+function loadPerCore(b: Beacon): number | null {
+  const one = b.loadAvg?.one
+  const cores = b.cpuCores
+  if (one == null || cores == null || cores <= 0) return null
+  return one / cores
+}
+
+/** True when the agent dashboard's listen port is exposed publicly. */
+function isAgentDashboardPort(port: number): boolean {
+  return port === 9119
 }
 
 /**
@@ -156,14 +328,94 @@ export function evaluateHealth(
   beacon: Beacon | null,
   now: number,
   budgetPercent: number | null,
+  // Prior beacons for this client, newest-first (excludes `beacon`). Used for
+  // the sustained-load check and config-change detection. Optional so existing
+  // single-beacon callers keep working.
+  priorBeacons: Beacon[] = [],
 ): HealthEval {
   if (!beacon) {
     return { light: 'red', staleMs: Infinity, reasons: ['No heartbeat received'] }
   }
   const staleMs = now - new Date(beacon.reportedAt).getTime()
   const reasons: string[] = []
+  const securityReasons: string[] = []
 
-  // ---- Red conditions ----
+  // ---- Security red conditions (evaluated first; these dominate everything) ----
+
+  // P0 — exposure. The raw public_listeners array is reported regardless (for
+  // visibility), but only a *direct app* bound to a public interface is a
+  // security concern. Reverse proxies (caddy/nginx/…) and system services
+  // (sshd/resolver) are expected — auth lives at the proxy — and per-client
+  // known-good services (e.g. Mike's print bridge) are allowlisted. A direct app
+  // (node/python/hermes) on a public bind — including the agent dashboard port —
+  // is the original attack and stays RED.
+  const hostname =
+    typeof beacon.extra?.hostname === 'string' ? (beacon.extra.hostname as string) : null
+  const classified = classifyPublicListeners(beacon.publicListeners, [beacon.clientId, hostname])
+  const flagged = classified.filter((l) => l.verdict === 'flagged')
+  const allowedPublicNotes = classified
+    .filter((l) => l.verdict === 'allowed')
+    .map(
+      (l) =>
+        `${l.port}${l.proc ? ` (${l.proc})` : ''} — ${
+          l.allowReason === 'proxy-or-system' ? 'proxy/system' : 'known-good'
+        }`,
+    )
+  if (flagged.length > 0) {
+    const dash = flagged.find((l) => isAgentDashboardPort(l.port))
+    if (dash) {
+      securityReasons.push(
+        `Agent dashboard EXPOSED on public interface (${dash.bindAddr}:${dash.port}, ${
+          dash.proc ?? 'unknown proc'
+        }) — unauthenticated access risk`,
+      )
+    }
+    const others = flagged.filter((l) => !isAgentDashboardPort(l.port))
+    if (others.length > 0) {
+      const list = others.map((l) => `${l.port}${l.proc ? ` (${l.proc})` : ''}`).join(', ')
+      securityReasons.push(`Service exposed on public interface: ${list}`)
+    }
+  }
+
+  // P2 — IOC match against outbound endpoints (exfil / mining C2).
+  const iocMatches = matchIocs(beacon.outboundRemotes)
+  if (iocMatches.length > 0) {
+    securityReasons.push(`Malicious outbound endpoint: ${describeIocMatches(iocMatches)}`)
+  }
+
+  // P1b — dangerous agent-config keys present.
+  const dangerous = beacon.dangerousConfigKeys ?? []
+  if (dangerous.length > 0) {
+    securityReasons.push(`Dangerous agent-config keys present: ${dangerous.join(', ')}`)
+  }
+
+  // P1a — sustained high CPU/load across the current + prior beacons.
+  const cur = loadPerCore(beacon)
+  if (cur != null && cur > SUSTAINED_LOAD_PER_CORE) {
+    const window = priorBeacons.slice(0, SUSTAINED_LOAD_HISTORY)
+    const haveHistory = window.length >= SUSTAINED_LOAD_HISTORY
+    const allHigh =
+      haveHistory &&
+      window.every((b) => {
+        const pc = loadPerCore(b)
+        return pc != null && pc > SUSTAINED_LOAD_PER_CORE
+      })
+    if (allHigh) {
+      securityReasons.push(
+        `Sustained high CPU (possible cryptominer) — load/core ${cur.toFixed(2)} over ${
+          SUSTAINED_LOAD_HISTORY + 1
+        } beacons`,
+      )
+    }
+  }
+
+  const notes = allowedPublicNotes.length > 0 ? { allowedPublicNotes } : {}
+
+  if (securityReasons.length > 0) {
+    return { light: 'red', staleMs, reasons: securityReasons, securityReasons, ...notes }
+  }
+
+  // ---- Operational red conditions ----
   if (staleMs > RED_AFTER_MS) {
     reasons.push(`No heartbeat in ${Math.round(staleMs / 60000)} min`)
   }
@@ -171,7 +423,7 @@ export function evaluateHealth(
     reasons.push('Container stopped')
   }
   const isRed = reasons.length > 0
-  if (isRed) return { light: 'red', staleMs, reasons }
+  if (isRed) return { light: 'red', staleMs, reasons, ...notes }
 
   // ---- Yellow conditions ----
   if (beacon.containerStatus === 'restarting') reasons.push('Container restarting')
@@ -185,9 +437,21 @@ export function evaluateHealth(
   if (budgetPercent != null && budgetPercent > BUDGET_WARN_PCT) {
     reasons.push(`Budget ${Math.round(budgetPercent)}%`)
   }
-  if (reasons.length > 0) return { light: 'yellow', staleMs, reasons }
 
-  return { light: 'green', staleMs, reasons: [] }
+  // P1b — config hash changed vs the previous beacon (no dangerous keys here, or
+  // we'd have gone red above). Yellow: config drift worth a human glance.
+  const prev = priorBeacons[0]
+  if (
+    beacon.configHash != null &&
+    prev?.configHash != null &&
+    beacon.configHash !== prev.configHash
+  ) {
+    reasons.push('Agent config changed')
+  }
+
+  if (reasons.length > 0) return { light: 'yellow', staleMs, reasons, ...notes }
+
+  return { light: 'green', staleMs, reasons: [], ...notes }
 }
 
 /** One client's row in the health dashboard: identity + latest beacon + verdict. */
@@ -203,6 +467,10 @@ export type ClientHealth = {
   light: HealthLight
   staleMs: number | null
   reasons: string[]
+  /** Subset of reasons that are security findings (shown prominently in the UI). */
+  securityReasons: string[]
+  /** Allowlisted public listeners (proxy/system/known-good) — informational. */
+  allowedPublicNotes: string[]
   beacon: Beacon | null
 }
 
@@ -212,10 +480,16 @@ export type ClientHealth = {
  * shows up — as red). Computes budget % from each client's monthly allowance.
  */
 export async function getClientHealthOverview(now = Date.now()): Promise<ClientHealth[]> {
-  const [beacons, clients] = await Promise.all([
-    getLatestBeacons(),
+  const [history, clients] = await Promise.all([
+    getRecentBeaconsByClient(),
     getClients().catch(() => []),
   ])
+
+  // Latest beacon per client is the head of each history list (newest-first).
+  const beacons: Beacon[] = []
+  history.forEach((list) => {
+    if (list[0]) beacons.push(list[0])
+  })
 
   const beaconByClient = new Map(beacons.map((b) => [b.clientId, b]))
   // Index clients by id so a beacon's client_id (we deploy with the uuid) resolves.
@@ -232,7 +506,9 @@ export async function getClientHealthOverview(now = Date.now()): Promise<ClientH
     const spend = beacon?.tokenSpendMonth ?? null
     const budgetPercent =
       allowance != null && allowance > 0 && spend != null ? (spend / allowance) * 100 : null
-    const evald = evaluateHealth(beacon, now, budgetPercent)
+    // Prior beacons for this client (everything after the latest), newest-first.
+    const prior = (history.get(clientId) ?? []).slice(1)
+    const evald = evaluateHealth(beacon, now, budgetPercent, prior)
     out.push({
       clientId,
       clientName: client?.name ?? clientId,
@@ -244,6 +520,8 @@ export async function getClientHealthOverview(now = Date.now()): Promise<ClientH
       light: evald.light,
       staleMs: beacon ? evald.staleMs : null,
       reasons: evald.reasons,
+      securityReasons: evald.securityReasons ?? [],
+      allowedPublicNotes: evald.allowedPublicNotes ?? [],
       beacon,
     })
   }

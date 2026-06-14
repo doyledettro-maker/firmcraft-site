@@ -1,7 +1,19 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { RefreshCw, Server, HardDrive, Cpu, Coins, Activity, Wifi, WifiOff } from 'lucide-react'
+import {
+  RefreshCw,
+  Server,
+  HardDrive,
+  Cpu,
+  Coins,
+  Activity,
+  Wifi,
+  WifiOff,
+  Gauge,
+  ShieldAlert,
+  ShieldCheck,
+} from 'lucide-react'
 import { Badge } from './ui'
 import type { ClientHealth, HealthLight } from '@/lib/db/health-beacons'
 
@@ -103,6 +115,14 @@ function HealthCard({ c }: { c: ClientHealth }) {
         ? 'border-l-[3px] border-l-status-warn'
         : 'border-l-[3px] border-l-status-down'
 
+  const security = c.securityReasons ?? []
+  const hasSecurity = security.length > 0
+  const allowedNotes = c.allowedPublicNotes ?? []
+  // Non-security reasons render in the normal reason line.
+  const otherReasons = c.reasons.filter((r) => !security.includes(r))
+  const cpuPct = c.beacon?.cpuPercent
+  const loadOne = c.beacon?.loadAvg?.one
+
   return (
     <div className={`rounded-xl border border-line bg-paper ${accent} px-4 py-4`}>
       <div className="flex items-start justify-between gap-3 mb-3">
@@ -110,6 +130,7 @@ function HealthCard({ c }: { c: ClientHealth }) {
           <div className="flex items-center gap-2">
             <Dot light={c.light} />
             <span className="font-medium text-ink truncate">{c.clientName}</span>
+            {hasSecurity ? <SecurityBadge /> : null}
           </div>
           <div className="text-[11.5px] text-muted font-mono mt-0.5 truncate">
             {c.known ? (c.plan ? `${c.plan} plan` : 'client') : 'unregistered'}
@@ -119,9 +140,30 @@ function HealthCard({ c }: { c: ClientHealth }) {
         <LightBadge light={c.light} />
       </div>
 
-      {c.reasons.length > 0 ? (
+      {hasSecurity ? (
+        <div className="rounded-lg border border-[#F87171]/40 bg-[#2A1520] px-3 py-2 mb-3">
+          <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-[#FCA5A5] mb-1">
+            <ShieldAlert className="w-3.5 h-3.5" />
+            Security
+          </div>
+          <ul className="text-[12px] text-[#FCA5A5] leading-snug list-disc list-inside space-y-0.5">
+            {security.map((r, i) => (
+              <li key={i}>{r}</li>
+            ))}
+          </ul>
+        </div>
+      ) : null}
+
+      {otherReasons.length > 0 ? (
         <div className="text-[12px] text-ink-2 mb-3 leading-snug">
-          {c.reasons.join(' · ')}
+          {otherReasons.join(' · ')}
+        </div>
+      ) : null}
+
+      {allowedNotes.length > 0 ? (
+        <div className="flex items-start gap-1.5 text-[11.5px] text-muted mb-3 leading-snug">
+          <ShieldCheck className="w-3.5 h-3.5 flex-none mt-0.5" />
+          <span>Public (allowed): {allowedNotes.join(' · ')}</span>
         </div>
       ) : null}
 
@@ -161,6 +203,18 @@ function HealthCard({ c }: { c: ClientHealth }) {
           label="Memory"
           value={c.beacon?.memoryPercent != null ? `${c.beacon.memoryPercent}%` : '—'}
           tone={c.beacon?.memoryPercent != null && c.beacon.memoryPercent > 90 ? 'warn' : 'muted'}
+        />
+        <Metric
+          icon={<Gauge className="w-3.5 h-3.5" />}
+          label="CPU"
+          value={
+            cpuPct != null
+              ? `${Math.round(cpuPct)}%${loadOne != null ? ` · ${loadOne.toFixed(2)}` : ''}`
+              : loadOne != null
+                ? `load ${loadOne.toFixed(2)}`
+                : '—'
+          }
+          tone={cpuPct != null && cpuPct > 85 ? 'warn' : 'muted'}
         />
         <Metric
           icon={<Activity className="w-3.5 h-3.5" />}
@@ -223,6 +277,18 @@ function Dot({ light }: { light: HealthLight }) {
   return <span className={`inline-block w-2.5 h-2.5 rounded-full flex-none ${cls}`} aria-hidden />
 }
 
+function SecurityBadge() {
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-[#2A1520] border border-[#F87171]/40 text-[10px] font-semibold uppercase tracking-wide text-[#FCA5A5] flex-none"
+      title="Security finding — see details"
+    >
+      <ShieldAlert className="w-3 h-3" />
+      Security
+    </span>
+  )
+}
+
 function LightBadge({ light }: { light: HealthLight }) {
   if (light === 'green') return <Badge tone="green">Healthy</Badge>
   if (light === 'yellow') return <Badge tone="amber">Warning</Badge>
@@ -266,6 +332,8 @@ function skeletons(): ClientHealth[] {
     light: 'yellow' as HealthLight,
     staleMs: null,
     reasons: [],
+    securityReasons: [],
+    allowedPublicNotes: [],
     beacon: null,
   }))
 }

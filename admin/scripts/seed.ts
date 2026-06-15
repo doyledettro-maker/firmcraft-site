@@ -33,7 +33,7 @@ const rumbleBee = {
   plan_tier: 'spark' as const,
   contact_name: 'Mike Carr',
   contact_email: 'rumblebeetreespfld@gmail.com',
-  monthly_price: 45.0,
+  monthly_price: 55.0,
   stripe_customer_id: 'cus_UXxEGRjkb4TBWf',
   vps_ip: '178.105.123.101',
   hermes_port: 9119,

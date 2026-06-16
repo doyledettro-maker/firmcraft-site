@@ -171,10 +171,13 @@ An agent that can operate someone's computer is a high-value target and a big tr
 
 ## Reliability Considerations
 
-- Install on an **always-on machine or small server** where possible, not someone's laptop. SMB back-office PCs sleep, reboot, and lose network.
-- **Queue + resume**: tasks dispatched to an offline agent are held and replayed when it reconnects (ties to Requirement #1).
+The cloud instance is the **always-on anchor**; the local agent is a **best-effort helper** for the subset of tasks that genuinely need a local connection or local files. The machine does **not** have to be always-on, and we deliberately keep the system from depending heavily on the local agent.
+
+- **Starts on boot.** The local agent installs as a service that launches at startup and immediately dials home, so it's available whenever the machine is. An offline machine is a normal, expected state — not an error.
+- **Degrade gracefully, don't depend.** Anything that can be done in the cloud stays in the cloud. The local agent is only invoked for tasks that *require* the local machine; everything else proceeds regardless of whether the agent is online.
+- **Queue + resume** for the local-only tasks: work dispatched while the agent is offline is held and replayed when the machine next boots and reconnects (ties to Requirement #1), rather than failing.
+- **Graceful "agent offline" UX** in-conversation — the operator can offer to queue a local task until the machine is back, instead of silently failing.
 - Auto-update with version reporting in the fleet view.
-- Graceful "agent offline" UX in-conversation rather than silent failure.
 
 ---
 

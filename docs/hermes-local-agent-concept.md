@@ -1,6 +1,6 @@
 # Hermes Local Agent — Concept Doc
 
-**Related docs:** [Weekend Buildout Plan](firmcraft-weekend-buildout-plan.md) · [Provisioning & Hardening](hermes-provisioning-hardening.md) · [Billing Spec](billing-spec.md) · [ROADMAP.md](../ROADMAP.md)
+**Related docs:** [Weekend Buildout Plan](firmcraft-weekend-buildout-plan.md) · [Provisioning & Hardening](hermes-provisioning-hardening.md) · [WorldMax Compromise (2026-06-13)](security/2026-06-13-worldmax-compromise.md) · [Billing Spec](billing-spec.md) · [ROADMAP.md](../ROADMAP.md)
 
 **Status:** Concept / exploration
 **Updated:** June 16, 2026
@@ -67,6 +67,16 @@ This surfaces in two places:
 - **To the user, in-conversation** — when a user asks for something that needs their local agent and it's offline, the cloud operator says so plainly ("Your desktop connector looks offline — want me to queue this until it's back?") rather than failing silently.
 
 Tasks dispatched to an offline agent are **queued and resumed**, not dropped (see Reliability).
+
+**Health must include security telemetry, not just uptime.** The WorldMax compromise (see Security) went undetected because the beacon was uptime/cost-oriented — a 100%-CPU cryptominer read as "green" and an exposed dashboard read as "healthy/reachable." We do not repeat that on the local fleet. From day one each local agent's heartbeat also reports:
+
+- **CPU% / load** (anomaly detection — sustained pegged CPU is a miner signal),
+- **listening sockets** (`ss -tlnp` equivalent) — the agent should have **no inbound listeners**; any public-bound service is an immediate alert,
+- **outbound-connection summary** matched against an **IOC list** (known exfil C2 / mining-pool hosts),
+- **agent binary + config integrity** (signed hash; alert on drift),
+- and **every agent must have the beacon installed** — no "pending"/uninstalled gaps like WorldMax had.
+
+Security signals route to a Slack alert channel and bypass dedupe.
 
 ### 2. All tokens route through our LiteLLM gateway
 
@@ -156,14 +166,37 @@ So we offer a ladder, which doubles as a pricing ladder:
 
 ## Security & Trust Model
 
-An agent that can operate someone's computer is a high-value target and a big trust ask. Non-negotiables:
+> **Threat model in one sentence:** the local agent is, by design, a **remote-code-execution capability on the customer's own PC** — it runs terminal / launch-app / desktop tools and connects to local files and systems. That is the entire point of the feature and the entire risk. Anything that can write its config or dispatch it tasks must be treated as RCE-equivalent on a client machine and on their LAN.
+
+This is the same class of surface that bit us on WorldMax (see below), except the blast radius now extends off our own VPS and onto customer-owned hardware. That raises the bar, and it's why this is a load-bearing section rather than a footnote.
+
+### Lessons from the WorldMax compromise (2026-06-13)
+
+On 2026-06-13 the WorldMax managed-Hermes VPS was found running a cryptominer (with credential-exfil and container-escape attempts) because its **Hermes dashboard was exposed to the internet unauthenticated** (`HERMES_DASHBOARD_HOST=0.0.0.0`, `HERMES_DASHBOARD_INSECURE=1`). The attacker wrote the agent config, which supports RCE via `startup_hooks` and `mcp_servers`. No host compromise and no data loss (the box was dormant with empty keys), but it's a clear preview of what an exposed control surface buys an attacker. Full writeup: [`security/2026-06-13-worldmax-compromise.md`](security/2026-06-13-worldmax-compromise.md).
+
+Each finding maps to a hard rule for this design:
+
+| WorldMax finding | Rule for the local-agent design |
+|---|---|
+| Unauthenticated dashboard bound to `0.0.0.0` was the root cause | **No unauthenticated control surface anywhere** — not the cloud admin/dashboard, not the local agent. The local agent is outbound-only with no inbound listeners (Req #3). |
+| We explicitly set `INSECURE=1` and defeated a secure-by-default gate | **Secure-by-default provisioning, no insecure flags.** Agents ship from a hardened template; an automated provisioning/CI audit rejects any `0.0.0.0` bind or `INSECURE` flag on every current and future instance. |
+| Config fields (`startup_hooks`, `mcp_servers`) gave instant RCE with no second confirmation | **Treat the local agent's config + task channel as RCE.** Config is signed and integrity-checked; the agent only accepts capabilities from the enrolled allowlist; sensitive actions need human approval. |
+| Exfil targeted `~/.hermes/.env` credentials | **Minimize secrets on the box.** The cloud holds keys; model calls go back through LiteLLM so **no provider API keys live on the customer PC**, shrinking exfil value. |
+| Container-escape attempt (chroot/nsenter/docker.sock) | **Least privilege / sandbox.** Run unprivileged, no host-escape primitives, no Docker socket; constrain to enrolled paths/apps. |
+| Monitoring was uptime-oriented; the miner read "green" | **Security telemetry in the heartbeat from day one** (see Requirement #1). |
+
+### Non-negotiables
 
 - **Outbound-only, mTLS, device identity.** No inbound ports. (Requirement #3.)
+- **Secure-by-default, audited provisioning.** No `0.0.0.0` binds, no `INSECURE`/no-auth flags on the agent or the cloud control plane; provisioning fails closed and a standing audit re-checks the whole fleet.
+- **Assume the cloud brain could be compromised.** Defense-in-depth so a rogue/hijacked cloud instance still can't run arbitrary actions on a customer PC: capability allowlists and human-approval gates are **enforced locally**, not just cloud-side. The local agent distrusts even its own brain beyond the enrolled scope.
 - **Capability allowlists.** The agent only exposes the specific tools/paths/apps enrolled for that client. Default-deny.
 - **Scoped, short-lived, signed task envelopes.** Every task names exactly what it may touch and expires.
 - **Human-in-the-loop for writes/destructive actions.** Model the approval UX on Claude Code's allow/deny prompts — surfaced in the user's normal channel.
+- **Minimize secrets on the local box.** Keys stay in the cloud; inference routes through LiteLLM.
+- **Sandbox / least privilege.** Unprivileged, no host-escape primitives, scoped to enrolled resources.
 - **Full audit trail** of every local action streamed to Langfuse.
-- **Visible local kill-switch / pause** on the client machine.
+- **Visible local kill-switch / pause** on the client machine — for the user and for Firmcraft.
 - **Prefer API/DB connectors over screen automation.** Computer-use (vision + click) is the brittle last resort, not the default.
 - Liability / insurance review before we put an executor on customer machines at scale.
 

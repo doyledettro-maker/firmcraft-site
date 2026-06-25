@@ -119,6 +119,10 @@ export interface BoardData {
   technicians: Technician[]
   jobTypes: JobType[]
   jobs: Job[]
+  jobDateRange: {
+    earliest: string | null
+    latest: string | null
+  }
 }
 
 /** Fields the board is allowed to patch on a job (drag/drop, resize, assign, status). */

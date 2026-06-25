@@ -216,15 +216,45 @@ export async function getJobs(tenantId: string, q: JobQuery = {}): Promise<Job[]
   return out
 }
 
+export async function getJobDateRange(tenantId: string): Promise<{ earliest: string | null; latest: string | null }> {
+  const sb = getSupabaseAdmin()
+  const [{ data: earliest }, { data: latest }] = await Promise.all([
+    sb
+      .from('jobs')
+      .select('scheduled_start')
+      .eq('tenant_id', tenantId)
+      .is('deleted_at', null)
+      .not('scheduled_start', 'is', null)
+      .order('scheduled_start', { ascending: true })
+      .limit(1)
+      .maybeSingle(),
+    sb
+      .from('jobs')
+      .select('scheduled_start')
+      .eq('tenant_id', tenantId)
+      .is('deleted_at', null)
+      .not('scheduled_start', 'is', null)
+      .order('scheduled_start', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ])
+
+  return {
+    earliest: (earliest?.scheduled_start as string | undefined) ?? null,
+    latest: (latest?.scheduled_start as string | undefined) ?? null,
+  }
+}
+
 export async function getBoardData(tenantId: string, q: JobQuery = {}): Promise<BoardData | null> {
   const tenant = await getTenantInfo(tenantId)
   if (!tenant) return null
-  const [technicians, jobTypes, jobs] = await Promise.all([
+  const [technicians, jobTypes, jobs, jobDateRange] = await Promise.all([
     getTechnicians(tenantId),
     getJobTypes(tenantId),
     getJobs(tenantId, q),
+    getJobDateRange(tenantId),
   ])
-  return { tenant, technicians, jobTypes, jobs }
+  return { tenant, technicians, jobTypes, jobs, jobDateRange }
 }
 
 export async function getJobDetail(tenantId: string, jobId: string): Promise<JobDetail | null> {

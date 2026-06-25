@@ -14,23 +14,28 @@ export interface BoardFilters {
 
 interface Props {
   dateLabel: string
+  dateValue: string
   view: BoardView
   filters: BoardFilters
   technicians: Technician[]
   jobTypes: JobType[]
+  jobDateRange: { earliest: string | null; latest: string | null }
   live: boolean
   onPrev: () => void
   onNext: () => void
   onToday: () => void
+  onDateChange: (date: string) => void
+  onJumpToLatestData: () => void
   onViewChange: (v: BoardView) => void
   onFiltersChange: (f: BoardFilters) => void
 }
 
 export function FilterBar({
-  dateLabel, view, filters, technicians, jobTypes, live,
-  onPrev, onNext, onToday, onViewChange, onFiltersChange,
+  dateLabel, dateValue, view, filters, technicians, jobTypes, jobDateRange, live,
+  onPrev, onNext, onToday, onDateChange, onJumpToLatestData, onViewChange, onFiltersChange,
 }: Props) {
   const activeCount = filters.techIds.length + filters.statuses.length + filters.jobTypeIds.length
+  const latestDataLabel = jobDateRange.latest ? shortDate(jobDateRange.latest) : null
 
   return (
     <div className="flex items-center gap-3 flex-wrap px-4 py-2.5 border-b border-line bg-paper">
@@ -46,7 +51,16 @@ export function FilterBar({
         <NavBtn onClick={onNext} aria-label="Next"><ChevronRight className="w-4 h-4" /></NavBtn>
       </div>
 
-      <div className="text-[14px] font-medium text-ink min-w-[150px]">{dateLabel}</div>
+      <div className="flex items-center gap-2 min-w-[250px]">
+        <div className="text-[14px] font-medium text-ink min-w-[150px]">{dateLabel}</div>
+        <input
+          type="date"
+          value={dateValue}
+          onChange={(e) => onDateChange(e.target.value)}
+          className="h-8 rounded-lg border border-line-2 bg-paper px-2 text-[12.5px] text-ink-2 hover:border-accent/60 focus:border-accent focus:outline-none"
+          aria-label="Jump to date"
+        />
+      </div>
 
       {/* View toggle */}
       <div className="flex rounded-lg border border-line-2 overflow-hidden">
@@ -105,9 +119,25 @@ export function FilterBar({
             Clear ({activeCount})
           </button>
         ) : null}
+
+        {latestDataLabel ? (
+          <button
+            onClick={onJumpToLatestData}
+            title={jobDateRange.earliest && jobDateRange.latest
+              ? `Scheduled data runs ${shortDate(jobDateRange.earliest)}–${shortDate(jobDateRange.latest)}`
+              : 'Jump to latest scheduled job'}
+            className="h-8 px-3 rounded-lg border border-accent/40 bg-accent/10 text-[12px] text-accent-2 hover:bg-accent/15 transition-colors"
+          >
+            Demo data: {latestDataLabel}
+          </button>
+        ) : null}
       </div>
     </div>
   )
+}
+
+function shortDate(iso: string) {
+  return new Intl.DateTimeFormat(undefined, { month: 'short', day: 'numeric' }).format(new Date(iso))
 }
 
 function NavBtn({ children, ...rest }: React.ButtonHTMLAttributes<HTMLButtonElement>) {

@@ -159,14 +159,22 @@ export function DispatchBoard({ initialBoard, initial }: Props) {
     <div className="h-screen flex flex-col bg-paper text-ink overflow-hidden">
       <FilterBar
         dateLabel={dateLabel}
+        dateValue={toDateStr(date)}
         view={view}
         filters={filters}
         technicians={board.technicians}
         jobTypes={board.jobTypes}
+        jobDateRange={board.jobDateRange}
         live={live}
         onPrev={() => step(-1)}
         onNext={() => step(1)}
         onToday={() => setDate(new Date())}
+        onDateChange={(value) => {
+          if (/^\d{4}-\d{2}-\d{2}$/.test(value)) setDate(parseDate(value))
+        }}
+        onJumpToLatestData={() => {
+          if (board.jobDateRange.latest) setDate(new Date(board.jobDateRange.latest))
+        }}
         onViewChange={setView}
         onFiltersChange={setFilters}
       />

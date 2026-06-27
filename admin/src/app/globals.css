@@ -87,8 +87,7 @@ body {
 ::-webkit-scrollbar-track { background: var(--color-surface); }
 ::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 3px; }
 
-/* Headline emphasis — signal blue, upright. The italic gesture is reserved
-   for the wordmark's F. */
+/* Headline emphasis — signal blue, upright. */
 .serif-h em,
 .serif-h-warm em {
   font-style: normal;

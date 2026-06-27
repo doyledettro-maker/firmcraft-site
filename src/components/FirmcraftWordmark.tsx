@@ -1,13 +1,14 @@
 /**
- * Firmcraft wordmark — integrated lockup (mark refresh "1+4").
+ * Firmcraft wordmark — integrated lockup.
  *
- * The italic Source Serif 4 F is simultaneously the brand mark and the first
- * letter of "Firmcraft"; the rest of the word is upright Geist 600. No ring,
- * no separate mark. Mirrors the admin app's FirmcraftWordmark.
+ * The blue F is simultaneously the brand mark and the first letter of
+ * "Firmcraft". Doyle's current direction is for the F to use the same upright
+ * Geist wordmark face as the rest of the name, not the older italic serif F.
+ * No ring, no separate mark. Mirrors the admin app's FirmcraftWordmark.
  *
  * Construction (docs/design_handoff_visual_refresh/mark-refresh.html, .lockup-int):
- * baseline-aligned, F at 1.25× the wordmark size, F letter-spacing −0.04em,
- * F tucked into "irmcraft" with −0.02em margin, wordmark tracking −0.024em.
+ * baseline-aligned, F at 1.06× the wordmark size, F tucked into "irmcraft"
+ * with tight margin, wordmark tracking −0.024em.
  */
 
 type WordmarkVariant = 'default' | 'inverse'
@@ -31,7 +32,7 @@ export function FirmcraftWordmark({
       style={{ fontSize: size }}
       aria-label="Firmcraft"
     >
-      <span className="fc-lockup-f" style={{ fontSize: Math.round(size * 1.25) }} aria-hidden="true">
+      <span className="fc-lockup-f" style={{ fontSize: Math.round(size * 1.06) }} aria-hidden="true">
         F
       </span>
       <span aria-hidden="true">irmcraft</span>

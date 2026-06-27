@@ -209,7 +209,7 @@ body {
   color: var(--color-inverse-2);
 }
 
-/* Wordmark — integrated lockup (mark refresh "1+4"): italic serif F + Geist 600 "irmcraft", no ring */
+/* Wordmark — integrated lockup: signal F + Geist 600 "irmcraft", no ring */
 .wm-link {
   display: inline-flex;
   align-items: center;
@@ -228,11 +228,11 @@ body {
   color: #fff;
 }
 .fc-lockup .fc-lockup-f {
-  font-family: var(--font-display);
-  font-style: italic;
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  margin-right: -0.02em;
+  font-family: var(--font-sans);
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: -0.024em;
+  margin-right: -0.035em;
   line-height: 1;
   color: var(--color-signal);
 }

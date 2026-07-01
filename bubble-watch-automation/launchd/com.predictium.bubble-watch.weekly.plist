@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.predictium.bubble-watch.weekly</string>
+
+  <!-- Monday 08:00 in the machine's LOCAL timezone.
+       Verify the Mac mini is set to America/Chicago (sudo systemsetup -gettimezone);
+       launchd has no per-job TZ support. -->
+  <key>StartCalendarInterval</key>
+  <dict>
+    <key>Weekday</key><integer>1</integer>
+    <key>Hour</key><integer>8</integer>
+    <key>Minute</key><integer>0</integer>
+  </dict>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-lc</string>
+    <string>"$HOME/source/predictium/Economics/bubble-watch/scripts/run_weekly_full.sh"</string>
+  </array>
+
+  <key>EnvironmentVariables</key>
+  <dict>
+    <!-- Set the real webhook for #predictium-marketing before loading,
+         or export it from the shell profile that -lc sources. -->
+    <key>SLACK_WEBHOOK_URL</key>
+    <string></string>
+  </dict>
+
+  <key>StandardOutPath</key>
+  <string>/tmp/bubble-watch-weekly.launchd.log</string>
+  <key>StandardErrorPath</key>
+  <string>/tmp/bubble-watch-weekly.launchd.log</string>
+
+  <!-- If the mini was asleep/off at 08:00, run when it comes back. -->
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>

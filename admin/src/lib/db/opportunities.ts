@@ -224,6 +224,16 @@ function inputToRow(input: OpportunityInput | OpportunityUpdate): Record<string,
   return row
 }
 
+/**
+ * True when the opportunities table hasn't been migrated yet (42P01 =
+ * undefined_table from Postgres; PGRST205 = PostgREST schema-cache miss).
+ * Read paths treat this as "no opportunities yet" so the admin can deploy
+ * ahead of the migration without taking down the dashboard/outreach pages.
+ */
+function isMissingTableError(error: { code?: string; message: string }): boolean {
+  return error.code === '42P01' || error.code === 'PGRST205'
+}
+
 const OPPORTUNITY_WITH_RELATIONS_SELECT = `
   *,
   companies (
@@ -248,7 +258,10 @@ export async function getOpportunities(
     query = query.in('stage', NON_CLOSED_STAGES)
   }
   const { data, error } = await query
-  if (error) throw new Error(`getOpportunities failed: ${error.message}`)
+  if (error) {
+    if (isMissingTableError(error)) return []
+    throw new Error(`getOpportunities failed: ${error.message}`)
+  }
   return ((data ?? []) as unknown as OpportunityRowWithRelations[]).map((row) =>
     rowToOpportunityWithRelations(row),
   )
@@ -262,7 +275,10 @@ export async function getOpportunity(id: string): Promise<OpportunityWithRelatio
     .select(OPPORTUNITY_WITH_RELATIONS_SELECT)
     .eq('id', id)
     .maybeSingle()
-  if (error) throw new Error(`getOpportunity(${id}) failed: ${error.message}`)
+  if (error) {
+    if (isMissingTableError(error)) return undefined
+    throw new Error(`getOpportunity(${id}) failed: ${error.message}`)
+  }
   if (!data) return undefined
   return rowToOpportunityWithRelations(data as unknown as OpportunityRowWithRelations)
 }
@@ -278,7 +294,10 @@ export async function getOpenOpportunityForCompany(
     .eq('company_id', companyId)
     .in('stage', NON_CLOSED_STAGES)
     .maybeSingle()
-  if (error) throw new Error(`getOpenOpportunityForCompany failed: ${error.message}`)
+  if (error) {
+    if (isMissingTableError(error)) return undefined
+    throw new Error(`getOpenOpportunityForCompany failed: ${error.message}`)
+  }
   if (!data) return undefined
   return rowToOpportunity(data as OpportunityRow)
 }

@@ -8,6 +8,7 @@ export {
   getCompanies,
   getCompany,
   findCompanyByName,
+  searchCompaniesByName,
   createCompany,
   upsertCompanyByName,
   updateCompany,
@@ -19,6 +20,7 @@ export {
   getContactWithCompany,
   getContactsForCompany,
   getContactByEmail,
+  findCompanyIdsByEmailDomain,
   createContact,
   createContacts,
   updateContact,
@@ -45,7 +47,7 @@ export {
   NON_CLOSED_STAGES,
 } from './opportunities'
 export { getAnalyticsSummary } from './analytics'
-export { getLeads, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
+export { getLeads, getLead, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
 export {
   recordBeacon,
   getLatestBeacons,

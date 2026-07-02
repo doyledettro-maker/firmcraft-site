@@ -247,6 +247,23 @@ export async function getContactByEmail(email: string): Promise<Contact | undefi
   return rowToContact(data as ContactRow)
 }
 
+/**
+ * Company ids that have a contact at the given email domain. Used by lead →
+ * opportunity conversion to suggest the right outreach company even when the
+ * lead typed the company name differently.
+ */
+export async function findCompanyIdsByEmailDomain(domain: string, limit = 20): Promise<string[]> {
+  if (!isSupabaseConfigured() || !domain.trim()) return []
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('contacts')
+    .select('company_id')
+    .ilike('email', `%@${domain.trim()}`)
+    .limit(limit)
+  if (error) throw new Error(`findCompanyIdsByEmailDomain failed: ${error.message}`)
+  return Array.from(new Set(((data ?? []) as Array<{ company_id: string }>).map((r) => r.company_id)))
+}
+
 export async function createContacts(inputs: ContactInput[]): Promise<Contact[]> {
   if (!isSupabaseConfigured()) {
     throw new Error('createContacts requires Supabase to be configured.')

@@ -24,6 +24,10 @@ export type Lead = {
   segment: LeadSegment | null
   notes: string | null
   createdAt: string
+  // Set by lead → opportunity conversion (see /api/leads/[id]/convert).
+  companyId: string | null
+  contactId: string | null
+  opportunityId: string | null
 }
 
 type LeadRow = {
@@ -38,6 +42,9 @@ type LeadRow = {
   segment: LeadSegment | null
   notes: string | null
   created_at: string
+  company_id?: string | null
+  contact_id?: string | null
+  opportunity_id?: string | null
 }
 
 function rowToLead(row: LeadRow): Lead {
@@ -53,6 +60,9 @@ function rowToLead(row: LeadRow): Lead {
     segment: row.segment,
     notes: row.notes,
     createdAt: row.created_at,
+    companyId: row.company_id ?? null,
+    contactId: row.contact_id ?? null,
+    opportunityId: row.opportunity_id ?? null,
   }
 }
 
@@ -67,9 +77,25 @@ export async function getLeads(): Promise<Lead[]> {
   return (data ?? []).map((r) => rowToLead(r as LeadRow))
 }
 
+export async function getLead(id: string): Promise<Lead | undefined> {
+  if (!isSupabaseConfigured()) return undefined
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('inbound_leads')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle()
+  if (error) throw new Error(`getLead(${id}) failed: ${error.message}`)
+  if (!data) return undefined
+  return rowToLead(data as LeadRow)
+}
+
 export type LeadUpdate = {
   status?: LeadStatus
   notes?: string | null
+  companyId?: string | null
+  contactId?: string | null
+  opportunityId?: string | null
 }
 
 export async function updateLead(id: string, update: LeadUpdate): Promise<Lead> {
@@ -80,6 +106,9 @@ export async function updateLead(id: string, update: LeadUpdate): Promise<Lead> 
   const row: Record<string, unknown> = {}
   if (update.status !== undefined) row.status = update.status
   if (update.notes !== undefined) row.notes = update.notes
+  if (update.companyId !== undefined) row.company_id = update.companyId
+  if (update.contactId !== undefined) row.contact_id = update.contactId
+  if (update.opportunityId !== undefined) row.opportunity_id = update.opportunityId
   const { data, error } = await db
     .from('inbound_leads')
     .update(row)

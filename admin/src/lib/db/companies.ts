@@ -147,6 +147,20 @@ export async function findCompanyByName(name: string): Promise<Company | undefin
   return rowToCompany(data as CompanyRow)
 }
 
+/** Fuzzy name search used by lead → opportunity conversion suggestions. */
+export async function searchCompaniesByName(q: string, limit = 5): Promise<Company[]> {
+  if (!isSupabaseConfigured() || !q.trim()) return []
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('companies')
+    .select('*')
+    .ilike('company_name', `%${q.trim()}%`)
+    .order('created_at', { ascending: true })
+    .limit(limit)
+  if (error) throw new Error(`searchCompaniesByName failed: ${error.message}`)
+  return ((data ?? []) as CompanyRow[]).map((row) => rowToCompany(row))
+}
+
 export async function createCompany(input: CompanyInput): Promise<Company> {
   if (!isSupabaseConfigured()) {
     throw new Error('createCompany requires Supabase to be configured.')

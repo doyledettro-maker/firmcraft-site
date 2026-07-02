@@ -1,9 +1,10 @@
 import { Building2, Mail, MailOpen, MousePointerClick, Send } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Card, CardBody } from '@/components/ui'
-import { OutreachWorkspace } from '@/components/outreach/OutreachWorkspace'
+import { OutreachWorkspace, type OpenOpportunitySummary } from '@/components/outreach/OutreachWorkspace'
 import { getCompanies } from '@/lib/db/companies'
 import { getContacts, getContactStats } from '@/lib/db/contacts'
+import { getOpportunities } from '@/lib/db/opportunities'
 import { formatNumber } from '@/lib/format'
 
 export const metadata = { title: 'Outreach · Firmcraft Admin' }
@@ -14,11 +15,17 @@ function formatPct(n: number) {
 }
 
 export default async function OutreachPage() {
-  const [companies, contacts, stats] = await Promise.all([
+  const [companies, contacts, stats, openOpportunities] = await Promise.all([
     getCompanies(),
     getContacts(),
     getContactStats(),
+    getOpportunities({ openOnly: true }),
   ])
+
+  const openOpps: Record<string, OpenOpportunitySummary> = {}
+  for (const opp of openOpportunities) {
+    openOpps[opp.companyId] = { id: opp.id, name: opp.name, stage: opp.stage }
+  }
 
   return (
     <AppShell>
@@ -48,7 +55,7 @@ export default async function OutreachPage() {
       </div>
 
       <Card>
-        <OutreachWorkspace companies={companies} contacts={contacts} />
+        <OutreachWorkspace companies={companies} contacts={contacts} openOpps={openOpps} />
       </Card>
     </AppShell>
   )

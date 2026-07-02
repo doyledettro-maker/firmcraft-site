@@ -29,8 +29,21 @@ export {
   logCorrespondence,
   getCorrespondenceForContact,
   getCorrespondenceForCompany,
+  getLatestTouchByCompany,
   deleteCorrespondence,
 } from './correspondence'
+export {
+  getOpportunities,
+  getOpportunity,
+  getOpenOpportunityForCompany,
+  createOpportunity,
+  updateOpportunity,
+  deleteOpportunity,
+  OPPORTUNITY_STAGES,
+  OPPORTUNITY_PRIORITIES,
+  OPPORTUNITY_PLAN_TIERS,
+  NON_CLOSED_STAGES,
+} from './opportunities'
 export { getAnalyticsSummary } from './analytics'
 export { getLeads, updateLead, getLeadStats, LEAD_STATUSES } from './leads'
 export {
@@ -59,6 +72,15 @@ export type {
   ContactWithCompany,
 } from './contacts'
 export type { Correspondence, CorrespondenceInput, CorrespondenceType } from './correspondence'
+export type {
+  Opportunity,
+  OpportunityInput,
+  OpportunityUpdate,
+  OpportunityStage,
+  OpportunityPriority,
+  OpportunityPlanTier,
+  OpportunityWithRelations,
+} from './opportunities'
 export type {
   AnalyticsSummary,
   DailyVisits,

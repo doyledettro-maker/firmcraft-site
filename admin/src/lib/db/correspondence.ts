@@ -120,6 +120,29 @@ export async function getCorrespondenceForCompany(companyId: string): Promise<Co
   return (data ?? []).map((r) => rowToCorrespondence(r as CorrespondenceRow))
 }
 
+/**
+ * Latest correspondence timestamp per company — powers the "last touch" and
+ * "stale" signals on the opportunity board. Pipeline sizes are small, so one
+ * ordered query and a first-wins reduce is plenty.
+ */
+export async function getLatestTouchByCompany(
+  companyIds: string[],
+): Promise<Record<string, string>> {
+  if (!isSupabaseConfigured() || companyIds.length === 0) return {}
+  const db = getSupabaseAdmin()
+  const { data, error } = await db
+    .from('correspondence')
+    .select('company_id, occurred_at')
+    .in('company_id', companyIds)
+    .order('occurred_at', { ascending: false })
+  if (error) throw new Error(`getLatestTouchByCompany failed: ${error.message}`)
+  const latest: Record<string, string> = {}
+  for (const row of (data ?? []) as Array<{ company_id: string; occurred_at: string }>) {
+    if (!(row.company_id in latest)) latest[row.company_id] = row.occurred_at
+  }
+  return latest
+}
+
 export async function deleteCorrespondence(id: string): Promise<void> {
   if (!isSupabaseConfigured()) {
     throw new Error('deleteCorrespondence requires Supabase to be configured.')

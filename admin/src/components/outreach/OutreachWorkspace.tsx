@@ -1,6 +1,7 @@
 'use client'
 
 import { useMemo, useState } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import {
   Search,
@@ -10,18 +11,15 @@ import {
   Loader2,
   Check,
   Plus,
-  Mail,
   Users,
   Phone,
   Calendar,
   StickyNote,
   Trash2,
   MessageSquare,
-  MousePointerClick,
-  MailOpen,
   Reply,
-  AlertCircle,
-  UserX,
+  Target,
+  ArrowUpRight,
 } from 'lucide-react'
 import {
   Button,
@@ -32,10 +30,13 @@ import {
   Textarea,
 } from '@/components/ui'
 import { CompanyStatusBadge, ContactStatusBadge } from './StatusBadges'
+import { TimelineRow } from './CorrespondenceTimeline'
 import { formatDate } from '@/lib/format'
+import { STAGE_LABELS } from '@/lib/opportunity-signals'
 import type { Company, CompanyStatus, CompanySegment } from '@/lib/db/companies'
 import type { Contact, ContactStatus, ContactWithCompany } from '@/lib/db/contacts'
 import type { Correspondence, CorrespondenceType } from '@/lib/db/correspondence'
+import type { OpportunityStage } from '@/lib/db/opportunities'
 
 const COMPANY_STATUS_OPTIONS: CompanyStatus[] = ['active', 'opened', 'engaged', 'customer', 'archived']
 const COMPANY_SEGMENT_OPTIONS: CompanySegment[] = ['small', 'midmarket', 'enterprise', 'pe']
@@ -84,12 +85,16 @@ const ENGAGEMENT_RANK: Record<ContactStatus, number> = {
   targeted: -1,
 }
 
+/** Open opportunity summary keyed by company id (link/badge instead of duplicating). */
+export type OpenOpportunitySummary = { id: string; name: string; stage: OpportunityStage }
+
 export type OutreachWorkspaceProps = {
   companies: Company[]
   contacts: ContactWithCompany[]
+  openOpps?: Record<string, OpenOpportunitySummary>
 }
 
-export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProps) {
+export function OutreachWorkspace({ companies, contacts, openOpps = {} }: OutreachWorkspaceProps) {
   const router = useRouter()
   const [filter, setFilter] = useState<CompanyFilter>('all')
   const [industry, setIndustry] = useState<string>('all')
@@ -314,7 +319,18 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
                   className="hover:bg-paper-2 cursor-pointer transition-colors"
                 >
                   <td className="px-4 py-3 border-t border-line">
-                    <div className="font-medium text-ink">{c.companyName}</div>
+                    <div className="font-medium text-ink flex items-center gap-2">
+                      <span className="truncate">{c.companyName}</span>
+                      {openOpps[c.id] ? (
+                        <span
+                          title={`Open opportunity · ${STAGE_LABELS[openOpps[c.id].stage]}`}
+                          className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full border border-accent-2/30 bg-accent-2/10 text-accent-2 font-mono text-[10px] uppercase tracking-[0.1em] flex-none"
+                        >
+                          <Target className="w-3 h-3" />
+                          Opp
+                        </span>
+                      ) : null}
+                    </div>
                     {c.website ? (
                       <div className="text-[12.5px] text-muted truncate max-w-[260px]">{c.website}</div>
                     ) : null}
@@ -359,6 +375,7 @@ export function OutreachWorkspace({ companies, contacts }: OutreachWorkspaceProp
         <CompanyDrawer
           company={openCompany}
           contacts={contactsByCompany.get(openCompany.id) ?? []}
+          openOpp={openOpps[openCompany.id]}
           onClose={() => setOpenCompanyId(null)}
           onSaved={() => { router.refresh(); flash('Saved') }}
           onContactOpen={(id) => setOpenContactId(id)}
@@ -461,6 +478,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 function CompanyDrawer({
   company,
   contacts,
+  openOpp,
   onClose,
   onSaved,
   onContactOpen,
@@ -469,12 +487,15 @@ function CompanyDrawer({
 }: {
   company: Company
   contacts: Contact[]
+  openOpp?: OpenOpportunitySummary
   onClose: () => void
   onSaved: () => void
   onContactOpen: (id: string) => void
   onContactCreated: () => void
   onDeleted: () => void
 }) {
+  const router = useRouter()
+  const [creatingOpp, setCreatingOpp] = useState(false)
   const [form, setForm] = useState({
     companyName: company.companyName,
     industry: company.industry ?? '',
@@ -528,6 +549,44 @@ function CompanyDrawer({
       setError(err instanceof Error ? err.message : 'Save failed')
     } finally {
       setSaving(false)
+    }
+  }
+
+  async function createOpportunity() {
+    if (creatingOpp) return
+    setCreatingOpp(true)
+    setError(null)
+    try {
+      // Most-engaged contact becomes the primary; owner/use case carry over
+      // from the outreach record so the opportunity starts with context.
+      const primary = contacts.reduce<Contact | null>(
+        (acc, ct) => (acc && ENGAGEMENT_RANK[acc.status] >= ENGAGEMENT_RANK[ct.status] ? acc : ct),
+        null,
+      )
+      const res = await fetch('/api/opportunities', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({
+          companyId: company.id,
+          primaryContactId: primary?.id ?? null,
+          owner: company.assignedTo,
+          useCase: company.notes,
+        }),
+      })
+      const data = await res.json()
+      if (res.status === 409 && data.opportunity?.id) {
+        router.push(`/opportunities?opp=${data.opportunity.id}`)
+        return
+      }
+      if (!res.ok) {
+        setError(data.error ?? 'Failed to create opportunity')
+        return
+      }
+      router.push(`/opportunities?opp=${data.opportunity.id}`)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create opportunity')
+    } finally {
+      setCreatingOpp(false)
     }
   }
 
@@ -645,6 +704,30 @@ function CompanyDrawer({
               Save company
             </Button>
           </div>
+        </div>
+
+        {/* Opportunity */}
+        <div className="px-6 py-4 border-b border-line flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Target className="w-4 h-4 text-muted" />
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted">
+              Opportunity
+            </h3>
+          </div>
+          {openOpp ? (
+            <Link
+              href={`/opportunities?opp=${openOpp.id}`}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-accent-2/30 bg-accent-2/10 text-accent-2 text-[12.5px] font-medium hover:border-accent-2 transition-colors"
+            >
+              {STAGE_LABELS[openOpp.stage]} · view on board
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </Link>
+          ) : (
+            <Button variant="ghost" size="sm" onClick={createOpportunity} disabled={creatingOpp}>
+              {creatingOpp ? <Loader2 className="w-4 h-4 animate-spin" /> : <Target className="w-4 h-4" />}
+              Create opportunity
+            </Button>
+          )}
         </div>
 
         {/* Contacts */}
@@ -983,55 +1066,6 @@ function ContactDrawer({
         ) : null}
       </div>
     </div>
-  )
-}
-
-/* ------------------------------------------------------------------ */
-/*  Timeline row                                                       */
-/* ------------------------------------------------------------------ */
-
-const TIMELINE_META: Record<CorrespondenceType, { label: string; icon: React.ComponentType<{ className?: string }>; tint: string }> = {
-  email_sent:         { label: 'Email sent',        icon: Send,               tint: 'text-blue-300' },
-  email_opened:       { label: 'Email opened',      icon: MailOpen,           tint: 'text-blue-300' },
-  email_clicked:      { label: 'Link clicked',      icon: MousePointerClick,  tint: 'text-emerald-300' },
-  email_replied:      { label: 'Email reply',       icon: Reply,              tint: 'text-emerald-300' },
-  email_bounced:      { label: 'Bounced',           icon: AlertCircle,        tint: 'text-rose-300' },
-  email_unsubscribed: { label: 'Unsubscribed',      icon: UserX,              tint: 'text-rose-300' },
-  call:               { label: 'Call',              icon: Phone,              tint: 'text-amber-300' },
-  meeting:            { label: 'Meeting',           icon: Calendar,           tint: 'text-amber-300' },
-  note:               { label: 'Note',              icon: StickyNote,         tint: 'text-muted' },
-  sms:                { label: 'SMS',               icon: Mail,               tint: 'text-amber-300' },
-}
-
-function TimelineRow({ entry }: { entry: Correspondence }) {
-  const meta = TIMELINE_META[entry.type]
-  const Icon = meta.icon
-  const occurred = new Date(entry.occurredAt)
-  return (
-    <li className="relative">
-      <span className="absolute -left-[30px] top-0.5 grid place-items-center w-6 h-6 rounded-full bg-paper border border-line">
-        <Icon className={`w-3 h-3 ${meta.tint}`} />
-      </span>
-      <div className="flex items-baseline justify-between gap-2">
-        <div className="text-[13px] text-ink font-medium">{meta.label}</div>
-        <div className="text-[11.5px] text-muted font-mono whitespace-nowrap">
-          {occurred.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}
-        </div>
-      </div>
-      {entry.subject ? (
-        <div className="text-[13px] text-ink-2 mt-0.5">{entry.subject}</div>
-      ) : null}
-      {entry.body ? (
-        <div className="text-[12.5px] text-ink-2 whitespace-pre-wrap mt-1 leading-relaxed">
-          {entry.body}
-        </div>
-      ) : null}
-      {Object.keys(entry.metadata).length > 0 && (entry.type === 'email_clicked' && entry.metadata.link_url) ? (
-        <div className="text-[11.5px] text-muted font-mono mt-1 truncate">
-          → {String(entry.metadata.link_url)}
-        </div>
-      ) : null}
-    </li>
   )
 }
 

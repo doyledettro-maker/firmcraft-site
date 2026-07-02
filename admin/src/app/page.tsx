@@ -1,10 +1,18 @@
 import Link from 'next/link'
-import { ArrowRight, ClipboardList } from 'lucide-react'
+import { ArrowRight, ClipboardList, Flame, Target } from 'lucide-react'
 import { AppShell } from '@/components/AppShell'
 import { Button, Card, ConsoleCard, Metric } from '@/components/ui'
 import { StatusBadge } from '@/components/StatusBadge'
 import { getClients, getAllUsageTotals } from '@/lib/db'
+import { getOpportunities } from '@/lib/db/opportunities'
 import { formatCurrency, formatSpend, formatDate, formatNumber } from '@/lib/format'
+import {
+  STAGE_LABELS,
+  formatCloseWindow,
+  isNextActionOverdue,
+  needsAttention,
+  pipelineSummary,
+} from '@/lib/opportunity-signals'
 
 export const dynamic = 'force-dynamic'
 
@@ -17,10 +25,17 @@ function currentMonthRange(now = new Date()) {
 }
 
 export default async function DashboardPage() {
-  const [clients, usageTotals] = await Promise.all([
+  const [clients, usageTotals, openOpps] = await Promise.all([
     getClients(),
     getAllUsageTotals(currentMonthRange()),
+    getOpportunities({ openOnly: true }),
   ])
+  const oppsWithTouch = openOpps.map((o) => ({ ...o, lastTouchAt: null }))
+  const pipeline = pipelineSummary(oppsWithTouch)
+  const attention = oppsWithTouch
+    .filter((o) => o.specialAttention)
+    .sort((a, b) => (a.expectedCloseEnd ?? '9999').localeCompare(b.expectedCloseEnd ?? '9999'))
+    .slice(0, 4)
   const total = clients.length
   const active = clients.filter((c) => c.status === 'active').length
   const onboarding = clients.filter((c) => c.status === 'onboarding').length
@@ -84,6 +99,69 @@ export default async function DashboardPage() {
           </div>
         </ConsoleCard>
       </div>
+
+      {openOpps.length > 0 ? (
+        <Card className="mb-8">
+          <div className="px-6 py-5 border-b border-line flex items-center justify-between">
+            <div>
+              <div className="eyebrow">Sales pipeline</div>
+              <h3 className="font-sans font-semibold text-[20px] tracking-tight mt-1 flex items-center gap-2">
+                <Target className="w-4 h-4 text-signal" />
+                {formatNumber(pipeline.openCount)} open · {formatCurrency(pipeline.pipelineValue)} pipeline
+                <span className="text-muted font-normal text-[13px] font-mono">
+                  ({formatCurrency(pipeline.weightedValue)} weighted · {pipeline.closingSoonCount} closing soon)
+                </span>
+              </h3>
+            </div>
+            <Link href="/opportunities">
+              <Button variant="ghost" size="sm">
+                Open board
+                <ArrowRight className="w-4 h-4" />
+              </Button>
+            </Link>
+          </div>
+          {attention.length > 0 ? (
+            <ul className="divide-y divide-line">
+              {attention.map((o) => {
+                const overdue = isNextActionOverdue(o)
+                const flag = needsAttention(o)
+                return (
+                  <li key={o.id}>
+                    <Link
+                      href={`/opportunities?opp=${o.id}`}
+                      className="flex items-center justify-between px-6 py-4 hover:bg-paper-2 transition-colors"
+                    >
+                      <div className="min-w-0">
+                        <div className="font-medium text-ink truncate flex items-center gap-2">
+                          <Flame className="w-3.5 h-3.5 text-accent-2 flex-none" />
+                          {o.company.companyName}
+                          {flag ? (
+                            <span className="font-mono text-[10px] uppercase tracking-[0.1em] text-danger">
+                              needs attention
+                            </span>
+                          ) : null}
+                        </div>
+                        <div className={`text-[13px] truncate ${overdue ? 'text-danger' : 'text-muted'}`}>
+                          {o.nextAction ?? 'No next action set'}
+                          {o.nextActionDueAt ? ` · due ${formatDate(o.nextActionDueAt)}` : ''}
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-3 flex-none">
+                        <span className="font-mono text-[11.5px] text-muted whitespace-nowrap hidden sm:inline">
+                          closes {formatCloseWindow(o.expectedCloseStart, o.expectedCloseEnd)}
+                        </span>
+                        <span className="font-mono text-[12px] text-ink-2 uppercase tracking-[0.12em]">
+                          {STAGE_LABELS[o.stage]}
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                )
+              })}
+            </ul>
+          ) : null}
+        </Card>
+      ) : null}
 
       <Card>
         <div className="px-6 py-5 border-b border-line flex items-center justify-between">

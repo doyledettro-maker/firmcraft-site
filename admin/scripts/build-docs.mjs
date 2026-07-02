@@ -33,6 +33,7 @@ const REGISTRY = [
   ['docs/gbp-setup-plan.md', 'Phase 6: Digital Ops', 'GBP Setup Plan'],
   ['docs/gbp-api-application-checklist.md', 'Phase 6: Digital Ops', 'GBP API Checklist'],
 
+  ['docs/sales-pipeline-architecture.md', 'Sales & Outreach', 'Pipeline Architecture'],
   ['docs/houston-hvac-prospect-research.md', 'Sales & Outreach', 'Houston HVAC Prospects'],
   ['docs/site-copy-vs-hermes-audit.md', 'Sales & Outreach', 'Site Copy vs Hermes Audit'],
   ['docs/brand-strategy-actions.md', 'Sales & Outreach', 'Brand Strategy Actions'],

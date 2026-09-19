@@ -58,7 +58,7 @@ const distinctions = [
 ]
 
 const fit = [
-  ['Revenue', '10 million and above'],
+  ['Scale', 'Established operating business'],
   ['Headcount', '50 to 1,500 employees'],
   [
     'Systems',

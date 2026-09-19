@@ -145,7 +145,7 @@ export function ContactForm({
             onChange={(e) => update('company', e.target.value)}
             autoComplete="organization"
             className={inputClass}
-            placeholder="Acme Dental"
+            placeholder="Midwest Components"
           />
         </Field>
         <Field label="Phone" htmlFor="phone" optional>

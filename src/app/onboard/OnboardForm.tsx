@@ -663,7 +663,7 @@ function Step1({
             autoComplete="organization"
             required
             className={inputClass}
-            placeholder="Acme Dental"
+            placeholder="Midwest Components"
           />
         </Field>
         <Field label="Industry" htmlFor="industry" required>

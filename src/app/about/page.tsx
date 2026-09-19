@@ -81,7 +81,7 @@ export default function AboutPage() {
                 tell when the underlying data will not support what is being proposed. Firmcraft is
                 built around the opposite arrangement.
               </p>
-              <p>The firm is based in central Illinois and works with clients across the United States.</p>
+              <p>The firm is based in central Illinois and works with clients across the globe.</p>
             </div>
           </div>
         </section>

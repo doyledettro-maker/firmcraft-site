@@ -15,8 +15,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Firmcraft (&ldquo;we,&rdquo; &ldquo;us&rdquo;) is an AI consulting firm based in the
-        Springfield, Illinois area, serving small and mid-sized businesses in central Illinois,
-        Houston, Texas, and across the United States. This policy covers the firmcraft.ai
+        Springfield, Illinois area, serving businesses across the globe. This policy covers the firmcraft.ai
         website. Data handling inside client deployments is governed by each client&apos;s
         services agreement and, where applicable, a Data Processing Agreement or Business
         Associate Agreement — see our <a href="/security">Security &amp; sovereignty</a> page.

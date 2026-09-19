@@ -7,7 +7,7 @@ import './about.css'
 export const metadata: Metadata = {
   title: 'About — Firmcraft',
   description:
-    'Firmcraft is an advisory practice combining enterprise systems and digital transformation experience with hands-on technical implementation.',
+    'Firmcraft is an advisory practice combining business process, industry, and enterprise systems experience with hands-on technical implementation.',
   alternates: { canonical: '/about' },
 }
 
@@ -59,10 +59,13 @@ export default function AboutPage() {
             <div className="pkg-head">
               <h2>Background</h2>
               <p>
-                Firmcraft is led by a technology advisor whose work has centered on enterprise
-                systems and digital transformation: several years implementing ERP and adjacent
-                operational systems across manufacturing, field service, distribution, and
-                industrial environments.
+                Firmcraft is led by an advisor whose background spans business process, industry
+                operations, and technology. On the technical side, that means several years
+                implementing ERP and adjacent operational systems across manufacturing, field
+                service, distribution, and industrial environments. Alongside it sits the process
+                and industry knowledge that determines whether an implementation is worth
+                undertaking at all — which of a business&apos;s workflows actually carry cost, where
+                the constraints genuinely sit, and what changes when they move.
               </p>
               <p>
                 Before that came a period in audit and a role as an industry controller, which

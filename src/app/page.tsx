@@ -31,9 +31,9 @@ const serviceLines = [
 
 const distinctions = [
   {
-    title: 'Enterprise systems and digital transformation experience',
+    title: 'Business process, industry, and systems depth',
     body:
-      'Firmcraft is led by a technology advisor with a substantial background in enterprise systems implementation — ERP and the operational systems around it — across manufacturing, field service, distribution, and industrial environments. That work has been done from both sides: first as the finance leader responsible for a system implementation, and later as the consultant delivering them.',
+      'Firmcraft is led by an advisor whose background spans business process, industry operations, and enterprise systems implementation. That work has been carried out in manufacturing, field service, distribution, and industrial environments, and from both sides of an implementation: first as the finance leader accountable for a rollout, and later as the consultant delivering them.',
   },
   {
     title: 'Commercial literacy',
@@ -86,8 +86,8 @@ export default function HomePage() {
                 <p className="lede">
                   Firmcraft advises mid-market companies on artificial intelligence and technology
                   strategy, implements what that strategy requires, and manages the result on an
-                  ongoing basis. The practice combines enterprise systems and digital
-                  transformation experience with hands-on technical implementation.
+                  ongoing basis. The practice brings together business process, industry, and
+                  enterprise systems experience with hands-on technical implementation.
                 </p>
                 <div className="hero-ctas">
                   <Link className="btn primary lg" href="/contact">

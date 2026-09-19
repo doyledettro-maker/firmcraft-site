@@ -47,7 +47,7 @@ type Cell = { kind: 'y' | 'n' | 'a' }
 const RBAC: { action: string; cells: Cell[] }[] = [
   { action: 'Read patient chart', cells: [{ kind: 'y' }, { kind: 'y' }, { kind: 'y' }] },
   { action: 'Submit insurance claim', cells: [{ kind: 'y' }, { kind: 'n' }, { kind: 'y' }] },
-  { action: 'Submit appeal > $1k', cells: [{ kind: 'a' }, { kind: 'n' }, { kind: 'y' }] },
+  { action: 'Submit high-value appeal', cells: [{ kind: 'a' }, { kind: 'n' }, { kind: 'y' }] },
   { action: 'Refund a patient', cells: [{ kind: 'n' }, { kind: 'n' }, { kind: 'a' }] },
   { action: 'Run recall campaign', cells: [{ kind: 'a' }, { kind: 'n' }, { kind: 'y' }] },
   { action: 'Edit playbook config', cells: [{ kind: 'n' }, { kind: 'n' }, { kind: 'y' }] },
@@ -59,7 +59,7 @@ const LOG: { ts: string; what: React.ReactNode; held?: boolean }[] = [
   { ts: '09:18:14', what: <>Operator read · <em className="text-signal not-italic">Eaglesoft / chart 4421</em></> },
   { ts: '09:18:31', what: <>Operator wrote · <em className="text-signal not-italic">claim_882041.pdf</em> → /Drive/Claims/</> },
   { ts: '09:18:44', what: <>Operator sent · POST <em className="text-signal not-italic">delta-dental.com/claims</em></> },
-  { ts: '11:42:08', what: <>Inbound webhook · EOB received · <em className="text-signal not-italic">$710 paid</em></> },
+  { ts: '11:42:08', what: <>Inbound webhook · EOB received · <em className="text-signal not-italic">claim paid</em></> },
   { ts: '11:42:12', what: <>Action <em className="not-italic" style={{ color: 'var(--color-operator)' }}>held</em> · pending Dr. Chen approval</>, held: true },
   { ts: '11:48:55', what: <><b className="font-medium text-ink">Dr. Chen</b> approved · patient text drafted</> },
   { ts: '11:48:57', what: <>Operator sent · SMS <em className="text-signal not-italic">+1 ••• ••• 4421</em></> },
@@ -338,7 +338,7 @@ export default function SecurityPage() {
               <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0 mb-3.5">
                 <strong className="text-ink font-medium">Approval chains.</strong> Sensitive
                 actions can require N-of-M approval — e.g. partner OR senior associate for
-                engagement letters, two partners for any wire over $25k.
+                engagement letters, two partners for any high-value wire.
               </p>
               <div
                 className="font-sans text-[19px] leading-[1.45] text-ink pl-[18px] mt-5"

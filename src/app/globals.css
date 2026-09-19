@@ -696,7 +696,7 @@ h1.display-h1 em {
 ::-webkit-scrollbar-thumb { background: var(--color-line-strong); border-radius: 3px; }
 
 /* ──────────────────────────────────────────────────────────────────────── */
-/* Homepage sections (hero, problem, how, pricing, industries,             */
+/* Homepage sections (hero, problem, how, industries,                     */
 /* compare, final).                                                        */
 /* ──────────────────────────────────────────────────────────────────────── */
 
@@ -1046,7 +1046,7 @@ h1.display-h1 em {
   font-size: 14.5px; line-height: 1.5;
 }
 
-/* Pricing */
+/* Legacy tier-card styles */
 .price-grid {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;
 }

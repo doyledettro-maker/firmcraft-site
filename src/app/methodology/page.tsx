@@ -112,7 +112,7 @@ export default function MethodologyPage() {
               <div className="step-info">
                 <div className="ix"><span>Phase 03</span><span className="duration">· Weeks 1–10 of Build</span></div>
                 <h2>Configure. <em>The Build, run like an implementation.</em></h2>
-                <p className="intro">The Foundation goes in first — Hermes deployed, retrieval indexed, the messaging gateway wired, Langfuse observing. Then the vertical workflows stack on top, one at a time, each shipped to production behind a feature flag, each with its eval suite in place before traffic. The discipline is straight out of ERP go-lives.</p>
+                <p className="intro">The Foundation goes in first — Hermes deployed, retrieval indexed, the messaging gateway wired, and observability in place. Then the vertical workflows stack on top, one at a time, each shipped to production behind a feature flag, each with its eval suite in place before traffic. The discipline is straight out of ERP go-lives.</p>
                 <div className="what">
                   <div className="row"><div className="k">Inputs</div><div className="v">Scorecard · roadmap · vendor matrix · TCO model</div></div>
                   <div className="row"><div className="k">Activities</div><div className="v"><span className="pill">Foundation install</span><span className="pill">RAG indexing</span><span className="pill">Workflow build</span><span className="pill">Integration</span></div></div>
@@ -147,17 +147,17 @@ export default function MethodologyPage() {
                           {/* 4 */}
                           <rect x="6" y="92" width="92" height="38" rx="7" fill="#FFFFFF" stroke="#E2E8F0"/>
                           <text x="52" y="108" textAnchor="middle" fontSize="8" fill="#64748B" letterSpacing=".06em">TOOL</text>
-                          <text x="52" y="123" textAnchor="middle" fill="#0F172A" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">BC · code</text>
+                          <text x="52" y="123" textAnchor="middle" fill="#0F172A" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">ERP · code</text>
 
                           {/* 5 */}
                           <rect x="134" y="92" width="92" height="38" rx="7" fill="#FFE9DD" stroke="#FB7C50"/>
                           <text x="180" y="108" textAnchor="middle" fontSize="8" fill="#7A2D0E" letterSpacing=".06em">REVIEW</text>
-                          <text x="180" y="123" textAnchor="middle" fill="#7A2D0E" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">if &gt; $5k</text>
+                          <text x="180" y="123" textAnchor="middle" fill="#7A2D0E" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">if high risk</text>
 
                           {/* 6 */}
                           <rect x="262" y="92" width="92" height="38" rx="7" fill="#FFFFFF" stroke="#E2E8F0"/>
                           <text x="308" y="108" textAnchor="middle" fontSize="8" fill="#64748B" letterSpacing=".06em">TOOL</text>
-                          <text x="308" y="123" textAnchor="middle" fill="#0F172A" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">BC · post</text>
+                          <text x="308" y="123" textAnchor="middle" fill="#0F172A" fontFamily="Geist,sans-serif" fontWeight="500" fontSize="11">ERP · post</text>
 
                           {/* 7 */}
                           <rect x="134" y="164" width="92" height="38" rx="7" fill="#DCFCE7" stroke="#10B981"/>
@@ -211,7 +211,7 @@ export default function MethodologyPage() {
                     <div className="scores">
                       <div className="s"><div className="k">Accuracy</div><div className="v green">94<span className="unit">%</span></div></div>
                       <div className="s"><div className="k">p95 latency</div><div className="v">410<span className="unit">ms</span></div></div>
-                      <div className="s"><div className="k">$ / run</div><div className="v amber">$0.018</div></div>
+                      <div className="s"><div className="k">Cost / run</div><div className="v amber">tracked</div></div>
                     </div>
                     <div className="test-list">
                       <div className="test"><span className="nm">vendor.match.exact</span><span className="ms">312ms</span><span className="pill pass">pass</span></div>
@@ -331,7 +331,7 @@ export default function MethodologyPage() {
                     maxWidth: '560px',
                   }}
                 >
-                  Start with the Assessment. Three weeks, fixed-fee, refundable against Build.
+                  Start with the Assessment. Three weeks, scoped around the roadmap and Build decision.
                 </p>
               </div>
               <a className="btn primary lg" href="/contact">

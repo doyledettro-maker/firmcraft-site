@@ -598,8 +598,8 @@ export function PlaybooksClient() {
                 >
                   Book a 20-min call →
                 </a>
-                <Link className="btn btn-ghost btn-lg" href="/pricing">
-                  See plans
+                <Link className="btn btn-ghost btn-lg" href="/services">
+                  See services
                 </Link>
               </div>
             </div>

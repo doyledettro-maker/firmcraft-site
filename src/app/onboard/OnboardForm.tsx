@@ -1276,7 +1276,7 @@ function Step6({
     <div className="flex flex-col gap-5">
       <p className="text-[14.5px] text-ink-2 leading-[1.55] m-0">
         Optional. These help us configure your operator faster — org chart, process docs,
-        pricing sheets, brand guidelines, anything else we should see. You can always add
+        commercial sheets, brand guidelines, anything else we should see. You can always add
         more later.
       </p>
 

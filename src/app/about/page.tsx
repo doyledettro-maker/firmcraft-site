@@ -7,7 +7,7 @@ import './about.css'
 export const metadata: Metadata = {
   title: 'About — A CPA-Led AI Consulting Firm',
   description:
-    'Founder, thesis, and the sovereign AI story. CPA + ERP consultant + AI builder, based in the Springfield, Illinois area — building one of the first AI consulting firms native to the post-ChatGPT era.',
+    'Founder, thesis, and the sovereign AI story. CPA + mid-market ERP consultant + AI builder, based in the Springfield, Illinois area.',
   alternates: { canonical: '/about' },
 }
 
@@ -62,10 +62,10 @@ export default function AboutPage() {
                   </div>
                   <div className="creds">
                     <span className="c">CPA</span>
-                    <span className="c">MS BC Consultant</span>
+                    <span className="c">ERP Consultant</span>
                     <span className="c">ERP Implementation</span>
-                    <span className="c">Claude Code</span>
-                    <span className="c">Bayesian · Monte Carlo</span>
+                    <span className="c">AI Builder</span>
+                    <span className="c">Model Evaluation</span>
                   </div>
                 </div>
               </div>
@@ -90,8 +90,8 @@ export default function AboutPage() {
                 </p>
                 <p>
                   <em>Firmcraft is a firm built around the inverse.</em> The principal is a CPA who
-                  spent the last seven years inside Microsoft Business Central engagements at one
-                  of the larger Dynamics partners — and the last two building eval harnesses, Monte
+                  spent the last several years inside mid-market ERP implementation engagements —
+                  and the last two building eval harnesses, Monte
                   Carlo simulations, and Bayesian models on his own time.
                 </p>
                 <p>
@@ -167,7 +167,7 @@ export default function AboutPage() {
                 <span className="ph">Phase 03</span>
                 <h4>ERP Consulting</h4>
                 <p>
-                  Microsoft Business Central implementations across field service, manufacturing,
+                  ERP implementations across field service, manufacturing,
                   and operations. Day job. Where the process-first reflex got sharpened on real
                   engagements.
                 </p>
@@ -223,11 +223,10 @@ export default function AboutPage() {
               </div>
               <div className="principle">
                 <div className="ix">iii.</div>
-                <h3>Fixed-fee where it matters.</h3>
+                <h3>Scope discipline.</h3>
                 <p>
-                  Build engagements are fixed-fee with dated delivery. The hourly work is reserved
-                  for genuine out-of-scope and change requests, logged and approved before
-                  it&apos;s billed. No buffer-burn at the end of a sprint.
+                  We define the work before implementation begins, document change requests, and
+                  keep budget, risk, and operational ownership visible throughout the engagement.
                 </p>
               </div>
               <div className="principle">
@@ -254,8 +253,9 @@ export default function AboutPage() {
                 </h2>
                 <p>
                   Hermes is the open-source LLM, retrieval pipeline, and observability layer we
-                  deploy in every Build engagement. It runs in your VPC or on-prem. We maintain it,
-                  you own it. If we disappear tomorrow, your operator keeps running.
+                  deploy when a self-hosted, client-owned setup is the right answer. It runs in
+                  your VPC or on-prem. We maintain it, you own it. If we disappear tomorrow, your
+                  system keeps running.
                 </p>
                 <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
                   <a className="btn console-ghost" href="#">
@@ -279,7 +279,7 @@ export default function AboutPage() {
                 <div className="r">
                   <span className="k">Stack</span>
                   <span className="v">
-                    Retrieval · gateway · evals<span className="sub">Langfuse-observed</span>
+                    Retrieval · gateway · evals<span className="sub">Observable by design</span>
                   </span>
                 </div>
                 <div className="r">
@@ -301,13 +301,12 @@ export default function AboutPage() {
               <div>
                 <div className="eyebrow">05 · Partner ecosystem</div>
                 <h2>
-                  The vendors <em className="em-italic">in our standard kit.</em>
+                  The categories <em className="em-italic">we work across.</em>
                 </h2>
               </div>
               <p>
-                The Assessment ends with a vendor matrix tuned to your engagement. These are the
-                partners we know best — where we have working integrations, eval harnesses, and a
-                phone number we can call if something breaks at 11pm.
+                The Assessment ends with a vendor matrix tuned to your engagement. We name the
+                category, the workflow, and the integration pattern before we name a product.
               </p>
             </div>
 
@@ -315,37 +314,37 @@ export default function AboutPage() {
               <div className="partner-block">
                 <h4>ERP &amp; Platform</h4>
                 <div className="logos">
-                  <div className="logo">Microsoft BC</div>
-                  <div className="logo">NetSuite</div>
-                  <div className="logo">Acumatica</div>
-                  <div className="logo">Sage</div>
+                  <div className="logo">Mid-market ERP</div>
+                  <div className="logo">Distribution ERP</div>
+                  <div className="logo">Manufacturing ERP</div>
+                  <div className="logo">Field-service ERP</div>
                 </div>
               </div>
               <div className="partner-block">
                 <h4>AI &amp; Workflow</h4>
                 <div className="logos">
                   <div className="logo">Hermes</div>
-                  <div className="logo">n8n</div>
-                  <div className="logo">Langfuse</div>
-                  <div className="logo">Claude Code</div>
+                  <div className="logo">Workflow automation</div>
+                  <div className="logo">Evaluation</div>
+                  <div className="logo">Implementation tooling</div>
                 </div>
               </div>
               <div className="partner-block">
                 <h4>Finance Automation</h4>
                 <div className="logos">
-                  <div className="logo">Vic.ai</div>
-                  <div className="logo">Stampli</div>
-                  <div className="logo">Ramp</div>
-                  <div className="logo">Bill</div>
+                  <div className="logo">AP automation</div>
+                  <div className="logo">AR workflow</div>
+                  <div className="logo">Expense control</div>
+                  <div className="logo">Payment operations</div>
                 </div>
               </div>
               <div className="partner-block">
                 <h4>Voice &amp; Support</h4>
                 <div className="logos">
-                  <div className="logo">Retell</div>
-                  <div className="logo">Vapi</div>
-                  <div className="logo">Fin · Intercom</div>
-                  <div className="logo">Zendesk</div>
+                  <div className="logo">Voice automation</div>
+                  <div className="logo">Chat support</div>
+                  <div className="logo">Helpdesk workflow</div>
+                  <div className="logo">CRM handoff</div>
                 </div>
               </div>
               <div className="partner-block">

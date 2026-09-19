@@ -83,7 +83,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'ChatGPT Teams, Copilot, Claude, custom GPTs, Perplexity, anything else. Honest is fine — "we paid for it but nobody opens it" is a useful answer.',
         placeholder:
-          'e.g. ChatGPT Teams ($25/user). A couple of managers use it for drafting; nobody else has logged in.',
+          'e.g. A general-purpose AI seat. A couple of managers use it for drafting; nobody else has logged in.',
       },
       {
         id: 'hosting',
@@ -174,7 +174,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Be specific — Salesforce, Gmail, Drive, your specific ERP or CRM vendor, your accounting platform, etc.',
         placeholder:
-          'e.g. Microsoft 365 (mail + calendar + SharePoint), HubSpot CRM, QuickBooks Online, DocuSign, our internal ERP (NetSuite).',
+          'e.g. mail, calendar, document storage, CRM, accounting, e-signature, and your internal ERP.',
       },
       {
         id: 'apiQuirks',
@@ -183,7 +183,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           "Don't worry if you don't know — but a heads-up saves a week.",
         placeholder:
-          "e.g. our ERP doesn't have a real API for the workflows we care about; we'll likely need to scrape PDFs out of email. NetSuite customization requires a vendor consultant.",
+          "e.g. our ERP doesn't have a real API for the workflows we care about; we'll likely need to scrape PDFs out of email. ERP customization requires a vendor consultant.",
       },
       {
         id: 'context',
@@ -331,7 +331,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         guidance:
           'Air-gapped network? Translation languages? Specific industry quirks? Things that have to work day one.',
         placeholder:
-          'e.g. customer pricing data is highly sensitive — no third-party model training on our data, ever.',
+          'e.g. customer commercial data is highly sensitive — no third-party model training on our data, ever.',
       },
       {
         id: 'mustHave',
@@ -345,7 +345,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         prompt: "Any deal-breakers? What would cause you to walk away?",
         guidance: "We'd rather know now than later.",
         placeholder:
-          "e.g. any model training on our data; long-term contracts; per-seat pricing; vendors without a US-only data residency option.",
+          "e.g. any model training on our data; long-term contracts; per-seat commercial models; vendors without a US-only data residency option.",
       },
     ],
   },

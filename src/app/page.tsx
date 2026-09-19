@@ -29,7 +29,7 @@ export default function HomePage() {
                   Firmcraft is an AI implementation, integration, and enablement firm for finance- and operations-driven SMBs running ERPs — built on a sovereign, open-source LLM foundation so your data never leaves your walls.
                 </p>
                 <div className="hero-ctas">
-                  <a className="btn primary lg" href="/pricing#assess">
+                  <a className="btn primary lg" href="/contact">
                     Book an Assessment <span className="arr">→</span>
                   </a>
                   <a className="btn ghost lg" href="/services">
@@ -38,7 +38,7 @@ export default function HomePage() {
                 </div>
                 <div className="hero-signals">
                   <span>CPA-credentialed</span>
-                  <span>Microsoft BC · NetSuite · Acumatica</span>
+                  <span>Mid-market ERP platforms</span>
                   <span>Sovereign by default</span>
                   <span>Process-first, not tool-first</span>
                 </div>
@@ -66,7 +66,7 @@ export default function HomePage() {
                     </div>
                     <div className="m">
                       <div className="k">12-mo TCO</div>
-                      <div className="v operator">$284k</div>
+                      <div className="v operator">Modeled</div>
                     </div>
                   </div>
                   <div className="sc-table">
@@ -159,7 +159,7 @@ export default function HomePage() {
                   AI Readiness <em>Assessment</em>
                 </h3>
                 <p className="desc">
-                  A fixed-fee diagnostic that ends with a roadmap you can actually fund — not a slide deck.
+                  A diagnostic that ends with a prioritized roadmap and a total cost model.
                 </p>
                 <ul>
                   <li>Stakeholder interviews &amp; system inventory</li>
@@ -168,7 +168,7 @@ export default function HomePage() {
                   <li>12-month roadmap + TCO model</li>
                 </ul>
                 <div className="foot">
-                  <span className="meta">2–3 weeks · fixed-fee</span>
+                  <span className="meta">2–3 weeks · scoped roadmap</span>
                   <a className="go" href="/services#assess">
                     Details →
                   </a>
@@ -181,19 +181,19 @@ export default function HomePage() {
                   <span className="ar">→</span>
                 </div>
                 <h3>
-                  Implementation <em>packages</em>
+                  AI <em>Implementation</em>
                 </h3>
                 <p className="desc">
-                  Four named builds, each anchored on Hermes — our sovereign LLM foundation — and wired through your ERP.
+                  Capability-area implementation anchored in the client&apos;s systems and wired through the ERP.
                 </p>
                 <ul>
-                  <li>Foundation — managed Hermes + RAG + gateway</li>
-                  <li>Finance — Vic.ai / Stampli + AP/AR workflows</li>
-                  <li>Operations — n8n agents + asset/maintenance</li>
-                  <li>Voice + Support — Retell / Vapi + helpdesk</li>
+                  <li>Foundational setup — client-owned AI environment</li>
+                  <li>Finance — AP/AR workflow automation</li>
+                  <li>Operations — asset and maintenance workflows</li>
+                  <li>Voice + Support — customer support automation</li>
                 </ul>
                 <div className="foot">
-                  <span className="meta">6–16 weeks · fixed-fee</span>
+                  <span className="meta">Scoped delivery</span>
                   <a className="go" href="/services#build">
                     Details →
                   </a>
@@ -212,10 +212,10 @@ export default function HomePage() {
                   Eval, regression, prompt tuning, new workflows. The recurring engine that keeps the system honest.
                 </p>
                 <ul>
-                  <li>Essential — model monitoring &amp; tuning</li>
-                  <li>Standard — 1–2 new workflows / quarter</li>
-                  <li>Comprehensive — embedded fractional AI lead</li>
-                  <li>Self-serve Firmcraft Operator plans</li>
+                  <li>Model monitoring and regression review</li>
+                  <li>Workflow maintenance and improvement</li>
+                  <li>Executive roadmap support</li>
+                  <li>Documented workflow ownership</li>
                 </ul>
                 <div className="foot">
                   <span className="meta">Monthly retainer</span>
@@ -257,9 +257,9 @@ export default function HomePage() {
                     CPA + ERP <span className="hi">credential.</span>
                   </h3>
                   <p>
-                    Doyle is a CPA and a working Microsoft Business Central consultant. He can debate revenue recognition with your controller, then go build the eval harness.
+                    Firmcraft&apos;s principal is a CPA with mid-market ERP implementation experience. He can debate revenue recognition with your controller, then go build the eval harness.
                   </p>
-                  <div className="meta">Business Central · NetSuite · Acumatica</div>
+                  <div className="meta">ERP implementation · finance operations · workflow design</div>
                 </div>
               </div>
 
@@ -346,7 +346,7 @@ export default function HomePage() {
                 <div className="r">
                   <span className="k">Revenue</span>
                   <span className="v">
-                    $10M – $500M
+                    Lower to upper mid-market
                     <span className="sub">Lower mid-market is our hot zone</span>
                   </span>
                 </div>
@@ -357,7 +357,7 @@ export default function HomePage() {
                 <div className="r">
                   <span className="k">ERP in place</span>
                   <span className="v">
-                    BC · NetSuite · Acumatica · Sage
+                    ERP system in place
                     <span className="sub">Or actively replatforming</span>
                   </span>
                 </div>
@@ -381,82 +381,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* ============ FIRMCRAFT OPERATOR BLOCK ============ */}
-        <section
-          className="sec"
-          data-screen-label="05 Firmcraft Operator"
-          style={{ borderBottom: 'none', paddingBottom: 0 }}
-        >
-          <div className="wrap">
-            <div className="mai-block">
-              <div>
-                <div className="eyebrow">04 · Firmcraft Operator</div>
-                <h2>
-                  The packaged product, sized by <em>who actually uses it.</em>
-                </h2>
-                <p>
-                  If you&apos;d rather start small — sovereign AI in
-                  your team chat, on a flat monthly rate, priced by
-                  how many of your people will work with it —
-                  Firmcraft Operator is the entry point. Solo / Team /
-                  Pro from $399, running by Friday.
-                </p>
-                <div className="links">
-                  <a className="btn primary" href="/managed-ai">
-                    Explore the Operator <span className="arr">→</span>
-                  </a>
-                  <a className="see" href="/pricing#operator">
-                    See plans · $399–$1,499/mo →
-                  </a>
-                </div>
-              </div>
-              <div className="mai-vis">
-                <div className="head">
-                  <b>operator.run · live</b>
-                  <span className="ok">● running</span>
-                </div>
-                <div className="row">
-                  <span>10:42:14</span>
-                  <span className="nm">
-                    <em>operator.dispatch</em> · ap.triage
-                  </span>
-                  <span className="pill-r ok">218ms</span>
-                </div>
-                <div className="row">
-                  <span>10:42:09</span>
-                  <span className="nm">
-                    <em>workflow</em> · contract.draft
-                  </span>
-                  <span className="pill-r run">running</span>
-                </div>
-                <div className="row">
-                  <span>10:41:51</span>
-                  <span className="nm">
-                    <em>tool</em> · BC.invoice.post
-                  </span>
-                  <span className="pill-r ok">ok</span>
-                </div>
-                <div className="row">
-                  <span>10:41:32</span>
-                  <span className="nm">
-                    <em>review</em> · claim.submit
-                  </span>
-                  <span className="pill-r held">human</span>
-                </div>
-                <div className="row">
-                  <span>10:41:08</span>
-                  <span className="nm">
-                    <em>cron</em> · followup.batch
-                  </span>
-                  <span className="pill-r ok">ok · 14</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* ============ FINAL CTA ============ */}
-        <section className="sec" id="book" data-screen-label="06 CTA">
+        <section className="sec" id="book" data-screen-label="05 CTA">
           <div className="wrap">
             <div className="final-cta">
               <div>
@@ -465,7 +391,7 @@ export default function HomePage() {
                   Twenty minutes on a call. <em>A funded roadmap by month&apos;s end.</em>
                 </h2>
                 <p>
-                  Every engagement starts with the Assessment. Fixed-fee, two to three weeks, scoped on the discovery call. If we don&apos;t think AI fits your business, we&apos;ll tell you on the call — and bill nothing.
+                  Every engagement starts with the Assessment. Two to three weeks, scoped on the discovery call, with a decision-ready roadmap at the end.
                 </p>
                 <div className="hero-ctas">
                   <a
@@ -483,10 +409,10 @@ export default function HomePage() {
                 <div className="head">
                   <div className="ttl">
                     AI Readiness Assessment{' '}
-                    <span className="sub">The fixed-fee front door to the practice.</span>
+                    <span className="sub">The front door to the practice.</span>
                   </div>
                   <div className="pr">
-                    <span className="lab">Fixed fee</span>2–3 weeks
+                    <span className="lab">Assessment</span>2–3 weeks
                   </div>
                 </div>
                 <ul>
@@ -494,11 +420,11 @@ export default function HomePage() {
                   <li>Use-case prioritization scorecard — feasibility × ROI × sovereign fit</li>
                   <li>Data audit + integration map for your ERP &amp; surrounding stack</li>
                   <li>12-month AI roadmap with sequenced TCO model and vendor matrix</li>
-                  <li>Recommended Build package (or &ldquo;don&apos;t build yet, here&apos;s why&rdquo;)</li>
+                  <li>Recommended implementation sequence, including work that should not be built</li>
                 </ul>
                 <div className="foot">
                   <span>Deliverable · funded plan</span>
-                  <span>Refundable against any Build engagement</span>
+                  <span>Sequenced implementation roadmap</span>
                 </div>
               </aside>
             </div>
@@ -506,7 +432,7 @@ export default function HomePage() {
         </section>
 
         {/* ============ WHAT FIRMCRAFT IS (plain-language definition) ============ */}
-        <section className="sec" data-screen-label="07 Definition" style={{ paddingTop: 40, paddingBottom: 48 }}>
+        <section className="sec" data-screen-label="06 Definition" style={{ paddingTop: 40, paddingBottom: 48 }}>
           <div className="wrap">
             <p
               style={{
@@ -519,10 +445,8 @@ export default function HomePage() {
             >
               Firmcraft is an AI consulting firm based in the Springfield, Illinois area, serving
               small and mid-sized businesses in central Illinois, Houston, Texas, and across the
-              United States. We provide fixed-fee AI readiness assessments, AI implementation and
-              ERP integration (Microsoft Dynamics 365 Business Central, NetSuite, Acumatica),
-              managed AI operations, and Firmcraft Operator — a managed AI employee that works in
-              Slack or Microsoft Teams, from $399/month. Clients range from owner-operated trades
+              United States. We provide AI readiness assessments, implementation, ERP integration,
+              and managed AI operations. Clients range from owner-operated trades
               and practices — HVAC, plumbing, tree care, dental, legal, CPA firms — to
               finance- and operations-led mid-market companies. CPA-led, with deep ERP
               implementation experience. Sovereign by default: deployments run on the open-source

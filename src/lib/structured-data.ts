@@ -16,11 +16,10 @@ export const ORG_JSONLD = {
   url: BASE,
   logo: `${BASE}/opengraph-image`,
   description:
-    'Firmcraft is an AI consulting firm for small and mid-sized businesses. AI readiness assessments, fixed-fee AI implementation, ERP integration (Microsoft Business Central, NetSuite, Acumatica), managed AI operations, and Firmcraft Operator — a managed AI employee that works in Slack or Microsoft Teams.',
+    'Firmcraft is an AI consulting firm for small and mid-sized businesses. AI readiness assessments, ERP integration, implementation, and managed operations.',
   slogan: 'Sovereign by default',
   telephone: '+1-217-303-8319',
   email: 'hello@firmcraft.ai',
-  priceRange: '$399/mo – $60,000+',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Springfield',
@@ -46,8 +45,7 @@ export const ORG_JSONLD = {
     'managed AI services',
     'AI agents',
     'ERP integration',
-    'Microsoft Dynamics 365 Business Central',
-    'NetSuite',
+    'mid-market ERP implementation',
     'AI receptionist',
     'workflow automation',
   ],

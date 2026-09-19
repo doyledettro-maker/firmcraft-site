@@ -4,8 +4,6 @@ import { MobileMenu } from './MobileMenu'
 
 const NAV_ITEMS: { label: string; href: string; key: string }[] = [
   { label: 'Services', href: '/services', key: 'services' },
-  { label: 'Operator', href: '/managed-ai', key: 'managed-ai' },
-  { label: 'Pricing', href: '/pricing', key: 'pricing' },
   { label: 'Methodology', href: '/methodology', key: 'methodology' },
   { label: 'About', href: '/about', key: 'about' },
 ]
@@ -14,7 +12,6 @@ export type SiteHeaderCurrent =
   | 'home'
   | 'services'
   | 'managed-ai'
-  | 'pricing'
   | 'methodology'
   | 'about'
 
@@ -43,9 +40,6 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
         </nav>
 
         <div className="right">
-          <Link href="/pricing" className="btn ghost sm hidden md:inline-flex">
-            Pricing
-          </Link>
           <a
             href="/contact"
             className="btn primary sm"

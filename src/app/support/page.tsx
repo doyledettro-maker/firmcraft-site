@@ -57,14 +57,8 @@ const FAQ: { q: React.ReactNode; a: React.ReactNode }[] = [
     q: <>How does billing work?</>,
     a: (
       <>
-        Flat monthly subscription per the plan you signed for, billed on the first. Each plan
-        includes a monthly AI token allowance; usage is tracked in real time and visible to you.
-        Anything past the included allowance is billed at the published per-token rates — no
-        markups, no surprise minimums. See the{' '}
-        <Link href="/pricing" className="text-signal hover:underline underline-offset-[3px]">
-          pricing page
-        </Link>{' '}
-        for current rates.
+        Billing follows the agreement you signed. Usage is tracked in real time and visible to you,
+        with any out-of-scope work documented before it proceeds.
       </>
     ),
   },

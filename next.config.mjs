@@ -19,6 +19,31 @@ const nextConfig = {
         permanent: true,
       },
       {
+        source: '/pricing',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/operator',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/managed-ai',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/houston',
+        destination: '/services',
+        permanent: true,
+      },
+      {
+        source: '/integrations',
+        destination: '/services',
+        permanent: true,
+      },
+      {
         source: '/trust',
         destination: '/security',
         permanent: false,

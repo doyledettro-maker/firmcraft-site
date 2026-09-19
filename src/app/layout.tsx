@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     template: '%s | Firmcraft',
   },
   description:
-    'Firmcraft is an AI consulting firm for small and mid-sized businesses. Fixed-fee AI assessments, implementation, ERP integration, and a managed AI employee from $399/mo. Sovereign by default.',
+    'Firmcraft is an AI consulting firm for small and mid-sized businesses. AI assessment, implementation, ERP integration, and managed operations. Sovereign by default.',
   metadataBase: new URL('https://firmcraft.ai'),
   openGraph: {
     title: 'Firmcraft — AI Consulting & Managed AI for Small Business',

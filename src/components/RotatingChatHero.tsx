@@ -48,7 +48,7 @@ const SCENES: Scene[] = [
         body: (
           <>
             <span className="men">@firmcraft</span> Mrs. Chen wants the oak removed
-            and stump ground. Quoted $2,400 + $400 stump. She&apos;s good. Send the
+            and stump ground. Quote approved, stump included. She&apos;s good. Send the
             contract — she&apos;s standing here.
           </>
         ),
@@ -57,7 +57,7 @@ const SCENES: Scene[] = [
         av: 'a2', avLabel: 'FC', name: 'firmcraft', ts: '10:42 AM · operator',
         body: <>Drafting the contract for 14 Oak Ridge Ln now. Pulling the property photos you took Monday and your standard liability terms.</>,
         steps: [
-          { ic: '✓', k: '[01]', text: 'Contract drafted — oak removal + stump grind, $2,800 total' },
+          { ic: '✓', k: '[01]', text: 'Contract drafted — oak removal + stump grind, approved quote' },
           { ic: '✓', k: '[02]', text: 'Insurance + liability terms attached (your standard rider)' },
           { ic: '✓', k: '[03]', text: 'Sent via DocuSign to chen.linda@gmail.com' },
           { ic: '', k: '[04]', text: 'Awaiting client signature', pending: true },
@@ -68,7 +68,7 @@ const SCENES: Scene[] = [
           subtitle: '· sent · awaiting signature',
           rows: [
             { l: 'Service', r: 'Oak removal + stump grind' },
-            { l: 'Total', r: '$2,800.00' },
+            { l: 'Quote', r: 'Approved' },
             { l: 'Schedule window', r: 'Sat 5/10 — 7am–11am' },
             { l: 'Sent to', r: 'chen.linda@gmail.com' },
           ],
@@ -113,14 +113,14 @@ const SCENES: Scene[] = [
           rows: [
             { l: 'Patient', r: 'A. Patel' },
             { l: 'Procedure', r: 'D2750 · crown · tooth 14' },
-            { l: 'Billed', r: '$1,420.00' },
+            { l: 'Claim', r: 'Submitted' },
             { l: 'Carrier', r: 'Delta Dental of NJ' },
           ],
         },
       },
       {
         av: 'a2', avLabel: 'FC', name: 'firmcraft', ts: '11:42 AM · operator',
-        body: <>✅ Approved. Insurance pays $710, patient owes $284. Drafted the patient text with payment link — ready when you are.</>,
+        body: <>✅ Approved. Insurance and patient responsibility calculated. Drafted the patient text with payment link — ready when you are.</>,
       },
     ],
   },
@@ -148,7 +148,7 @@ const SCENES: Scene[] = [
           { ic: '✓', k: '[01]', text: 'Drafted email — "How Romeo\'s cut chargebacks 41%"' },
           { ic: '✓', k: '[02]', text: '3 LinkedIn variants in your voice' },
           { ic: '✓', k: '[03]', text: 'Pulled 412 signups from HubSpot' },
-          { ic: '✓', k: '[04]', text: 'Built segment: restaurants, $2M+ GMV (147)' },
+          { ic: '✓', k: '[04]', text: 'Built segment: restaurants, high-volume accounts (147)' },
         ],
         card: {
           iconLabel: 'Dr',
@@ -180,7 +180,7 @@ const SCENES: Scene[] = [
         body: (
           <>
             <span className="men">@firmcraft</span> new lead from the contact form —
-            Ridgewood Mfg, 80 seats, NetSuite migration. Qualify them and book me
+            Ridgewood Mfg, 80 seats, ERP migration. Qualify them and book me
             Tuesday if they&apos;re real.
           </>
         ),
@@ -189,7 +189,7 @@ const SCENES: Scene[] = [
         av: 'a2', avLabel: 'FC', name: 'firmcraft', ts: '4:05 PM · operator',
         body: <>Looking up Ridgewood — cross-checking LinkedIn, their site, and your CRM for prior touches.</>,
         steps: [
-          { ic: '✓', k: '[01]', text: 'Verified: Ridgewood Mfg · Cleveland · ~$48M rev · 82 staff' },
+          { ic: '✓', k: '[01]', text: 'Verified: Ridgewood Mfg · Cleveland · mid-market · 82 staff' },
           { ic: '✓', k: '[02]', text: 'Currently on Sage 100 — confirmed via job posting' },
           { ic: '✓', k: '[03]', text: 'Scored STRONG — matches your last 3 closes' },
           { ic: '✓', k: '[04]', text: 'Sent qualification email + Calendly to Eric Larsen, COO' },
@@ -201,7 +201,7 @@ const SCENES: Scene[] = [
           subtitle: '· saved to Drive',
           rows: [
             { l: 'Fit score', r: 'Strong (matches Acme, Northstar, BWX)' },
-            { l: 'Likely engagement', r: '$140k–$180k · 14 wks' },
+            { l: 'Likely engagement', r: 'Scoped Build · 14 wks' },
             { l: 'Decision-maker', r: 'Eric Larsen, COO' },
           ],
         },

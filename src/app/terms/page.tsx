@@ -15,7 +15,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
     body: (
       <p>
         These terms govern your use of the firmcraft.ai website. Consulting engagements,
-        Firmcraft Operator subscriptions, and managed services are governed by separate, signed
+        Firmcraft subscriptions and managed services are governed by separate, signed
         agreements (statement of work, services agreement, and where applicable a Data
         Processing Agreement or Business Associate Agreement). If a signed agreement conflicts
         with these terms, the signed agreement wins.
@@ -38,7 +38,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
     body: (
       <p>
         Content on this site is general information about our services, not professional advice.
-        Pricing, timelines, and service descriptions are indicative and may change; the binding
+        Timelines and service descriptions are indicative and may change; the binding
         version is whatever we put in a signed proposal. Although our founder is a CPA, nothing
         on this site constitutes accounting, tax, or legal advice, and reading it does not
         create a client relationship.
@@ -62,8 +62,8 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
       <p>
         The site is provided &ldquo;as is.&rdquo; To the maximum extent permitted by law, we
         disclaim implied warranties and are not liable for indirect or consequential damages
-        arising from use of the site. Our total liability arising from the site is limited to
-        $100. (Liability for paid services is addressed in the applicable services agreement,
+        arising from use of the site. Our total liability arising from the site is limited as
+        stated in the applicable services agreement,
         not here.)
       </p>
     ),

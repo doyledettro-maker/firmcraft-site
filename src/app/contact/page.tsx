@@ -13,8 +13,8 @@ export const metadata: Metadata = {
 
 const POINTS: [string, string][] = [
   ['Discovery call', 'Twenty minutes to understand your firm and where AI actually fits.'],
-  ['Fixed-fee assessment', 'Two to three weeks, scoped on the call. A funded roadmap at the end.'],
-  ['No fit, no bill', 'If we don’t think AI fits your business, we’ll say so — and bill nothing.'],
+  ['Assessment', 'Two to three weeks, scoped on the call. A funded roadmap at the end.'],
+  ['Fit first', 'If AI is not the right answer, the roadmap will say so.'],
 ]
 
 export default function ContactPage() {

@@ -17,8 +17,6 @@ const COLUMNS: FooterColumn[] = [
   {
     heading: 'Practice',
     links: [
-      { label: 'Firmcraft Operator', href: '/managed-ai' },
-      { label: 'Pricing', href: '/pricing' },
       { label: 'Methodology', href: '/methodology' },
       { label: 'About', href: '/about' },
     ],
@@ -26,10 +24,7 @@ const COLUMNS: FooterColumn[] = [
   {
     heading: 'Resources',
     links: [
-      { label: 'Playbooks', href: '/playbooks' },
-      { label: 'Integrations', href: '/integrations' },
       { label: 'Security & sovereignty', href: '/security' },
-      { label: 'Houston contractors', href: '/houston' },
       { label: 'Workforce training ↗', href: 'https://skillcalibrate.com', external: true },
     ],
   },
@@ -59,7 +54,7 @@ export function SiteFooter() {
             </Link>
             <p>
               An AI consulting firm for small and mid-sized businesses — AI assessment,
-              implementation, ERP integration, and managed AI. Based in the Springfield,
+              implementation, ERP integration, and managed operations. Based in the Springfield,
               Illinois area, serving central Illinois, Houston, Texas, and clients nationwide.
             </p>
           </div>

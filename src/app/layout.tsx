@@ -24,16 +24,16 @@ const serif = Source_Serif_4({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Firmcraft — AI Consulting & Managed AI for Small Business',
+    default: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
     template: '%s | Firmcraft',
   },
   description:
-    'Firmcraft is an AI consulting firm for small and mid-sized businesses. AI assessment, implementation, ERP integration, and managed operations. Sovereign by default.',
+    'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
   metadataBase: new URL('https://firmcraft.ai'),
   openGraph: {
-    title: 'Firmcraft — AI Consulting & Managed AI for Small Business',
+    title: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
     description:
-      'Big consulting firms won\'t touch you. Frontier labs don\'t care. We do the work in between.',
+      'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implementation, and ongoing management.',
     url: 'https://firmcraft.ai',
     siteName: 'Firmcraft',
     locale: 'en_US',
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Firmcraft — AI Consulting & Managed AI for Small Business',
+    title: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
     description:
-      'An AI consulting firm for small and mid-sized businesses. Sovereign by default.',
+      'Advisory, managed services, and infrastructure for mid-market companies adopting artificial intelligence.',
   },
 }
 

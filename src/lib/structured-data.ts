@@ -16,8 +16,7 @@ export const ORG_JSONLD = {
   url: BASE,
   logo: `${BASE}/opengraph-image`,
   description:
-    'Firmcraft is an AI consulting firm for small and mid-sized businesses. AI readiness assessments, ERP integration, implementation, and managed operations.',
-  slogan: 'Sovereign by default',
+    'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
   telephone: '+1-217-303-8319',
   email: 'hello@firmcraft.ai',
   address: {
@@ -40,13 +39,11 @@ export const ORG_JSONLD = {
     { '@type': 'Country', name: 'United States' },
   ],
   knowsAbout: [
-    'AI consulting for small business',
-    'AI implementation',
+    'AI advisory',
     'managed AI services',
-    'AI agents',
+    'AI infrastructure',
     'ERP integration',
     'mid-market ERP implementation',
-    'AI receptionist',
     'workflow automation',
   ],
   sameAs: [

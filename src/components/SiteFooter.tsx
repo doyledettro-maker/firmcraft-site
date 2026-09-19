@@ -6,39 +6,25 @@ type FooterColumn = { heading: string; links: FooterLink[] }
 
 const COLUMNS: FooterColumn[] = [
   {
-    heading: 'Services',
-    links: [
-      { label: 'AI Readiness Assessment', href: '/services#assess' },
-      { label: 'Implementation', href: '/services#build' },
-      { label: 'Managed Operations', href: '/services#operate' },
-      { label: 'Fractional Advisory', href: '/services#advisory' },
-    ],
-  },
-  {
     heading: 'Practice',
     links: [
-      { label: 'Methodology', href: '/methodology' },
+      { label: 'Advisory', href: '/advisory' },
+      { label: 'How We Work', href: '/how-we-work' },
+      { label: 'Data Sovereignty', href: '/sovereignty' },
+      { label: 'For Small Business', href: '/for-small-business' },
+    ],
+  },
+  {
+    heading: 'Firm',
+    links: [
       { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
     ],
   },
   {
-    heading: 'Resources',
+    heading: 'Related',
     links: [
-      { label: 'Security & sovereignty', href: '/security' },
-      { label: 'Workforce training ↗', href: 'https://skillcalibrate.com', external: true },
-    ],
-  },
-  {
-    heading: 'Contact',
-    links: [
-      { label: 'hello@firmcraft.ai', href: 'mailto:hello@firmcraft.ai', external: true },
-      { label: '(217) 303-8319', href: 'tel:+12173038319', external: true },
-      {
-        label: 'Book a call',
-        href: '/contact',
-        external: true,
-      },
-      { label: 'LinkedIn', href: 'https://www.linkedin.com/company/firmcraft-ai/', external: true },
+      { label: 'SkillCalibrate', href: 'https://skillcalibrate.com', external: true },
     ],
   },
 ]
@@ -53,9 +39,8 @@ export function SiteFooter() {
               <FirmcraftWordmark size={21} variant="inverse" />
             </Link>
             <p>
-              An AI consulting firm for small and mid-sized businesses — AI assessment,
-              implementation, ERP integration, and managed operations. Based in the Springfield,
-              Illinois area, serving central Illinois, Houston, Texas, and clients nationwide.
+              Firmcraft advises mid-market companies on artificial intelligence and technology
+              strategy, implements what the strategy requires, and manages it on an ongoing basis.
             </p>
           </div>
 
@@ -83,7 +68,7 @@ export function SiteFooter() {
         </div>
 
         <div className="legal">
-          <span>© 2026 Firmcraft · Sovereign by default</span>
+          <span>© {new Date().getFullYear()} Firmcraft</span>
           <span>
             <a href="/terms">Terms</a>
             {' · '}

@@ -201,7 +201,7 @@ const SCENES: Scene[] = [
           subtitle: '· saved to Drive',
           rows: [
             { l: 'Fit score', r: 'Strong (matches Acme, Northstar, BWX)' },
-            { l: 'Likely engagement', r: 'Scoped Build · 14 wks' },
+            { l: 'Likely engagement', r: 'Scoped Build' },
             { l: 'Decision-maker', r: 'Eric Larsen, COO' },
           ],
         },

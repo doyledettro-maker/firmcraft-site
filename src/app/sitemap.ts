@@ -6,13 +6,13 @@ const BASE = 'https://firmcraft.ai'
 // field entirely once it's provably wrong (e.g. "today" on every fetch).
 // Bump a route's date when its content meaningfully changes.
 const ROUTES: { path: string; priority: number; lastModified: string }[] = [
-  { path: '/', priority: 1, lastModified: '2026-06-12' },
-  { path: '/services', priority: 0.9, lastModified: '2026-06-12' },
-  { path: '/methodology', priority: 0.9, lastModified: '2026-05-20' },
-  { path: '/about', priority: 0.8, lastModified: '2026-06-12' },
-  { path: '/security', priority: 0.7, lastModified: '2026-06-12' },
-  { path: '/support', priority: 0.6, lastModified: '2026-05-20' },
-  { path: '/contact', priority: 0.6, lastModified: '2026-05-20' },
+  { path: '/', priority: 1, lastModified: '2026-09-19' },
+  { path: '/advisory', priority: 0.9, lastModified: '2026-09-19' },
+  { path: '/how-we-work', priority: 0.9, lastModified: '2026-09-19' },
+  { path: '/sovereignty', priority: 0.8, lastModified: '2026-09-19' },
+  { path: '/for-small-business', priority: 0.8, lastModified: '2026-09-19' },
+  { path: '/about', priority: 0.8, lastModified: '2026-09-19' },
+  { path: '/contact', priority: 0.6, lastModified: '2026-09-19' },
   { path: '/privacy', priority: 0.3, lastModified: '2026-06-12' },
   { path: '/terms', priority: 0.3, lastModified: '2026-06-12' },
 ]

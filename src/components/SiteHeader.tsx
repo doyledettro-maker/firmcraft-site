@@ -3,16 +3,18 @@ import { FirmcraftWordmark } from './FirmcraftWordmark'
 import { MobileMenu } from './MobileMenu'
 
 const NAV_ITEMS: { label: string; href: string; key: string }[] = [
-  { label: 'Services', href: '/services', key: 'services' },
-  { label: 'Methodology', href: '/methodology', key: 'methodology' },
+  { label: 'Advisory', href: '/advisory', key: 'advisory' },
+  { label: 'How We Work', href: '/how-we-work', key: 'how-we-work' },
+  { label: 'For Small Business', href: '/for-small-business', key: 'for-small-business' },
   { label: 'About', href: '/about', key: 'about' },
 ]
 
 export type SiteHeaderCurrent =
   | 'home'
-  | 'services'
-  | 'managed-ai'
-  | 'methodology'
+  | 'advisory'
+  | 'how-we-work'
+  | 'for-small-business'
+  | 'sovereignty'
   | 'about'
 
 export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
@@ -44,7 +46,7 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
             href="/contact"
             className="btn primary sm"
           >
-            Book a call <span className="arr">→</span>
+            Contact
           </a>
           <MobileMenu
             items={NAV_ITEMS.map((n) => ({ label: n.label, href: n.href }))}

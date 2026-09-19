@@ -5,16 +5,16 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { ContactForm } from '@/components/ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Contact — Book a 20-Minute Call',
+  title: 'Contact — Firmcraft',
   alternates: { canonical: '/contact' },
   description:
-    'Talk to Firmcraft about putting an AI operator to work in your firm. Twenty minutes on a call, a funded roadmap by month’s end.',
+    'Contact Firmcraft about artificial intelligence advisory, managed services, and infrastructure.',
 }
 
 const POINTS: [string, string][] = [
-  ['Discovery call', 'Twenty minutes to understand your firm and where AI actually fits.'],
-  ['Assessment', 'Two to three weeks, scoped on the call. A funded roadmap at the end.'],
-  ['Fit first', 'If AI is not the right answer, the roadmap will say so.'],
+  ['Initial conversation', 'An initial conversation carries no cost and no obligation.'],
+  ['Assessment', 'Firmcraft establishes the current landscape and the roadmap before implementation.'],
+  ['Fit first', 'If artificial intelligence is not the right investment for the problem, Firmcraft will say so.'],
 ]
 
 export default function ContactPage() {
@@ -44,7 +44,7 @@ export default function ContactPage() {
           </div>
           <div className="eyebrow">Start here</div>
           <h1 className="font-sans font-medium text-[clamp(40px,4.6vw,64px)] leading-[1.04] tracking-[-0.022em] mt-3 mb-4 text-balance">
-            Let&apos;s talk about your <em>firm.</em>
+            Contact Firmcraft
           </h1>
           <p className="text-[18px] leading-[1.55] text-ink-2 max-w-[640px] m-0">
             Tell us a little about what you do and what you&apos;re hoping AI can take off your

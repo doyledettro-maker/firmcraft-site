@@ -5,9 +5,9 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './about.css'
 
 export const metadata: Metadata = {
-  title: 'About — A CPA-Led AI Consulting Firm',
+  title: 'About — Firmcraft',
   description:
-    'Founder, thesis, and the sovereign AI story. CPA + mid-market ERP consultant + AI builder, based in the Springfield, Illinois area.',
+    'Firmcraft is an advisory practice combining enterprise systems and digital transformation experience with hands-on technical implementation.',
   alternates: { canonical: '/about' },
 }
 
@@ -27,11 +27,11 @@ export default function AboutPage() {
                   <em>controller&apos;s office.</em>
                 </h1>
                 <p className="lede">
-                  Firmcraft was started by a CPA who became an ERP consultant who became an AI
-                  builder — in that order. The differentiator isn&apos;t the technology. It&apos;s
-                  the path through the technology that someone who&apos;s been on the other side of
-                  the table can see. We&apos;re based in the Springfield, Illinois area and work
-                  with clients across central Illinois, Houston, Texas, and the rest of the US.
+                  Firmcraft is led by a technology advisor whose work has centered on enterprise
+                  systems and digital transformation: ERP and adjacent operational systems,
+                  finance operations, and hands-on AI implementation. We&apos;re based in the
+                  Springfield, Illinois area and work with clients across central Illinois,
+                  Houston, Texas, and the rest of the US.
                 </p>
                 <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
                   <a
@@ -61,8 +61,8 @@ export default function AboutPage() {
                     Doyle Dettro <span className="role">Founder · Principal</span>
                   </div>
                   <div className="creds">
-                    <span className="c">CPA</span>
-                    <span className="c">ERP Consultant</span>
+                    <span className="c">Technology Advisor</span>
+                    <span className="c">Digital Transformation</span>
                     <span className="c">ERP Implementation</span>
                     <span className="c">AI Builder</span>
                     <span className="c">Model Evaluation</span>
@@ -89,10 +89,10 @@ export default function AboutPage() {
                   mishandled for four years.
                 </p>
                 <p>
-                  <em>Firmcraft is a firm built around the inverse.</em> The principal is a CPA who
-                  spent the last several years inside mid-market ERP implementation engagements —
-                  and the last two building eval harnesses, Monte
-                  Carlo simulations, and Bayesian models on his own time.
+                  <em>Firmcraft is a firm built around the inverse.</em> The principal has spent
+                  the last several years inside mid-market ERP implementation engagements — and
+                  the last two building eval harnesses, Monte Carlo simulations, and Bayesian
+                  models on his own time.
                 </p>
                 <p>
                   That&apos;s the shape of the engagement. We sit across from your controller,
@@ -147,7 +147,7 @@ export default function AboutPage() {
               <div className="tl-cell">
                 <span className="yr">2016 – 2019</span>
                 <span className="ph">Phase 01</span>
-                <h4>CPA · Big-4 audit</h4>
+                <h4>Audit and corporate finance</h4>
                 <p>
                   Audit and assurance. Where the obsession with reconciled numbers and process
                   traceability got installed.

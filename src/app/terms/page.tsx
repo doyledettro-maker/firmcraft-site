@@ -39,9 +39,8 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
       <p>
         Content on this site is general information about our services, not professional advice.
         Timelines and service descriptions are indicative and may change; the binding
-        version is whatever we put in a signed proposal. Although our founder is a CPA, nothing
-        on this site constitutes accounting, tax, or legal advice, and reading it does not
-        create a client relationship.
+        version is whatever we put in a signed proposal. Nothing on this site constitutes
+        accounting, tax, or legal advice, and reading it does not create a client relationship.
       </p>
     ),
   },

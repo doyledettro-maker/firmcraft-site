@@ -37,7 +37,7 @@ export default function HomePage() {
                   </a>
                 </div>
                 <div className="hero-signals">
-                  <span>CPA-credentialed</span>
+                  <span>Enterprise systems experience</span>
                   <span>Mid-market ERP platforms</span>
                   <span>Sovereign by default</span>
                   <span>Process-first, not tool-first</span>
@@ -239,7 +239,7 @@ export default function HomePage() {
                 </h2>
               </div>
               <p>
-                The differentiation isn&apos;t the model. It&apos;s the credential, the posture, the method, and the engagement model. We picked each one deliberately, and we&apos;ll defend each one in a procurement room.
+                The differentiation isn&apos;t the model. It&apos;s the enterprise systems background, the posture, the method, and the engagement model. We picked each one deliberately, and we&apos;ll defend each one in a procurement room.
               </p>
             </div>
 
@@ -254,12 +254,12 @@ export default function HomePage() {
                 </div>
                 <div>
                   <h3>
-                    CPA + ERP <span className="hi">credential.</span>
+                    Enterprise systems and <span className="hi">digital transformation.</span>
                   </h3>
                   <p>
-                    Firmcraft&apos;s principal is a CPA with mid-market ERP implementation experience. He can debate revenue recognition with your controller, then go build the eval harness.
+                    Firmcraft is led by a technology advisor with a substantial background in enterprise systems implementation, ERP, and the operational systems around it.
                   </p>
-                  <div className="meta">ERP implementation · finance operations · workflow design</div>
+                  <div className="meta">ERP implementation · digital transformation · workflow design</div>
                 </div>
               </div>
 
@@ -447,9 +447,9 @@ export default function HomePage() {
               small and mid-sized businesses in central Illinois, Houston, Texas, and across the
               United States. We provide AI readiness assessments, implementation, ERP integration,
               and managed AI operations. Clients range from owner-operated trades
-              and practices — HVAC, plumbing, tree care, dental, legal, CPA firms — to
-              finance- and operations-led mid-market companies. CPA-led, with deep ERP
-              implementation experience. Sovereign by default: deployments run on the open-source
+              and practices — HVAC, plumbing, tree care, dental, legal, and accounting firms — to
+              finance- and operations-led mid-market companies. Led by enterprise systems and
+              digital transformation experience. Sovereign by default: deployments run on the open-source
               Hermes platform and your data stays in your environment.
             </p>
           </div>

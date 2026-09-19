@@ -24,9 +24,9 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
 export function ContactForm({
   source = 'contact',
-  submitLabel = 'Send to Firmcraft →',
+  submitLabel = 'Contact Firmcraft',
 }: {
-  /** Which page/CTA this form is embedded on — stored with the lead. */
+  /** Which page or call to action this form is embedded on. Stored with the lead. */
   source?: string
   submitLabel?: string
 }) {
@@ -81,11 +81,10 @@ export function ContactForm({
           ✓
         </div>
         <h3 className="font-sans font-medium text-[28px] leading-[1.15] tracking-[-0.01em] m-0">
-          Thanks — we&apos;ve got it.
+          Thank you. Firmcraft has received it.
         </h3>
         <p className="text-[16.5px] leading-[1.55] text-ink-2 m-0">
-          Doyle reads every message personally and will get back to you within one business day,
-          usually sooner. If it&apos;s time-sensitive, text him directly at (217) 206-5142.
+          Firmcraft will reply by email. If the matter is time-sensitive, call (217) 303-8319.
         </p>
         <button
           type="button"
@@ -95,7 +94,7 @@ export function ContactForm({
             setStatus('idle')
           }}
         >
-          Send another →
+          Send another message
         </button>
       </div>
     )
@@ -118,7 +117,7 @@ export function ContactForm({
             autoComplete="name"
             required
             className={inputClass}
-            placeholder="Jane Operator"
+            placeholder="Jane Smith"
           />
         </Field>
         <Field label="Work email" htmlFor="email" required>
@@ -171,7 +170,7 @@ export function ContactForm({
           onChange={(e) => update('message', e.target.value)}
           rows={5}
           className={`${inputClass} resize-y min-h-[120px]`}
-          placeholder="Tell us about your firm and what you're hoping AI can take off your plate."
+          placeholder="Describe the organization, the systems in place, and the problem Firmcraft should understand."
         />
       </Field>
 

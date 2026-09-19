@@ -15,7 +15,7 @@ const sections = [
   {
     title: 'Discovery',
     body: [
-      'Work begins with interviews of the people who perform the work in question, finance, operations, information technology, and whoever is responsible for the chart of accounts. Alongside the interviews, Firmcraft compiles an inventory of the systems in use and maps the processes that are candidates for change.',
+      'Work begins with interviews of the people who perform the work in question — finance, operations, information technology, and whoever is responsible for the chart of accounts. Alongside the interviews, Firmcraft compiles an inventory of the systems in use and maps the processes that are candidates for change.',
       "The output is a working document describing the current landscape, including the discrepancies between what the organization's systems are understood to do and what its people actually do. That document is referenced throughout the engagement.",
     ],
   },
@@ -36,14 +36,14 @@ const sections = [
   {
     title: 'Training and evaluation',
     body: [
-      'Two things happen in parallel. The people who will use the system are trained on it, using their own work rather than illustrative examples. And an evaluation framework is established so that the system output can be assessed objectively over time rather than by impression.',
+      "Two things happen in parallel. The people who will use the system are trained on it, using their own work rather than illustrative examples. And an evaluation framework is established so that the system's output can be assessed objectively over time rather than by impression.",
       'Evaluation matters more for artificial intelligence than for conventional software. Behavior changes as models change, and without measurement that drift is not visible until it causes a problem.',
     ],
   },
   {
     title: 'Ongoing support',
     body: [
-      'For a defined period after implementation, Firmcraft remains closely involved, resolving issues, adjusting configuration in response to real use, and confirming that the measured outcomes match what was projected during the assessment.',
+      'For a defined period after implementation, Firmcraft remains closely involved — resolving issues, adjusting configuration in response to real use, and confirming that the measured outcomes match what was projected during the assessment.',
       'Beyond that period, clients generally move to ongoing managed services.',
     ],
   },

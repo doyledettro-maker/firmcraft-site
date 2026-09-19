@@ -62,7 +62,7 @@ export default function AboutPage() {
                 Firmcraft is led by a technology advisor whose work has centered on enterprise
                 systems and digital transformation: several years implementing ERP and adjacent
                 operational systems across manufacturing, field service, distribution, and
-                industrial environments, and a continuing role in the enterprise software industry.
+                industrial environments.
               </p>
               <p>
                 Before that came a period in audit and a role as an industry controller, which
@@ -73,7 +73,7 @@ export default function AboutPage() {
               <p>
                 Artificial intelligence projects in mid-market organizations do not usually fail
                 for technical reasons. They fail because the person defining the work does not
-                understand the operational and financial processes the technology has to fit into,
+                understand the operational and financial processes the technology has to fit into —
                 has not owned an implementation, has not sat through a fit-gap analysis, and cannot
                 tell when the underlying data will not support what is being proposed. Firmcraft is
                 built around the opposite arrangement.

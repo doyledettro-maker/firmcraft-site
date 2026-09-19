@@ -33,7 +33,7 @@ const distinctions = [
   {
     title: 'Enterprise systems and digital transformation experience',
     body:
-      'Firmcraft is led by a technology advisor with a substantial background in enterprise systems implementation, ERP and the operational systems around it, across manufacturing, field service, distribution, and industrial environments. That work has been done from both sides: first as the finance leader responsible for a system implementation, and since then as the consultant delivering them.',
+      'Firmcraft is led by a technology advisor with a substantial background in enterprise systems implementation — ERP and the operational systems around it — across manufacturing, field service, distribution, and industrial environments. That work has been done from both sides: first as the finance leader responsible for a system implementation, and later as the consultant delivering them.',
   },
   {
     title: 'Commercial literacy',
@@ -62,7 +62,7 @@ const fit = [
   ['Headcount', '50 to 1,500 employees'],
   [
     'Systems',
-    'A system of record in place, or actively replatforming, an ERP, a dealer or practice management system, or equivalent',
+    'A system of record in place, or actively replatforming — an ERP, a dealer or practice management system, or equivalent',
   ],
   [
     'Organizational lead',

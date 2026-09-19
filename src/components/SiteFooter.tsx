@@ -38,10 +38,6 @@ export function SiteFooter() {
             <Link href="/" aria-label="Firmcraft home" className="wm-link">
               <FirmcraftWordmark size={21} variant="inverse" />
             </Link>
-            <p>
-              Firmcraft advises mid-market companies on artificial intelligence and technology
-              strategy, implements what the strategy requires, and manages it on an ongoing basis.
-            </p>
           </div>
 
           {COLUMNS.map((col) => (
@@ -69,13 +65,6 @@ export function SiteFooter() {
 
         <div className="legal">
           <span>© {new Date().getFullYear()} Firmcraft</span>
-          <span>
-            <a href="/terms">Terms</a>
-            {' · '}
-            <a href="/privacy">Privacy</a>
-            {' · '}
-            <a href="/trust">Trust</a>
-          </span>
         </div>
       </div>
     </footer>

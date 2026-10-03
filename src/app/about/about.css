@@ -6,6 +6,13 @@
 .about-hero .lede{margin-bottom:24px}
 
 /* Founder card */
+.founder-profile{display:grid;grid-template-columns:minmax(260px,360px) minmax(0,1fr);gap:56px;align-items:start;max-width:1040px}
+.founder-portrait{position:relative;aspect-ratio:4/5;background:var(--color-surface-2);border-radius:14px;overflow:hidden;border:1px solid var(--color-line)}
+.founder-copy{max-width:690px}
+.founder-copy h2{font-weight:600;font-size:clamp(30px,3.4vw,44px);letter-spacing:-.024em;line-height:1.08;margin:8px 0 4px}
+.founder-role{font-size:15px;color:var(--color-ink);font-weight:600;margin:0 0 22px}
+.founder-copy p:not(.eyebrow):not(.founder-role){font-size:16px;line-height:1.7;color:var(--color-ink-2);margin:0 0 18px}
+.founder-copy p:last-child{margin-bottom:0}
 .founder-card{background:var(--color-paper);border:1px solid var(--color-line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .founder-photo{aspect-ratio:1/1.05;background:var(--color-surface-2);border-radius:12px;position:relative;overflow:hidden}
 .founder-img{object-fit:cover;object-position:center top}
@@ -76,7 +83,8 @@
 .sc-block .lk{font-family:var(--font-mono);font-size:11px;color:var(--color-operator-ink);background:var(--color-operator-soft);padding:6px 12px;border-radius:8px;letter-spacing:.06em;text-transform:uppercase;font-weight:500;display:inline-flex;align-items:center;gap:6px}
 
 @media (max-width:980px){
-  .about-hero-grid,.thesis,.hermes-block,.sc-block{grid-template-columns:1fr;gap:32px}
+  .about-hero-grid,.thesis,.hermes-block,.sc-block,.founder-profile{grid-template-columns:1fr;gap:32px}
+  .founder-portrait{max-width:420px}
   .hermes-block{padding:32px 24px}
   .timeline{grid-template-columns:1fr 1fr}
   .tl-cell{border-right:none;border-bottom:1px solid var(--color-line)}

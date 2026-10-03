@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
@@ -56,32 +57,57 @@ export default function AboutPage() {
 
         <section className="sec">
           <div className="wrap">
+            <div className="founder-profile">
+              <div className="founder-portrait">
+                <Image
+                  src="/founder/doyle.jpg"
+                  alt="Doyle Dettro"
+                  fill
+                  sizes="(min-width: 980px) 360px, 100vw"
+                  className="founder-img"
+                  priority
+                />
+              </div>
+              <div className="founder-copy">
+                <p className="eyebrow">Founder</p>
+                <h2>Doyle Dettro</h2>
+                <p className="founder-role">Founder and Principal</p>
+                <p>
+                  Doyle Dettro earned his bachelor&apos;s degree in accounting at the University of
+                  Illinois, passing the CPA examination while completing it, and joined Arthur
+                  Andersen on graduation. He then worked at early-stage companies, including one
+                  through its initial public offering.
+                </p>
+                <p>
+                  For more than two decades since, his career has been in enterprise software and
+                  digital transformation, working on ERP and enterprise asset management systems for
+                  operations-heavy and asset-intensive organizations around the world. That work has
+                  spanned business process design, solution architecture, implementation, and the
+                  commercial side of major system decisions.
+                </p>
+                <p>
+                  He founded Firmcraft to apply that experience to artificial intelligence, which
+                  most organizations are now adopting without the discipline they would bring to any
+                  other major system. He leads every Firmcraft engagement directly and builds and
+                  operates the firm&apos;s AI infrastructure himself.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="sec">
+          <div className="wrap">
             <div className="pkg-head">
-              <h2>Background</h2>
+              <h2>Why the practice is built this way</h2>
               <p>
-                Firmcraft is led by an advisor whose background spans business process, industry
-                operations, and technology. On the technical side, that means several years
-                implementing ERP and adjacent operational systems across manufacturing, field
-                service, distribution, and industrial environments. Alongside it sits the process
-                and industry knowledge that determines whether an implementation is worth
-                undertaking at all — which of a business&apos;s workflows actually carry cost, where
-                the constraints genuinely sit, and what changes when they move.
+                Artificial intelligence projects do not usually fail for technical reasons. They
+                fail because the person defining the work does not understand the operational and
+                financial processes the technology has to fit into: they have not run an
+                implementation, have not sat through a fit-gap analysis, and cannot tell when the
+                underlying data will not support what is being proposed. Firmcraft is built around
+                the opposite arrangement.
               </p>
-              <p>
-                Before that came a period in audit and a role as an industry controller, which
-                included responsibility for a system implementation as the customer rather than the
-                supplier. Having sat on both sides of that table is the reason the firm exists in
-                its current form.
-              </p>
-              <p>
-                Artificial intelligence projects in mid-market organizations do not usually fail
-                for technical reasons. They fail because the person defining the work does not
-                understand the operational and financial processes the technology has to fit into —
-                has not owned an implementation, has not sat through a fit-gap analysis, and cannot
-                tell when the underlying data will not support what is being proposed. Firmcraft is
-                built around the opposite arrangement.
-              </p>
-              <p>The firm is based in central Illinois and works with clients across the globe.</p>
             </div>
           </div>
         </section>

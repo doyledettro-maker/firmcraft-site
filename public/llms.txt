@@ -1,37 +1,28 @@
 # Firmcraft
 
-> Firmcraft is an AI consulting firm for small and mid-sized businesses, based
-> in the Springfield, Illinois area and serving central Illinois, Houston,
-> Texas, and US clients remotely. Services: fixed-fee AI readiness assessments
-> ($4,500–$8,500, 2–3 weeks), AI implementation and ERP integration (Microsoft
-> Dynamics 365 Business Central, NetSuite, Acumatica), managed AI operations,
-> and Firmcraft Operator — a managed AI employee that works in Slack or
-> Microsoft Teams, from $399/month. CPA-led, with deep ERP implementation
-> experience. Sovereign by default: deployments run on the open-source Hermes
-> agent platform and client data stays in the client's environment.
+> Firmcraft is an advisory practice for mid-market companies bringing
+> artificial intelligence into finance and operations. The firm advises on
+> artificial intelligence and technology strategy, implements what the strategy
+> requires, and manages the result on an ongoing basis. Firmcraft is led by an
+> advisor with more than two decades in enterprise software and digital
+> transformation, spanning business process design, solution architecture, and
+> implementation for operations-heavy and asset-intensive organizations.
 
-Firmcraft serves two kinds of buyers: owner-operated service businesses
-(HVAC, plumbing, electrical, tree care, dental and medical practices, law and
-CPA firms) that want a done-for-you AI operator, and finance- or
-operations-led mid-market companies ($10M–$500M revenue) running ERPs that
-want AI implemented against their real systems. All pricing is published.
+Firmcraft works with mid-market organizations where the owner, chief executive,
+or finance and operations leadership drives the technology agenda. The practice
+is independent: it does not resell software and does not receive vendor margin.
 
-## Services
-- [Services overview](https://firmcraft.ai/services): Assess → Build → Operate → Advisory; fixed-fee packages
-- [Firmcraft Operator](https://firmcraft.ai/managed-ai): managed AI employee in Slack/Teams, $399–$1,499/mo by team size
-- [Pricing](https://firmcraft.ai/pricing): all prices published — Operator plans, assessment, build packages, retainers
-- [AI office manager for Houston contractors](https://firmcraft.ai/houston): phones, scheduling, dispatch, invoicing for HVAC, plumbing, electrical, roofing
-- [Playbooks library](https://firmcraft.ai/playbooks): 40 production AI playbooks across trades, healthcare, professional firms, B2B
-- [Integrations](https://firmcraft.ai/integrations): 112 tools — QuickBooks, NetSuite, Eaglesoft, Jobber, ServiceTitan, Clio, HubSpot, and custom connectors
+## Practice
+- [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, and infrastructure
+- [How We Work](https://firmcraft.ai/how-we-work): assessment, implementation, and ongoing support
+- [Data Sovereignty](https://firmcraft.ai/sovereignty): how client data is handled and where systems run
+- [For Small Business](https://firmcraft.ai/for-small-business): managed artificial intelligence capability for smaller organizations
 
 ## Trust
-- [Security & sovereignty](https://firmcraft.ai/security): per-firm deployment, audit logs, BAAs, no training on client data
-- [Methodology](https://firmcraft.ai/methodology): five phases inherited from ERP implementation discipline
-- [About](https://firmcraft.ai/about): founder background — CPA, Big-4 audit, industry controller, Microsoft BC consultant
+- [About](https://firmcraft.ai/about): founder background and operating principles
 
 ## Contact
 - Email: hello@firmcraft.ai
-- Phone: (217) 303-8319
 - [Contact / book a call](https://firmcraft.ai/contact)
 
 ## Optional

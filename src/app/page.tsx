@@ -33,12 +33,12 @@ const distinctions = [
   {
     title: 'Business process, industry, and systems depth',
     body:
-      'Firmcraft is led by an advisor whose background spans business process, industry operations, and enterprise systems implementation. That work has been carried out in manufacturing, field service, distribution, and industrial environments, and from both sides of an implementation: first as the finance leader accountable for a rollout, and later as the consultant delivering them.',
+      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for operations-heavy and asset-intensive organizations around the world.',
   },
   {
     title: 'Commercial literacy',
     body:
-      'An earlier career in audit and corporate finance means engagements are led by someone who can assess whether a proposed project produces measurable financial value, and discuss that assessment with a controller or chief financial officer in their own terms.',
+      'An early career in public accounting and at early-stage companies, including one through its initial public offering, means engagements are led by someone who can assess whether a proposed project produces measurable financial value, and discuss that assessment with an owner, controller, or chief financial officer in their own terms.',
   },
   {
     title: 'Independence',

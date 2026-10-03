@@ -83,7 +83,8 @@ export default function AboutPage() {
                   digital transformation, working on ERP and enterprise asset management systems for
                   operations-heavy and asset-intensive organizations around the world. That work has
                   spanned business process design, solution architecture, implementation, and the
-                  commercial side of major system decisions.
+                  commercial side of major system decisions. Over that time he has advised hundreds
+                  of businesses on their systems and operations.
                 </p>
                 <p>
                   He founded Firmcraft to apply that experience to artificial intelligence, which

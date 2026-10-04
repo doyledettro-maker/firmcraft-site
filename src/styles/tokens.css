@@ -60,7 +60,7 @@
 
   /* ---------- Type ---------- */
   --font-sans:    "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono:    "JetBrains Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-mono:    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --font-display: "Source Serif 4", "Iowan Old Style", Georgia, serif; /* wordmark only */
 
   /* ---------- Radii ---------- */

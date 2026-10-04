@@ -32,6 +32,7 @@
 html {
   scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
+  overflow-x: hidden;
 }
 
 body {
@@ -40,6 +41,7 @@ body {
   font-family: var(--font-sans);
   font-feature-settings: "ss01";
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 /* ── Typography helpers ───────────────────────────────────────────────── */
@@ -47,7 +49,7 @@ body {
 .font-serif-warm {
   font-family: var(--font-display);
 }
-/* Mono labels — JetBrains Mono */
+/* Mono labels — system mono fallback for console-like surfaces */
 .font-mono-warm {
   font-family: var(--font-mono);
 }
@@ -120,6 +122,15 @@ body {
   font-size: 13px;
   border-radius: 8px;
 }
+.btn.brass {
+  background: #C9A46A;
+  color: #0E1B2E;
+  border-color: #C9A46A;
+}
+.btn.brass:hover {
+  background: #D5B77F;
+  border-color: #D5B77F;
+}
 .btn .arr {
   transition: transform 0.15s ease;
 }
@@ -131,11 +142,15 @@ body {
 
 /* Layout primitives */
 .wrap {
+  box-sizing: border-box;
+  width: 100%;
   max-width: 1280px;
   margin: 0 auto;
   padding: 0 32px;
 }
 .wrap-narrow {
+  box-sizing: border-box;
+  width: 100%;
   max-width: 1080px;
   margin: 0 auto;
   padding: 0 32px;
@@ -242,10 +257,27 @@ body {
   position: sticky;
   top: 0;
   z-index: 50;
-  background: rgba(244, 246, 250, 0.82);
+  background: rgba(247, 243, 236, 0.92);
   backdrop-filter: saturate(140%) blur(12px);
   -webkit-backdrop-filter: saturate(140%) blur(12px);
   border-bottom: 1px solid var(--color-line);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+.site-header.over-hero {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: transparent;
+  border-bottom-color: transparent;
+  color: #F7F3EC;
+}
+.site-header.over-hero.scrolled {
+  background: rgba(247, 243, 236, 0.94);
+  border-bottom-color: rgba(27,35,51,0.12);
+  color: #1B2333;
+}
+.site-header.over-hero:not(.scrolled) .fc-lockup .fc-lockup-f {
+  color: #F7F3EC;
 }
 .site-header .row {
   height: 68px;
@@ -267,12 +299,21 @@ body {
   text-decoration: none;
   transition: color 0.15s ease;
 }
+.site-header.over-hero:not(.scrolled) nav.primary-nav a.link {
+  color: rgba(247,243,236,0.82);
+}
 .site-header nav.primary-nav a.link:hover {
   color: var(--color-ink);
+}
+.site-header.over-hero:not(.scrolled) nav.primary-nav a.link:hover {
+  color: #F7F3EC;
 }
 .site-header nav.primary-nav a.link.current {
   color: var(--color-ink);
   font-weight: 500;
+}
+.site-header.over-hero:not(.scrolled) nav.primary-nav a.link.current {
+  color: #F7F3EC;
 }
 .site-header nav.primary-nav a.link.current::after {
   content: "";
@@ -281,7 +322,7 @@ body {
   right: 0;
   bottom: -22px;
   height: 2px;
-  background: var(--color-signal);
+  background: #C9A46A;
   border-radius: 2px;
 }
 .site-header .right {
@@ -290,11 +331,24 @@ body {
   gap: 10px;
 }
 
+@media (max-width: 860px) {
+  .site-header nav.primary-nav {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-header .right > .btn {
+    display: none;
+  }
+}
+
 /* Site footer (new firmcraft style) */
 .site-footer {
-  background: var(--color-console);
-  color: var(--color-inverse);
+  background: #0E1B2E;
+  color: #F7F3EC;
   padding: 72px 0 32px;
+  border-top: 2px solid #C9A46A;
 }
 .site-footer .footer-grid {
   display: grid;
@@ -304,12 +358,12 @@ body {
   margin-bottom: 48px;
 }
 .site-footer .col h5 {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: 10.5px;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-inverse-2);
-  font-weight: 500;
+  color: #A9B2C3;
+  font-weight: 600;
   margin: 0 0 14px;
 }
 .site-footer .col ul {
@@ -322,7 +376,7 @@ body {
 }
 .site-footer .col a {
   font-size: 13.5px;
-  color: #fff;
+  color: #F7F3EC;
   opacity: 0.84;
   text-decoration: none;
   transition: opacity 0.15s ease;
@@ -334,7 +388,7 @@ body {
   margin: 14px 0 0;
   font-size: 13.5px;
   line-height: 1.6;
-  color: var(--color-inverse-2);
+  color: #A9B2C3;
   max-width: 280px;
 }
 .site-footer .legal {
@@ -342,12 +396,12 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-top: 24px;
-  border-top: 1px solid var(--color-line-console);
-  font-family: var(--font-mono);
+  border-top: 1px solid rgba(247,243,236,0.14);
+  font-family: var(--font-sans);
   font-size: 10.5px;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--color-inverse-2);
+  color: #A9B2C3;
 }
 .site-footer .legal a {
   color: var(--color-inverse-2);

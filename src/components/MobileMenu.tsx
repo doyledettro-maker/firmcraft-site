@@ -120,7 +120,7 @@ export function MobileMenu({ items, current }: Props) {
             onClick={() => setOpen(false)}
             className="btn primary mt-3 w-full justify-center"
           >
-            Book a call
+            Contact Firmcraft
           </a>
         </nav>
       </div>

@@ -1,5 +1,7 @@
 import type { Metadata } from 'next'
+import Image from 'next/image'
 import Link from 'next/link'
+import { HeroVideo } from '@/components/HeroVideo'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 import './home.css'
@@ -13,17 +15,29 @@ export const metadata: Metadata = {
 
 const serviceLines = [
   {
+    eyebrow: 'Advisory',
     title: 'Advisory',
+    image: '/media/service-advisory.jpg',
+    alt: 'Professionals seated around a table reviewing business materials together.',
+    href: '/advisory',
     body:
       'Establishing what is currently running, what it costs, and what it actually does. Determining what should be kept, replaced, built, or left alone. Owning the artificial intelligence and technology roadmap at the executive level, so that decisions are made deliberately rather than accumulated by default.',
   },
   {
+    eyebrow: 'Managed services',
     title: 'Managed AI services',
+    image: '/media/service-managed.jpg',
+    alt: 'Close view of people reviewing documents and figures at a work table.',
+    href: '/advisory',
     body:
       "Operating the resulting capability over time. Monitoring, evaluation, tuning, retiring what has become obsolete, and introducing what has genuinely improved. The objective is that a client's capability keeps pace with the field rather than freezing at the point of implementation.",
   },
   {
+    eyebrow: 'Infrastructure',
     title: 'Infrastructure',
+    image: '/media/service-infrastructure.jpg',
+    alt: 'A clean modern office interior with people working in the background.',
+    href: '/sovereignty',
     body:
       "The technical foundation beneath both, with data sovereignty as the default position. Determining where client data resides, what runs inside the client's own environment, and what may reasonably be sent elsewhere.",
   },
@@ -76,10 +90,11 @@ export default function HomePage() {
     <>
       <SiteHeader current="home" />
 
-      <main>
+      <main className="marketing marketing-home">
         <section className="home-hero">
+          <HeroVideo />
           <div className="wrap">
-            <div className="hero-grid" style={{ gridTemplateColumns: 'minmax(0, 0.9fr)' }}>
+            <div className="hero-grid">
               <div className="lhs">
                 <h1>AI advisory and managed services</h1>
                 <p className="lede">
@@ -90,10 +105,10 @@ export default function HomePage() {
                   implementation.
                 </p>
                 <div className="hero-ctas">
-                  <Link className="btn primary lg" href="/contact">
+                  <Link className="btn brass lg" href="/contact">
                     Contact Firmcraft
                   </Link>
-                  <Link className="btn ghost lg" href="/how-we-work">
+                  <Link className="btn outline-inverse lg" href="/how-we-work">
                     How we work
                   </Link>
                 </div>
@@ -102,38 +117,38 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sec">
+        <section className="m-section problem-section reveal-section">
           <div className="wrap">
-            <div className="sec-head">
-              <div>
+            <div className="problem-grid">
+              <div className="problem-heading">
                 <h2>The problem most organizations have with AI</h2>
               </div>
-            </div>
-            <div className="prose-block">
-              <p>
-                In most organizations, artificial intelligence arrived from the bottom up.
-                Individual employees adopted individual tools. Subscriptions accumulated without a
-                central view of cost or exposure, few of those tools connect to the systems the
-                business actually runs on, and no one owns the overall result.
-              </p>
-              <p>
-                The pace of change compounds the difficulty. A decision that was reasonable
-                eighteen months ago may no longer be, and few organizations have someone on staff
-                whose job is to track that.
-              </p>
-              <p>
-                Firms that specialize in artificial intelligence often lack working familiarity
-                with the financial and operational systems a business depends on, and firms that
-                know those systems rarely build and operate artificial intelligence themselves.
-                Firmcraft was established to do both.
-              </p>
+              <div className="prose-block">
+                <p>
+                  In most organizations, artificial intelligence arrived from the bottom up.
+                  Individual employees adopted individual tools. Subscriptions accumulated without a
+                  central view of cost or exposure, few of those tools connect to the systems the
+                  business actually runs on, and no one owns the overall result.
+                </p>
+                <p>
+                  The pace of change compounds the difficulty. A decision that was reasonable
+                  eighteen months ago may no longer be, and few organizations have someone on staff
+                  whose job is to track that.
+                </p>
+                <p>
+                  Firms that specialize in artificial intelligence often lack working familiarity
+                  with the financial and operational systems a business depends on, and firms that
+                  know those systems rarely build and operate artificial intelligence themselves.
+                </p>
+                <p className="statement">Firmcraft was established to do both.</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <section className="sec surface-2">
+        <section className="m-section services-section reveal-section">
           <div className="wrap">
-            <div className="sec-head">
+            <div className="m-section-head">
               <div>
                 <h2>What Firmcraft does</h2>
               </div>
@@ -143,12 +158,22 @@ export default function HomePage() {
                 who will use it.
               </p>
             </div>
-            <div className="diff-grid">
+            <div className="service-grid">
               {serviceLines.map((line) => (
-                <article className="diff" key={line.title}>
-                  <div>
+                <article className="service-card" key={line.title}>
+                  <Image
+                    src={line.image}
+                    alt={line.alt}
+                    width={1200}
+                    height={900}
+                    sizes="(min-width: 980px) 31vw, 100vw"
+                    unoptimized
+                  />
+                  <div className="service-body">
+                    <p className="eyebrow">{line.eyebrow}</p>
                     <h3>{line.title}</h3>
                     <p>{line.body}</p>
+                    <Link href={line.href}>Learn more</Link>
                   </div>
                 </article>
               ))}
@@ -156,16 +181,17 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sec">
+        <section className="m-section distinctions-section reveal-section">
           <div className="wrap">
-            <div className="sec-head">
+            <div className="m-section-head">
               <div>
                 <h2>What distinguishes Firmcraft</h2>
               </div>
             </div>
-            <div className="diff-grid">
-              {distinctions.map((item) => (
+            <div className="distinction-grid">
+              {distinctions.map((item, index) => (
                 <article className="diff" key={item.title}>
+                  <span className="num">{String(index + 1).padStart(2, '0')}</span>
                   <div>
                     <h3>{item.title}</h3>
                     <p>{item.body}</p>
@@ -176,9 +202,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sec surface-2">
+        <section className="m-section fit-section reveal-section">
           <div className="wrap">
-            <div className="sec-head">
+            <div className="m-section-head">
               <div>
                 <h2>Who Firmcraft works with</h2>
               </div>
@@ -188,7 +214,7 @@ export default function HomePage() {
                 teams of larger enterprises.
               </p>
             </div>
-            <div className="icp-spec" style={{ maxWidth: 900 }}>
+            <div className="icp-spec">
               {fit.map(([label, value]) => (
                 <div className="r" key={label}>
                   <span className="k">{label}</span>
@@ -199,7 +225,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="sec" style={{ borderBottom: 'none' }}>
+        <section className="m-section closing-section reveal-section">
           <div className="wrap">
             <div className="final-cta">
               <div>
@@ -215,6 +241,17 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
+              <figure className="founder-mini">
+                <Image
+                  src="/founder/doyle.jpg"
+                  alt="Doyle Dettro"
+                  width={320}
+                  height={400}
+                  sizes="180px"
+                  unoptimized
+                />
+                <figcaption>Doyle Dettro, Founder and Principal</figcaption>
+              </figure>
             </div>
           </div>
         </section>

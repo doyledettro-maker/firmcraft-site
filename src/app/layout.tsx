@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
-import { JetBrains_Mono, Source_Serif_4 } from 'next/font/google'
+import { Source_Serif_4 } from 'next/font/google'
 import { GeistSans } from 'geist/font/sans'
 import { Analytics } from '@/components/Analytics'
 import { JsonLd } from '@/components/JsonLd'
@@ -8,18 +8,11 @@ import { ORG_JSONLD } from '@/lib/structured-data'
 import '../styles/tokens.css'
 import './globals.css'
 
-const mono = JetBrains_Mono({
-  subsets: ['latin'],
-  variable: '--font-mono',
-  display: 'swap',
-})
-
 const serif = Source_Serif_4({
   subsets: ['latin'],
   variable: '--font-display',
   display: 'swap',
-  style: 'italic',
-  weight: '500',
+  weight: ['400', '500', '600'],
 })
 
 export const metadata: Metadata = {
@@ -56,7 +49,7 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${GeistSans.variable} ${mono.variable} ${serif.variable}`}
+      className={`${GeistSans.variable} ${serif.variable}`}
     >
       <body suppressHydrationWarning className="antialiased">
         <JsonLd data={ORG_JSONLD} />

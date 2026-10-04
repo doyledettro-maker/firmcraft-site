@@ -20,7 +20,7 @@ export default function ForSmallBusinessPage() {
           <div className="wrap">
             <h1>For small business</h1>
             <p className="lede">
-              Smaller organizations often need the same operational relief as mid-market companies
+              Smaller organizations often need the same operational relief as larger companies
               without the scale to justify a full advisory engagement. For these clients, Firmcraft
               operates a managed artificial intelligence capability directly.
             </p>

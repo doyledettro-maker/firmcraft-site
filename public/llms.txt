@@ -1,16 +1,15 @@
 # Firmcraft
 
-> Firmcraft is an advisory practice for mid-market companies bringing
-> artificial intelligence into finance and operations. The firm advises on
-> artificial intelligence and technology strategy, implements what the strategy
-> requires, and manages the result on an ongoing basis. Firmcraft is led by an
-> advisor with more than two decades in enterprise software and digital
-> transformation, spanning business process design, solution architecture, and
-> implementation for operations-heavy and asset-intensive organizations.
+> Firmcraft advises business owners and executive teams on artificial
+> intelligence and technology strategy, implements what the strategy requires,
+> and manages the result on an ongoing basis. The practice brings together
+> business process, industry, and enterprise systems experience with hands-on
+> technical implementation.
 
-Firmcraft works with mid-market organizations where the owner, chief executive,
-or finance and operations leadership drives the technology agenda. The practice
-is independent: it does not resell software and does not receive vendor margin.
+Firmcraft works with organizations where the owner, the chief executive, or
+senior leadership drives the technology agenda, from owner-led businesses to the
+executive teams of larger enterprises. The practice is independent: it does not
+resell software and does not receive vendor margin.
 
 ## Practice
 - [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, and infrastructure

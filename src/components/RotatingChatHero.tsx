@@ -189,7 +189,7 @@ const SCENES: Scene[] = [
         av: 'a2', avLabel: 'FC', name: 'firmcraft', ts: '4:05 PM · operator',
         body: <>Looking up Ridgewood — cross-checking LinkedIn, their site, and your CRM for prior touches.</>,
         steps: [
-          { ic: '✓', k: '[01]', text: 'Verified: Ridgewood Mfg · Cleveland · mid-market · 82 staff' },
+          { ic: '✓', k: '[01]', text: 'Verified: Ridgewood Mfg · Cleveland · systems in place' },
           { ic: '✓', k: '[02]', text: 'Currently on Sage 100 — confirmed via job posting' },
           { ic: '✓', k: '[03]', text: 'Scored STRONG — matches your last 3 closes' },
           { ic: '✓', k: '[04]', text: 'Sent qualification email + Calendly to Eric Larsen, COO' },

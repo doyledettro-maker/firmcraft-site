@@ -46,9 +46,9 @@ export default function AboutPage() {
               <div>
                 <h1>About Firmcraft</h1>
                 <p className="lede">
-                  Firmcraft is an advisory practice working with mid-market organizations on
-                  artificial intelligence and technology strategy, implementation, and ongoing
-                  management.
+                  Firmcraft is an advisory practice working with business owners and executive
+                  teams on artificial intelligence and technology strategy, implementation, and
+                  ongoing management.
                 </p>
               </div>
             </div>
@@ -80,8 +80,8 @@ export default function AboutPage() {
                 </p>
                 <p>
                   For more than two decades since, his career has been in enterprise software and
-                  digital transformation, working on ERP and enterprise asset management systems for
-                  operations-heavy and asset-intensive organizations around the world. That work has
+                  digital transformation, working on ERP and other enterprise systems for
+                  organizations across a wide range of industries around the world. That work has
                   spanned business process design, solution architecture, implementation, and the
                   commercial side of major system decisions. Over that time he has advised hundreds
                   of businesses on their systems and operations.

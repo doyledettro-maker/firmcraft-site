@@ -16,7 +16,7 @@ export const ORG_JSONLD = {
   url: BASE,
   logo: `${BASE}/opengraph-image`,
   description:
-    'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
+    'Firmcraft advises business owners and executive teams on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
   telephone: '+1-217-303-8319',
   email: 'hello@firmcraft.ai',
   address: {
@@ -43,7 +43,7 @@ export const ORG_JSONLD = {
     'managed AI services',
     'AI infrastructure',
     'ERP integration',
-    'mid-market ERP implementation',
+    'ERP implementation',
     'workflow automation',
   ],
   sameAs: [

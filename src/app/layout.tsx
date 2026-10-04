@@ -24,16 +24,16 @@ const serif = Source_Serif_4({
 
 export const metadata: Metadata = {
   title: {
-    default: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
+    default: 'Firmcraft — AI Advisory and Managed Services',
     template: '%s | Firmcraft',
   },
   description:
-    'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
+    'Firmcraft advises business owners and executive teams on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
   metadataBase: new URL('https://firmcraft.ai'),
   openGraph: {
-    title: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
+    title: 'Firmcraft — AI Advisory and Managed Services',
     description:
-      'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implementation, and ongoing management.',
+      'Advisory, managed services, and infrastructure for organizations adopting artificial intelligence.',
     url: 'https://firmcraft.ai',
     siteName: 'Firmcraft',
     locale: 'en_US',
@@ -41,9 +41,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
+    title: 'Firmcraft — AI Advisory and Managed Services',
     description:
-      'Advisory, managed services, and infrastructure for mid-market companies adopting artificial intelligence.',
+      'Advisory, managed services, and infrastructure for organizations adopting artificial intelligence.',
   },
 }
 

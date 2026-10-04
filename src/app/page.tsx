@@ -5,9 +5,9 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './home.css'
 
 export const metadata: Metadata = {
-  title: 'Firmcraft — AI Advisory and Managed Services for Mid-Market Companies',
+  title: 'Firmcraft — AI Advisory and Managed Services',
   description:
-    'Firmcraft advises mid-market companies on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
+    'Firmcraft advises business owners and executive teams on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
   alternates: { canonical: '/' },
 }
 
@@ -33,7 +33,7 @@ const distinctions = [
   {
     title: 'Business process, industry, and systems depth',
     body:
-      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for operations-heavy and asset-intensive organizations around the world.',
+      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for organizations across a wide range of industries, from owner-led businesses to large enterprises, around the world.',
   },
   {
     title: 'Commercial literacy',
@@ -58,15 +58,14 @@ const distinctions = [
 ]
 
 const fit = [
-  ['Scale', 'Established operating business'],
-  ['Headcount', '50 to 1,500 employees'],
+  ['Scale', 'Established operating business of any size'],
   [
     'Systems',
     'A system of record in place, or actively replatforming — an ERP, a dealer or practice management system, or equivalent',
   ],
   [
     'Organizational lead',
-    'Owner, chief executive, chief financial officer, controller, chief operating officer, or director of finance',
+    'Owner, chief executive, chief financial officer, chief operating officer, or other senior leader',
   ],
   ['Typical situation', 'Manual process load, constrained headcount, audit and control exposure'],
   ['AI maturity', 'Isolated pilots without broader adoption, or no formal program'],
@@ -82,12 +81,13 @@ export default function HomePage() {
           <div className="wrap">
             <div className="hero-grid" style={{ gridTemplateColumns: 'minmax(0, 0.9fr)' }}>
               <div className="lhs">
-                <h1>AI advisory and managed services for mid-market companies</h1>
+                <h1>AI advisory and managed services</h1>
                 <p className="lede">
-                  Firmcraft advises mid-market companies on artificial intelligence and technology
-                  strategy, implements what that strategy requires, and manages the result on an
-                  ongoing basis. The practice brings together business process, industry, and
-                  enterprise systems experience with hands-on technical implementation.
+                  Firmcraft advises business owners and executive teams on artificial intelligence
+                  and technology strategy, implements what that strategy requires, and manages the
+                  result on an ongoing basis. The practice brings together business process,
+                  industry, and enterprise systems experience with hands-on technical
+                  implementation.
                 </p>
                 <div className="hero-ctas">
                   <Link className="btn primary lg" href="/contact">
@@ -118,14 +118,14 @@ export default function HomePage() {
               </p>
               <p>
                 The pace of change compounds the difficulty. A decision that was reasonable
-                eighteen months ago may no longer be, and few mid-market organizations have someone
-                on staff whose job is to track that.
+                eighteen months ago may no longer be, and few organizations have someone on staff
+                whose job is to track that.
               </p>
               <p>
-                Larger consulting firms are generally not structured to serve companies of this
-                size. Firms that specialize in artificial intelligence often lack working
-                familiarity with the financial and operational systems mid-market companies depend
-                on. Firmcraft was established to address both gaps.
+                Firms that specialize in artificial intelligence often lack working familiarity
+                with the financial and operational systems a business depends on, and firms that
+                know those systems rarely build and operate artificial intelligence themselves.
+                Firmcraft was established to do both.
               </p>
             </div>
           </div>
@@ -183,8 +183,9 @@ export default function HomePage() {
                 <h2>Who Firmcraft works with</h2>
               </div>
               <p>
-                Firmcraft works with mid-market organizations where the owner, the chief executive,
-                or the finance and operations leadership drives the technology agenda.
+                Firmcraft works with organizations where the owner, the chief executive, or senior
+                leadership drives the technology agenda, from owner-led businesses to the executive
+                teams of larger enterprises.
               </p>
             </div>
             <div className="icp-spec" style={{ maxWidth: 900 }}>
@@ -195,11 +196,6 @@ export default function HomePage() {
                 </div>
               ))}
             </div>
-            <p style={{ color: 'var(--color-muted)', marginTop: 24, maxWidth: 820 }}>
-              Firmcraft is generally not the right fit for pre-revenue companies or for
-              organizations whose financial and operational data is not yet held in a system of
-              record.
-            </p>
           </div>
         </section>
 

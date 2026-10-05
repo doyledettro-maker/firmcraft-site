@@ -1,8 +1,4 @@
 /* ===== Services page ===== */
-.page-hero{padding:80px 0 64px;background:linear-gradient(180deg,var(--color-surface) 0%,var(--color-paper) 100%);border-bottom:1px solid var(--color-line)}
-.page-hero h1{font-weight:600;font-size:clamp(34px,4.4vw,56px);letter-spacing:-.026em;line-height:1.04;margin:14px 0 22px;text-wrap:balance;max-width:880px}
-.page-hero h1 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--color-signal);letter-spacing:-.018em}
-.page-hero .lede{font-size:17px;line-height:1.6;color:var(--color-ink-2);margin:0;max-width:680px}
 
 /* funnel ribbon */
 .ribbon{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:42px;background:var(--color-paper);border:1px solid var(--color-line);border-radius:18px;padding:10px;align-items:stretch}
@@ -16,11 +12,6 @@
 
 /* ===== ASSESS section ===== */
 .assess-grid{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
-.pkg-head{margin-bottom:34px}
-.pkg-head .eyebrow{margin-bottom:8px}
-.pkg-head h2{font-weight:600;font-size:clamp(28px,3.4vw,42px);letter-spacing:-.024em;line-height:1.05;margin:0 0 14px;text-wrap:balance}
-.pkg-head h2 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--color-signal);letter-spacing:-.018em}
-.pkg-head p{font-size:15.5px;line-height:1.65;color:var(--color-ink-2);margin:0;max-width:620px}
 
 .assess-card{background:var(--color-paper);border:1px solid var(--color-line);border-radius:18px;padding:32px;display:flex;flex-direction:column;gap:18px}
 .assess-card .meta-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
@@ -85,13 +76,7 @@
 .adv-spec .r .v{font-size:14.5px;color:#fff;line-height:1.4;font-weight:500;letter-spacing:-.003em}
 .adv-spec .r .v .sub{display:block;font-weight:400;color:var(--color-inverse-2);font-size:12.5px;margin-top:3px}
 
-/* contact CTA at end */
-.cta-end{background:var(--color-paper);border:1px solid var(--color-line);border-radius:22px;padding:48px 56px;display:grid;grid-template-columns:1fr auto;gap:32px;align-items:center}
-.cta-end h2{margin:0;font-weight:600;font-size:clamp(24px,2.8vw,34px);letter-spacing:-.02em;line-height:1.1;text-wrap:balance;max-width:620px}
-.cta-end h2 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:var(--color-signal);letter-spacing:-.018em}
-
 @media (max-width:980px){
   .ribbon,.assess-grid,.build-grid,.op-tiers,.adv-block,.cta-end{grid-template-columns:1fr}
   .adv-block{padding:32px 24px}
-  .cta-end{padding:32px}
 }

@@ -47,7 +47,7 @@ const distinctions = [
   {
     title: 'Business process, industry, and systems depth',
     body:
-      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for organizations across a wide range of industries, from owner-led businesses to large enterprises, around the world.',
+      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for organizations across a wide range of industries, from owner-led businesses to large enterprises, around the world. The same advisor designs the process, understands the systems it runs on, and builds and operates the artificial intelligence that supports it.',
   },
   {
     title: 'Commercial literacy',
@@ -62,7 +62,7 @@ const distinctions = [
   {
     title: 'An established implementation method',
     body:
-      "Firmcraft's approach is adapted from enterprise systems implementation rather than from software piloting. Most artificial intelligence projects fail during scoping rather than engineering, and the method is built around that.",
+      "Firmcraft's approach is adapted from enterprise systems implementation rather than from software piloting. Each process is redesigned before any part of it is automated, and its current performance is measured before anything is built, so that results can be compared against a known starting point.",
   },
   {
     title: 'Continuity',
@@ -129,6 +129,14 @@ export default function HomePage() {
                   Individual employees adopted individual tools. Subscriptions accumulated without a
                   central view of cost or exposure, few of those tools connect to the systems the
                   business actually runs on, and no one owns the overall result.
+                </p>
+                <p>
+                  Most of that artificial intelligence has been applied to processes as they already
+                  exist. In a typical business process, the time spent doing the work is small
+                  compared with the time spent waiting between steps, for documents, for approvals,
+                  or for a reply from another team. Making each step faster leaves that waiting in
+                  place, which is why many initiatives produce satisfied users and little measurable
+                  change in how the organization performs.
                 </p>
                 <p>
                   The pace of change compounds the difficulty. A decision that was reasonable

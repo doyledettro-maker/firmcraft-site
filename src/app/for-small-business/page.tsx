@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { SmallBusinessVideo } from '@/components/SmallBusinessVideo'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
@@ -23,6 +24,12 @@ export default function ForSmallBusinessPage() {
               without the scale to justify a full advisory engagement. For these clients, Firmcraft
               operates a managed artificial intelligence capability directly.
             </p>
+          </div>
+        </section>
+
+        <section className="sec smb-video-section">
+          <div className="wrap">
+            <SmallBusinessVideo />
           </div>
         </section>
 

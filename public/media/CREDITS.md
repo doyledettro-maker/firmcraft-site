@@ -13,6 +13,16 @@ The homepage hero video combines:
 - "Businesspeople Looking at Documents" by Alena Darmel, Pexels video 8141713. Source: https://www.pexels.com/video/businesspeople-looking-at-documents-8141713/
 - "Man Working and Reading Documents Inside the Office" by Kampus Production, Pexels video 8460887. Source: https://www.pexels.com/video/man-working-and-reading-documents-inside-the-office-8460887/
 
+## Small business video
+
+The For Small Business video combines these Pexels clips:
+
+- "Chainsaw Operation in Outdoor Setting" by Usman AbdulrasheedGambo, Pexels video 34223312. Source: https://www.pexels.com/video/chainsaw-operation-in-outdoor-setting-34223312/
+- "Businesswoman in a Bakery" by Hanna Pad, Pexels video 7550996. Source: https://www.pexels.com/video/businesswoman-in-a-bakery-7550996/
+- "A Real Estate Agent Showing a House to a Family" by MART PRODUCTION, Pexels video 7347880. Source: https://www.pexels.com/video/a-real-estate-agent-showing-a-house-to-a-family-7347880/
+- "Man Cutting Grass" by Videas Cl, Pexels video 10470722. Source: https://www.pexels.com/video/man-cutting-grass-10470722/
+- "Woman Using Smartphone" by Kaboompics.com, Pexels video 6631689. Source: https://www.pexels.com/video/woman-using-smartphone-6631689/
+
 ## Homepage service-line photography
 
 - Advisory: "A Group of People Sitting at the Table at a Business Meeting" by Edmond Dantès, Pexels photo 4342497. Source: https://www.pexels.com/photo/a-group-of-people-sitting-at-the-table-at-a-business-meeting-4342497/

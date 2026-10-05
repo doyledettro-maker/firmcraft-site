@@ -18,7 +18,7 @@ The homepage hero video combines:
 The For Small Business video combines these Pexels clips:
 
 - "Chainsaw Operation in Outdoor Setting" by Usman AbdulrasheedGambo, Pexels video 34223312. Source: https://www.pexels.com/video/chainsaw-operation-in-outdoor-setting-34223312/
-- "Businesswoman in a Bakery" by Hanna Pad, Pexels video 7550996. Source: https://www.pexels.com/video/businesswoman-in-a-bakery-7550996/
+- "A Woman Rolling a Dough and Putting on a Tray" by K, Pexels video 7405936. Source: https://www.pexels.com/video/a-woman-rolling-a-dough-and-putting-on-a-tray-7405936/
 - "A Real Estate Agent Showing a House to a Family" by MART PRODUCTION, Pexels video 7347880. Source: https://www.pexels.com/video/a-real-estate-agent-showing-a-house-to-a-family-7347880/
 - "Man Cutting Grass" by Videas Cl, Pexels video 10470722. Source: https://www.pexels.com/video/man-cutting-grass-10470722/
 - "Woman Using Smartphone" by Kaboompics.com, Pexels video 6631689. Source: https://www.pexels.com/video/woman-using-smartphone-6631689/

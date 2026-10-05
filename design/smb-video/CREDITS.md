@@ -27,13 +27,13 @@ Pexels License summary: free to use; attribution is not required, but credits ar
 ## 2. Bakery
 
 ### `clips/2-bakery-a.mp4`
-- Title: Businesswoman in a Bakery
-- Author: Hanna Pad
-- Source URL: https://www.pexels.com/video/businesswoman-in-a-bakery-7550996/
+- Title: A Woman Rolling a Dough and Putting on a Tray
+- Author: K
+- Source URL: https://www.pexels.com/video/a-woman-rolling-a-dough-and-putting-on-a-tray-7405936/
 - License: Pexels License
-- Downloaded file: 4K landscape, 3840 x 2160, 10.07s
-- Source description: Black woman using tablet in bright bakery with cakes.
-- Fit note: bakery owner/staff member using a tablet in a bright bakery setting.
+- Downloaded file: 4K landscape, 3840 x 2160, 8.26s, 24fps
+- Source description: Female baker expertly kneading dough in a warm artisan kitchen setting.
+- Fit note: close bakery production footage with hands placing bread/dough on trays.
 
 ### `clips/2-bakery-b.mp4`
 - Title: Women Making Bread

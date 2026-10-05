@@ -5,20 +5,13 @@ https://www.pexels.com/license/
 
 Pexels allows free use for commercial and noncommercial purposes. Attribution is not required by the licence, but sources are recorded here for auditability.
 
-## Hero video candidates
+## Hero video
 
-- Candidate A combines:
-  - "People in a Work Meeting" by Kampus Production, Pexels video 6829151. Source: https://www.pexels.com/video/people-in-a-work-meeting-6829151/
-  - "Man Working and Reading Documents Inside the Office" by Kampus Production, Pexels video 8460887. Source: https://www.pexels.com/video/man-working-and-reading-documents-inside-the-office-8460887/
-  - "Employees Walking in the Office" by Edmond Dantès, Pexels video 8034687. Source: https://www.pexels.com/video/employees-walking-in-the-office-8034687/
-- Candidate B combines:
-  - "People Working at the Office" by Pavel Danilyuk, Pexels video 7593288. Source: https://www.pexels.com/video/people-working-at-the-office-7593288/
-  - "Businesspeople Looking at Documents" by Alena Darmel, Pexels video 8141713. Source: https://www.pexels.com/video/businesspeople-looking-at-documents-8141713/
-  - "People in a Work Meeting" by Kampus Production, Pexels video 6829151. Source: https://www.pexels.com/video/people-in-a-work-meeting-6829151/
-- Candidate C combines:
-  - "Man Working and Reading Documents Inside the Office" by Kampus Production, Pexels video 8460887. Source: https://www.pexels.com/video/man-working-and-reading-documents-inside-the-office-8460887/
-  - "Employees Walking in the Office" by Edmond Dantès, Pexels video 8034687. Source: https://www.pexels.com/video/employees-walking-in-the-office-8034687/
-  - "People Working at the Office" by Pavel Danilyuk, Pexels video 7593288. Source: https://www.pexels.com/video/people-working-at-the-office-7593288/
+The homepage hero video combines:
+
+- "People Working at the Office" by Pavel Danilyuk, Pexels video 7593288. Source: https://www.pexels.com/video/people-working-at-the-office-7593288/
+- "Businesspeople Looking at Documents" by Alena Darmel, Pexels video 8141713. Source: https://www.pexels.com/video/businesspeople-looking-at-documents-8141713/
+- "Man Working and Reading Documents Inside the Office" by Kampus Production, Pexels video 8460887. Source: https://www.pexels.com/video/man-working-and-reading-documents-inside-the-office-8460887/
 
 ## Homepage service-line photography
 

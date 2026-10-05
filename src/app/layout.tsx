@@ -11,8 +11,8 @@ import './marketing-shared.css'
 
 const serif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-display',
-  display: 'swap',
+  variable: '--font-source-serif',
+  display: 'optional',
   weight: ['400', '500', '600'],
 })
 

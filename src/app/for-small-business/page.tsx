@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import '../services/services.css'
 
 export const metadata: Metadata = {
   title: 'For Small Business — Firmcraft',
@@ -15,7 +14,7 @@ export default function ForSmallBusinessPage() {
   return (
     <>
       <SiteHeader current="for-small-business" />
-      <main>
+      <main className="marketing-inner">
         <section className="page-hero">
           <div className="wrap">
             <h1>For small business</h1>
@@ -67,7 +66,7 @@ export default function ForSmallBusinessPage() {
           <div className="wrap">
             <div className="cta-end">
               <h2>Start a conversation</h2>
-              <Link className="btn primary lg" href="/contact">
+              <Link className="btn navy lg" href="/contact">
                 Contact Firmcraft
               </Link>
             </div>

@@ -20,9 +20,16 @@ export type SiteHeaderCurrent =
   | 'sovereignty'
   | 'about'
 
-export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
+export function SiteHeader({
+  current,
+  marketing = false,
+}: {
+  current?: SiteHeaderCurrent
+  marketing?: boolean
+}) {
   const [scrolled, setScrolled] = useState(false)
   const overHero = current === 'home'
+  const isMarketing = marketing || Boolean(current)
 
   useEffect(() => {
     if (!overHero) return
@@ -39,7 +46,9 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
   const inverse = overHero && !scrolled
 
   return (
-    <header className={`site-header${overHero ? ' over-hero' : ''}${scrolled ? ' scrolled' : ''}`}>
+    <header
+      className={`site-header${isMarketing ? ' marketing-header' : ''}${overHero ? ' over-hero' : ''}${scrolled ? ' scrolled' : ''}`}
+    >
       <div className="wrap row">
         <Link href="/" aria-label="Firmcraft home" className="wm-link">
           <FirmcraftWordmark size={22} variant={inverse ? 'inverse' : 'default'} />
@@ -64,13 +73,14 @@ export function SiteHeader({ current }: { current?: SiteHeaderCurrent }) {
         <div className="right">
           <a
             href="/contact"
-            className={`btn sm${inverse ? ' brass' : ' primary'}`}
+            className={`btn sm${inverse ? ' brass' : isMarketing ? ' navy' : ' primary'}`}
           >
             Contact Firmcraft
           </a>
           <MobileMenu
             items={NAV_ITEMS.map((n) => ({ label: n.label, href: n.href }))}
             current={current}
+            marketing={isMarketing}
           />
         </div>
       </div>

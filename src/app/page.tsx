@@ -236,7 +236,7 @@ export default function HomePage() {
                   Firmcraft will say so.
                 </p>
                 <div className="hero-ctas">
-                  <Link className="btn primary lg" href="/contact">
+                  <Link className="btn navy lg" href="/contact">
                     Contact Firmcraft
                   </Link>
                 </div>

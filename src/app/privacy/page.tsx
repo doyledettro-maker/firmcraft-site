@@ -104,8 +104,8 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
 export default function PrivacyPage() {
   return (
     <>
-      <SiteHeader />
-      <main>
+      <SiteHeader marketing />
+      <main className="marketing-inner">
         <section className="sec">
           <div className="wrap" style={{ maxWidth: 820 }}>
             <div className="eyebrow">Legal</div>

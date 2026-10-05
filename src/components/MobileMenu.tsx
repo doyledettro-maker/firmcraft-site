@@ -8,6 +8,7 @@ type NavItem = { label: string; href: string; external?: boolean }
 type Props = {
   items: NavItem[]
   current?: string
+  marketing?: boolean
 }
 
 function normalizeCurrent(href: string, current?: string) {
@@ -16,7 +17,7 @@ function normalizeCurrent(href: string, current?: string) {
   return href === `/${current}`
 }
 
-export function MobileMenu({ items, current }: Props) {
+export function MobileMenu({ items, current, marketing = false }: Props) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -78,7 +79,7 @@ export function MobileMenu({ items, current }: Props) {
         id="mobile-menu-drawer"
         role="dialog"
         aria-modal="false"
-        aria-hidden={!open}
+        hidden={!open}
         className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--color-line)] bg-[rgba(244,246,250,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
           open ? 'max-h-[640px] opacity-100' : 'pointer-events-none max-h-0 opacity-0'
         }`}
@@ -118,7 +119,7 @@ export function MobileMenu({ items, current }: Props) {
           <a
             href="/contact"
             onClick={() => setOpen(false)}
-            className="btn primary mt-3 w-full justify-center"
+            className={`btn ${marketing ? 'navy' : 'primary'} mt-3 w-full justify-center`}
           >
             Contact Firmcraft
           </a>

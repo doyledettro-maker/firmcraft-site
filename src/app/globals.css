@@ -131,6 +131,15 @@ body {
   background: #D5B77F;
   border-color: #D5B77F;
 }
+.btn.navy {
+  background: #0E1B2E;
+  color: #F7F3EC;
+  border-color: #0E1B2E;
+}
+.btn.navy:hover {
+  background: #16263D;
+  border-color: #16263D;
+}
 .btn .arr {
   transition: transform 0.15s ease;
 }
@@ -277,7 +286,11 @@ body {
   color: #1B2333;
 }
 .site-header.over-hero:not(.scrolled) .fc-lockup .fc-lockup-f {
-  color: #F7F3EC;
+  color: #C9A46A;
+}
+.site-header.marketing-header:not(.over-hero) .fc-lockup .fc-lockup-f,
+.site-header.marketing-header.over-hero.scrolled .fc-lockup .fc-lockup-f {
+  color: #8A6A33;
 }
 .site-header .row {
   height: 68px;
@@ -357,7 +370,7 @@ body {
   align-items: start;
   margin-bottom: 48px;
 }
-.site-footer .col h5 {
+.site-footer .col-heading {
   font-family: var(--font-sans);
   font-size: 10.5px;
   letter-spacing: 0.16em;
@@ -409,6 +422,9 @@ body {
 }
 .site-footer .legal a:hover {
   color: #fff;
+}
+.site-footer .fc-lockup .fc-lockup-f {
+  color: #C9A46A;
 }
 
 /* Reusable cards */

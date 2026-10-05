@@ -1,7 +1,6 @@
 import type { Metadata } from 'next'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import '../services/services.css'
 
 export const metadata: Metadata = {
   title: 'Data Sovereignty — Firmcraft',
@@ -37,7 +36,7 @@ export default function SovereigntyPage() {
   return (
     <>
       <SiteHeader current="sovereignty" />
-      <main>
+      <main className="marketing-inner">
         <section className="page-hero">
           <div className="wrap">
             <h1>Data sovereignty</h1>

@@ -39,7 +39,7 @@ export default function AboutPage() {
   return (
     <>
       <SiteHeader current="about" />
-      <main>
+      <main className="marketing-inner">
         <section className="about-hero">
           <div className="wrap">
             <div className="about-hero-grid" style={{ gridTemplateColumns: 'minmax(0, 0.9fr)' }}>
@@ -66,6 +66,7 @@ export default function AboutPage() {
                   sizes="(min-width: 980px) 360px, 100vw"
                   className="founder-img"
                   priority
+                  unoptimized
                 />
               </div>
               <div className="founder-copy">
@@ -159,7 +160,7 @@ export default function AboutPage() {
                 intelligence is not the right investment for the problem you are describing,
                 Firmcraft will say so.
               </p>
-              <Link className="btn primary lg" href="/contact">
+              <Link className="btn navy lg" href="/contact">
                 Contact Firmcraft
               </Link>
             </div>

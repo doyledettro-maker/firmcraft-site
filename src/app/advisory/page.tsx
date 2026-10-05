@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import '../services/services.css'
 
 export const metadata: Metadata = {
   title: 'Advisory Services — Firmcraft',
@@ -15,7 +14,7 @@ export default function AdvisoryPage() {
   return (
     <>
       <SiteHeader current="advisory" />
-      <main>
+      <main className="marketing-inner">
         <section className="page-hero">
           <div className="wrap">
             <h1>Advisory</h1>
@@ -122,7 +121,7 @@ export default function AdvisoryPage() {
             <div className="cta-end">
               <h2>Start a conversation</h2>
               <p>An initial conversation carries no cost and no obligation.</p>
-              <Link className="btn primary lg" href="/contact">
+              <Link className="btn navy lg" href="/contact">
                 Contact Firmcraft
               </Link>
             </div>

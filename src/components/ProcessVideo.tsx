@@ -101,9 +101,9 @@ export function ProcessVideo() {
             setPaused(true)
           }}
         >
-          <source src="/media/process-720.mp4" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/media/process-1080.webm" type="video/webm" />
-          <source src="/media/process-1080.mp4" type="video/mp4" />
+          <source src="/media/process-720.mp4?v=2" media="(max-width: 768px)" type="video/mp4" />
+          <source src="/media/process-1080.webm?v=2" type="video/webm" />
+          <source src="/media/process-1080.mp4?v=2" type="video/mp4" />
         </video>
 
         <div className="process-video-controls">

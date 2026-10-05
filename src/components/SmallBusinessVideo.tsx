@@ -5,7 +5,7 @@ import type { CSSProperties } from 'react'
 import { useEffect, useRef, useState } from 'react'
 
 const captions = [
-  'Tree service. Request: "Send the Hendricks contract to the client." Agent: The contract has been sent to Mark Hendricks for signature. I will let you know when it is signed.',
+  "Auto service. Request: \"Order brake pads for the car in bay three.\" Agent: The parts department has the order. The pads will be at bay three by two o'clock, and the customer has been told the car will be ready at five.",
   "Bakery. Request: \"Order flour and butter for Friday's baking.\" Agent: Ordered from your usual supplier: ten bags of flour and twenty-four pounds of butter, arriving Thursday morning.",
   "Real estate. Request: \"Confirm the four o'clock showing at 212 Elm Street.\" Agent: Confirmed with the buyer's agent for four o'clock. Your reminder is set for three.",
   'Landscaping. Request: "Pull up the work order for the next property." Agent: Work order 1048: spring cleanup, hedge trimming, and mulch for the front beds. The gate code is in the notes.',
@@ -105,9 +105,9 @@ export function SmallBusinessVideo() {
             setPaused(true)
           }}
         >
-          <source src="/media/smb-720.mp4" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/media/smb-1080.webm" type="video/webm" />
-          <source src="/media/smb-1080.mp4" type="video/mp4" />
+          <source src="/media/smb-720.mp4?v=2" media="(max-width: 768px)" type="video/mp4" />
+          <source src="/media/smb-1080.webm?v=2" type="video/webm" />
+          <source src="/media/smb-1080.mp4?v=2" type="video/mp4" />
         </video>
 
         <div className="process-video-controls">

@@ -5,6 +5,26 @@ https://www.pexels.com/license/
 
 Pexels License summary: free to use; attribution is not required, but credits are retained here for project records.
 
+## Mechanic replacement candidates
+
+### `clips/1-mechanic-a.mp4`
+- Title: Mechanic Using OBD Scanner Tablet
+- Author: Gustavo Fring
+- Source URL: https://www.pexels.com/video/mechanic-using-obd-scanner-tablet-6870334/
+- License: Pexels License
+- Downloaded file: QHD landscape, 2560 x 1440, 10.94s, 29.97fps
+- Source description: Mechanic diagnosing car with a tablet device indoors.
+- Fit note: technician in a clean professional service bay using a tablet beside a car; no obvious readable brand marks in sampled frames.
+
+### `clips/1-mechanic-b.mp4`
+- Title: A Worker Repairing a Vehicle
+- Author: Artem Podrez
+- Source URL: https://www.pexels.com/video/a-worker-repairing-a-vehicle-8987075/
+- License: Pexels License
+- Downloaded file: QHD landscape, 2560 x 1440, 14.57s, 30fps
+- Source description: Mechanic replacing tires in a workshop with tools and equipment under a car lift.
+- Fit note: technician working at a raised car/wheel in a professional service bay; no obvious readable brand marks in sampled frames.
+
 ## 1. Tree service
 
 ### `clips/1-tree-a.mp4`

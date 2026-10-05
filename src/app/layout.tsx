@@ -7,6 +7,7 @@ import { JsonLd } from '@/components/JsonLd'
 import { ORG_JSONLD } from '@/lib/structured-data'
 import '../styles/tokens.css'
 import './globals.css'
+import './marketing-shared.css'
 
 const mono = JetBrains_Mono({
   subsets: ['latin'],

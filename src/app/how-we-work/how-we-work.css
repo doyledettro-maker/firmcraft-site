@@ -126,7 +126,7 @@
   overflow: hidden;
   border: 1px solid var(--m-rule);
   border-radius: 6px;
-  background: var(--m-navy);
+  background: var(--m-navy) url('/media/process-poster.jpg') center / cover no-repeat;
   aspect-ratio: 16 / 9;
 }
 
@@ -135,6 +135,7 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  background: var(--m-navy) url('/media/process-poster.jpg') center / cover no-repeat;
 }
 
 .process-video-controls {
@@ -271,6 +272,10 @@
 
 .fit-gap-questions strong {
   font-weight: 600;
+}
+
+.fit-gap-questions li > span {
+  min-width: 0;
 }
 
 .fit-gap-questions li::before {

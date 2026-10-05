@@ -125,7 +125,9 @@ export default function HowWeWorkPage() {
                     <ol className="fit-gap-questions">
                       {section.treatments.map((treatment) => (
                         <li key={treatment.label}>
-                          <strong>{treatment.label}</strong> {treatment.body}
+                          <span>
+                            <strong>{treatment.label}</strong> {treatment.body}
+                          </span>
                         </li>
                       ))}
                     </ol>

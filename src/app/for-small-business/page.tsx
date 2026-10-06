@@ -5,7 +5,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'For Small Business — Firmcraft',
+  title: 'For Small Business',
   description:
     'A managed artificial intelligence capability for smaller organizations, operated by Firmcraft.',
   alternates: { canonical: '/for-small-business' },

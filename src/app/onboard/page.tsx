@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { OnboardForm } from './OnboardForm'
 
 export const metadata: Metadata = {
-  title: 'Onboarding | Firmcraft',
+  title: 'Onboarding',
   description:
     'Tell us about your business, your team, and the work you want your Firmcraft AI operator to pick up. Six quick steps — about 10 minutes.',
 }

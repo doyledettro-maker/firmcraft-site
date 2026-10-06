@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './about.css'
 
 export const metadata: Metadata = {
-  title: 'About — Firmcraft',
+  title: 'About',
   description:
     'Firmcraft is an advisory practice combining business process, industry, and enterprise systems experience with hands-on technical implementation.',
   alternates: { canonical: '/about' },

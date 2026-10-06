@@ -19,7 +19,7 @@ const serif = Source_Serif_4({
 export const metadata: Metadata = {
   title: {
     default: 'Firmcraft — AI Advisory and Managed Services',
-    template: '%s | Firmcraft',
+    template: '%s — Firmcraft',
   },
   description:
     'Firmcraft advises business owners and executive teams on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',

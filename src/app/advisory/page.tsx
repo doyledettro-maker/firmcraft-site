@@ -4,7 +4,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'Advisory Services — Firmcraft',
+  title: 'Advisory Services',
   description:
     'Advisory, managed AI services, and infrastructure for companies bringing artificial intelligence into finance and operations.',
   alternates: { canonical: '/advisory' },

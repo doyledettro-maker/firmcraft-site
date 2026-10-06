@@ -6,7 +6,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './how-we-work.css'
 
 export const metadata: Metadata = {
-  title: 'How We Work — Firmcraft',
+  title: 'How We Work',
   description:
     "Firmcraft's approach to assessment, implementation, and ongoing support, adapted from enterprise systems implementation practice.",
   alternates: { canonical: '/how-we-work' },

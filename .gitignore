@@ -35,4 +35,10 @@ next-env.d.ts
 # credentials
 firmcraft-credentials.md
 
+# design source exports
+design/**/*.mp4
+design/**/*.webm
+design/**/*.jpg
+design/smb-video/clips/
+
 # trigger deploy via fresh webhook

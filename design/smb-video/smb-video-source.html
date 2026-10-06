@@ -1,0 +1,88 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:FSerif;src:url(fonts/serif.woff2) format("woff2");font-weight:200 900}
+@font-face{font-family:FSans;src:url(fonts/Geist-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:FSans;src:url(fonts/Geist-Medium.woff2) format("woff2");font-weight:500}
+@font-face{font-family:FSans;src:url(fonts/Geist-SemiBold.woff2) format("woff2");font-weight:600}
+@font-face{font-family:FSans;src:url(fonts/Geist-Bold.woff2) format("woff2");font-weight:700}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:#0E1B2E}
+#stage{position:relative;width:1920px;height:1080px;overflow:hidden;font-family:FSans;color:#F7F3EC}
+.abs{position:absolute}
+.shot{position:absolute;left:0;top:0;width:1920px;height:1080px;object-fit:cover;transform-origin:50% 50%}
+.vig{left:0;top:0;width:1920px;height:1080px;background:linear-gradient(90deg,rgba(14,27,46,.72) 0%,rgba(14,27,46,.35) 42%,rgba(14,27,46,0) 70%),linear-gradient(0deg,rgba(14,27,46,.55) 0%,rgba(14,27,46,0) 45%)}
+.card{left:120px;bottom:120px;width:900px;padding:36px 44px 38px;background:rgba(14,27,46,.84);border-left:3px solid #C9A46A;border-radius:4px;backdrop-filter:blur(6px)}
+.ey{font-weight:600;font-size:20px;letter-spacing:.18em;text-transform:uppercase;color:#C9A46A;margin-bottom:22px}
+.who{display:flex;align-items:center;gap:12px;font-size:19px;color:#A9B2C3;letter-spacing:.02em;margin-bottom:10px}
+.wave{display:flex;align-items:center;gap:4px;height:22px}
+.wave i{display:block;width:4px;border-radius:2px;background:#F7F3EC}
+.req{font-family:FSerif;font-size:44px;line-height:1.25;color:#F7F3EC}
+.rule{height:1px;background:rgba(247,243,236,.16);margin:26px 0 22px}
+.dot{width:10px;height:10px;border-radius:50%;background:#C9A46A}
+.rep{font-size:29px;line-height:1.45;color:#F7F3EC}
+.endc{left:0;top:0;width:1920px;height:1080px;background:radial-gradient(1200px 700px at 50% 45%,#13233A 0%,#0E1B2E 70%)}
+.wm{left:0;width:1920px;text-align:center;top:400px;font-weight:700;font-size:96px;letter-spacing:-.02em}
+.wm .f{color:#C9A46A}
+.sub{left:0;width:1920px;text-align:center;top:540px;font-family:FSerif;font-size:40px}
+.url{left:0;width:1920px;text-align:center;top:618px;font-size:24px;letter-spacing:.12em;color:#A9B2C3}
+</style></head>
+<body><div id="stage"></div>
+<script>
+const SCENES=[
+ {k:'1-mechanic',lbl:'Auto service',req:'\u201cOrder brake pads for the car in bay three.\u201d',rep:'The parts department has the order. The pads will be at bay three by two o\u2019clock, and the customer has been told the car will be ready at five.'},
+ {k:'2-bakery',lbl:'Bakery',req:'“Order flour and butter for Friday’s baking.”',rep:'Ordered from your usual supplier: ten bags of flour and twenty-four pounds of butter, arriving Thursday morning.'},
+ {k:'3-realestate',lbl:'Real estate',req:'“Confirm the four o’clock showing at 212 Elm Street.”',rep:'Confirmed with the buyer’s agent for four o’clock. Your reminder is set for three.'},
+ {k:'4-landscaping',lbl:'Landscaping',req:'“Pull up the work order for the next property.”',rep:'Work order 1048: spring cleanup, hedge trimming, and mulch for the front beds. The gate code is in the notes.'},
+ {k:'5-dental',lbl:'Dental office',req:'“Submit the claim for this morning’s cleaning.”',rep:'The claim has been submitted to the patient’s insurer. I will follow up if it has not been acknowledged within two days.'},
+];
+const STEP=6.4, LEN=7.0, XF=0.6, FPS=30;           // scene i: [i*STEP, i*STEP+LEN]
+const END0=SCENES.length*STEP;                        // end card fades in over XF
+const DUR=END0+5.0;
+const S=document.getElementById('stage');
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+function el(cls,html,p=S){const d=document.createElement('div');d.className='abs '+cls;if(html!=null)d.innerHTML=html;p.appendChild(d);return d}
+const shots=SCENES.map(()=>{const i=document.createElement('img');i.className='shot';i.style.opacity=0;S.appendChild(i);return i});
+const vig=el('vig');
+const cards=SCENES.map(s=>{
+  const c=el('card',`<div class="ey">${s.lbl}</div>
+  <div class="who"><span class="wave">${'<i></i>'.repeat(7)}</span>Spoken request</div>
+  <div class="req">${s.req}</div><div class="rule"></div>
+  <div class="who rr"><span class="dot"></span>Agent</div><div class="rep">${s.rep}</div>`);
+  c.style.opacity=0;return c});
+const endc=el('endc');const wm=el('wm','<span class="f">F</span>irmcraft');
+const sub=el('sub','Managed artificial intelligence for smaller organizations');const url=el('url','FIRMCRAFT.AI');
+[endc,wm,sub,url].forEach(e=>e.style.opacity=0);
+
+async function render(t){
+  const loads=[];
+  SCENES.forEach((s,i)=>{
+    const t0=i*STEP,u=t-t0;
+    const vis=u>-0.01&&u<LEN+0.01;
+    const a=i===0?1:ease(seg(u,0,XF));                     // fade in (first scene starts visible)
+    const shot=shots[i];
+    if(vis){const fi=Math.min(Math.floor(clamp(u,0,LEN-0.001)*FPS),Math.round(LEN*FPS)-1);
+      const src=`frames/${s.k}/f${String(fi+1).padStart(4,'0')}.jpg`;
+      if(!shot.src.endsWith(src)){shot.src=src;loads.push(shot.decode().catch(()=>{}))}
+      shot.style.opacity=a;shot.style.zIndex=i;shot.style.transform=`scale(${1.0+0.035*u/LEN})`;}
+    else shot.style.opacity=0;
+    // overlay card
+    const card=cards[i];
+    const cin=ease(seg(u,0.7,1.3)), cout=1-ease(seg(u,STEP-0.5,STEP-0.05));
+    card.style.opacity=Math.min(cin,cout);card.style.transform=`translateY(${(1-cin)*14}px)`;card.style.zIndex=20;
+    const rIn=ease(seg(u,2.5,3.1));
+    card.querySelector('.rule').style.opacity=rIn;card.querySelector('.rr').style.opacity=rIn;
+    const rep=card.querySelector('.rep');rep.style.opacity=rIn;rep.style.transform=`translateY(${(1-rIn)*8}px)`;
+    // waveform: animates while "speaking" (0.9..2.5), settles after
+    const speaking=u>0.9&&u<2.5?1:0.25;
+    [...card.querySelectorAll('.wave i')].forEach((b,k)=>{const h=6+speaking*14*Math.abs(Math.sin(u*9+k*1.3));b.style.height=h+'px';b.style.opacity=speaking>.5?1:.5});
+  });
+  vig.style.zIndex=10;vig.style.opacity=t<END0+XF?1:1-ease(seg(t,END0,END0+XF));
+  const e=ease(seg(t,END0,END0+XF));[endc].forEach(x=>{x.style.opacity=e;x.style.zIndex=30});
+  [[wm,END0+0.3],[sub,END0+0.9],[url,END0+1.4]].forEach(([x,a])=>{x.style.zIndex=31;x.style.opacity=ease(seg(t,a,a+0.8))});
+  await Promise.all(loads);
+}
+window.render=render;window.DUR=DUR;window.FPS=FPS;
+</script></body></html>

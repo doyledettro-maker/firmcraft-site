@@ -1,0 +1,244 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:FSerif;src:url(fonts/serif.woff2) format("woff2");font-weight:200 900}
+@font-face{font-family:FSans;src:url(fonts/Geist-Regular.woff2) format("woff2");font-weight:400}
+@font-face{font-family:FSans;src:url(fonts/Geist-Medium.woff2) format("woff2");font-weight:500}
+@font-face{font-family:FSans;src:url(fonts/Geist-SemiBold.woff2) format("woff2");font-weight:600}
+@font-face{font-family:FSans;src:url(fonts/Geist-Bold.woff2) format("woff2");font-weight:700}
+:root{--navy:#0E1B2E;--navy2:#16263D;--navy3:#22344F;--cream:#F7F3EC;--muted:#A9B2C3;--brass:#C9A46A;--rule:rgba(247,243,236,.16)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:1920px;height:1080px;overflow:hidden;background:var(--navy)}
+#stage{position:relative;width:1920px;height:1080px;background:radial-gradient(1200px 700px at 50% 40%,#13233A 0%,var(--navy) 70%);font-family:FSans;color:var(--cream)}
+.abs{position:absolute}
+svg{position:absolute;left:0;top:0}
+.title{left:0;width:1920px;top:430px;text-align:center;font-family:FSerif;font-weight:400;font-size:84px;letter-spacing:-.01em}
+.eyebrow{font-family:FSans;font-weight:600;font-size:20px;letter-spacing:.18em;text-transform:uppercase;color:var(--brass)}
+.cap{left:260px;top:842px;width:1400px}
+.cap .st{font-family:FSerif;font-size:34px;color:var(--brass);margin-bottom:12px}
+.cap .tx{font-size:34px;line-height:1.4;color:var(--cream)}
+.step{width:150px;height:96px;border:1.5px solid rgba(247,243,236,.22);background:var(--navy2);border-radius:6px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:19px;line-height:1.25;padding:0 10px;color:var(--cream)}
+.step .strike{position:absolute;left:12px;right:12px;top:50%;height:2px;background:var(--muted);transform-origin:left center}
+.chip{width:150px;text-align:center;font-size:17px;font-weight:600;letter-spacing:.04em;padding:7px 0;border-radius:999px}
+.chip.R{border:1.5px solid var(--muted);color:var(--muted)}
+.chip.S{border:1.5px solid var(--cream);color:var(--cream)}
+.chip.A{background:var(--brass);color:var(--navy);border:1.5px solid var(--brass)}
+.chip.P{background:var(--cream);color:var(--navy);border:1.5px solid var(--cream)}
+.src{width:520px;height:88px;border:1.5px solid var(--brass);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px;color:var(--cream);background:rgba(201,164,106,.06)}
+.lbl{font-size:24px;color:var(--muted)}
+.lbl b{color:var(--cream);font-weight:500}
+.prog{top:70px;left:260px;width:1400px;display:flex;justify-content:space-between}
+.prog .p{font-size:19px;color:var(--muted);letter-spacing:.02em;width:220px}
+.prog .p span{font-family:FSerif;color:var(--brass);margin-right:8px}
+.sys{width:420px;height:96px;border:1.5px solid rgba(247,243,236,.22);background:var(--navy3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.ill{font-size:17px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.wm{left:0;width:1920px;text-align:center;top:410px;font-family:FSans;font-weight:700;font-size:96px;letter-spacing:-.02em}
+.wm .f{color:var(--brass)}
+.sub{left:0;width:1920px;text-align:center;top:548px;font-family:FSerif;font-size:38px;color:var(--cream)}
+.url{left:0;width:1920px;text-align:center;top:624px;font-size:24px;letter-spacing:.12em;color:var(--muted)}
+</style></head>
+<body><div id="stage"></div>
+<script>
+const W=1920,H=1080,DUR=66;
+const S=document.getElementById('stage');
+const clamp=(x,a=0,b=1)=>Math.max(a,Math.min(b,x));
+const seg=(t,a,b)=>clamp((t-a)/(b-a));
+const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+const eo=x=>1-Math.pow(1-x,3);
+const lerp=(a,b,x)=>a+(b-a)*x;
+// fade in a..a+d, out b..b+d
+const win=(t,a,b,d=.6)=>Math.min(ease(seg(t,a,a+d)),1-ease(seg(t,b,b+d)));
+function el(cls,html,parent=S){const d=document.createElement('div');d.className='abs '+cls;if(html!=null)d.innerHTML=html;parent.appendChild(d);return d}
+const NS='http://www.w3.org/2000/svg';
+const svg=document.createElementNS(NS,'svg');svg.setAttribute('width',W);svg.setAttribute('height',H);S.appendChild(svg);
+function sv(tag,attrs){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);svg.appendChild(e);return e}
+function set(e,o){for(const k in o)e.style[k]=o[k]}
+
+// ---------- persistent elements ----------
+const title=el('title','How Firmcraft approaches a process');
+const titleEy=el('eyebrow','How we work');set(titleEy,{left:'0',width:'1920px',textAlign:'center',top:'370px'});
+
+// progress line
+const prog=el('prog');
+const stages=['Discovery','Process redesign','Implementation','Training and evaluation','Ongoing support'];
+const progItems=stages.map((s,i)=>{const e=el('p',`<span>0${i+1}</span>${s}`,prog);e.style.position='relative';return e});
+const progLine=sv('line',{x1:260,y1:56,x2:1660,y2:56,stroke:'rgba(247,243,236,.16)','stroke-width':2});
+const progFill=sv('line',{x1:260,y1:56,x2:260,y2:56,stroke:'#C9A46A','stroke-width':2});
+
+// caption
+const cap=el('cap','<div class="st"></div><div class="tx"></div>');
+const capSt=cap.querySelector('.st'),capTx=cap.querySelector('.tx');
+const CAPS=[
+ [5.2,13.6,'','In most processes, the work itself takes a small share of the elapsed time. Most of the time is spent waiting between steps.'],
+ [14.4,24.6,'01  Discovery','Interviews and the organization’s own system records establish how the work actually proceeds, including the exceptions.'],
+ [25.2,37.6,'02  Process redesign','Each step is removed, handled by conventional software, assigned to an AI agent, or kept with a person.'],
+ [38.2,44.6,'02  Process redesign','Current performance is measured before anything is built, so that results can be compared against it.'],
+ [45.2,52.6,'03  Implementation','The redesigned process is built inside the systems the organization already uses.'],
+ [53.2,60.0,'04  Training and evaluation    05  Ongoing support','People are trained on their own work, and results are reported against the starting measurement.'],
+];
+
+// ---------- scene B: time bar ----------
+const BX=260,BW=1400,BY=470;
+const barBg=sv('rect',{x:BX,y:BY,width:0,height:30,rx:3,fill:'#2A3B57'});
+const workSegs=[[0.02,14],[0.17,10],[0.36,16],[0.55,10],[0.78,12],[0.95,14]].map(([p,w])=>({p,w,r:sv('rect',{x:BX+p*BW,y:BY,width:w,height:30,fill:'#C9A46A',opacity:0})}));
+const barLblL=el('lbl','<b>Elapsed time</b> for one item, from request to completion');set(barLblL,{left:BX+'px',top:(BY-56)+'px'});
+const keyWork=el('lbl','<span style="display:inline-block;width:18px;height:18px;background:#C9A46A;vertical-align:-2px;margin-right:12px"></span>Time spent on the work');set(keyWork,{left:BX+'px',top:(BY+60)+'px'});
+const keyWait=el('lbl','<span style="display:inline-block;width:18px;height:18px;background:#2A3B57;vertical-align:-2px;margin-right:12px"></span>Time spent waiting between steps');set(keyWait,{left:(BX+420)+'px',top:(BY+60)+'px'});
+// after bar (scene E)
+const barLblB=el('lbl','<b>Before</b>');set(barLblB,{left:BX+'px',top:(BY-96)+'px'});
+const AY=BY+150;
+const barAfter=sv('rect',{x:BX,y:AY,width:0,height:30,rx:3,fill:'#2A3B57'});
+const afterSegs=[0.03,0.2,0.42,0.6,0.8,0.95].map(p=>sv('rect',{x:BX+p*BW*0.32,y:AY,width:12,height:30,fill:'#C9A46A',opacity:0}));
+const barLblA=el('lbl','<b>After</b>');set(barLblA,{left:BX+'px',top:(AY-44)+'px'});
+const ill=el('ill','Illustrative');set(ill,{left:(BX+BW-160)+'px',top:(BY-96)+'px',width:'160px',textAlign:'right'});
+
+// ---------- scene C/D: process steps ----------
+const STEPS=[
+ ['Request received','S'],['Documents chased','R'],['Data re-entered','R'],['Checked against records','S'],['Query emailed','R'],
+ ['Reply awaited','R'],['Reviewed','A'],['Approved','P'],['System updated','S'],['Parties notified','S']];
+const TAGTXT={R:'Remove',S:'Software',A:'AI agent',P:'Person'};
+const SY=470,SW=150,GAP=22,SX0=(W-(10*SW+9*GAP))/2;
+const kept=STEPS.map((s,i)=>s[1]!=='R'?i:-1).filter(i=>i>=0);
+const SW2=200,GAP2=40,SX2=(W-(kept.length*SW2+(kept.length-1)*GAP2))/2;
+const steps=STEPS.map(([l,tag],i)=>{
+  const d=el('step',l);const st=document.createElement('div');st.className='strike';d.appendChild(st);
+  const c=el('chip '+tag,TAGTXT[tag]);
+  return {d,st,c,tag,i,x:SX0+i*(SW+GAP)};
+});
+const arrows=STEPS.slice(1).map(()=>sv('line',{stroke:'rgba(247,243,236,.35)','stroke-width':2}));
+const heads=STEPS.slice(1).map(()=>sv('path',{fill:'rgba(247,243,236,.5)'}));
+// exception loop: from step 4 (idx4) back to step 2 (idx2), dashed above
+const exc=sv('path',{fill:'none',stroke:'#C9A46A','stroke-width':2,'stroke-dasharray':'8 8',opacity:0});
+const excLbl=el('lbl','Exception');set(excLbl,{color:'#C9A46A',fontSize:'20px'});
+// sources
+const src1=el('src','Interviews with the people who do the work');set(src1,{left:(W/2-560)+'px',top:'250px'});
+const src2=el('src','Records from the organization’s systems');set(src2,{left:(W/2+40)+'px',top:'250px'});
+const srcL1=sv('path',{fill:'none',stroke:'#C9A46A','stroke-width':2});
+const srcL2=sv('path',{fill:'none',stroke:'#C9A46A','stroke-width':2});
+// legend
+const legend=el('','');set(legend,{left:'0',width:'1920px',top:'700px',display:'flex',justifyContent:'center',gap:'28px'});
+['R','S','A','P'].forEach(k=>{const c=el('chip '+k,TAGTXT[k],legend);c.className='chip '+k;c.style.position='relative'});
+
+// ---------- scene F: systems ----------
+const sysLbl=el('lbl','Systems the organization already uses');set(sysLbl,{left:'0',width:'1920px',textAlign:'center',top:'560px'});
+const sysNames=['Accounting system','Customer records','Documents and email'];
+const sys=sysNames.map((n,i)=>{const d=el('sys',n);set(d,{left:(W/2-660+i*460-10)+'px',top:'612px'});return d});
+const sysLinks=kept.map(()=>sv('path',{fill:'none',stroke:'rgba(201,164,106,.7)','stroke-width':1.5,'stroke-dasharray':'4 6'}));
+const platform=sv('rect',{x:240,y:596,width:1440,height:128,rx:10,fill:'none',stroke:'rgba(247,243,236,.14)','stroke-width':1.5});
+
+// ---------- scene G: chart ----------
+const CX0=360,CX1=1560,CY0=250,CY1=680;
+const axis=sv('path',{d:`M${CX0} ${CY0} L${CX0} ${CY1} L${CX1} ${CY1}`,fill:'none',stroke:'rgba(247,243,236,.3)','stroke-width':2});
+const baseY=310;
+const baseLine=sv('line',{x1:CX0,y1:baseY,x2:CX0,y2:baseY,stroke:'#A9B2C3','stroke-width':2,'stroke-dasharray':'10 10'});
+const baseLbl=el('lbl','Starting measurement');set(baseLbl,{left:(CX1-260)+'px',top:(baseY-42)+'px',width:'260px',textAlign:'right'});
+const chartLbl=el('lbl','<b>Elapsed time per item</b>');set(chartLbl,{left:CX0+'px',top:(CY0-58)+'px'});
+const pts=[...Array(12)].map((_,i)=>{const x=lerp(CX0+40,CX1-20,i/11);const k=eo(clamp((i-1)/7));const y=lerp(baseY+10,600,k)+Math.sin(i*1.7)*6;return [x,y]});
+const line=sv('path',{fill:'none',stroke:'#C9A46A','stroke-width':4,'stroke-linejoin':'round','stroke-linecap':'round'});
+const dots=pts.map(([x,y])=>sv('circle',{cx:x,cy:y,r:7,fill:'#0E1B2E',stroke:'#C9A46A','stroke-width':3,opacity:0}));
+const mo1=el('lbl','Month 1');set(mo1,{left:(CX0+10)+'px',top:(CY1+16)+'px'});
+const mo12=el('lbl','Month 12');set(mo12,{left:(CX1-110)+'px',top:(CY1+16)+'px'});
+const ill2=el('ill','Illustrative');set(ill2,{left:(CX1-160)+'px',top:(CY0-52)+'px',width:'160px',textAlign:'right'});
+const chk=[3,6,9,11].map(i=>{const [x,y]=pts[i];return sv('line',{x1:x,y1:CY1,x2:x,y2:y,stroke:'rgba(201,164,106,.25)','stroke-width':1.5,opacity:0})});
+
+// ---------- end card ----------
+const wm=el('wm','<span class="f">F</span>irmcraft');
+const sub=el('sub','Advisory, managed AI services, and infrastructure');
+const url=el('url','FIRMCRAFT.AI');
+
+function op(e,v){if(e instanceof SVGElement)e.setAttribute('opacity',v);else e.style.opacity=v}
+
+function render(t){
+  // intro
+  const ti=1-ease(seg(t,4.2,5.0));op(title,ti);op(titleEy,ti);title.style.transform='none';
+  // progress line (from 14s to 60s)
+  const pv=win(t,13.8,60.4,.6);op(prog,pv);op(progLine,pv);op(progFill,pv);
+  let cur=-1; if(t>=14)cur=0; if(t>=25)cur=1; if(t>=45)cur=2; if(t>=53)cur=3;
+  progItems.forEach((p,i)=>{const on=(i===cur)||(cur===3&&i===4);p.style.color=on?'#F7F3EC':'#A9B2C3';p.style.opacity=on?1:.55});
+  const pf=[0,0.06,0.3,0.55,1][cur+1]||0; const pfx=cur<0?0:[0.08,0.32,0.56,1][cur];
+  progFill.setAttribute('x2',260+1400*lerp(0,1,pfx));
+  // captions
+  let shown=null;for(const c of CAPS){if(t>=c[0]-.2&&t<=c[1]+.8)shown=c}
+  if(shown){capSt.textContent=shown[2];capSt.style.display=shown[2]?'block':'none';capTx.textContent=shown[3];op(cap,win(t,shown[0],shown[1],.6));cap.style.transform=`translateY(${(1-ease(seg(t,shown[0],shown[0]+.8)))*10}px)`}else op(cap,0);
+
+  // ---- scene B (5-14) + E (38-45.4) bars
+  const bIn=ease(seg(t,5.4,7.6));
+  const bVis=Math.max(win(t,5.2,13.6,.6),win(t,38,44.6,.6));
+  barBg.setAttribute('width',BW*(t<30?bIn:1));op(barBg,bVis);
+  workSegs.forEach((s,i)=>op(s.r,bVis*ease(seg(t,7.8+i*.25,8.3+i*.25))*(t<30?1:1)));
+  op(barLblL,win(t,5.6,13.6,.6));
+  op(keyWork,win(t,9.4,13.6,.6));op(keyWait,win(t,10,13.6,.6));
+  // E
+  const eV=win(t,38.2,44.6,.6);op(barLblB,eV);op(barLblA,eV);op(ill,eV);
+  barAfter.setAttribute('width',BW*0.32*ease(seg(t,39.4,41.2)));op(barAfter,eV);
+  afterSegs.forEach((r,i)=>op(r,eV*ease(seg(t,40.6+i*.12,41+i*.12))));
+
+
+  // ---- scene C/D/F steps
+  const stepsVis=Math.max(win(t,15.4,37.4,.6),win(t,45.2,52.4,.6));
+  const collapse=ease(seg(t,32.6,34.6));
+  const lift=ease(seg(t,45.4,46.6)); // in F the flow sits higher
+  const flowY= t>44? lerp(SY,330,1):SY;
+  steps.forEach((s,i)=>{
+    const appear=ease(seg(t,15.6+i*.35,16.2+i*.35));
+    const ki=kept.indexOf(i);
+    let x=s.x, w=SW, o=appear*stepsVis;
+    if(s.tag==='R'){o*=1-collapse;}
+    if(ki>=0){x=lerp(s.x,SX2+ki*(SW2+GAP2),collapse);w=lerp(SW,SW2,collapse)}
+    const y=flowY+(1-appear)*12;
+    set(s.d,{left:x+'px',top:y+'px',width:w+'px',opacity:o});
+    // tags
+    const tg=ease(seg(t,26.4+i*.45,26.9+i*.45));
+    const chipO=tg*stepsVis*(s.tag==='R'?1-collapse:1)*(t>44?0:1);
+    set(s.c,{left:x+'px',top:(y+112)+'px',width:w+'px',opacity:chipO});
+    if(s.tag==='R'){s.st.style.transform=`scaleX(${ease(seg(t,26.6+i*.45,27.2+i*.45))})`;s.d.style.color=`rgba(247,243,236,${1-.5*tg})`}
+    else s.st.style.transform='scaleX(0)';
+    s.cx=x;s.cw=w;s.cy=y;s.co=o;
+  });
+  // arrows between consecutive visible steps
+  const vis=steps.filter(s=>s.co>0.02);
+  arrows.forEach((a,k)=>{op(a,0);op(heads[k],0)});
+  for(let k=0;k<vis.length-1;k++){const a=vis[k],b=vis[k+1];const x1=a.cx+a.cw+4,x2=b.cx-6,y=a.cy+48;const o=Math.min(a.co,b.co);
+    if(x2-x1<6)continue;arrows[k].setAttribute('x1',x1);arrows[k].setAttribute('x2',x2-6);arrows[k].setAttribute('y1',y);arrows[k].setAttribute('y2',y);op(arrows[k],o);
+    heads[k].setAttribute('d',`M${x2} ${y} l-10 -6 l0 12 z`);op(heads[k],o)}
+  // exception loop (idx 4 -> idx 2), shown in C
+  const eo2=win(t,20.5,24.6,.6)*1;const s4=steps[4],s2=steps[2];
+  const ex1=s4.cx+s4.cw/2, ex2=s2.cx+s2.cw/2, ey=s4.cy+96;
+  exc.setAttribute('d',`M${ex1} ${ey+4} C${ex1} ${ey+90}, ${ex2} ${ey+90}, ${ex2} ${ey+6}`);
+  const len=420;exc.setAttribute('stroke-dashoffset',0);op(exc,eo2);
+  set(excLbl,{left:((ex1+ex2)/2-50)+'px',top:(ey+70)+'px',opacity:eo2});
+  // sources
+  const sV=win(t,14.6,24.6,.6);op(src1,sV);op(src2,sV);
+  const d1=ease(seg(t,16.8,18.4));
+  srcL1.setAttribute('d',`M${W/2-300} 338 C${W/2-300} ${lerp(338,420,d1)}, ${W/2-300} 420, ${W/2-300} ${lerp(338,462,d1)}`);
+  srcL2.setAttribute('d',`M${W/2+300} 338 C${W/2+300} ${lerp(338,420,d1)}, ${W/2+300} 420, ${W/2+300} ${lerp(338,462,d1)}`);
+  op(srcL1,sV);op(srcL2,sV);
+  // legend in D
+  op(legend,win(t,26.2,32.4,.6));
+
+  // ---- scene F systems
+  const fV=win(t,45.6,52.4,.6);
+  op(sysLbl,fV);op(platform,fV);
+  sys.forEach((d,i)=>{const a=ease(seg(t,46.4+i*.3,47+i*.3));set(d,{opacity:fV*a,transform:`translateY(${(1-a)*14}px)`})});
+  kept.forEach((idx,k)=>{const s=steps[idx];const x=s.cx+s.cw/2;const target=sys[[0,0,1,1,0,2][k]];const tx=parseFloat(target.style.left)+210;
+    const a=ease(seg(t,47.6+k*.15,48.4+k*.15));
+    sysLinks[k].setAttribute('d',`M${x} ${s.cy+96} C${x} ${lerp(s.cy+96,560,a)}, ${tx} ${lerp(s.cy+96,560,a)}, ${tx} ${lerp(s.cy+96,612,a)}`);op(sysLinks[k],fV*a)});
+
+  // ---- scene G chart
+  const gV=win(t,53.2,60.2,.6);
+  op(axis,gV);op(chartLbl,gV);op(mo1,gV);op(mo12,gV);op(ill2,gV);
+  baseLine.setAttribute('x2',lerp(CX0,CX1,ease(seg(t,53.6,54.8))));op(baseLine,gV);op(baseLbl,gV*ease(seg(t,54.4,55)));
+  const lp=ease(seg(t,55,58.4));const n=1+lp*11;let d='';
+  for(let i=0;i<12;i++){if(i>n)break;const [x,y]=pts[i];d+=(i?'L':'M')+x+' '+y}
+  if(n<11){const i=Math.floor(n),f=n-i;const [x0,y0]=pts[i],[x1,y1]=pts[Math.min(11,i+1)];d+=`L${lerp(x0,x1,f)} ${lerp(y0,y1,f)}`}
+  line.setAttribute('d',d);op(line,gV);
+  dots.forEach((c,i)=>op(c,gV*(i<=n?1:0)));
+  [3,6,9,11].forEach((i,k)=>op(chk[k],gV*(i<=n?1:0)));
+
+  // ---- end card
+  const eV2=win(t,60.8,70,.9);op(wm,eV2);op(sub,win(t,61.6,70,.9));op(url,win(t,62.4,70,.9));
+  wm.style.transform=`translateY(${(1-ease(seg(t,60.8,62)))*12}px)`;
+}
+window.render=render;window.DUR=DUR;
+if(!location.hash.includes('static')){const t0=performance.now();(function loop(){render(((performance.now()-t0)/1000)%DUR);requestAnimationFrame(loop)})()}
+</script></body></html>

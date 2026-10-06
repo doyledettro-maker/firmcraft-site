@@ -246,3 +246,16 @@ curl -sSL https://firmcraft.ai | grep -oE 'hero-(1080|720)\.(mp4|webm)|hero-post
 curl -sSL https://firmcraft.ai | grep -oiE 'mid-market|asset-intensive|JetBrains' | sort -u        # expect none
 for f in hero-1080.mp4 hero-720.mp4 hero-poster.jpg; do printf '%-16s ' $f; curl -sSI https://firmcraft.ai/media/$f | grep -iE '^(HTTP|content-length)' | tr -d '\r' | tr '\n' ' '; echo; done
 ```
+
+---
+
+## Amendment — Hero grid (Oct 2026, approved by Doyle)
+
+The single hero loop is replaced by a grid of working scenes, so that the hero reads as cross-industry. Layout, overlay, controls, and reduced-motion behaviour are unchanged; only the media files change.
+
+- **Desktop:** a 4×2 grid with navy hairlines between tiles. Every tile rests on a still frame, plays about 4 seconds of its clip, then dissolves back. A new tile starts every 3 seconds, so no more than two move at once. 24-second seamless loop. A slight extra navy darkening on the left is baked in for text legibility.
+- **Tiles (top row, left to right):** a technician servicing a truck, a property viewing, a site review, a florist. **Bottom row:** a restaurant kitchen, two people reviewing documents, a warehouse, a leadership meeting.
+- **Phones (`hero-720.mp4`):** a 2×2 portrait version (technician, florist, site review, leadership meeting), one tile moving at a time.
+- **Poster:** all eight tiles at rest.
+- **Files:** `public/media/hero-1080.mp4`, `hero-1080.webm`, `hero-720.mp4`, `hero-poster.jpg`. Build script: `design/hero-grid/build.sh`. Credits: `public/media/CREDITS.md`.
+- Considered and declined: 8×2 and 8×4 grids (tiles too small to recognise; a large grid of people reads as a video call).

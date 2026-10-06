@@ -34,6 +34,11 @@ const nextConfig = {
         statusCode: 301,
       },
       {
+        source: '/software-as-an-asset',
+        destination: '/adaptable-software',
+        statusCode: 301,
+      },
+      {
         source: '/methodology',
         destination: '/how-we-work',
         statusCode: 301,

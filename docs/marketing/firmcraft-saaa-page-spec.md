@@ -126,3 +126,22 @@ for p in "" advisory how-we-work sovereignty for-small-business about; do
 curl -sSL https://firmcraft.ai/software-as-an-asset | grep -oiE 'SaaS|\$[0-9]|subscription tier|package' | sort -u   # expect none
 curl -sSL https://firmcraft.ai/how-we-work | grep -o 'no reasonable alternative'                                     # expect none
 ```
+
+---
+
+## Amendment — Renamed to Adaptable Software (Oct 2026, approved by Doyle)
+
+Doyle asked for the page name to emphasize that the software can keep changing with the business, and for the "Software as an Asset" term to move into the body.
+
+- **Path:** `/adaptable-software`. `/software-as-an-asset` redirects to it (301).
+- **`<title>`:** Adaptable Software — Firmcraft. **Meta description:** How Firmcraft builds software that the client owns and can adapt as its needs change, host where it chooses, and change without depending on Firmcraft.
+- **Eyebrow:** Software ownership (unchanged). **H1:** Adaptable Software. **Footer:** "Adaptable Software", same position. Cross-links on Advisory, How we work, and Sovereignty use the new name and path.
+- **Lede, first paragraph, last two sentences:** Firmcraft calls this arrangement Software as an Asset (SaaA). The client owns the software, and can operate it, host it, and change it as its needs change.
+- **New section, second, after "What the client receives":**
+
+  **Software that changes with the organization**
+
+  An organization's processes do not stay fixed. It adds products and services, changes suppliers, enters new markets, and revises how work is reviewed and approved. The software that supports those processes needs to change with them.
+
+  Software the client owns can be changed when the client needs it to change. Firmcraft builds it to be adapted: it is documented, tested, and structured so that a change can be made safely and quickly, whether by Firmcraft under its managed services, by the client's own staff, or by AI coding agents working under an engineer's direction. The software is expected to change over its working life, and it is designed and delivered on that basis.
+- **`llms.txt`:** `/adaptable-software — Adaptable Software: how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA).`

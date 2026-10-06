@@ -64,7 +64,7 @@ Doyle rejected three earlier registers before settling on this one. When in doub
 - **Never name Verosoft, or imply a current role anywhere else.** No "day job," and no open-ended date ranges. Firmcraft and SkillCalibrate must never appear in materials facing Verosoft. Don't name RSM externally.
 - **Never present "CPA" as a credential or badge.** Doyle passed the exam but holds no active licence. The approved wording is "passing the CPA examination."
 - Write Firmcraft's copy in its own words. When Doyle brings in outside ideas (articles, videos, other AI sessions), keep the substance and rewrite the delivery. Never quote or closely paraphrase the source.
-- **Exception Doyle approved:** the page name **"Software as an Asset (SaaA)"** is a deliberate play on "SaaS," and he wants it. The page body still states what Firmcraft provides without arguing against SaaS.
+- **Exception Doyle approved:** the term **"Software as an Asset (SaaA)"** is a deliberate play on "SaaS," and he wants it, named in the body of the Adaptable Software page (it was the page title until Oct 2026). The page still states what Firmcraft provides without arguing against SaaS.
 
 ## 5. Positioning (firmcraft.ai)
 
@@ -75,21 +75,21 @@ Doyle rejected three earlier registers before settling on this one. When in doub
   3. **Implementation:** built around the systems the client already relies on.
   4. **Training and evaluation:** with no lock-in to a single model provider.
   5. **Ongoing support:** results reported against the starting measurements.
-- **Software always accompanies an AI deployment.** AI needs integrations, data access, rules, and controls. That software is the client's property, under **Software as an Asset (SaaA)**. Code from Firmcraft's own library is handed over too, not licensed. The client can host it themselves or have Firmcraft operate it under managed services, and can change it without Firmcraft. In Doyle's words, domain experts should own the software that runs their business.
+- **Software always accompanies an AI deployment.** AI needs integrations, data access, rules, and controls. That software is the client's property, under **Software as an Asset (SaaA)**, and is built to be changed as the business changes. The page is titled **Adaptable Software**; SaaA is named in its body. Code from Firmcraft's own library is handed over too, not licensed. The client can host it themselves or have Firmcraft operate it under managed services, and can change it without Firmcraft. In Doyle's words, domain experts should own the software that runs their business.
 - **Data sovereignty by default:** client data stays in the client's environment unless there's a specific, agreed reason.
 - **The most defensible point:** one advisor who designs the process, understands the systems it runs on, and builds and operates the AI that supports it.
 - **Future, not on the site yet:** a library of solutions for particular industries, or for gaps between ERP and CRM systems. Don't mention it until it exists.
 
 ## 6. Current state: firmcraft.ai (live as of 6 Oct 2026)
 
-- **Pages:** `/` · `/advisory` · `/how-we-work` · `/for-small-business` · `/about` · `/contact` · `/sovereignty` (footer only) · `/software-as-an-asset` (footer only) · `/privacy` · `/terms`.
-  - Redirects: `/pricing`, `/services` → `/advisory`; `/operator` → `/for-small-business`; `/methodology` → `/how-we-work`.
+- **Pages:** `/` · `/advisory` · `/how-we-work` · `/for-small-business` · `/about` · `/contact` · `/sovereignty` (footer only) · `/adaptable-software` (footer only; formerly `/software-as-an-asset`) · `/privacy` · `/terms`.
+  - Redirects: `/pricing`, `/services` → `/advisory`; `/operator` → `/for-small-business`; `/methodology` → `/how-we-work`; `/software-as-an-asset` → `/adaptable-software`.
   - Main navigation: Advisory · How We Work · For Small Business · About · [Contact Firmcraft].
-  - Footer Practice column: Advisory · How We Work · Data Sovereignty · Software as an Asset · For Small Business.
+  - Footer Practice column: Advisory · How We Work · Data Sovereignty · Adaptable Software · For Small Business.
 - **Design system (redesign phase A, live):**
   - Colours: deep navy `#0E1B2E`, cream `#F7F3EC`, paper `#FFFDF9`, ink `#1B2333`, muted `#5B6475`, brass `#C9A46A` (on navy only), brass-ink `#8A6A33` (brass text on light backgrounds), hairline rules. No blue anywhere on marketing pages.
   - Type: Source Serif 4 headings via `var(--font-display)`, Geist body. No monospace on marketing pages.
-  - The homepage hero is a muted background video loop (people at work, Pexels footage, colour-graded) with a navy overlay and a pause control. It shows a still image under reduced motion or Save-Data. Fixed and confirmed working in Safari.
+  - The homepage hero is a muted 4×2 grid of working scenes (Pexels footage, colour-graded; a 2×2 version on phones) in which one or two tiles play at a time, with a navy overlay and a pause control. Build script: `design/hero-grid/build.sh`. It shows a still image under reduced motion or Save-Data. Fixed and confirmed working in Safari.
   - Restrained fade-up reveals, and nothing else that moves.
   - Credits for all media are in `public/media/CREDITS.md`.
 - **About:** Doyle's photo (`public/founder/doyle.jpg`) beside the verified bio.
@@ -125,7 +125,7 @@ In `firmcraft-site`, under `docs/marketing/` (Claudia is committing them there):
 | `firmcraft-positioning-brief.md` | Positioning rationale, service lines, voice reasoning |
 | `firmcraft-copy-spec.md` | All page copy. **Read the amendments at the end** ("Broaden the audience", "Process redesign method"); they replace earlier text. |
 | `firmcraft-redesign-spec.md` | Visual system, homepage, §4b How we work, §4c process video, §4d Small Business video, §5 phase B |
-| `firmcraft-saaa-page-spec.md` | Software as an Asset page, as built |
+| `firmcraft-saaa-page-spec.md` | Adaptable Software page (formerly Software as an Asset), as built; read the amendment at the end |
 | `firmcraft-founder-video.md` | Founder video script and filming guide |
 
 In `SkillCalibrate`, under `docs/marketing/`:

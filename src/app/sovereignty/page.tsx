@@ -28,7 +28,7 @@ const sections = [
       <>
         Ownership of software that Firmcraft builds for a client, including what is delivered and
         how the client can operate and change it independently, is described in{' '}
-        <Link href="/software-as-an-asset">Software as an Asset</Link>.
+        <Link href="/adaptable-software">Adaptable Software</Link>.
       </>,
       "This is not offered as a required component of every engagement. Where a client's circumstances call for a different configuration, that is what Firmcraft builds.",
     ],

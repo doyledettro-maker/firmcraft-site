@@ -2,13 +2,13 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
-import './software-as-an-asset.css'
+import './adaptable-software.css'
 
 export const metadata: Metadata = {
-  title: 'Software as an Asset — Firmcraft',
+  title: 'Adaptable Software — Firmcraft',
   description:
-    'How Firmcraft structures the software it builds for clients so that the client owns it, can host it where it chooses, and can change it without depending on Firmcraft.',
-  alternates: { canonical: '/software-as-an-asset' },
+    'How Firmcraft builds software that the client owns and can adapt as its needs change, host where it chooses, and change without depending on Firmcraft.',
+  alternates: { canonical: '/adaptable-software' },
 }
 
 const sections = [
@@ -17,6 +17,13 @@ const sections = [
     body: [
       "The result of the work is a functioning system together with everything required to operate, maintain, and extend it: the application source code, the infrastructure configuration that defines where and how it runs, the database and its schema, written documentation of the system's design and behavior, a test suite, a deployment pipeline, and a development environment that another engineering team could use immediately. Where artificial intelligence is part of the system, the client also receives the agent instructions and the evaluation framework that govern how those components behave.",
       'The system is built so that someone who did not build it can understand and modify it. Documentation, consistent naming, test coverage, and the structure of the code are treated as part of the work rather than as items to be completed afterwards.',
+    ],
+  },
+  {
+    title: 'Software that changes with the organization',
+    body: [
+      'An organization\'s processes do not stay fixed. It adds products and services, changes suppliers, enters new markets, and revises how work is reviewed and approved. The software that supports those processes needs to change with them.',
+      'Software the client owns can be changed when the client needs it to change. Firmcraft builds it to be adapted: it is documented, tested, and structured so that a change can be made safely and quickly, whether by Firmcraft under its managed services, by the client\'s own staff, or by AI coding agents working under an engineer\'s direction. The software is expected to change over its working life, and it is designed and delivered on that basis.',
     ],
   },
   {
@@ -57,7 +64,7 @@ const sections = [
   },
 ]
 
-export default function SoftwareAsAnAssetPage() {
+export default function AdaptableSoftwarePage() {
   return (
     <>
       <SiteHeader marketing />
@@ -65,7 +72,7 @@ export default function SoftwareAsAnAssetPage() {
         <section className="page-hero">
           <div className="wrap">
             <p className="eyebrow">Software ownership</p>
-            <h1>Software as an Asset</h1>
+            <h1>Adaptable Software</h1>
             <p className="lede">
               Deploying artificial intelligence in an organization always involves software built
               for that organization. An artificial intelligence system needs integrations with the
@@ -73,9 +80,9 @@ export default function SoftwareAsAnAssetPage() {
               it may do, and controls around its output. Every Firmcraft engagement therefore
               includes software built for the client, typically rules-based automation, artificial
               intelligence embedded in particular steps of a process, integrations, and dashboards
-              designed around how its people work. Firmcraft delivers that software as software as
-              an asset (SaaA). The client owns it, and can operate it, host it, and change it on
-              its own terms.
+              designed around how its people work. Firmcraft calls this arrangement Software as an
+              Asset (SaaA). The client owns the software, and can operate it, host it, and change
+              it as its needs change.
             </p>
             <p className="lede">
               The people who understand a business best are the people who run it. Firmcraft&apos;s

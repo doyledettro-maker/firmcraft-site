@@ -15,7 +15,7 @@ resell software and does not receive vendor margin.
 - [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, and infrastructure
 - [How We Work](https://firmcraft.ai/how-we-work): assessment, implementation, and ongoing support
 - [Data Sovereignty](https://firmcraft.ai/sovereignty): how client data is handled and where systems run
-- /software-as-an-asset — Software as an Asset (SaaA): how Firmcraft structures the software it builds so that the client owns it.
+- /adaptable-software — Adaptable Software: how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA).
 - [For Small Business](https://firmcraft.ai/for-small-business): managed artificial intelligence capability for smaller organizations
 
 ## Trust

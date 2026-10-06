@@ -12,12 +12,32 @@ const captions = [
   'Training and evaluation, and ongoing support. People are trained on their own work, and results are reported against the starting measurement.',
 ]
 
+const PROCESS_VIDEO = {
+  mp4: '/media/process-1080.mp4?v=2',
+  webm: '/media/process-1080.webm?v=2',
+  mobile: '/media/process-720.mp4?v=2',
+} as const
+
+function getPreferredProcessMp4() {
+  if (typeof window === 'undefined') return PROCESS_VIDEO.mp4
+  return window.matchMedia('(max-width: 768px)').matches ? PROCESS_VIDEO.mobile : PROCESS_VIDEO.mp4
+}
+
 export function ProcessVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [ended, setEnded] = useState(false)
   const [hasPlayed, setHasPlayed] = useState(false)
   const [paused, setPaused] = useState(true)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [mp4Source, setMp4Source] = useState<string>(PROCESS_VIDEO.mp4)
+
+  useEffect(() => {
+    setMp4Source(getPreferredProcessMp4())
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    const updateSource = () => setMp4Source(getPreferredProcessMp4())
+    mediaQuery.addEventListener('change', updateSource)
+    return () => mediaQuery.removeEventListener('change', updateSource)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
@@ -83,6 +103,17 @@ export function ProcessVideo() {
     })
   }
 
+  function handleFinalSourceError() {
+    const video = videoRef.current
+    if (!video) return
+    if (
+      video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE ||
+      video.error?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+    ) {
+      setPaused(true)
+    }
+  }
+
   return (
     <div className="process-video-block">
       <div className="process-video-frame">
@@ -101,9 +132,8 @@ export function ProcessVideo() {
             setPaused(true)
           }}
         >
-          <source src="/media/process-720.mp4?v=2" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/media/process-1080.webm?v=2" type="video/webm" />
-          <source src="/media/process-1080.mp4?v=2" type="video/mp4" />
+          <source src={mp4Source} type="video/mp4" />
+          <source src={PROCESS_VIDEO.webm} type="video/webm" onError={handleFinalSourceError} />
         </video>
 
         <div className="process-video-controls">

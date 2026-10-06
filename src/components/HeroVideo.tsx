@@ -9,18 +9,29 @@ const HERO = {
   mobile: '/media/hero-720.mp4',
 } as const
 
+function getPreferredHeroMp4() {
+  if (typeof window === 'undefined') return HERO.mp4
+  return window.matchMedia('(max-width: 768px)').matches ? HERO.mobile : HERO.mp4
+}
+
 export function HeroVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [paused, setPaused] = useState(false)
   const [posterOnly, setPosterOnly] = useState(false)
+  const [mp4Source, setMp4Source] = useState<string>(HERO.mp4)
 
   useEffect(() => {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    const compactViewport = window.matchMedia('(max-width: 768px)').matches
     const saveData = 'connection' in navigator
       ? Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData)
       : false
-    setPosterOnly(reduceMotion || saveData || compactViewport)
+    setPosterOnly(reduceMotion || saveData)
+    setMp4Source(getPreferredHeroMp4())
+
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    const updateSource = () => setMp4Source(getPreferredHeroMp4())
+    mediaQuery.addEventListener('change', updateSource)
+    return () => mediaQuery.removeEventListener('change', updateSource)
   }, [])
 
   useEffect(() => {
@@ -28,7 +39,18 @@ export function HeroVideo() {
     videoRef.current.load()
     videoRef.current.play().catch(() => setPaused(true))
     setPaused(false)
-  }, [posterOnly])
+  }, [mp4Source, posterOnly])
+
+  function handleFinalSourceError() {
+    const video = videoRef.current
+    if (!video) return
+    if (
+      video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE ||
+      video.error?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+    ) {
+      setPosterOnly(true)
+    }
+  }
 
   function togglePlayback() {
     const video = videoRef.current
@@ -52,12 +74,10 @@ export function HeroVideo() {
           loop
           playsInline
           preload="metadata"
-          onError={() => setPosterOnly(true)}
           aria-hidden="true"
         >
-          <source src={HERO.mobile} media="(max-width: 768px)" type="video/mp4" />
-          <source src={HERO.webm} type="video/webm" />
-          <source src={HERO.mp4} type="video/mp4" />
+          <source src={mp4Source} type="video/mp4" />
+          <source src={HERO.webm} type="video/webm" onError={handleFinalSourceError} />
         </video>
       )}
 

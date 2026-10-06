@@ -13,12 +13,32 @@ const captions = [
   'Names, addresses and figures are illustrative.',
 ]
 
+const SMB_VIDEO = {
+  mp4: '/media/smb-1080.mp4?v=2',
+  webm: '/media/smb-1080.webm?v=2',
+  mobile: '/media/smb-720.mp4?v=2',
+} as const
+
+function getPreferredSmbMp4() {
+  if (typeof window === 'undefined') return SMB_VIDEO.mp4
+  return window.matchMedia('(max-width: 768px)').matches ? SMB_VIDEO.mobile : SMB_VIDEO.mp4
+}
+
 export function SmallBusinessVideo() {
   const videoRef = useRef<HTMLVideoElement | null>(null)
   const [ended, setEnded] = useState(false)
   const [hasPlayed, setHasPlayed] = useState(false)
   const [paused, setPaused] = useState(true)
   const [reducedMotion, setReducedMotion] = useState(false)
+  const [mp4Source, setMp4Source] = useState<string>(SMB_VIDEO.mp4)
+
+  useEffect(() => {
+    setMp4Source(getPreferredSmbMp4())
+    const mediaQuery = window.matchMedia('(max-width: 768px)')
+    const updateSource = () => setMp4Source(getPreferredSmbMp4())
+    mediaQuery.addEventListener('change', updateSource)
+    return () => mediaQuery.removeEventListener('change', updateSource)
+  }, [])
 
   useEffect(() => {
     const video = videoRef.current
@@ -84,6 +104,17 @@ export function SmallBusinessVideo() {
     })
   }
 
+  function handleFinalSourceError() {
+    const video = videoRef.current
+    if (!video) return
+    if (
+      video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE ||
+      video.error?.code === MediaError.MEDIA_ERR_SRC_NOT_SUPPORTED
+    ) {
+      setPaused(true)
+    }
+  }
+
   return (
     <div className="process-video-block smb-video-block">
       <div
@@ -105,9 +136,8 @@ export function SmallBusinessVideo() {
             setPaused(true)
           }}
         >
-          <source src="/media/smb-720.mp4?v=2" media="(max-width: 768px)" type="video/mp4" />
-          <source src="/media/smb-1080.webm?v=2" type="video/webm" />
-          <source src="/media/smb-1080.mp4?v=2" type="video/mp4" />
+          <source src={mp4Source} type="video/mp4" />
+          <source src={SMB_VIDEO.webm} type="video/webm" onError={handleFinalSourceError} />
         </video>
 
         <div className="process-video-controls">

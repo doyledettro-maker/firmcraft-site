@@ -96,7 +96,7 @@ export default function AdvisoryPage() {
               </p>
               <p>
                 How Firmcraft structures ownership of the software it builds is described in{' '}
-                <Link href="/software-as-an-asset">Software as an Asset</Link>.
+                <Link href="/adaptable-software">Adaptable Software</Link>.
               </p>
             </div>
           </div>

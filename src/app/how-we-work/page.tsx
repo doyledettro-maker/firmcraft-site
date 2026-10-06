@@ -57,7 +57,7 @@ const sections = [
       'An organization does not need to consolidate its systems before this work begins. Agents can work across systems that hold inconsistent records, provided it is clear which system is authoritative for each item.',
       <>
         How ownership of that software is structured is described in{' '}
-        <Link href="/software-as-an-asset">Software as an Asset</Link>.
+        <Link href="/adaptable-software">Adaptable Software</Link>.
       </>,
     ],
   },

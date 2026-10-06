@@ -7,11 +7,16 @@ Pexels allows free use for commercial and noncommercial purposes. Attribution is
 
 ## Hero video
 
-The homepage hero video combines:
+The homepage hero is a 4×2 grid of still frames, each of which plays a few seconds of its clip in turn (desktop: `hero-1080.mp4`, `hero-1080.webm`; phones: a 2×2 version, `hero-720.mp4`). Build script: `design/hero-grid/build.sh`.
 
+- "Women Working in a Flower Shop" by Amina Filkins, Pexels video 5404697. Source: https://www.pexels.com/video/women-working-in-a-flower-shop-5404697/
+- "Men Looking at a Printed Chart" by Yan Krukau, Pexels video 7693477. Source: https://www.pexels.com/video/men-looking-at-a-printed-chart-7693477/
 - "People Working at the Office" by Pavel Danilyuk, Pexels video 7593288. Source: https://www.pexels.com/video/people-working-at-the-office-7593288/
-- "Businesspeople Looking at Documents" by Alena Darmel, Pexels video 8141713. Source: https://www.pexels.com/video/businesspeople-looking-at-documents-8141713/
-- "Man Working and Reading Documents Inside the Office" by Kampus Production, Pexels video 8460887. Source: https://www.pexels.com/video/man-working-and-reading-documents-inside-the-office-8460887/
+- "A Mechanic At Work" by cottonbro studio, Pexels video 7541838. Source: https://www.pexels.com/video/a-mechanic-at-work-7541838/
+- "Engineers in a Construction Site Having a Conversation" by Mikael Blomkvist, Pexels video 8964379. Source: https://www.pexels.com/video/engineers-in-a-construction-site-having-a-conversation-8964379/
+- "A Chef Cooking Food in the Kitchen" by Kampus Production, Pexels video 8626269. Source: https://www.pexels.com/video/a-chef-cooking-food-in-the-kitchen-8626269/
+- "Two Men Working In A Warehouse" by Tiger Lily, Pexels video 4293956. Source: https://www.pexels.com/video/man-working-warehouse-talking-4293956/
+- "A Real Estate Agent Showing a House to a Family" by MART PRODUCTION, Pexels video 7347880. Source: https://www.pexels.com/video/a-real-estate-agent-showing-a-house-to-a-family-7347880/
 
 ## Small business video
 

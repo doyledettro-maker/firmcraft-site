@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
@@ -22,8 +23,15 @@ const sections = [
   },
   {
     title: 'What clients own',
-    body:
-      "Firmcraft deploys an open-source foundation, licensed under Apache 2.0, when a self-hosted and client-owned configuration is the appropriate answer. Where that applies, the client owns the deployment. Firmcraft maintains it under the managed services relationship, but the client is not dependent on that relationship continuing in order to keep operating. This is not offered as a required component of every engagement. Where a client's circumstances call for a different configuration, that is what Firmcraft builds.",
+    body: [
+      'Firmcraft deploys an open-source foundation, licensed under Apache 2.0, when a self-hosted and client-owned configuration is the appropriate answer. Where that applies, the client owns the deployment. Firmcraft maintains it under the managed services relationship, but the client is not dependent on that relationship continuing in order to keep operating.',
+      <>
+        Ownership of software that Firmcraft builds for a client, including what is delivered and
+        how the client can operate and change it independently, is described in{' '}
+        <Link href="/software-as-an-asset">Software as an Asset</Link>.
+      </>,
+      "This is not offered as a required component of every engagement. Where a client's circumstances call for a different configuration, that is what Firmcraft builds.",
+    ],
   },
   {
     title: 'Commitments in writing',
@@ -53,7 +61,13 @@ export default function SovereigntyPage() {
             <div className="wrap">
               <div className="pkg-head">
                 <h2>{section.title}</h2>
-                <p>{section.body}</p>
+                {Array.isArray(section.body) ? (
+                  section.body.map((paragraph, paragraphIndex) => (
+                    <p key={paragraphIndex}>{paragraph}</p>
+                  ))
+                ) : (
+                  <p>{section.body}</p>
+                )}
               </div>
             </div>
           </section>

@@ -53,8 +53,12 @@ const sections = [
     id: 'implementation',
     title: 'Implementation',
     body: [
-      'Implementation follows the redesign. Firmcraft builds what was agreed inside the systems the organization already uses, and introduces new systems only where there is no reasonable alternative. Access, permissions, audit logging, and exception handling are treated as part of the build rather than as items to be addressed afterwards.',
+      'Implementation follows the redesign. Firmcraft builds what was agreed around the systems the organization already relies on, such as its financial and customer systems. That work always includes software built for the client, because artificial intelligence needs integrations, access to data, rules, and controls in order to do useful work. Typically this means rules-based automation, artificial intelligence embedded in particular steps, integrations, and dashboards. The client owns that software. Access, permissions, audit logging, and exception handling are treated as part of the build rather than as items to be addressed afterwards.',
       'An organization does not need to consolidate its systems before this work begins. Agents can work across systems that hold inconsistent records, provided it is clear which system is authoritative for each item.',
+      <>
+        How ownership of that software is structured is described in{' '}
+        <Link href="/software-as-an-asset">Software as an Asset</Link>.
+      </>,
     ],
   },
   {
@@ -118,8 +122,8 @@ export default function HowWeWorkPage() {
                   <h2>{section.title}</h2>
                 </div>
                 <div className="stage-copy">
-                  {section.body.map((paragraph) => (
-                    <p key={paragraph}>{paragraph}</p>
+                  {section.body.map((paragraph, paragraphIndex) => (
+                    <p key={paragraphIndex}>{paragraph}</p>
                   ))}
                   {'treatments' in section && section.treatments ? (
                     <ol className="fit-gap-questions">

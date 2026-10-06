@@ -11,6 +11,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'Advisory', href: '/advisory' },
       { label: 'How We Work', href: '/how-we-work' },
       { label: 'Data Sovereignty', href: '/sovereignty' },
+      { label: 'Software as an Asset', href: '/software-as-an-asset' },
       { label: 'For Small Business', href: '/for-small-business' },
     ],
   },

@@ -94,6 +94,10 @@ export default function AdvisoryPage() {
               <p>
                 Further detail is set out in <Link href="/sovereignty">Data Sovereignty</Link>.
               </p>
+              <p>
+                How Firmcraft structures ownership of the software it builds is described in{' '}
+                <Link href="/software-as-an-asset">Software as an Asset</Link>.
+              </p>
             </div>
           </div>
         </section>

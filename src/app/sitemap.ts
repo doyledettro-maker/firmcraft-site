@@ -10,6 +10,7 @@ const ROUTES: { path: string; priority: number; lastModified: string }[] = [
   { path: '/advisory', priority: 0.9, lastModified: '2026-09-19' },
   { path: '/how-we-work', priority: 0.9, lastModified: '2026-09-19' },
   { path: '/sovereignty', priority: 0.8, lastModified: '2026-09-19' },
+  { path: '/software-as-an-asset', priority: 0.8, lastModified: '2026-10-05' },
   { path: '/for-small-business', priority: 0.8, lastModified: '2026-09-19' },
   { path: '/about', priority: 0.8, lastModified: '2026-09-19' },
   { path: '/contact', priority: 0.6, lastModified: '2026-09-19' },

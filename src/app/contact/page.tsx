@@ -4,7 +4,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import { ContactForm } from '@/components/ContactForm'
 
 export const metadata: Metadata = {
-  title: 'Contact — Firmcraft',
+  title: 'Contact',
   alternates: { canonical: '/contact' },
   description:
     'Contact Firmcraft about artificial intelligence advisory, managed services, and infrastructure.',

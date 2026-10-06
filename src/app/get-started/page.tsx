@@ -13,7 +13,7 @@ import {
 export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
-  title: 'Get started · Firmcraft',
+  title: 'Get started',
   description:
     'Tell us about your business so we can scope your AI operator. Token-gated onboarding survey.',
 }

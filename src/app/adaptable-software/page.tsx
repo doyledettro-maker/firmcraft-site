@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/SiteFooter'
 import './adaptable-software.css'
 
 export const metadata: Metadata = {
-  title: 'Adaptable Software — Firmcraft',
+  title: 'Adaptable Software',
   description:
     'How Firmcraft builds software that the client owns and can adapt as its needs change, host where it chooses, and change without depending on Firmcraft.',
   alternates: { canonical: '/adaptable-software' },

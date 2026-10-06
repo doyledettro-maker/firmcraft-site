@@ -4,7 +4,7 @@ import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
 
 export const metadata: Metadata = {
-  title: 'Data Sovereignty — Firmcraft',
+  title: 'Data Sovereignty',
   description:
     "How Firmcraft handles client data, what runs inside a client's own environment, and how those decisions are made.",
   alternates: { canonical: '/sovereignty' },

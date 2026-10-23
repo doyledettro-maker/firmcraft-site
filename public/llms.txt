@@ -8,22 +8,26 @@
 
 Firmcraft works with organizations where the owner, the chief executive, or
 senior leadership drives the technology agenda, from owner-led businesses to the
-executive teams of larger enterprises. The practice is independent: it does not
-resell software and does not receive vendor margin.
+executive teams of larger enterprises. It also works with consulting, ERP
+implementation, accounting, and advisory firms that deliver artificial
+intelligence to their own clients, through joint delivery, subcontracted
+delivery, or referral. The practice is independent: it does not resell software
+and does not receive vendor margin.
 
 ## Practice
 - [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, and infrastructure
-- [How We Work](https://firmcraft.ai/how-we-work): assessment, implementation, and ongoing support
+- [How We Work](https://firmcraft.ai/how-we-work): discovery, process redesign, implementation, training and evaluation, and ongoing support
 - [Data Sovereignty](https://firmcraft.ai/sovereignty): how client data is handled and where systems run
-- /adaptable-software — Adaptable Software: how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA).
+- [Adaptable Software](https://firmcraft.ai/adaptable-software): how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA)
 - [For Small Business](https://firmcraft.ai/for-small-business): managed artificial intelligence capability for smaller organizations
+- [Partner Firms](https://firmcraft.ai/partners): how Firmcraft works with consulting, ERP implementation, accounting, and advisory firms to deliver artificial intelligence to their clients
 
 ## Trust
 - [About](https://firmcraft.ai/about): founder background and operating principles
 
 ## Contact
 - Email: hello@firmcraft.ai
-- [Contact / book a call](https://firmcraft.ai/contact)
+- [Contact](https://firmcraft.ai/contact)
 
 ## Optional
 - [Support](https://firmcraft.ai/support)

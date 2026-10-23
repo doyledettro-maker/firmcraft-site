@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import { REFERRAL_OPTIONS, ON_BEHALF_OPTIONS } from '@/lib/lead-options'
 
 type FormState = {
   name: string
@@ -8,6 +9,8 @@ type FormState = {
   company: string
   phone: string
   message: string
+  referral: string
+  onBehalf: string
 }
 
 type Status = 'idle' | 'submitting' | 'success' | 'error'
@@ -18,6 +21,8 @@ const initialForm: FormState = {
   company: '',
   phone: '',
   message: '',
+  referral: '',
+  onBehalf: '',
 }
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
@@ -173,6 +178,41 @@ export function ContactForm({
           placeholder="Describe the organization, the systems in place, and the problem Firmcraft should understand."
         />
       </Field>
+
+      <div className="grid sm:grid-cols-2 gap-6">
+        <Field label="How did you hear about Firmcraft?" htmlFor="referral" optional>
+          <select
+            id="referral"
+            name="referral"
+            value={form.referral}
+            onChange={(e) => update('referral', e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select one</option>
+            {REFERRAL_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field label="I am writing on behalf of" htmlFor="onBehalf" optional>
+          <select
+            id="onBehalf"
+            name="onBehalf"
+            value={form.onBehalf}
+            onChange={(e) => update('onBehalf', e.target.value)}
+            className={inputClass}
+          >
+            <option value="">Select one</option>
+            {ON_BEHALF_OPTIONS.map((option) => (
+              <option key={option} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </Field>
+      </div>
 
       {status === 'error' && errorMsg && (
         <div

@@ -13,6 +13,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'Data Sovereignty', href: '/sovereignty' },
       { label: 'Adaptable Software', href: '/adaptable-software' },
       { label: 'For Small Business', href: '/for-small-business' },
+      { label: 'Partner Firms', href: '/partners' },
     ],
   },
   {

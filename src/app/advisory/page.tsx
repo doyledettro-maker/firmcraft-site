@@ -2,6 +2,32 @@ import type { Metadata } from 'next'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { serviceJsonLd } from '@/lib/structured-data'
+
+const SERVICES = [
+  serviceJsonLd({
+    name: 'AI advisory',
+    serviceType: 'Artificial intelligence and technology strategy advisory',
+    url: '/advisory',
+    description:
+      'An assessment of what artificial intelligence and related systems an organization runs, what they cost and produce, and where they create exposure, leading to a roadmap an executive team can fund.',
+  }),
+  serviceJsonLd({
+    name: 'Managed AI services',
+    serviceType: 'Managed artificial intelligence operations',
+    url: '/advisory',
+    description:
+      "Ongoing operation of a client's artificial intelligence capability: monitoring and evaluation, tuning, cost management, and replacement of components as better options become available.",
+  }),
+  serviceJsonLd({
+    name: 'AI infrastructure',
+    serviceType: 'Artificial intelligence infrastructure and data sovereignty',
+    url: '/advisory',
+    description:
+      "Design and operation of where artificial intelligence systems run and where data resides, with client data kept in the client's own environment by default.",
+  }),
+]
 
 export const metadata: Metadata = {
   title: 'Advisory Services',
@@ -14,6 +40,9 @@ export default function AdvisoryPage() {
   return (
     <>
       <SiteHeader current="advisory" />
+      {SERVICES.map((service) => (
+        <JsonLd key={service.name} data={service} />
+      ))}
       <main className="marketing-inner">
         <section className="page-hero">
           <div className="wrap">
@@ -111,10 +140,16 @@ export default function AdvisoryPage() {
                 deliberate constraint on the business model rather than a statement of preference.
               </p>
               <p>
-                The practical consequence is that recommendations are not shaped by a partner
+                The practical consequence is that recommendations are not shaped by a vendor
                 relationship. Where the appropriate answer is a system the client already owns, a
                 change to process rather than technology, or no action at all, that is what
                 Firmcraft recommends.
+              </p>
+              <p>
+                Firmcraft also works with consulting, ERP implementation, and accounting firms that
+                deliver artificial intelligence to their own clients. How those engagements are
+                structured is described in{' '}
+                <Link href="/partners">Working with consulting and advisory firms</Link>.
               </p>
             </div>
           </div>

@@ -1,5 +1,11 @@
 import { NextResponse } from 'next/server'
-import { saveLead, sendLeadEmail, isValidEmail } from '@/lib/leads'
+import {
+  saveLead,
+  sendLeadEmail,
+  isValidEmail,
+  REFERRAL_OPTIONS,
+  ON_BEHALF_OPTIONS,
+} from '@/lib/leads'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -11,6 +17,13 @@ type Body = {
   phone?: unknown
   message?: unknown
   source?: unknown
+  referral?: unknown
+  onBehalf?: unknown
+}
+
+/** Returns the value only if it is one of the allowed options. */
+function pick(v: unknown, allowed: readonly string[]): string | null {
+  return typeof v === 'string' && allowed.includes(v) ? v : null
 }
 
 function asString(v: unknown): string {
@@ -31,6 +44,8 @@ export async function POST(req: Request) {
   const phone = asString(body.phone).trim()
   const message = asString(body.message).trim()
   const source = asString(body.source).trim() || 'contact'
+  const referral = pick(body.referral, REFERRAL_OPTIONS)
+  const onBehalf = pick(body.onBehalf, ON_BEHALF_OPTIONS)
 
   if (!name) {
     return NextResponse.json({ error: 'Please enter your name.' }, { status: 400 })
@@ -41,7 +56,7 @@ export async function POST(req: Request) {
 
   let lead
   try {
-    lead = await saveLead({ name, email, company, phone, message, source })
+    lead = await saveLead({ name, email, company, phone, message, source, referral, onBehalf })
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'Unknown error'
     console.error('[leads] save failed:', msg)

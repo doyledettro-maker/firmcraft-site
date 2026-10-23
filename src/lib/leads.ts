@@ -13,6 +13,8 @@ export type LeadStatus = (typeof LEAD_STATUSES)[number]
 export const LEAD_SEGMENTS = ['small', 'midmarket', 'pe'] as const
 export type LeadSegment = (typeof LEAD_SEGMENTS)[number]
 
+export { REFERRAL_OPTIONS, ON_BEHALF_OPTIONS } from './lead-options'
+
 export type LeadInput = {
   name: string
   email: string
@@ -20,6 +22,10 @@ export type LeadInput = {
   phone?: string | null
   message?: string | null
   source?: string | null
+  /** Self-reported discovery source; stored in notes (no dedicated column yet). */
+  referral?: string | null
+  /** Whether the inquiry is for the sender's organization or a client of their firm. */
+  onBehalf?: string | null
 }
 
 export type Lead = LeadInput & {
@@ -62,6 +68,14 @@ export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
+/** Builds the initial notes line from the optional self-reported fields. */
+function leadNotes(input: LeadInput): string | null {
+  const lines: string[] = []
+  if (input.referral) lines.push(`Heard about Firmcraft: ${input.referral}`)
+  if (input.onBehalf) lines.push(`Writing on behalf of: ${input.onBehalf}`)
+  return lines.length ? lines.join('\n') : null
+}
+
 export async function saveLead(input: LeadInput): Promise<Lead> {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured — cannot save lead.')
@@ -75,6 +89,7 @@ export async function saveLead(input: LeadInput): Promise<Lead> {
     message: input.message?.trim() || null,
     source: input.source?.trim() || null,
     segment: guessSegment(input.company),
+    notes: leadNotes(input),
   }
   const { data, error } = await db
     .from('inbound_leads')
@@ -138,6 +153,7 @@ function buildHtml(lead: Lead): string {
         ${detailRow('Company', lead.company)}
         ${detailRow('Phone', lead.phone)}
         ${detailRow('Source', lead.source)}
+        ${detailRow('Notes', lead.notes)}
       </table>
       ${messageBlock}
       <p style="margin:22px 0 0;font-size:12px;color:#94A3B8;">

@@ -25,19 +25,7 @@ export const ORG_JSONLD = {
     addressRegion: 'IL',
     addressCountry: 'US',
   },
-  areaServed: [
-    {
-      '@type': 'City',
-      name: 'Springfield',
-      containedInPlace: { '@type': 'State', name: 'Illinois' },
-    },
-    {
-      '@type': 'City',
-      name: 'Houston',
-      containedInPlace: { '@type': 'State', name: 'Texas' },
-    },
-    { '@type': 'Country', name: 'United States' },
-  ],
+  areaServed: 'Worldwide',
   knowsAbout: [
     'AI advisory',
     'managed AI services',
@@ -45,6 +33,7 @@ export const ORG_JSONLD = {
     'ERP integration',
     'ERP implementation',
     'workflow automation',
+    'AI implementation for consulting firms',
   ],
   sameAs: [
     'https://www.linkedin.com/company/firmcraft-ai/',
@@ -68,7 +57,7 @@ export function serviceJsonLd(opts: {
     url: `${BASE}${opts.url}`,
     serviceType: opts.serviceType,
     provider: { '@id': ORG_ID },
-    areaServed: opts.areaServed ?? 'United States',
+    areaServed: opts.areaServed ?? 'Worldwide',
     ...(opts.offers
       ? {
           offers: opts.offers.map((o) => ({

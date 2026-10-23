@@ -57,7 +57,9 @@ const sections = [
       'An organization does not need to consolidate its systems before this work begins. Agents can work across systems that hold inconsistent records, provided it is clear which system is authoritative for each item.',
       <>
         How ownership of that software is structured is described in{' '}
-        <Link href="/adaptable-software">Adaptable Software</Link>.
+        <Link href="/adaptable-software">Adaptable Software</Link>. Where a consulting or
+        advisory firm leads the engagement, Firmcraft follows the same method; see{' '}
+        <Link href="/partners">how Firmcraft works with partner firms</Link>.
       </>,
     ],
   },

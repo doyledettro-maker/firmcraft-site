@@ -26,7 +26,7 @@ const principles = [
   {
     title: 'Independence',
     body:
-      'Firmcraft does not resell software and does not take vendor margin. Recommendations are not shaped by partner relationships.',
+      'Firmcraft does not resell software and does not take vendor margin. Recommendations are not shaped by vendor relationships.',
   },
   {
     title: 'Continuity of engagement',

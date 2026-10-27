@@ -15,10 +15,11 @@ delivery, or referral. The practice is independent: it does not resell software
 and does not receive vendor margin.
 
 ## Practice
-- [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, and infrastructure
+- [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, infrastructure, and commissioned software
 - [How We Work](https://firmcraft.ai/how-we-work): discovery, process redesign, implementation, training and evaluation, and ongoing support
 - [Data Sovereignty](https://firmcraft.ai/sovereignty): how client data is handled and where systems run
 - [Adaptable Software](https://firmcraft.ai/adaptable-software): how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA)
+- [Commissioned Software](https://firmcraft.ai/commissioned-software): systems commonly obtained by subscription, built to the client's specification and transferred to the client to host, own, and change
 - [For Small Business](https://firmcraft.ai/for-small-business): managed artificial intelligence capability for smaller organizations
 - [Partner Firms](https://firmcraft.ai/partners): how Firmcraft works with consulting, ERP implementation, accounting, and advisory firms to deliver artificial intelligence to their clients
 

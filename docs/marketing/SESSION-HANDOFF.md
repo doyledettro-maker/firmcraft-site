@@ -58,9 +58,9 @@ Doyle rejected three earlier registers before settling on this one. When in doub
 - No em-dash rhythm, wit, edge, swagger, or sensory metaphors.
 - No jokes at a prospect's expense, and no self-congratulatory asides ("That answer alone pays for…").
 - **No "car salesman" language:** no urgency, no badges ("Most popular"), no offer graphics, no repeated arrow calls to action. A free first conversation is fine. State it once, plainly: "An initial conversation carries no cost and no obligation."
-- **No pricing anywhere, and no packages.** No tiers, named bundles, durations, or fee structures. Firmcraft has **service lines** (Advisory, Managed AI services, Infrastructure). Implementation connects all three and is never sold as a separate line.
+- **No pricing anywhere, and no packages.** No tiers, named bundles, durations, or fee structures. Firmcraft has **service lines** (Advisory, Managed AI services, Infrastructure, and, since Oct 2026, Commissioned software). Implementation connects them and is never sold as a separate line; Commissioned software is the one exception Doyle approved, because the deliverable is a system the client owns.
 - **No product or vendor names** on the site. Use categories ("ERP", "a hosted model", "an open-source foundation").
-- **No target industry or company-size band.** Never say "mid-market," "asset-intensive," or "operations-heavy," or give headcount ranges. Describe clients as "business owners and executive teams" or "organizations."
+- **No target industry or company-size band.** Never say "mid-market," "asset-intensive," or "operations-heavy," or give headcount ranges. Describe clients as "business owners and executive teams" or "organizations." Exception Doyle approved (Oct 2026): the Commissioned Software page may address "public bodies", because ownership, code-sharing, and accessibility obligations apply to them specifically.
 - **Never name Verosoft, or imply a current role anywhere else.** No "day job," and no open-ended date ranges. Firmcraft and SkillCalibrate must never appear in materials facing Verosoft. Don't name RSM externally.
 - **Never present "CPA" as a credential or badge.** Doyle passed the exam but holds no active licence. The approved wording is "passing the CPA examination."
 - Write Firmcraft's copy in its own words. When Doyle brings in outside ideas (articles, videos, other AI sessions), keep the substance and rewrite the delivery. Never quote or closely paraphrase the source.
@@ -82,10 +82,10 @@ Doyle rejected three earlier registers before settling on this one. When in doub
 
 ## 6. Current state: firmcraft.ai (live as of 6 Oct 2026)
 
-- **Pages:** `/` · `/advisory` · `/how-we-work` · `/for-small-business` · `/about` · `/contact` · `/sovereignty` (footer only) · `/adaptable-software` (footer only; formerly `/software-as-an-asset`) · `/privacy` · `/terms`.
+- **Pages:** `/` · `/advisory` · `/how-we-work` · `/for-small-business` · `/about` · `/contact` · `/sovereignty` (footer only) · `/adaptable-software` (footer only; formerly `/software-as-an-asset`) · `/commissioned-software` (footer only) · `/partners` (footer only) · `/privacy` · `/terms`.
   - Redirects: `/pricing`, `/services` → `/advisory`; `/operator` → `/for-small-business`; `/methodology` → `/how-we-work`; `/software-as-an-asset` → `/adaptable-software`.
   - Main navigation: Advisory · How We Work · For Small Business · About · [Contact Firmcraft].
-  - Footer Practice column: Advisory · How We Work · Data Sovereignty · Adaptable Software · For Small Business.
+  - Footer Practice column: Advisory · How We Work · Data Sovereignty · Adaptable Software · Commissioned Software · For Small Business · Partner Firms.
 - **Design system (redesign phase A, live):**
   - Colours: deep navy `#0E1B2E`, cream `#F7F3EC`, paper `#FFFDF9`, ink `#1B2333`, muted `#5B6475`, brass `#C9A46A` (on navy only), brass-ink `#8A6A33` (brass text on light backgrounds), hairline rules. No blue anywhere on marketing pages.
   - Type: Source Serif 4 headings via `var(--font-display)`, Geist body. No monospace on marketing pages.
@@ -125,6 +125,7 @@ In `firmcraft-site`, under `docs/marketing/` (Claudia is committing them there):
 | `firmcraft-positioning-brief.md` | Positioning rationale, service lines, voice reasoning |
 | `firmcraft-copy-spec.md` | All page copy. **Read the amendments at the end** ("Broaden the audience", "Process redesign method"); they replace earlier text. |
 | `firmcraft-redesign-spec.md` | Visual system, homepage, §4b How we work, §4c process video, §4d Small Business video, §5 phase B |
+| `firmcraft-commissioned-software-spec.md` | Commissioned Software service line and page, as built, with the research behind it |
 | `firmcraft-saaa-page-spec.md` | Adaptable Software page (formerly Software as an Asset), as built; read the amendment at the end |
 | `firmcraft-founder-video.md` | Founder video script and filming guide |
 

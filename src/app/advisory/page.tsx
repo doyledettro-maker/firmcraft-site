@@ -27,12 +27,19 @@ const SERVICES = [
     description:
       "Design and operation of where artificial intelligence systems run and where data resides, with client data kept in the client's own environment by default.",
   }),
+  serviceJsonLd({
+    name: 'Commissioned software',
+    serviceType: 'Custom software development with transfer of ownership to the client',
+    url: '/commissioned-software',
+    description:
+      'Systems commonly obtained by subscription, built to the client’s specification and transferred to the client with source code, documentation, and agent instructions, so the client can host and change them independently.',
+  }),
 ]
 
 export const metadata: Metadata = {
   title: 'Advisory Services',
   description:
-    'Advisory, managed AI services, and infrastructure for companies bringing artificial intelligence into finance and operations.',
+    'Advisory, managed AI services, infrastructure, and commissioned software for organizations bringing artificial intelligence into their operations.',
   alternates: { canonical: '/advisory' },
 }
 
@@ -49,8 +56,9 @@ export default function AdvisoryPage() {
             <h1>Advisory</h1>
             <p className="lede">
               Firmcraft is an advisory practice. The firm offers managed artificial intelligence
-              services and the infrastructure that supports them, and it advises on the decisions
-              that determine whether either is worth undertaking.
+              services, the infrastructure that supports them, and software built for clients to
+              own, and it advises on the decisions that determine whether any of them is worth
+              undertaking.
             </p>
           </div>
         </section>
@@ -132,6 +140,28 @@ export default function AdvisoryPage() {
         </section>
 
         <section className="sec surface-2">
+          <div className="wrap">
+            <div className="pkg-head">
+              <h2>Commissioned software</h2>
+              <p>
+                Many organizations obtain by subscription the systems that support one particular
+                process, such as permitting and licensing, case management, or grants
+                administration. Firmcraft builds systems of this kind to the client&apos;s
+                specification and transfers them to the client, together with the source code,
+                documentation, and agent instructions needed to change them with the client&apos;s
+                own staff or AI coding tools.
+              </p>
+              <p>
+                Before any work is commissioned, Firmcraft compares the expected cost of the new
+                system over its working life with the cost of the subscription it would replace.
+                Further detail is set out in{' '}
+                <Link href="/commissioned-software">Commissioned Software</Link>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="sec">
           <div className="wrap">
             <div className="pkg-head">
               <h2>Independence</h2>

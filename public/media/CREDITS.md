@@ -33,6 +33,7 @@ The For Small Business video combines these Pexels clips:
 - Advisory: "A Group of People Sitting at the Table at a Business Meeting" by Edmond Dantès, Pexels photo 4342497. Source: https://www.pexels.com/photo/a-group-of-people-sitting-at-the-table-at-a-business-meeting-4342497/
 - Managed AI services: "A Close-Up Shot of People Reviewing Documents" by Mikhail Nilov, Pexels photo 8730981. Source: https://www.pexels.com/photo/a-close-up-shot-of-people-reviewing-documents-8730981/
 - Infrastructure: "Interior of a Modern Office Building", Pexels photo 15465916. Source: https://www.pexels.com/photo/interior-of-a-modern-office-building-15465916/
+- Commissioned software: "People Planning Using a White Board on a Table" by Micah Eleazar, Pexels photo 10499058. Source: https://www.pexels.com/photo/people-planning-using-a-white-board-on-a-table-10499058/
 
 ## Owned media
 

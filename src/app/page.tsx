@@ -41,6 +41,15 @@ const serviceLines = [
     body:
       "The technical foundation beneath both, with data sovereignty as the default position. Determining where client data resides, what runs inside the client's own environment, and what may reasonably be sent elsewhere.",
   },
+  {
+    eyebrow: 'Commissioned software',
+    title: 'Commissioned software',
+    image: '/media/service-commissioned.jpg',
+    alt: 'Colleagues around a table sketching the layout of a system on large sheets of paper.',
+    href: '/commissioned-software',
+    body:
+      'Building systems that organizations commonly obtain by subscription, to the client\'s specification, and transferring them to the client to host and own, together with the source code and documentation needed to change them with its own staff or AI coding tools.',
+  },
 ]
 
 const distinctions = [
@@ -161,9 +170,9 @@ export default function HomePage() {
                 <h2>What Firmcraft does</h2>
               </div>
               <p>
-                Implementation runs through all three areas below. Firmcraft builds what the advice
-                calls for, integrates it with the systems already in place, and trains the people
-                who will use it.
+                Implementation runs through each of the areas below. Firmcraft builds what the
+                advice calls for, integrates it with the systems already in place, and trains the
+                people who will use it.
               </p>
             </div>
             <div className="service-grid">
@@ -174,7 +183,7 @@ export default function HomePage() {
                     alt={line.alt}
                     width={1200}
                     height={900}
-                    sizes="(min-width: 980px) 31vw, 100vw"
+                    sizes="(min-width: 980px) 46vw, 100vw"
                     unoptimized
                   />
                   <div className="service-body">

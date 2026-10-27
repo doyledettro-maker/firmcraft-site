@@ -40,6 +40,10 @@ const sections = [
     body: [
       "Many organizations pay for subscription software of which they use a small part, and adjust their processes to fit what that software was designed to do. Where a workflow can be handled by software built for it, working alongside the organization's existing financial and customer systems, the result is often simpler for staff to use and less expensive to run. Firmcraft makes that comparison during the process redesign and recommends a subscription product where it is the better answer.",
       'The larger cost of custom software has historically been maintaining and changing it over time. Organizations often found that they could not change a custom system without returning to the original builder, because no one else understood it well enough to work on it safely. AI coding agents, working under the direction of an engineer, can now perform much of that work on code that is well structured, documented, and tested. Firmcraft builds with that in mind and delivers the documentation and agent instructions that make it possible.',
+      <>
+        Where an organization wants to replace a subscription system with one it owns, that work is
+        described in <Link href="/commissioned-software">Commissioned Software</Link>.
+      </>,
     ],
   },
   {

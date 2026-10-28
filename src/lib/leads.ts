@@ -22,9 +22,9 @@ export type LeadInput = {
   phone?: string | null
   message?: string | null
   source?: string | null
-  /** Self-reported discovery source; stored in notes (no dedicated column yet). */
+  /** Self-reported discovery source (column referral_source). */
   referral?: string | null
-  /** Whether the inquiry is for the sender's organization or a client of their firm. */
+  /** Whether the inquiry is for the sender's organization or a client of their firm (column inquiry_for). */
   onBehalf?: string | null
 }
 
@@ -68,14 +68,6 @@ export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
 }
 
-/** Builds the initial notes line from the optional self-reported fields. */
-function leadNotes(input: LeadInput): string | null {
-  const lines: string[] = []
-  if (input.referral) lines.push(`Heard about Firmcraft: ${input.referral}`)
-  if (input.onBehalf) lines.push(`Writing on behalf of: ${input.onBehalf}`)
-  return lines.length ? lines.join('\n') : null
-}
-
 export async function saveLead(input: LeadInput): Promise<Lead> {
   if (!isSupabaseConfigured()) {
     throw new Error('Supabase not configured — cannot save lead.')
@@ -89,7 +81,8 @@ export async function saveLead(input: LeadInput): Promise<Lead> {
     message: input.message?.trim() || null,
     source: input.source?.trim() || null,
     segment: guessSegment(input.company),
-    notes: leadNotes(input),
+    referral_source: input.referral?.trim() || null,
+    inquiry_for: input.onBehalf?.trim() || null,
   }
   const { data, error } = await db
     .from('inbound_leads')
@@ -105,6 +98,8 @@ export async function saveLead(input: LeadInput): Promise<Lead> {
     phone: data.phone,
     message: data.message,
     source: data.source,
+    referral: data.referral_source,
+    onBehalf: data.inquiry_for,
     status: data.status,
     segment: data.segment,
     notes: data.notes,
@@ -153,7 +148,8 @@ function buildHtml(lead: Lead): string {
         ${detailRow('Company', lead.company)}
         ${detailRow('Phone', lead.phone)}
         ${detailRow('Source', lead.source)}
-        ${detailRow('Notes', lead.notes)}
+        ${detailRow('Heard about Firmcraft', lead.referral)}
+        ${detailRow('Writing on behalf of', lead.onBehalf)}
       </table>
       ${messageBlock}
       <p style="margin:22px 0 0;font-size:12px;color:#94A3B8;">

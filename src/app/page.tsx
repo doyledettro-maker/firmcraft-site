@@ -28,9 +28,9 @@ const serviceLines = [
     title: 'Managed AI services',
     image: '/media/service-managed.jpg',
     alt: 'Close view of people reviewing documents and figures at a work table.',
-    href: '/advisory',
+    href: '/managed-ai-services',
     body:
-      "Operating the resulting capability over time. Monitoring, evaluation, tuning, retiring what has become obsolete, and introducing what has genuinely improved. The objective is that a client's capability keeps pace with the field rather than freezing at the point of implementation.",
+      "Operating the resulting capability over time, across the models it uses, the harness that connects them to the organization's systems, and the context it works from. The objective is that a client's capability keeps pace with the field rather than freezing at the point of implementation.",
   },
   {
     eyebrow: 'Infrastructure',

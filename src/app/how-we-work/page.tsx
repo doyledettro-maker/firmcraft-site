@@ -83,7 +83,7 @@ const sections = [
         three parts of a deployment that need support over time: the models it uses, the harness
         that connects them to the organization&apos;s systems, and the context the system works
         from. Each is described under{' '}
-        <Link href="/advisory#managed-ai-services">Managed AI services</Link>.
+        <Link href="/managed-ai-services">Managed AI services</Link>.
       </>,
     ],
   },

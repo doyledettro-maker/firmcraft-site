@@ -10,6 +10,7 @@ const COLUMNS: FooterColumn[] = [
     links: [
       { label: 'Advisory', href: '/advisory' },
       { label: 'How We Work', href: '/how-we-work' },
+      { label: 'Managed AI Services', href: '/managed-ai-services' },
       { label: 'Data Sovereignty', href: '/sovereignty' },
       { label: 'Adaptable Software', href: '/adaptable-software' },
       { label: 'Commissioned Software', href: '/commissioned-software' },

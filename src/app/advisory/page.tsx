@@ -16,7 +16,7 @@ const SERVICES = [
   serviceJsonLd({
     name: 'Managed AI services',
     serviceType: 'Managed artificial intelligence operations',
-    url: '/advisory',
+    url: '/managed-ai-services',
     description:
       "Ongoing support of a client's artificial intelligence capability across its three parts: the models it uses, the harness that connects them to the client's systems, and the context it works from, with monitoring, evaluation, and cost management.",
   }),
@@ -136,7 +136,8 @@ export default function AdvisoryPage() {
                 Monitoring, evaluation, and cost management apply across all three, and results
                 are reported against the measurements taken before the work began. Clients retain
                 a single point of accountability for the whole of their artificial intelligence
-                estate rather than managing a collection of vendors.
+                estate rather than managing a collection of vendors. Each part is described in
+                more detail in <Link href="/managed-ai-services">Managed AI services</Link>.
               </p>
               <p>
                 This includes operating assistants inside the tools leadership and staff already

@@ -45,7 +45,7 @@ const nextConfig = {
       },
       {
         source: '/managed-ai',
-        destination: '/for-small-business',
+        destination: '/managed-ai-services',
         statusCode: 301,
       },
       {

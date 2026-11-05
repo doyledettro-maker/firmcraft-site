@@ -15,7 +15,8 @@ delivery, or referral. The practice is independent: it does not resell software
 and does not receive vendor margin.
 
 ## Practice
-- [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, infrastructure, and commissioned software. Managed AI services support the three parts of a deployment that change over time: the models, the harness that connects them to the client's systems, and the context the system works from
+- [Advisory](https://firmcraft.ai/advisory): advisory, managed AI services, infrastructure, and commissioned software
+- [Managed AI Services](https://firmcraft.ai/managed-ai-services): ongoing support for the three parts of a deployment that change over time: the models, the harness that connects them to the client's systems, and the context the system works from
 - [How We Work](https://firmcraft.ai/how-we-work): discovery, process redesign, implementation, training and evaluation, and ongoing support
 - [Data Sovereignty](https://firmcraft.ai/sovereignty): how client data is handled and where systems run
 - [Adaptable Software](https://firmcraft.ai/adaptable-software): how Firmcraft builds software that the client owns and can change as its needs change, under an arrangement Firmcraft calls Software as an Asset (SaaA)

@@ -17,7 +17,7 @@ const contributions = [
   'Process redesign, with current performance measured before anything is built.',
   'Integration with the systems the client already relies on, including ERP, accounting, and customer relationship systems.',
   "Agents and automation built and tested against the client's own records.",
-  'Ongoing managed services, covering monitoring, evaluation, cost management, and the replacement of models as better options become available.',
+  'Ongoing managed services for the models a deployment uses, the harness that connects them to the client\'s systems, and the context the system works from, with monitoring, evaluation, and cost management.',
 ]
 
 const models = [

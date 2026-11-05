@@ -78,7 +78,13 @@ const sections = [
     body: [
       'For a defined period after implementation, Firmcraft remains closely involved — resolving issues, adjusting configuration in response to real use, and confirming that the measured outcomes match what was projected during the assessment.',
       'Results are reported against the measurements taken before the work began.',
-      'Beyond that period, clients generally move to ongoing managed services.',
+      <>
+        Beyond that period, clients generally move to ongoing managed services. These cover the
+        three parts of a deployment that need support over time: the models it uses, the harness
+        that connects them to the organization&apos;s systems, and the context the system works
+        from. Each is described under{' '}
+        <Link href="/advisory#managed-ai-services">Managed AI services</Link>.
+      </>,
     ],
   },
 ]

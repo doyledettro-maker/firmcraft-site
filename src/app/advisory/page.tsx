@@ -18,7 +18,7 @@ const SERVICES = [
     serviceType: 'Managed artificial intelligence operations',
     url: '/advisory',
     description:
-      "Ongoing operation of a client's artificial intelligence capability: monitoring and evaluation, tuning, cost management, and replacement of components as better options become available.",
+      "Ongoing support of a client's artificial intelligence capability across its three parts: the models it uses, the harness that connects them to the client's systems, and the context it works from, with monitoring, evaluation, and cost management.",
   }),
   serviceJsonLd({
     name: 'AI infrastructure',
@@ -90,7 +90,7 @@ export default function AdvisoryPage() {
           </div>
         </section>
 
-        <section className="sec surface-2">
+        <section className="sec surface-2" id="managed-ai-services">
           <div className="wrap">
             <div className="pkg-head">
               <h2>Managed AI services</h2>
@@ -101,11 +101,42 @@ export default function AdvisoryPage() {
               </p>
               <p>
                 Managed services cover the ongoing operation of a client&apos;s artificial
-                intelligence capability: monitoring and evaluation, tuning, cost management,
-                retirement of components that no longer earn their place, and introduction of
-                capabilities that have genuinely improved. Clients retain a single point of
-                accountability for the whole of their artificial intelligence estate rather than
-                managing a collection of vendors.
+                intelligence capability. Each deployment has three parts that need support over
+                time: the models it uses, the harness that connects those models to the
+                organization&apos;s systems, and the context the system works from.
+              </p>
+              <h3 className="advisory-sub">The models</h3>
+              <p>
+                Model providers retire models on published schedules, in some cases with as little
+                as two months&apos; notice, and each new model changes cost and behavior. Firmcraft
+                keeps a record of the models each deployment depends on, tests a replacement
+                against the client&apos;s own evaluation cases before switching, and completes the
+                change before a retirement date arrives.
+              </p>
+              <h3 className="advisory-sub">The harness</h3>
+              <p>
+                The harness is the software around the model: its instructions, its connections to
+                the client&apos;s systems, the permissions and approval steps that govern what it
+                may do, its scheduled tasks, and the records of what it did. The harness needs
+                attention when a connected system changes, when a permission needs adjusting, or
+                when a newer model responds differently to the same instructions. Firmcraft
+                maintains it as software, under version control, with each change tested before
+                it is put into use.
+              </p>
+              <h3 className="advisory-sub">The context</h3>
+              <p>
+                Context is the information the system works from: its standing instructions, the
+                organization&apos;s documents and records, and the memory it accumulates through
+                use. Context deteriorates gradually. Documents go out of date, accumulated memory
+                collects errors and duplicates, and an excess of material reduces accuracy.
+                Firmcraft keeps what each system draws on current, so that it continues to reflect
+                how the organization works.
+              </p>
+              <p>
+                Monitoring, evaluation, and cost management apply across all three, and results
+                are reported against the measurements taken before the work began. Clients retain
+                a single point of accountability for the whole of their artificial intelligence
+                estate rather than managing a collection of vendors.
               </p>
               <p>
                 This includes operating assistants inside the tools leadership and staff already

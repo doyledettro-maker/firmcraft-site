@@ -90,8 +90,10 @@ export default function AboutPage() {
                   career has been in enterprise software and digital transformation. He has served
                   as senior software architect and project manager on some of the largest
                   implementations in the world of a major ERP platform, many of them multinational
-                  and multi-currency, and has led software sales, guiding buyers through major
-                  system decisions. Over that time he has advised hundreds of businesses on their
+                  and multi-currency. From 2012 to 2015 he was senior finance architect on the
+                  global ERP program of a multinational commodity trading and energy group, which
+                  implemented three instances across 150 countries. He has also led software sales,
+                  guiding buyers through major system decisions. Over that time he has advised hundreds of businesses on their
                   systems and operations. In his most recent enterprise software role, he led the
                   work to bring artificial intelligence into the company&apos;s products and
                   operations.

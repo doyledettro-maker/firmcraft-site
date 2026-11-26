@@ -102,7 +102,9 @@ export default function AboutPage() {
                   global ERP program of one of the world&apos;s largest commodity trading companies, a
                   privately held group, which implemented three instances across 150 countries. During that program he identified an
                   enterprise asset management product and led his company&apos;s acquisition of it,
-                  building deep expertise in infrastructure and asset maintenance processes.
+                  building deep expertise in infrastructure and asset maintenance processes. As
+                  principal industry advisor, he later led that product to become a major offering
+                  in its market, with revenue growing more than fivefold during his tenure.
                 </p>
                 <p>
                   Underneath that work is deep financial reporting experience, including public

@@ -74,3 +74,9 @@
 .managed-page .page-hero .lede + .lede {
   margin-top: 1rem;
 }
+
+.managed-updated {
+  font-size: 14px;
+  color: var(--m-muted);
+  margin-top: 18px;
+}

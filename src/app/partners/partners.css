@@ -70,3 +70,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+.partners-updated {
+  font-size: 14px;
+  color: var(--m-muted);
+  margin-top: 18px;
+}

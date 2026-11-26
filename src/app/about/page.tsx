@@ -77,21 +77,24 @@ export default function AboutPage() {
                 <h2>Doyle Dettro</h2>
                 <p className="founder-role">Founder and Principal</p>
                 <p>
-                  Doyle Dettro earned his bachelor&apos;s degree in accounting at the University of
-                  Illinois, passing the CPA examination while completing it, and joined Arthur
-                  Andersen on graduation. He then worked at early-stage companies, including one
-                  through its initial public offering.
+                  Doyle Dettro graduated from the University of Illinois in 1997 with a
+                  bachelor&apos;s degree in accounting and passed the CPA examination on his first
+                  attempt. He worked at the accounting firm George S. Olive while in school and
+                  joined Arthur Andersen in Chicago on graduation. He then moved to NovaMed, where he
+                  worked in finance, accounting, and analysis through the company&apos;s initial
+                  public offering, and later to New York to join Virtual Chip Exchange, an
+                  early-stage company in semiconductor trading.
                 </p>
                 <p>
-                  For more than two decades since, his career has been in enterprise software and
-                  digital transformation. He has managed ERP and enterprise system implementations
-                  as a project manager, designed solutions as a software project architect, and
-                  worked in software sales, where he guided buyers through major system decisions.
-                  Much of his ERP work has involved multinational, multi-currency implementations
-                  for organizations across a wide range of industries around the world. Over that
-                  time he has advised hundreds of businesses on their systems and operations. In
-                  his most recent enterprise software role, he led the work to bring artificial
-                  intelligence into the company&apos;s products and operations.
+                  He went on to co-found a software company, and for more than two decades his
+                  career has been in enterprise software and digital transformation. He has served
+                  as senior software architect and project manager on some of the largest
+                  implementations in the world of a major ERP platform, many of them multinational
+                  and multi-currency, and has led software sales, guiding buyers through major
+                  system decisions. Over that time he has advised hundreds of businesses on their
+                  systems and operations. In his most recent enterprise software role, he led the
+                  work to bring artificial intelligence into the company&apos;s products and
+                  operations.
                 </p>
                 <p>
                   He founded Firmcraft to apply that experience to artificial intelligence, which

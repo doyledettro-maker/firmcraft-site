@@ -9,6 +9,7 @@ const NAV_ITEMS: { label: string; href: string; key: string }[] = [
   { label: 'Advisory', href: '/advisory', key: 'advisory' },
   { label: 'How We Work', href: '/how-we-work', key: 'how-we-work' },
   { label: 'For Small Business', href: '/for-small-business', key: 'for-small-business' },
+  { label: 'Selected Work', href: '/work', key: 'work' },
   { label: 'About', href: '/about', key: 'about' },
 ]
 
@@ -18,6 +19,7 @@ export type SiteHeaderCurrent =
   | 'how-we-work'
   | 'for-small-business'
   | 'sovereignty'
+  | 'work'
   | 'about'
 
 export function SiteHeader({

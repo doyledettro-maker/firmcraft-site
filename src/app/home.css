@@ -323,6 +323,23 @@
   grid-column: 1 / -1;
 }
 
+.distinction-grid.even .diff:last-child {
+  grid-column: auto;
+}
+
+.distinction-grid.compact .diff {
+  min-height: 0;
+}
+
+.distinction-grid h3 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.distinction-grid h3 a:hover {
+  text-decoration: underline;
+}
+
 .distinction-grid .num {
   display: block;
   margin-bottom: 22px;

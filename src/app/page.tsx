@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { HeroVideo } from '@/components/HeroVideo'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { selectedWork } from '@/lib/selected-work'
 import './home.css'
 
 export const metadata: Metadata = {
@@ -84,7 +85,7 @@ const fit = [
   ['Scale', 'Established operating business of any size'],
   [
     'Systems',
-    'A system of record in place, or actively replatforming — an ERP, a dealer or practice management system, or equivalent',
+    'A system of record in place, or actively replatforming: an ERP, a dealer or practice management system, or equivalent',
   ],
   [
     'Organizational lead',
@@ -216,6 +217,38 @@ export default function HomePage() {
                 </article>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="m-section work-section reveal-section">
+          <div className="wrap">
+            <div className="m-section-head">
+              <div>
+                <h2>Selected work</h2>
+              </div>
+              <p>
+                Firmcraft&apos;s approach has been applied in a field services business, a dental
+                practice, a process safety platform for oil refineries, and a software venture.
+              </p>
+            </div>
+            <div className="distinction-grid even compact">
+              {selectedWork.map((entry, index) => (
+                <article className="diff" key={entry.id}>
+                  <span className="num">{String(index + 1).padStart(2, '0')}</span>
+                  <div>
+                    <h3>
+                      <Link href={`/work#${entry.id}`}>{entry.title}</Link>
+                    </h3>
+                    <p>{entry.summary}</p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <p style={{ marginTop: 28 }}>
+              <Link className="btn navy" href="/work">
+                See selected work
+              </Link>
+            </p>
           </div>
         </section>
 

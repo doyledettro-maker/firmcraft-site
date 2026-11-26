@@ -82,3 +82,32 @@ export function faqJsonLd(items: { q: string; a: string }[]) {
     })),
   }
 }
+
+export const personJsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  '@id': `${BASE}/about#doyle-dettro`,
+  name: 'Doyle Dettro',
+  url: `${BASE}/about`,
+  image: `${BASE}/founder/doyle.jpg`,
+  jobTitle: 'Founder and Principal, Firmcraft',
+  worksFor: { '@id': ORG_ID },
+  alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Illinois' },
+  hasOccupation: [
+    { '@type': 'Occupation', name: 'Founder and Principal, Firmcraft' },
+    { '@type': 'Occupation', name: 'Chief Technology Officer, AI-PSM' },
+    { '@type': 'Occupation', name: 'Founder, Predictium' },
+  ],
+  affiliation: [
+    { '@type': 'Organization', name: 'AI-PSM', url: 'https://ai-psm.com' },
+    { '@type': 'Organization', name: 'Predictium' },
+  ],
+  knowsAbout: [
+    'AI implementation',
+    'agentic AI',
+    'ERP implementation',
+    'software project management',
+    'solution architecture',
+    'process safety software',
+  ],
+}

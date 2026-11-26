@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { personJsonLd } from '@/lib/structured-data'
 import './about.css'
 
 export const metadata: Metadata = {
@@ -39,6 +41,7 @@ export default function AboutPage() {
   return (
     <>
       <SiteHeader current="about" />
+      <JsonLd data={personJsonLd} />
       <main className="marketing-inner">
         <section className="about-hero">
           <div className="wrap">
@@ -81,17 +84,29 @@ export default function AboutPage() {
                 </p>
                 <p>
                   For more than two decades since, his career has been in enterprise software and
-                  digital transformation, working on ERP and other enterprise systems for
-                  organizations across a wide range of industries around the world. That work has
-                  spanned business process design, solution architecture, implementation, and the
-                  commercial side of major system decisions. Over that time he has advised hundreds
-                  of businesses on their systems and operations.
+                  digital transformation. He has managed ERP and enterprise system implementations
+                  as a project manager, designed solutions as a software project architect, and
+                  worked in software sales, where he guided buyers through major system decisions.
+                  Much of his ERP work has involved multinational, multi-currency implementations
+                  for organizations across a wide range of industries around the world. Over that
+                  time he has advised hundreds of businesses on their systems and operations. In
+                  his most recent enterprise software role, he led the work to bring artificial
+                  intelligence into the company&apos;s products and operations.
                 </p>
                 <p>
                   He founded Firmcraft to apply that experience to artificial intelligence, which
                   most organizations are now adopting without the discipline they would bring to any
                   other major system. He leads every Firmcraft engagement directly and builds and
                   operates the firm&apos;s AI infrastructure himself.
+                </p>
+                <p>
+                  Alongside Firmcraft, he is Chief Technology Officer of{' '}
+                  <a href="https://ai-psm.com" rel="noopener">
+                    AI-PSM
+                  </a>
+                  , an agentic artificial intelligence platform for process safety and asset
+                  integrity at oil refineries, and the founder of Predictium. Both are described
+                  in <Link href="/work">Selected Work</Link>.
                 </p>
               </div>
             </div>

@@ -1,0 +1,14 @@
+.work-page .work-entry {
+  max-width: 860px;
+}
+
+.work-page .work-place {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--m-muted);
+  margin: -4px 0 18px;
+}
+
+.work-page .work-entry p {
+  max-width: 720px;
+}

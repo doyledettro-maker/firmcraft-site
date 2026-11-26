@@ -3,6 +3,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { SiteHeader } from '@/components/SiteHeader'
 import { SiteFooter } from '@/components/SiteFooter'
+import { JsonLd } from '@/components/JsonLd'
+import { personJsonLd } from '@/lib/structured-data'
 import './about.css'
 
 export const metadata: Metadata = {
@@ -39,6 +41,7 @@ export default function AboutPage() {
   return (
     <>
       <SiteHeader current="about" />
+      <JsonLd data={personJsonLd} />
       <main className="marketing-inner">
         <section className="about-hero">
           <div className="wrap">
@@ -74,24 +77,58 @@ export default function AboutPage() {
                 <h2>Doyle Dettro</h2>
                 <p className="founder-role">Founder and Principal</p>
                 <p>
-                  Doyle Dettro earned his bachelor&apos;s degree in accounting at the University of
-                  Illinois, passing the CPA examination while completing it, and joined Arthur
-                  Andersen on graduation. He then worked at early-stage companies, including one
-                  through its initial public offering.
+                  Doyle Dettro graduated from the University of Illinois in 1997 with a
+                  bachelor&apos;s degree in accounting and passed the CPA examination on his first
+                  attempt. He worked at the accounting firm George S. Olive while in school and
+                  joined Arthur Andersen in Chicago on graduation. He then moved to NovaMed, where he
+                  worked in finance, accounting, and analysis through the company&apos;s initial
+                  public offering, and later to New York to join Virtual Chip Exchange, an
+                  early-stage company in semiconductor trading.
                 </p>
                 <p>
-                  For more than two decades since, his career has been in enterprise software and
-                  digital transformation, working on ERP and other enterprise systems for
-                  organizations across a wide range of industries around the world. That work has
-                  spanned business process design, solution architecture, implementation, and the
-                  commercial side of major system decisions. Over that time he has advised hundreds
-                  of businesses on their systems and operations.
+                  He went on to co-found a software company in 2002 and grew it from four people to
+                  twenty, and for more than two decades his career has been in enterprise software
+                  and digital transformation. He has served
+                  as senior software architect and project manager on some of the largest
+                  implementations in the world of a major ERP platform, many of them multinational
+                  and multi-currency. From 2004 to 2006 he led a digital transformation for West
+                  Africa&apos;s largest oil and gas logistics operator, covering fiber connectivity, a new
+                  data center, and a 250-user ERP for port services and cargo tracking. From 2007 to 2012 he managed ERP and finance systems for an offshore energy
+                  services group, and served as interim global controller of its publicly traded
+                  parent during its restructuring, handling SEC reporting and consolidations. That
+                  work carried him through a cross-Atlantic acquisition, the parent company&apos;s
+                  bankruptcy, and the spin-out of its subsidiary as an independent North Sea
+                  company. From 2012 to 2015 he was senior finance architect on the
+                  global ERP program of one of the world&apos;s largest commodity trading companies, a
+                  privately held group, which implemented three instances across 150 countries. During that program he identified an
+                  enterprise asset management product and led his company&apos;s acquisition of it,
+                  building deep expertise in infrastructure and asset maintenance processes. As
+                  principal industry advisor, he later led that product to become a major offering
+                  in its market, with revenue growing more than twentyfold during his tenure.
+                </p>
+                <p>
+                  Underneath that work is deep financial reporting experience, including public
+                  company and SEC reporting, IFRS, multi-currency accounting, and consolidations.
+                  Alongside his implementation work, he has led software sales,
+                  guiding buyers through major system decisions. Over that time he has advised hundreds of businesses on their
+                  systems and operations. In his most recent enterprise software role, he led the
+                  work to bring artificial intelligence into the company&apos;s products and
+                  operations.
                 </p>
                 <p>
                   He founded Firmcraft to apply that experience to artificial intelligence, which
                   most organizations are now adopting without the discipline they would bring to any
                   other major system. He leads every Firmcraft engagement directly and builds and
                   operates the firm&apos;s AI infrastructure himself.
+                </p>
+                <p>
+                  Alongside Firmcraft, he is Chief Technology Officer of{' '}
+                  <a href="https://ai-psm.com" rel="noopener">
+                    AI-PSM
+                  </a>
+                  , an agentic artificial intelligence platform for process safety and asset
+                  integrity at oil refineries, and the founder of Predictium. Both are described
+                  in <Link href="/work">Selected Work</Link>.
                 </p>
               </div>
             </div>

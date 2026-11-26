@@ -25,7 +25,7 @@ and does not receive vendor margin.
 - [Partner Firms](https://firmcraft.ai/partners): how Firmcraft works with consulting, ERP implementation, accounting, and advisory firms to deliver artificial intelligence to their clients
 
 ## Trust
-- [Selected Work](https://firmcraft.ai/work): Rumble Bee Tree Service (Springfield, Illinois), Dr. Sarah Carlson's dental practice (Burlington, Illinois), the AI-PSM process safety platform, of which Doyle Dettro is Chief Technology Officer, and Predictium, which he founded
+- [Selected Work](https://firmcraft.ai/work): Rumble Bee Tree Service (Springfield, Illinois), Dr. Sarah Carlson of Century Dental of Huntley (Huntley, Illinois), the AI-PSM process safety platform, of which Doyle Dettro is Chief Technology Officer, and Predictium, which he founded
 - [About](https://firmcraft.ai/about): founder background (enterprise software project management, solution architecture and sales; Chief Technology Officer of AI-PSM; founder of Predictium) and operating principles
 
 ## Contact

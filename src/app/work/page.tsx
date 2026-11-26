@@ -8,7 +8,7 @@ import './work.css'
 export const metadata: Metadata = {
   title: 'Selected Work',
   description:
-    'Selected Firmcraft engagements and ventures: Rumble Bee Tree Service, a dental practice in Burlington, Illinois, the AI-PSM process safety platform, and Predictium.',
+    'Selected Firmcraft engagements and ventures: Rumble Bee Tree Service, Century Dental of Huntley in Huntley, Illinois, the AI-PSM process safety platform, and Predictium.',
   alternates: { canonical: '/work' },
 }
 

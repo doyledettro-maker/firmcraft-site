@@ -30,12 +30,12 @@ export const selectedWork: WorkEntry[] = [
   {
     id: 'dental-practice',
     kind: 'Capability building',
-    title: 'Dr. Sarah Carlson, dental practice',
-    place: 'Burlington, Illinois',
+    title: 'Dr. Sarah Carlson, Century Dental of Huntley',
+    place: 'Huntley, Illinois',
     summary:
       'A dentist and practice partner who now automates a substantial share of her practice’s work herself.',
     body: [
-      'Not every engagement ends with Firmcraft delivering a system. Dr. Sarah Carlson is a dentist and the primary partner of her practice. Firmcraft introduced her to the practical use of artificial intelligence, and she now automates a substantial share of the practice’s work herself.',
+      'Not every engagement ends with Firmcraft delivering a system. Dr. Sarah Carlson is a dentist and the primary partner of Century Dental of Huntley. Firmcraft introduced her to the practical use of artificial intelligence, and she now automates a substantial share of the practice’s work herself.',
     ],
   },
   {

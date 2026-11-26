@@ -33,9 +33,9 @@ export const selectedWork: WorkEntry[] = [
     title: 'Dr. Sarah Carlson, Century Dental of Huntley',
     place: 'Huntley, Illinois',
     summary:
-      'A dentist and practice partner who now automates a substantial share of her practice’s work herself.',
+      'A dentist and practice partner who automated her practice’s insurance reimbursement work herself, freeing two staff members for their core roles.',
     body: [
-      'Not every engagement ends with Firmcraft delivering a system. Dr. Sarah Carlson is a dentist and the primary partner of Century Dental of Huntley. Firmcraft introduced her to the practical use of artificial intelligence, and she now automates a substantial share of the practice’s work herself.',
+      'Not every engagement ends with Firmcraft delivering a system. Dr. Sarah Carlson is a dentist and the primary partner of Century Dental of Huntley. Firmcraft introduced her to the practical use of artificial intelligence, and she has since automated the practice’s insurance reimbursement work with insurance companies herself. That change freed the receptionist and a dental assistant to return to the work their roles are meant for.',
     ],
   },
   {

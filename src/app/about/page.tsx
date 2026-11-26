@@ -98,7 +98,9 @@ export default function AboutPage() {
                   bankruptcy, and the spin-out of its subsidiary as an independent North Sea
                   company. From 2012 to 2015 he was senior finance architect on the
                   global ERP program of one of the world&apos;s largest commodity trading companies, a
-                  privately held group, which implemented three instances across 150 countries.
+                  privately held group, which implemented three instances across 150 countries. During that program he identified an
+                  enterprise asset management product and led his company&apos;s acquisition of it,
+                  building deep expertise in infrastructure and asset maintenance processes.
                 </p>
                 <p>
                   Alongside that implementation work, he has led software sales,

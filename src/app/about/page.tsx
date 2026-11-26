@@ -103,7 +103,9 @@ export default function AboutPage() {
                   building deep expertise in infrastructure and asset maintenance processes.
                 </p>
                 <p>
-                  Alongside that implementation work, he has led software sales,
+                  Underneath that work is deep financial reporting experience, including public
+                  company and SEC reporting, IFRS, multi-currency accounting, and consolidations.
+                  Alongside his implementation work, he has led software sales,
                   guiding buyers through major system decisions. Over that time he has advised hundreds of businesses on their
                   systems and operations. In his most recent enterprise software role, he led the
                   work to bring artificial intelligence into the company&apos;s products and

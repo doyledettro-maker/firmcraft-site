@@ -91,13 +91,14 @@ export default function AboutPage() {
                   and digital transformation. He has served
                   as senior software architect and project manager on some of the largest
                   implementations in the world of a major ERP platform, many of them multinational
-                  and multi-currency. From 2007 to 2012 he managed ERP and finance systems for an offshore energy
+                  and multi-currency. From 2004 to 2006 he led a digital transformation for West
+                  Africa&apos;s largest oil and gas logistics operator, covering fiber connectivity, a new
+                  data center, and a 250-user ERP for port services and cargo tracking. From 2007 to 2012 he managed ERP and finance systems for an offshore energy
                   services group, through a cross-Atlantic acquisition, the parent company&apos;s
                   bankruptcy, and the spin-out of its subsidiary as an independent North Sea
                   company. From 2012 to 2015 he was senior finance architect on the
                   global ERP program of one of the world&apos;s largest commodity trading companies, a
-                  privately held group, which implemented three instances across 150 countries. He also led a
-                  250-user ERP rollout in West Africa.
+                  privately held group, which implemented three instances across 150 countries.
                 </p>
                 <p>
                   Alongside that implementation work, he has led software sales,

@@ -96,8 +96,11 @@ export default function AboutPage() {
                   bankruptcy, and the spin-out of its subsidiary as an independent North Sea
                   company. From 2012 to 2015 he was senior finance architect on the
                   global ERP program of one of the world&apos;s largest commodity trading companies, a
-                  privately held group, which implemented three instances across 150 countries. He has also led a
-                  250-user ERP rollout in West Africa. He has also led software sales,
+                  privately held group, which implemented three instances across 150 countries. He also led a
+                  250-user ERP rollout in West Africa.
+                </p>
+                <p>
+                  Alongside that implementation work, he has led software sales,
                   guiding buyers through major system decisions. Over that time he has advised hundreds of businesses on their
                   systems and operations. In his most recent enterprise software role, he led the
                   work to bring artificial intelligence into the company&apos;s products and

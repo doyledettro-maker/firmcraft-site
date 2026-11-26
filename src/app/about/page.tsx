@@ -94,7 +94,9 @@ export default function AboutPage() {
                   and multi-currency. From 2004 to 2006 he led a digital transformation for West
                   Africa&apos;s largest oil and gas logistics operator, covering fiber connectivity, a new
                   data center, and a 250-user ERP for port services and cargo tracking. From 2007 to 2012 he managed ERP and finance systems for an offshore energy
-                  services group, through a cross-Atlantic acquisition, the parent company&apos;s
+                  services group, and served as interim global controller of its publicly traded
+                  parent during its restructuring, handling SEC reporting and consolidations. That
+                  work carried him through a cross-Atlantic acquisition, the parent company&apos;s
                   bankruptcy, and the spin-out of its subsidiary as an independent North Sea
                   company. From 2012 to 2015 he was senior finance architect on the
                   global ERP program of one of the world&apos;s largest commodity trading companies, a

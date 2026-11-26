@@ -104,7 +104,7 @@ export default function AboutPage() {
                   enterprise asset management product and led his company&apos;s acquisition of it,
                   building deep expertise in infrastructure and asset maintenance processes. As
                   principal industry advisor, he later led that product to become a major offering
-                  in its market, with revenue growing more than fivefold during his tenure.
+                  in its market, with revenue growing more than twentyfold during his tenure.
                 </p>
                 <p>
                   Underneath that work is deep financial reporting experience, including public

@@ -86,13 +86,18 @@ export default function AboutPage() {
                   early-stage company in semiconductor trading.
                 </p>
                 <p>
-                  He went on to co-found a software company, and for more than two decades his
-                  career has been in enterprise software and digital transformation. He has served
+                  He went on to co-found a software company in 2002 and grew it from four people to
+                  twenty, and for more than two decades his career has been in enterprise software
+                  and digital transformation. He has served
                   as senior software architect and project manager on some of the largest
                   implementations in the world of a major ERP platform, many of them multinational
-                  and multi-currency. From 2012 to 2015 he was senior finance architect on the
+                  and multi-currency. From 2007 to 2012 he managed ERP and finance systems for an offshore energy
+                  services group, through a cross-Atlantic acquisition, the parent company&apos;s
+                  bankruptcy, and the spin-out of its subsidiary as an independent North Sea
+                  company. From 2012 to 2015 he was senior finance architect on the
                   global ERP program of one of the world&apos;s largest commodity trading companies, a
-                  privately held group, which implemented three instances across 150 countries. He has also led software sales,
+                  privately held group, which implemented three instances across 150 countries. He has also led a
+                  250-user ERP rollout in West Africa. He has also led software sales,
                   guiding buyers through major system decisions. Over that time he has advised hundreds of businesses on their
                   systems and operations. In his most recent enterprise software role, he led the
                   work to bring artificial intelligence into the company&apos;s products and

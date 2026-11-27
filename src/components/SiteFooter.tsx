@@ -24,6 +24,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'Selected Work', href: '/work' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/doyledettro', external: true },
     ],
   },
   {

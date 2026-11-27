@@ -48,8 +48,8 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
     h: 'Intellectual property',
     body: (
       <p>
-        The Firmcraft name, wordmark, and site content are ours. Hermes Agent — the open-source
-        platform our managed deployments run on — is separately licensed under its own
+        The Firmcraft name, wordmark, and site content are ours. Hermes Agent, the open-source
+        platform our managed deployments run on, is separately licensed under its own
         open-source license by its maintainers; nothing here restricts your rights under that
         license.
       </p>

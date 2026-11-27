@@ -41,6 +41,14 @@ const faq = [
     a: 'Consulting, ERP implementation, accounting, and advisory firms, and operating partners at investment firms, whose clients need artificial intelligence capability that the firm does not provide itself.',
   },
   {
+    q: 'Does Firmcraft provide white-label AI implementation for ERP and accounting firms?',
+    a: "Yes, through subcontracted delivery. Firmcraft carries out the implementation and engineering work within the partner firm's project, and is presented to the client in the way the partner firm and Firmcraft agree.",
+  },
+  {
+    q: 'Does Firmcraft work across private equity portfolios and venture studios?',
+    a: "Yes. Firmcraft applies the same method in each operating company, reuses what has already been proven, and reports each company's results against its own starting measurements.",
+  },
+  {
     q: "Can Firmcraft work under our firm's name?",
     a: 'Where both firms agree, yes. How Firmcraft is presented and who holds each client-facing responsibility are agreed before work begins.',
   },
@@ -84,6 +92,7 @@ export default function PartnersPage() {
               work that an artificial intelligence deployment requires, and can operate the result
               afterwards.
             </p>
+            <p className="partners-updated">Updated November 26, 2026</p>
           </div>
         </section>
 
@@ -98,9 +107,12 @@ export default function PartnersPage() {
               </ul>
               <p>
                 Firmcraft is led by an advisor with more than two decades in enterprise software and
-                digital transformation. The same person designs the process, understands the
-                systems it runs on, and builds and operates the artificial intelligence that
-                supports it.
+                digital transformation, including ERP and finance programs that ran in 150
+                countries. The same person designs the process, understands the systems it runs
+                on, and builds and operates the artificial intelligence that supports it. Examples
+                are in <Link href="/work">Selected Work</Link>, and{' '}
+                <Link href="/ai-implementation-options">AI implementation options</Link> compares
+                a managed partner with an agency and an in-house team.
               </p>
             </div>
           </div>

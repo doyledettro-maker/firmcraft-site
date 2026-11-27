@@ -76,6 +76,11 @@ export default function AboutPage() {
                 <p className="eyebrow">Founder</p>
                 <h2>Doyle Dettro</h2>
                 <p className="founder-role">Founder and Principal</p>
+                <p className="founder-linkedin">
+                  <a href="https://www.linkedin.com/in/doyledettro" rel="noopener">
+                    LinkedIn profile
+                  </a>
+                </p>
                 <p>
                   Doyle Dettro graduated from the University of Illinois in 1997 with a
                   bachelor&apos;s degree in accounting and passed the CPA examination on his first

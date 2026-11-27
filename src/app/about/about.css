@@ -11,7 +11,9 @@
 .founder-copy{max-width:690px}
 .founder-copy h2{font-weight:600;font-size:clamp(30px,3.4vw,44px);letter-spacing:-.024em;line-height:1.08;margin:8px 0 4px}
 .founder-role{font-size:15px;color:var(--color-ink);font-weight:600;margin:0 0 22px}
-.founder-copy p:not(.eyebrow):not(.founder-role){font-size:16px;line-height:1.7;color:var(--color-ink-2);margin:0 0 18px}
+.founder-linkedin{font-size:15px;margin:-14px 0 22px}
+.founder-linkedin a{text-decoration:underline;text-underline-offset:3px}
+.founder-copy p:not(.eyebrow):not(.founder-role):not(.founder-linkedin){font-size:16px;line-height:1.7;color:var(--color-ink-2);margin:0 0 18px}
 .founder-copy p:last-child{margin-bottom:0}
 .founder-card{background:var(--color-paper);border:1px solid var(--color-line);border-radius:18px;padding:14px;display:flex;flex-direction:column;gap:0;overflow:hidden}
 .founder-photo{aspect-ratio:1/1.05;background:var(--color-surface-2);border-radius:12px;position:relative;overflow:hidden}

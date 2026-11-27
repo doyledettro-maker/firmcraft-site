@@ -110,6 +110,7 @@ export default function ManagedAiServicesPage() {
               connects those models to the organization&apos;s systems, and the context the system
               works from.
             </p>
+            <p className="managed-updated">Updated November 5, 2026</p>
           </div>
         </section>
 

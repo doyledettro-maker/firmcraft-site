@@ -406,6 +406,8 @@ body {
 }
 .site-footer .legal {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
   justify-content: space-between;
   align-items: center;
   padding-top: 24px;
@@ -422,6 +424,10 @@ body {
 }
 .site-footer .legal a:hover {
   color: #fff;
+}
+.site-footer .legal-links {
+  display: flex;
+  gap: 20px;
 }
 .site-footer .fc-lockup .fc-lockup-f {
   color: #C9A46A;

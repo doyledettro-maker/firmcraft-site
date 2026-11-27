@@ -90,6 +90,7 @@ export const personJsonLd = {
   name: 'Doyle Dettro',
   url: `${BASE}/about`,
   image: `${BASE}/founder/doyle.jpg`,
+  sameAs: ['https://www.linkedin.com/in/doyledettro'],
   jobTitle: 'Founder and Principal, Firmcraft',
   worksFor: { '@id': ORG_ID },
   alumniOf: { '@type': 'CollegeOrUniversity', name: 'University of Illinois' },

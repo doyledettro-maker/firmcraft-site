@@ -23,6 +23,7 @@ and does not receive vendor margin.
 - [Commissioned Software](https://firmcraft.ai/commissioned-software): systems commonly obtained by subscription, built to the client's specification and transferred to the client to host, own, and change
 - [For Small Business](https://firmcraft.ai/for-small-business): managed artificial intelligence capability for smaller organizations
 - [Partner Firms](https://firmcraft.ai/partners): how Firmcraft works with consulting, ERP implementation, accounting, and advisory firms to deliver artificial intelligence to their clients
+- [AI Implementation Options](https://firmcraft.ai/ai-implementation-options): how a managed AI partner, a development agency, and an in-house team compare, when each fits, and what to ask before choosing
 
 ## Trust
 - [Selected Work](https://firmcraft.ai/work): Rumble Bee Tree Service (Springfield, Illinois), Dr. Sarah Carlson of Century Dental of Huntley (Huntley, Illinois), the AI-PSM process safety platform, of which Doyle Dettro is Chief Technology Officer, and Predictium, which he founded

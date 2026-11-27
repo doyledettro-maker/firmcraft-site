@@ -18,7 +18,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
         Springfield, Illinois area, serving businesses across the globe. This policy covers the firmcraft.ai
         website. Data handling inside client deployments is governed by each client&apos;s
         services agreement and, where applicable, a Data Processing Agreement or Business
-        Associate Agreement — see our <a href="/security">Security &amp; sovereignty</a> page.
+        Associate Agreement. See our <a href="/security">Security &amp; sovereignty</a> page.
       </p>
     ),
   },
@@ -28,7 +28,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
       <>
         <p>
           <strong>Information you give us.</strong> When you submit the contact, support, or
-          onboarding forms, we collect what you enter — typically your name, email, phone,
+          onboarding forms, we collect what you enter, typically your name, email, phone,
           company, and your message. We use it to respond to you, scope an engagement, and
           deliver services. It is stored in our own systems and sent to us by email.
         </p>
@@ -40,7 +40,8 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
         </p>
         <p>
           <strong>Hosting logs.</strong> Our hosting providers (Vercel, Cloudflare) keep standard
-          server logs — IP address, user agent, requested URL — for security and operations.
+          server logs, including IP address, user agent, and requested URL, for security and
+          operations.
         </p>
       </>
     ),
@@ -82,7 +83,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
       <p>
         We keep inquiry records for as long as needed to serve you and meet our legal
         obligations. You can ask us to access, correct, or delete personal information we hold
-        about you — email <a href="mailto:hello@firmcraft.ai">hello@firmcraft.ai</a> and we&apos;ll
+        about you. Email <a href="mailto:hello@firmcraft.ai">hello@firmcraft.ai</a> and we&apos;ll
         respond within a reasonable time. If you are in a jurisdiction with specific privacy
         rights (for example, the EU/UK or California), we will honor requests consistent with
         the law that applies to you.

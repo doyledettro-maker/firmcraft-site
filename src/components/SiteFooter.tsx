@@ -24,6 +24,7 @@ const COLUMNS: FooterColumn[] = [
       { label: 'Selected Work', href: '/work' },
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
+      { label: 'LinkedIn', href: 'https://www.linkedin.com/in/doyledettro', external: true },
     ],
   },
   {
@@ -70,6 +71,10 @@ export function SiteFooter() {
 
         <div className="legal">
           <span>© {new Date().getFullYear()} Firmcraft</span>
+          <nav aria-label="Legal" className="legal-links">
+            <Link href="/privacy">Privacy Policy</Link>
+            <Link href="/terms">Terms of Use</Link>
+          </nav>
         </div>
       </div>
     </footer>

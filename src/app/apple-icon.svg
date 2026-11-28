@@ -1,4 +1,10 @@
 <svg viewBox="0 0 180 180" xmlns="http://www.w3.org/2000/svg">
-  <rect width="180" height="180" rx="40" fill="#0B1220"/>
-  <text x="90" y="129" text-anchor="middle" font-family="Source Serif 4, Georgia, serif" font-style="italic" font-weight="500" font-size="124" fill="#2C6BF0">F</text>
+  <rect width="180" height="180" fill="#F5F7F3"/>
+  <g transform="translate(26 26) scale(3.2)" fill="#0F3D2B">
+    <rect x="9" y="4" width="5" height="26"/>
+    <rect x="9" y="4" width="22" height="5"/>
+    <rect x="9" y="15" width="16" height="5"/>
+    <rect x="4" y="33" width="32" height="1.6"/>
+    <rect x="4" y="36.4" width="32" height="1.6"/>
+  </g>
 </svg>

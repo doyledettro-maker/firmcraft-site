@@ -1,313 +1,687 @@
 import type { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
-import { HeroVideo } from '@/components/HeroVideo'
-import { SiteHeader } from '@/components/SiteHeader'
+import { IBM_Plex_Mono, IBM_Plex_Sans, Schibsted_Grotesk } from 'next/font/google'
+import { MobileMenu } from '@/components/MobileMenu'
 import { SiteFooter } from '@/components/SiteFooter'
-import { selectedWork } from '@/lib/selected-work'
-import './home.css'
+import { BookingBar } from '@/components/home/BookingBar'
+import { FirmcraftMark } from '@/components/home/FirmcraftMark'
+import './home-ledger.css'
+
+/*
+ * Homepage, "Ledger" design (Nov 2026).
+ *
+ * PROPOSED COPY, awaiting Doyle's OK. Two pieces of wording on this page are
+ * not approved yet. Each is marked in the JSX below with a PROPOSED COPY
+ * comment and in the rendered HTML with data-proposed-copy:
+ *   1. The continuity line ("Every system ships with its documentation, its
+ *      source and your own admin access, so it never depends on one person."),
+ *      used in the private equity list and in the controls list.
+ *   2. The four answers under "Questions buyers ask."
+ * Client results use only the wording already on /work.
+ */
+
+const display = Schibsted_Grotesk({
+  subsets: ['latin'],
+  weight: ['500', '600', '700', '800'],
+  variable: '--font-fl-display',
+  display: 'swap',
+})
+const body = IBM_Plex_Sans({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-fl-body',
+  display: 'swap',
+})
+const mono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['400', '500'],
+  variable: '--font-fl-mono',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
-  title: 'Firmcraft — AI Advisory and Managed Services',
+  title: { absolute: 'Firmcraft | AI advisory, build and managed services' },
   description:
-    'Firmcraft advises business owners and executive teams on artificial intelligence and technology strategy, implements what the strategy requires, and manages it on an ongoing basis.',
+    'Firmcraft designs, builds and runs AI inside the systems your business already depends on, starting from a measured baseline and led by a principal with more than twenty years in ERP and finance systems.',
   alternates: { canonical: '/' },
 }
 
-const serviceLines = [
-  {
-    eyebrow: 'Advisory',
-    title: 'Advisory',
-    image: '/media/service-advisory.jpg',
-    alt: 'Professionals seated around a table reviewing business materials together.',
-    href: '/advisory',
-    body:
-      'Establishing what is currently running, what it costs, and what it actually does. Determining what should be kept, replaced, built, or left alone. Owning the artificial intelligence and technology roadmap at the executive level, so that decisions are made deliberately rather than accumulated by default.',
-  },
-  {
-    eyebrow: 'Managed services',
-    title: 'Managed AI services',
-    image: '/media/service-managed.jpg',
-    alt: 'Close view of people reviewing documents and figures at a work table.',
-    href: '/managed-ai-services',
-    body:
-      "Operating the resulting capability over time, across the models it uses, the harness that connects them to the organization's systems, and the context it works from. The objective is that a client's capability keeps pace with the field rather than freezing at the point of implementation.",
-  },
-  {
-    eyebrow: 'Infrastructure',
-    title: 'Infrastructure',
-    image: '/media/service-infrastructure.jpg',
-    alt: 'A clean modern office interior with people working in the background.',
-    href: '/sovereignty',
-    body:
-      "The technical foundation beneath both, with data sovereignty as the default position. Determining where client data resides, what runs inside the client's own environment, and what may reasonably be sent elsewhere.",
-  },
-  {
-    eyebrow: 'Commissioned software',
-    title: 'Commissioned software',
-    image: '/media/service-commissioned.jpg',
-    alt: 'Colleagues around a table sketching the layout of a system on large sheets of paper.',
-    href: '/commissioned-software',
-    body:
-      'Building systems that organizations commonly obtain by subscription, to the client\'s specification, and transferring them to the client to host and own, together with the source code and documentation needed to change them with its own staff or AI coding tools.',
-  },
+const CONTINUITY =
+  'Every system ships with its documentation, its source and your own admin access, so it never depends on one person.'
+
+const NAV = [
+  { label: 'Diagnostic', href: '#diagnostic' },
+  { label: 'Services', href: '#services' },
+  { label: 'Selected Work', href: '/work' },
+  { label: 'Private equity', href: '#pe' },
+  { label: 'About', href: '/about' },
 ]
 
-const distinctions = [
-  {
-    title: 'Business process, industry, and systems depth',
-    body:
-      'Firmcraft is led by an advisor with more than two decades in enterprise software and digital transformation. That work has spanned business process design, solution architecture, and implementation for organizations across a wide range of industries, from owner-led businesses to large enterprises, around the world. The same advisor designs the process, understands the systems it runs on, and builds and operates the artificial intelligence that supports it.',
-  },
-  {
-    title: 'Commercial literacy',
-    body:
-      'An early career in public accounting and at early-stage companies, including one through its initial public offering, means engagements are led by someone who can assess whether a proposed project produces measurable financial value, and discuss that assessment with an owner, controller, or chief financial officer in their own terms.',
-  },
-  {
-    title: 'Independence',
-    body:
-      'Firmcraft does not resell software and does not take vendor margin. Where the appropriate answer is a system the client already owns, or no new system at all, that is the recommendation.',
-  },
-  {
-    title: 'An established implementation method',
-    body:
-      "Firmcraft's approach is adapted from enterprise systems implementation rather than from software piloting. Each process is redesigned before any part of it is automated, and its current performance is measured before anything is built, so that results can be compared against a known starting point.",
-  },
-  {
-    title: 'Continuity',
-    body:
-      'The person who scopes an engagement leads the implementation and remains through ongoing support. Engagements are not passed to a delivery team.',
-  },
-]
-
-const fit = [
-  ['Scale', 'Established operating business of any size'],
-  [
-    'Systems',
-    'A system of record in place, or actively replatforming: an ERP, a dealer or practice management system, or equivalent',
-  ],
-  [
-    'Organizational lead',
-    'Owner, chief executive, chief financial officer, chief operating officer, or other senior leader',
-  ],
-  ['Typical situation', 'Manual process load, constrained headcount, audit and control exposure'],
-  ['AI maturity', 'Isolated pilots without broader adoption, or no formal program'],
+const MOBILE_NAV = [
+  { label: 'The Diagnostic', href: '#diagnostic' },
+  { label: 'Services', href: '#services' },
+  { label: 'Private equity', href: '#pe' },
+  { label: 'Advisory', href: '/advisory' },
+  { label: 'How We Work', href: '/how-we-work' },
+  { label: 'Selected Work', href: '/work' },
+  { label: 'About', href: '/about' },
 ]
 
 export default function HomePage() {
   return (
-    <>
-      <SiteHeader current="home" />
+    <div className={`fl-page ${display.variable} ${body.variable} ${mono.variable}`}>
+      <div className="fl-shell">
+        <header className="fl-wrap">
+          <nav className="fl-nav" aria-label="Primary">
+            <Link className="fl-brand" href="/" aria-label="Firmcraft home">
+              <FirmcraftMark size={30} />
+              <b>Firmcraft</b>
+            </Link>
+            <div className="fl-nav-r">
+              <ul>
+                {NAV.map((item) => (
+                  <li key={item.href}>
+                    <a href={item.href}>{item.label}</a>
+                  </li>
+                ))}
+              </ul>
+              <a className="fl-btn fl-primary" href="/contact" data-cta>
+                Book a call
+              </a>
+              <MobileMenu items={MOBILE_NAV} current="home" marketing />
+            </div>
+          </nav>
+        </header>
 
-      <main className="marketing marketing-home">
-        <section className="home-hero">
-          <HeroVideo />
-          <div className="wrap">
-            <div className="hero-grid">
-              <div className="lhs">
-                <h1>AI advisory and managed services</h1>
-                <p className="lede">
-                  Firmcraft advises business owners and executive teams on artificial intelligence
-                  and technology strategy, implements what that strategy requires, and manages the
-                  result on an ongoing basis. The practice brings together business process,
-                  industry, and enterprise systems experience with hands-on technical
-                  implementation.
+        <main>
+          <div className="fl-wrap">
+            <div className="fl-hero" id="top">
+              <div className="fl-hero-copy">
+                <span className="fl-label">AI advisory, build and managed services</span>
+                <h1>
+                  AI that shows up in the <span className="fl-uline">P&amp;L.</span>
+                </h1>
+                <p className="fl-lede">
+                  Firmcraft designs, builds and runs AI inside the systems your business already
+                  depends on. Every engagement starts from a measured baseline and is led by a
+                  principal trained in public accounting, with more than twenty years in ERP and
+                  finance systems.
                 </p>
-                <div className="hero-ctas">
-                  <Link className="btn brass lg" href="/contact">
-                    Contact Firmcraft
-                  </Link>
-                  <Link className="btn outline-inverse lg" href="/how-we-work">
-                    How we work
-                  </Link>
+                <div className="fl-ctas">
+                  <a className="fl-btn fl-primary" href="/contact" data-cta>
+                    Book a 30-minute call
+                  </a>
+                  <a className="fl-btn fl-ghost" href="#diagnostic">
+                    See the Diagnostic
+                  </a>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="m-section problem-section reveal-section">
-          <div className="wrap">
-            <div className="problem-grid">
-              <div className="problem-heading">
-                <h2>The problem most organizations have with AI</h2>
-              </div>
-              <div className="prose-block">
-                <p>
-                  In most organizations, artificial intelligence arrived from the bottom up.
-                  Individual employees adopted individual tools. Subscriptions accumulated without a
-                  central view of cost or exposure, few of those tools connect to the systems the
-                  business actually runs on, and no one owns the overall result.
+                <p className="fl-for">
+                  For <a href="#doors">owners</a>, <a href="#doors">CFOs and controllers</a>, and{' '}
+                  <a href="#pe">private equity</a>.
                 </p>
-                <p>
-                  Most of that artificial intelligence has been applied to processes as they already
-                  exist. In a typical business process, the time spent doing the work is small
-                  compared with the time spent waiting between steps, for documents, for approvals,
-                  or for a reply from another team. Making each step faster leaves that waiting in
-                  place, which is why many initiatives produce satisfied users and little measurable
-                  change in how the organization performs.
-                </p>
-                <p>
-                  The pace of change compounds the difficulty. A decision that was reasonable
-                  eighteen months ago may no longer be, and few organizations have someone on staff
-                  whose job is to track that.
-                </p>
-                <p>
-                  Firms that specialize in artificial intelligence often lack working familiarity
-                  with the financial and operational systems a business depends on, and firms that
-                  know those systems rarely build and operate artificial intelligence themselves.
-                </p>
-                <p className="statement">Firmcraft was established to do both.</p>
               </div>
-            </div>
-          </div>
-        </section>
 
-        <section className="m-section services-section reveal-section">
-          <div className="wrap">
-            <div className="m-section-head">
-              <div>
-                <h2>What Firmcraft does</h2>
-              </div>
-              <p>
-                Implementation runs through each of the areas below. Firmcraft builds what the
-                advice calls for, integrates it with the systems already in place, and trains the
-                people who will use it.
-              </p>
-            </div>
-            <div className="service-grid">
-              {serviceLines.map((line) => (
-                <article className="service-card" key={line.title}>
-                  <Image
-                    src={line.image}
-                    alt={line.alt}
-                    width={1200}
-                    height={900}
-                    sizes="(min-width: 980px) 46vw, 100vw"
-                    unoptimized
-                  />
-                  <div className="service-body">
-                    <p className="eyebrow">{line.eyebrow}</p>
-                    <h3>{line.title}</h3>
-                    <p>{line.body}</p>
-                    <Link href={line.href}>Learn more</Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="m-section distinctions-section reveal-section">
-          <div className="wrap">
-            <div className="m-section-head">
-              <div>
-                <h2>What distinguishes Firmcraft</h2>
-              </div>
-            </div>
-            <div className="distinction-grid">
-              {distinctions.map((item, index) => (
-                <article className="diff" key={item.title}>
-                  <span className="num">{String(index + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3>{item.title}</h3>
-                    <p>{item.body}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="m-section work-section reveal-section">
-          <div className="wrap">
-            <div className="m-section-head">
-              <div>
-                <h2>Selected work</h2>
-              </div>
-              <p>
-                Firmcraft&apos;s approach has been applied in a field services business, a dental
-                practice, a process safety platform for oil refineries, and a software venture.
-              </p>
-            </div>
-            <div className="distinction-grid even compact">
-              {selectedWork.map((entry, index) => (
-                <article className="diff" key={entry.id}>
-                  <span className="num">{String(index + 1).padStart(2, '0')}</span>
-                  <div>
-                    <h3>
-                      <Link href={`/work#${entry.id}`}>{entry.title}</Link>
-                    </h3>
-                    <p>{entry.summary}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-            <p style={{ marginTop: 28 }}>
-              <Link className="btn navy" href="/work">
-                See selected work
-              </Link>
-            </p>
-          </div>
-        </section>
-
-        <section className="m-section fit-section reveal-section">
-          <div className="wrap">
-            <div className="m-section-head">
-              <div>
-                <h2>Who Firmcraft works with</h2>
-              </div>
-              <p>
-                Firmcraft works with organizations where the owner, the chief executive, or senior
-                leadership drives the technology agenda, from owner-led businesses to the executive
-                teams of larger enterprises.
-              </p>
-            </div>
-            <div className="icp-spec">
-              {fit.map(([label, value]) => (
-                <div className="r" key={label}>
-                  <span className="k">{label}</span>
-                  <span className="v">{value}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="m-section closing-section reveal-section">
-          <div className="wrap">
-            <div className="final-cta">
-              <div>
-                <h2>Start a conversation</h2>
-                <p>
-                  An initial conversation carries no cost and no obligation. If artificial
-                  intelligence is not the right investment for the problem you are describing,
-                  Firmcraft will say so.
-                </p>
-                <div className="hero-ctas">
-                  <Link className="btn navy lg" href="/contact">
-                    Contact Firmcraft
-                  </Link>
-                </div>
-              </div>
-              <figure className="founder-mini">
-                <Image
-                  src="/founder/doyle.jpg"
-                  alt="Doyle Dettro"
-                  width={320}
-                  height={400}
-                  sizes="180px"
-                  unoptimized
-                />
-                <figcaption>Doyle Dettro, Founder and Principal</figcaption>
+              <figure className="fl-face">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/founder/doyle.jpg" alt="Doyle Dettro" width={540} height={676} />
+                <figcaption>
+                  <b>Doyle Dettro</b>
+                  <span>Founder and Principal</span>
+                </figcaption>
               </figure>
+
+              <div className="fl-ledger" aria-label="Engagement ledger">
+                <div className="fl-ledger-top">
+                  <h3>Engagement ledger</h3>
+                  <a className="fl-link" href="#results">
+                    Before and after
+                  </a>
+                </div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Result</th>
+                      <th>Client</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="fl-result">Capacity tripled</td>
+                      <td>Rumble Bee Tree Service</td>
+                    </tr>
+                    <tr>
+                      <td className="fl-result">Two staff freed for their core roles</td>
+                      <td>Century Dental of Huntley</td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                    <tr>
+                      <td>Software resold by Firmcraft</td>
+                      <td>
+                        <span className="fl-total">None</span>
+                      </td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+
+              <div className="fl-proof" aria-label="Founder record">
+                <div className="fl-cell">
+                  <span className="fl-num">1997</span>
+                  <b>Arthur Andersen</b>
+                  <span className="fl-d">Public accounting; passed the CPA examination on the first attempt</span>
+                </div>
+                <div className="fl-cell">
+                  <span className="fl-num">Late 1990s</span>
+                  <b>Through an IPO</b>
+                  <span className="fl-d">Finance, accounting and analysis at NovaMed</span>
+                </div>
+                <div className="fl-cell">
+                  <span className="fl-num">2007 to 2012</span>
+                  <b>Interim global controller</b>
+                  <span className="fl-d">SEC reporting for a public parent</span>
+                </div>
+                <div className="fl-cell">
+                  <span className="fl-num">2012 to 2015</span>
+                  <b>150-country ERP program</b>
+                  <span className="fl-d">Senior finance architect</span>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-      </main>
 
-      <SiteFooter />
-    </>
+          <section className="fl-block" id="doors" style={{ paddingTop: 8 }}>
+            <div className="fl-wrap">
+              <div className="fl-block-head">
+                <h2>Start where you sit.</h2>
+              </div>
+              <div className="fl-doors">
+                <article className="fl-door">
+                  <span className="fl-label">Owners</span>
+                  <h3>&ldquo;My people are buried in admin.&rdquo;</h3>
+                  <p>Quotes, contracts and invoices, handed to an AI agent you run from your phone.</p>
+                  <a className="fl-link" href="#diagnostic">
+                    Talk about your business
+                  </a>
+                </article>
+                <article className="fl-door">
+                  <span className="fl-label">CFOs and controllers</span>
+                  <h3>&ldquo;I need AI I can defend to an auditor.&rdquo;</h3>
+                  <p>Automation on your system of record, with approvals, logs and a measured baseline.</p>
+                  <a className="fl-link" href="#controls">
+                    See the controls
+                  </a>
+                </article>
+                <article className="fl-door">
+                  <span className="fl-label">Private equity</span>
+                  <h3>&ldquo;Every portfolio company is doing this differently.&rdquo;</h3>
+                  <p>One comparable review of AI cost, exposure and opportunity.</p>
+                  <a className="fl-link" href="#pe">
+                    See the portfolio review
+                  </a>
+                </article>
+              </div>
+            </div>
+          </section>
+
+          <section className="fl-block" id="diagnostic" style={{ paddingTop: 0 }}>
+            <div className="fl-wrap fl-diag">
+              <div>
+                <span className="fl-label">Every engagement begins here</span>
+                <h2>The first step.</h2>
+                <p className="fl-intro">
+                  A fixed-scope review of what you run today, what it costs and what it actually
+                  does, ending in a written finding.
+                </p>
+                <div className="fl-ctas">
+                  <a className="fl-btn fl-primary" href="/contact" data-cta>
+                    Book a 30-minute call
+                  </a>
+                </div>
+              </div>
+
+              <article
+                className="fl-letter"
+                aria-label="The AI and Systems Diagnostic, engagement letter"
+              >
+                <div className="fl-lh">
+                  <span className="fl-brand">
+                    <FirmcraftMark size={24} />
+                    <b>Firmcraft</b>
+                  </span>
+                  <span className="fl-label">Engagement letter</span>
+                </div>
+                <div className="fl-re">
+                  <span className="fl-label">Re:</span>
+                  <h3>The AI and Systems Diagnostic</h3>
+                </div>
+                <dl className="fl-terms">
+                  <div>
+                    <dt>Scope</dt>
+                    <dd>What you run today, what it costs, and what it actually does.</dd>
+                  </div>
+                  <div>
+                    <dt>Form</dt>
+                    <dd>Fixed scope. Ends with a written finding.</dd>
+                  </div>
+                </dl>
+                <div className="fl-deliv-h">
+                  <span className="fl-label">Deliverables</span>
+                  <span className="fl-label">5</span>
+                </div>
+                <ol className="fl-deliv">
+                  <li>
+                    <span className="fl-num">01</span>
+                    <span>
+                      <b>AI tool and spend inventory</b>
+                    </span>
+                  </li>
+                  <li>
+                    <span className="fl-num">02</span>
+                    <span>
+                      <b>Measured baseline</b> for the processes that matter most
+                    </span>
+                  </li>
+                  <li>
+                    <span className="fl-num">03</span>
+                    <span>
+                      <b>Data exposure and controls review</b>
+                    </span>
+                  </li>
+                  <li>
+                    <span className="fl-num">04</span>
+                    <span>
+                      <b>Ranked opportunities</b> with expected effect and effort
+                    </span>
+                  </li>
+                  <li>
+                    <span className="fl-num">05</span>
+                    <span>
+                      <b>A plan you can run</b> with Firmcraft, someone else or yourself
+                    </span>
+                  </li>
+                </ol>
+                <div className="fl-lead">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src="/founder/doyle.jpg" alt="" width={58} height={73} />
+                  <div>
+                    <span className="fl-label">Led by</span>
+                    <b>Doyle Dettro</b>
+                    <span>Founder and Principal</span>
+                  </div>
+                </div>
+                <div className="fl-sig">
+                  <div>
+                    <p>If AI is the wrong investment, the finding says so.</p>
+                    <span className="fl-label">Firmcraft</span>
+                  </div>
+                  <div>
+                    <p className="fl-next">Begins with a 30-minute call</p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </section>
+
+          <section className="fl-block" id="results" style={{ paddingTop: 0 }}>
+            <div className="fl-wrap">
+              <div className="fl-block-head">
+                <h2>Results, stated plainly.</h2>
+              </div>
+              <div className="fl-results">
+                <article className="fl-case">
+                  <span className="fl-tag">Client engagement</span>
+                  <span className="fl-metric">3x</span>
+                  <h3>Rumble Bee Tree Service</h3>
+                  <dl className="fl-ba">
+                    <div className="fl-b">
+                      <dt>Before</dt>
+                      <dd>
+                        The owner divided his time among tree work, administration and
+                        hand-delivering contracts. Most of the business ran on paper.
+                      </dd>
+                    </div>
+                    <div className="fl-a">
+                      <dt>After</dt>
+                      <dd>
+                        Quotes, contracts and invoicing run electronically through an AI agent the
+                        owner uses from his phone. He reports that the company&rsquo;s capacity has
+                        tripled.
+                      </dd>
+                    </div>
+                  </dl>
+                </article>
+                <article className="fl-case">
+                  <span className="fl-tag">Capability building</span>
+                  <span className="fl-metric">2 staff</span>
+                  <h3>Dr. Sarah Carlson, Century Dental of Huntley</h3>
+                  <dl className="fl-ba">
+                    <div className="fl-b">
+                      <dt>Before</dt>
+                      <dd>Insurance reimbursement work took up the receptionist and a dental assistant.</dd>
+                    </div>
+                    <div className="fl-a">
+                      <dt>After</dt>
+                      <dd>
+                        Firmcraft introduced her to the practical use of AI, and she automated the
+                        practice&rsquo;s reimbursement work herself. Both staff members returned to
+                        the work their roles are meant for.
+                      </dd>
+                    </div>
+                  </dl>
+                </article>
+              </div>
+              <p className="fl-built">
+                <b>Built by the founder:</b> AI-PSM, agentic AI for refinery process safety, as CTO;
+                and Predictium, a software business run with full automation.{' '}
+                <Link className="fl-link" href="/work">
+                  See selected work
+                </Link>
+              </p>
+            </div>
+          </section>
+
+          <section className="fl-block" id="services" style={{ paddingTop: 0 }}>
+            <div className="fl-wrap">
+              <div className="fl-block-head">
+                <h2>Four accounts, one principal.</h2>
+                <p>The person who scopes the work builds it and stays to run it.</p>
+              </div>
+              <div className="fl-coa">
+                <div className="fl-coa-row">
+                  <span className="fl-num">1000</span>
+                  <h3>
+                    <Link href="/advisory">Advisory</Link>
+                  </h3>
+                  <p>What to keep, replace, build or leave alone, in one roadmap.</p>
+                </div>
+                <div className="fl-coa-row">
+                  <span className="fl-num">2000</span>
+                  <h3>
+                    <Link href="/managed-ai-services">Managed AI</Link>
+                  </h3>
+                  <p>Models, connections and context, run to keep pace with the field.</p>
+                </div>
+                <div className="fl-coa-row">
+                  <span className="fl-num">3000</span>
+                  <h3>
+                    <Link href="/sovereignty">Private infrastructure</Link>
+                  </h3>
+                  <p>Open-source models in your environment. Your data stays where you decide.</p>
+                </div>
+                <div className="fl-coa-row">
+                  <span className="fl-num">4000</span>
+                  <h3>
+                    <Link href="/commissioned-software">Commissioned software</Link>
+                  </h3>
+                  <p>
+                    Systems you would otherwise rent, built to your specification and handed over
+                    with source code.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="fl-block" id="controls" style={{ paddingTop: 0 }}>
+            <div className="fl-wrap">
+              <div className="fl-block-head">
+                <h2>Controls, built into account 3000.</h2>
+                <p>Where data goes, who approved it, and what is logged.</p>
+              </div>
+              <div className="fl-controls">
+                <figure className="fl-diagram-card">
+                  <svg
+                    className="fl-diagram fl-d"
+                    viewBox="0 0 440 484"
+                    role="img"
+                    aria-label="Diagram: your systems, agents and workflows, private models and an action log all sit inside your environment. Public AI services sit outside and connect through one gate, only by your agreement."
+                  >
+                    <rect className="fl-dg-perim" x="6" y="6" width="428" height="380" />
+                    <rect className="fl-dg-perim-in" x="11" y="11" width="418" height="370" />
+                    <text className="fl-dg-lab" x="26" y="38">YOUR ENVIRONMENT</text>
+                    <rect className="fl-dg-box" x="26" y="56" width="388" height="72" />
+                    <text className="fl-dg-t" x="42" y="86">YOUR SYSTEMS</text>
+                    <text className="fl-dg-s" x="42" y="108">ERP, accounting, practice and document systems</text>
+                    <path className="fl-dg-link" d="M220 128 V160" />
+                    <rect className="fl-dg-box" x="26" y="160" width="388" height="80" />
+                    <text className="fl-dg-t" x="42" y="190">AGENTS AND WORKFLOWS</text>
+                    <text className="fl-dg-s fl-ok" x="42" y="212">a person approves what matters</text>
+                    <path className="fl-dg-link" d="M120 240 V272" />
+                    <path className="fl-dg-link" d="M320 240 V272" />
+                    <rect className="fl-dg-box" x="26" y="272" width="188" height="86" />
+                    <text className="fl-dg-t" x="40" y="302">PRIVATE MODELS</text>
+                    <text className="fl-dg-s" x="40" y="324">hosted on your server</text>
+                    <rect className="fl-dg-box" x="226" y="272" width="188" height="86" />
+                    <text className="fl-dg-t" x="240" y="302">ACTION LOG</text>
+                    <text className="fl-dg-s" x="240" y="324">every action recorded</text>
+                    <path className="fl-dg-exit" d="M220 240 V378" />
+                    <rect className="fl-dg-gate" x="212" y="378" width="16" height="16" />
+                    <path className="fl-dg-exit" d="M220 394 V420" />
+                    <rect className="fl-dg-out" x="110" y="420" width="220" height="56" />
+                    <text className="fl-dg-t" x="220" y="444" textAnchor="middle">PUBLIC AI SERVICES</text>
+                    <text className="fl-dg-s" x="220" y="464" textAnchor="middle">only by your agreement</text>
+                  </svg>
+                  <svg
+                    className="fl-diagram fl-m"
+                    viewBox="0 0 300 512"
+                    role="img"
+                    aria-label="Diagram: your systems, agents and workflows, private models and an action log all sit inside your environment. Public AI services sit outside and connect through one gate, only by your agreement."
+                  >
+                    <rect className="fl-dg-perim" x="4" y="4" width="292" height="404" />
+                    <rect className="fl-dg-perim-in" x="9" y="9" width="282" height="394" />
+                    <text className="fl-dg-lab" x="20" y="32">YOUR ENVIRONMENT</text>
+                    <rect className="fl-dg-box" x="20" y="46" width="260" height="80" />
+                    <text className="fl-dg-t" x="34" y="72">YOUR SYSTEMS</text>
+                    <text className="fl-dg-s" x="34" y="94">ERP, accounting, practice</text>
+                    <text className="fl-dg-s" x="34" y="112">and document systems</text>
+                    <path className="fl-dg-link" d="M128 126 V146" />
+                    <rect className="fl-dg-box" x="20" y="146" width="260" height="80" />
+                    <text className="fl-dg-t" x="34" y="172">AGENTS AND WORKFLOWS</text>
+                    <text className="fl-dg-s fl-ok" x="34" y="194">a person approves</text>
+                    <text className="fl-dg-s fl-ok" x="34" y="212">what matters</text>
+                    <path className="fl-dg-link" d="M128 226 V246" />
+                    <rect className="fl-dg-box" x="20" y="246" width="216" height="62" />
+                    <text className="fl-dg-t" x="34" y="272">PRIVATE MODELS</text>
+                    <text className="fl-dg-s" x="34" y="294">hosted on your server</text>
+                    <path className="fl-dg-link" d="M128 308 V322" />
+                    <rect className="fl-dg-box" x="20" y="322" width="216" height="62" />
+                    <text className="fl-dg-t" x="34" y="348">ACTION LOG</text>
+                    <text className="fl-dg-s" x="34" y="370">every action recorded</text>
+                    <path className="fl-dg-exit" d="M258 226 V400" />
+                    <rect className="fl-dg-gate" x="250" y="400" width="16" height="16" />
+                    <path className="fl-dg-exit" d="M258 416 V444" />
+                    <rect className="fl-dg-out" x="64" y="444" width="220" height="62" />
+                    <text className="fl-dg-t" x="174" y="470" textAnchor="middle">PUBLIC AI SERVICES</text>
+                    <text className="fl-dg-s" x="174" y="492" textAnchor="middle">only by your agreement</text>
+                  </svg>
+                  <figcaption>
+                    The double rule marks your environment. One gate leads out, shut unless you
+                    open it.
+                  </figcaption>
+                </figure>
+                <div className="fl-subs">
+                  <div className="fl-sub">
+                    <span className="fl-acct">3100</span>
+                    <h3>Data location</h3>
+                    <p>Models run in your environment or on a dedicated server Firmcraft manages.</p>
+                  </div>
+                  <div className="fl-sub">
+                    <span className="fl-acct">3200</span>
+                    <h3>Approval</h3>
+                    <p>A person approves what matters.</p>
+                  </div>
+                  <div className="fl-sub">
+                    <span className="fl-acct">3300</span>
+                    <h3>Logging</h3>
+                    <p>Every action is recorded: what ran and who approved it.</p>
+                  </div>
+                  {/* PROPOSED COPY, awaiting Doyle's OK: continuity line. */}
+                  <div className="fl-sub" data-proposed-copy="continuity line, awaiting Doyle's OK">
+                    <span className="fl-acct">3400</span>
+                    <h3>Continuity</h3>
+                    <p>{CONTINUITY}</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div className="fl-pe" id="pe">
+            <div className="fl-wrap">
+              <div>
+                <span className="fl-label">For private equity</span>
+                <h2>One standard for AI across the portfolio.</h2>
+                <p className="fl-intro">
+                  One view of AI cost, exposure and opportunity for operating partners, with each
+                  company&rsquo;s data kept in its own environment.
+                </p>
+                <a className="fl-btn fl-primary" href="/contact" data-cta>
+                  Talk about a portfolio review
+                </a>
+              </div>
+              <ul>
+                <li>
+                  <b>Portfolio review</b>
+                  <span>
+                    The Diagnostic run across several companies, with one comparable summary for
+                    the deal team.
+                  </span>
+                </li>
+                <li>
+                  <b>One principal</b>
+                  <span>
+                    The same person across every company, so lessons carry from one to the next.
+                    {/* PROPOSED COPY, awaiting Doyle's OK: continuity line. */}
+                    <span className="fl-keep" data-proposed-copy="continuity line, awaiting Doyle's OK">
+                      {CONTINUITY}
+                    </span>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          {/* PROPOSED COPY, awaiting Doyle's OK: the four answers in "Questions buyers ask". */}
+          <section
+            className="fl-block"
+            id="questions"
+            data-proposed-copy="buyer question answers, awaiting Doyle's OK"
+          >
+            <div className="fl-wrap">
+              <div className="fl-block-head">
+                <h2>Questions buyers ask.</h2>
+              </div>
+              <div className="fl-notes">
+                <div className="fl-qn" id="q1">
+                  <h3>
+                    <span className="fl-num">1.</span>Where does our data live?
+                  </h3>
+                  <p>
+                    In your environment by default. Nothing goes elsewhere without a reason, your
+                    agreement and reviewed terms.
+                  </p>
+                </div>
+                <div className="fl-qn" id="q2">
+                  <h3>
+                    <span className="fl-num">2.</span>Which systems do you work with?
+                  </h3>
+                  <p>
+                    Any system of record: an ERP, a dealer or practice management system, or
+                    equivalent, including one you are replatforming. Firmcraft is not tied to one
+                    vendor.
+                  </p>
+                </div>
+                <div className="fl-qn" id="q3">
+                  <h3>
+                    <span className="fl-num">3.</span>Do you resell software?
+                  </h3>
+                  <p>
+                    No. Firmcraft takes no vendor margin. If the right answer is a system you
+                    already own, or no new system, that is the recommendation.
+                  </p>
+                </div>
+                <div className="fl-qn" id="q4">
+                  <h3>
+                    <span className="fl-num">4.</span>Do we own what you build?
+                  </h3>
+                  <p>
+                    Commissioned software transfers to you with its source code and documentation,
+                    so your own staff or AI coding tools can change it.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </section>
+          {/* END PROPOSED COPY: buyer questions */}
+
+          <section className="fl-block" id="about" style={{ paddingTop: 0 }}>
+            <div className="fl-wrap fl-founder">
+              <div>
+                <span className="fl-label">Who leads every engagement</span>
+                <h2>Doyle Dettro</h2>
+              </div>
+              <div>
+                <p className="fl-bio">
+                  Accounting degree from the University of Illinois, then Arthur Andersen, an IPO,
+                  and two decades leading ERP and finance systems programs from owner-led businesses
+                  to multinationals. He founded Firmcraft to bring that discipline to AI, and builds
+                  and runs its infrastructure himself.
+                </p>
+                <div className="fl-tl">
+                  <div>
+                    <span className="fl-num">1997</span>
+                    <span>Arthur Andersen, Chicago</span>
+                  </div>
+                  <div>
+                    <span className="fl-num">2002</span>
+                    <span>Co-founded a software company and grew it from four people to twenty</span>
+                  </div>
+                  <div>
+                    <span className="fl-num">2007 to 2012</span>
+                    <span>
+                      ERP and finance systems for an offshore energy group; interim global
+                      controller of its public parent
+                    </span>
+                  </div>
+                  <div>
+                    <span className="fl-num">2012 to 2015</span>
+                    <span>Senior finance architect, global ERP program across 150 countries</span>
+                  </div>
+                  <div>
+                    <span className="fl-num">Today</span>
+                    <span>Firmcraft; CTO of AI-PSM; founder of Predictium</span>
+                  </div>
+                </div>
+                <p style={{ marginTop: 18 }}>
+                  <Link className="fl-link" href="/about">
+                    Full background
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <div className="fl-close" id="book" data-cta>
+            <div className="fl-wrap">
+              <div>
+                <h2>Start with the numbers.</h2>
+                <p>
+                  A first conversation carries no cost and no obligation. If AI is not the right
+                  investment for the problem you describe, you will hear that directly.
+                </p>
+              </div>
+              <a className="fl-btn fl-primary" href="/contact">
+                Book a 30-minute call
+              </a>
+            </div>
+          </div>
+        </main>
+
+        <SiteFooter />
+      </div>
+
+      <BookingBar />
+    </div>
   )
 }

@@ -1,15 +1,16 @@
 .how-work-page {
-  --m-navy: #0E1B2E;
-  --m-navy-2: #16263D;
-  --m-cream: #F7F3EC;
-  --m-paper: #FFFDF9;
-  --m-ink: #1B2333;
-  --m-muted: #5B6475;
-  --m-muted-navy: #A9B2C3;
-  --m-brass: #C9A46A;
-  --m-brass-ink: #8A6A33;
-  --m-rule: rgba(27,35,51,0.12);
-  --m-rule-navy: rgba(247,243,236,0.14);
+  /* Ledger palette (Nov 2026 preview); tokens live in ledger-theme.css */
+  --m-navy: var(--lg-ink);
+  --m-navy-2: #1E2F27;
+  --m-cream: var(--lg-paper);
+  --m-paper: var(--lg-sheet);
+  --m-ink: var(--lg-ink);
+  --m-muted: var(--lg-ink-2);
+  --m-muted-navy: var(--lg-on-dark-2);
+  --m-brass: var(--lg-sage);
+  --m-brass-ink: var(--lg-green);
+  --m-rule: var(--lg-rule);
+  --m-rule-navy: rgba(232, 239, 234, 0.14);
   background: var(--m-cream);
   color: var(--m-ink);
 }
@@ -17,6 +18,7 @@
 .how-work-page h1,
 .how-work-page h2 {
   font-family: var(--font-display);
+  font-weight: 700 !important;
   letter-spacing: -0.015em;
 }
 

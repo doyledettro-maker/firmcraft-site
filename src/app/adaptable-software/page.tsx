@@ -116,8 +116,8 @@ export default function AdaptableSoftwarePage() {
                 <h2>Start a conversation</h2>
                 <p>An initial conversation carries no cost and no obligation.</p>
               </div>
-              <Link className="btn brass lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn brass lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

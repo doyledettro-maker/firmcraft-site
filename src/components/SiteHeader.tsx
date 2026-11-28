@@ -1,20 +1,29 @@
-'use client'
-
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { FirmcraftWordmark } from './FirmcraftWordmark'
+import { FirmcraftMark } from './home/FirmcraftMark'
 import { MobileMenu } from './MobileMenu'
 
+// Ledger header for every inner page. Links match the homepage nav.
 const NAV_ITEMS: { label: string; href: string; key: string }[] = [
-  { label: 'Advisory', href: '/advisory', key: 'advisory' },
-  { label: 'How We Work', href: '/how-we-work', key: 'how-we-work' },
-  { label: 'For Small Business', href: '/for-small-business', key: 'for-small-business' },
+  { label: 'Diagnostic', href: '/diagnostic', key: 'diagnostic' },
+  { label: 'Services', href: '/#services', key: 'services' },
   { label: 'Selected Work', href: '/work', key: 'work' },
+  { label: 'Private equity', href: '/#pe', key: 'pe' },
   { label: 'About', href: '/about', key: 'about' },
+]
+
+const MOBILE_ITEMS = [
+  { label: 'The Diagnostic', href: '/diagnostic' },
+  { label: 'Services', href: '/#services' },
+  { label: 'Advisory', href: '/advisory' },
+  { label: 'How We Work', href: '/how-we-work' },
+  { label: 'Selected Work', href: '/work' },
+  { label: 'Private equity', href: '/#pe' },
+  { label: 'About', href: '/about' },
 ]
 
 export type SiteHeaderCurrent =
   | 'home'
+  | 'diagnostic'
   | 'advisory'
   | 'how-we-work'
   | 'for-small-business'
@@ -24,66 +33,34 @@ export type SiteHeaderCurrent =
 
 export function SiteHeader({
   current,
-  marketing = false,
+  ctaHref = '/diagnostic',
 }: {
   current?: SiteHeaderCurrent
+  /** Kept for older call sites; every page now uses the Ledger header. */
   marketing?: boolean
+  ctaHref?: string
 }) {
-  const [scrolled, setScrolled] = useState(false)
-  const overHero = current === 'home'
-  const isMarketing = marketing || Boolean(current)
-
-  useEffect(() => {
-    if (!overHero) return
-
-    function onScroll() {
-      setScrolled(window.scrollY > 80)
-    }
-
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [overHero])
-
-  const inverse = overHero && !scrolled
-
   return (
-    <header
-      className={`site-header${isMarketing ? ' marketing-header' : ''}${overHero ? ' over-hero' : ''}${scrolled ? ' scrolled' : ''}`}
-    >
-      <div className="wrap row">
-        <Link href="/" aria-label="Firmcraft home" className="wm-link">
-          <FirmcraftWordmark size={22} variant={inverse ? 'inverse' : 'default'} />
+    <header className="lh-header">
+      <div className="wrap lh-row">
+        <Link href="/" aria-label="Firmcraft home" className="lh-brand">
+          <FirmcraftMark size={30} />
+          <b>Firmcraft</b>
         </Link>
-
-        <nav className="primary-nav" aria-label="Primary">
-          {NAV_ITEMS.map((item) => {
-            const isCur = current === item.key
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                aria-current={isCur ? 'page' : undefined}
-                className={`link${isCur ? ' current' : ''}`}
-              >
-                {item.label}
-              </Link>
-            )
-          })}
-        </nav>
-
-        <div className="right">
-          <a
-            href="/contact"
-            className={`btn sm${inverse ? ' brass' : isMarketing ? ' navy' : ' primary'}`}
-          >
-            Contact Firmcraft
+        <div className="lh-right">
+          <ul className="lh-links">
+            {NAV_ITEMS.map((item) => (
+              <li key={item.href}>
+                <Link href={item.href} aria-current={current === item.key ? 'page' : undefined}>
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <a className="lh-btn" href={ctaHref}>
+            Book a call
           </a>
-          <MobileMenu
-            items={NAV_ITEMS.map((n) => ({ label: n.label, href: n.href }))}
-            current={current}
-            marketing={isMarketing}
-          />
+          <MobileMenu items={MOBILE_ITEMS} current={current} marketing ctaHref={ctaHref} />
         </div>
       </div>
     </header>

@@ -197,8 +197,8 @@ export default function AboutPage() {
                 intelligence is not the right investment for the problem you are describing,
                 Firmcraft will say so.
               </p>
-              <Link className="btn navy lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn navy lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

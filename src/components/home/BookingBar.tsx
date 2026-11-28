@@ -26,7 +26,7 @@ export function BookingBar() {
 
   return (
     <div className={`fl-mbar${hidden ? ' fl-hide' : ''}`} role="complementary" aria-label="Book a call">
-      <a className="fl-btn fl-primary" href="/contact" tabIndex={hidden ? -1 : undefined}>
+      <a className="fl-btn fl-primary" href="/diagnostic" tabIndex={hidden ? -1 : undefined}>
         Book a 30-minute call
       </a>
     </div>

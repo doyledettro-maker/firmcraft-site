@@ -56,8 +56,8 @@ export default function WorkPage() {
             <div className="cta-end">
               <h2>Start a conversation</h2>
               <p>An initial conversation carries no cost and no obligation.</p>
-              <Link className="btn navy lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn navy lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

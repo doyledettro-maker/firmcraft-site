@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import localFont from 'next/font/local'
 import { MobileMenu } from '@/components/MobileMenu'
 import { SiteFooter } from '@/components/SiteFooter'
 import { BookingBar } from '@/components/home/BookingBar'
@@ -21,40 +20,20 @@ import './home-ledger.css'
  * Century Dental and Rumble Bee figures were supplied by Doyle (Nov 28, 2026).
  */
 
-// Fonts are bundled (latin subset, SIL Open Font License) rather than fetched
-// from Google at build time, which failed intermittently on Next 14.
-const display = localFont({
-  src: '../assets/fonts/ledger/SchibstedGrotesk-latin-var.woff2',
-  weight: '400 900',
-  variable: '--font-fl-display',
-  display: 'swap',
-})
-const body = localFont({
-  src: '../assets/fonts/ledger/IBMPlexSans-latin-var.woff2',
-  weight: '100 700',
-  variable: '--font-fl-body',
-  display: 'swap',
-})
-const mono = localFont({
-  src: [
-    { path: '../assets/fonts/ledger/IBMPlexMono-latin-400.woff2', weight: '400' },
-    { path: '../assets/fonts/ledger/IBMPlexMono-latin-500.woff2', weight: '500' },
-  ],
-  variable: '--font-fl-mono',
-  display: 'swap',
-})
-
 export const metadata: Metadata = {
-  title: { absolute: 'Firmcraft | AI advisory, build and managed services' },
+  title: { absolute: 'Firmcraft | AI for mid-size companies running an ERP' },
   description:
     'AI designed, built and run inside your ERP and finance stack for mid-size companies, from a measured baseline, by a principal trained in public accounting with more than twenty years in ERP and finance systems.',
   alternates: { canonical: '/' },
 }
 
+// Change this date whenever the homepage copy changes.
+const UPDATED = { iso: '2026-11-28', label: 'November 28, 2026' }
+
 const CONTINUITY_SHORT = 'Documentation, source and your own admin access ship with every system.'
 
 const NAV = [
-  { label: 'Diagnostic', href: '#diagnostic' },
+  { label: 'Diagnostic', href: '/diagnostic' },
   { label: 'Services', href: '#services' },
   { label: 'Selected Work', href: '/work' },
   { label: 'Private equity', href: '#pe' },
@@ -62,7 +41,7 @@ const NAV = [
 ]
 
 const MOBILE_NAV = [
-  { label: 'The Diagnostic', href: '#diagnostic' },
+  { label: 'The Diagnostic', href: '/diagnostic' },
   { label: 'Services', href: '#services' },
   { label: 'Private equity', href: '#pe' },
   { label: 'Advisory', href: '/advisory' },
@@ -73,7 +52,7 @@ const MOBILE_NAV = [
 
 export default function HomePage() {
   return (
-    <div className={`fl-page ${display.variable} ${body.variable} ${mono.variable}`}>
+    <div className="fl-page">
       <div className="fl-shell">
         <header className="fl-wrap">
           <nav className="fl-nav" aria-label="Primary">
@@ -89,10 +68,10 @@ export default function HomePage() {
                   </li>
                 ))}
               </ul>
-              <a className="fl-btn fl-primary" href="/contact" data-cta>
+              <a className="fl-btn fl-primary" href="/diagnostic" data-cta>
                 Book a call
               </a>
-              <MobileMenu items={MOBILE_NAV} current="home" marketing />
+              <MobileMenu items={MOBILE_NAV} current="home" marketing ctaHref="/diagnostic" ctaLabel="Book a call" />
             </div>
           </nav>
         </header>
@@ -111,7 +90,7 @@ export default function HomePage() {
                   public accounting.
                 </p>
                 <div className="fl-ctas">
-                  <a className="fl-btn fl-primary" href="/contact" data-cta>
+                  <a className="fl-btn fl-primary" href="/diagnostic" data-cta>
                     Book a 30-minute call
                   </a>
                   <a className="fl-btn fl-ghost" href="#diagnostic">
@@ -192,7 +171,7 @@ export default function HomePage() {
                     Quotes, contracts and invoices, handed to an AI agent you run from your phone.
                     Same principal, same measured baseline.
                   </p>
-                  <a className="fl-link" href="/contact">
+                  <a className="fl-link" href="/diagnostic">
                     Talk about your business
                   </a>
                 </article>
@@ -216,12 +195,12 @@ export default function HomePage() {
                     clients work directly with the principal, start with the Diagnostic, and help
                     shape how the method is applied to larger finance teams.
                   </p>
-                  <a className="fl-link" href="/contact">
+                  <a className="fl-link" href="/diagnostic#founding">
                     Ask about a founding-client Diagnostic
                   </a>
                 </div>
                 <div className="fl-ctas">
-                  <a className="fl-btn fl-primary" href="/contact" data-cta>
+                  <a className="fl-btn fl-primary" href="/diagnostic" data-cta>
                     Book a 30-minute call
                   </a>
                 </div>
@@ -538,7 +517,7 @@ export default function HomePage() {
                   One view of AI cost, exposure and opportunity for operating partners, with each
                   company&rsquo;s data kept in its own environment.
                 </p>
-                <a className="fl-btn fl-primary" href="/contact" data-cta>
+                <a className="fl-btn fl-primary" href="/diagnostic" data-cta>
                   Talk about a portfolio review
                 </a>
               </div>
@@ -670,11 +649,14 @@ export default function HomePage() {
                   answer, you will hear that directly.
                 </p>
               </div>
-              <a className="fl-btn fl-primary" href="/contact">
+              <a className="fl-btn fl-primary" href="/diagnostic">
                 Book a 30-minute call
               </a>
             </div>
           </div>
+          <p className="fl-wrap fl-updated">
+            Updated <time dateTime={UPDATED.iso}>{UPDATED.label}</time>
+          </p>
         </main>
 
         <SiteFooter />

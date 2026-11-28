@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
-import { IBM_Plex_Mono, IBM_Plex_Sans, Schibsted_Grotesk } from 'next/font/google'
+import localFont from 'next/font/local'
 import { MobileMenu } from '@/components/MobileMenu'
 import { SiteFooter } from '@/components/SiteFooter'
 import { BookingBar } from '@/components/home/BookingBar'
@@ -20,21 +20,25 @@ import './home-ledger.css'
  * Client results use only the wording already on /work.
  */
 
-const display = Schibsted_Grotesk({
-  subsets: ['latin'],
-  weight: ['500', '600', '700', '800'],
+// Fonts are bundled (latin subset, SIL Open Font License) rather than fetched
+// from Google at build time, which failed intermittently on Next 14.
+const display = localFont({
+  src: '../assets/fonts/ledger/SchibstedGrotesk-latin-var.woff2',
+  weight: '400 900',
   variable: '--font-fl-display',
   display: 'swap',
 })
-const body = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600'],
+const body = localFont({
+  src: '../assets/fonts/ledger/IBMPlexSans-latin-var.woff2',
+  weight: '100 700',
   variable: '--font-fl-body',
   display: 'swap',
 })
-const mono = IBM_Plex_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
+const mono = localFont({
+  src: [
+    { path: '../assets/fonts/ledger/IBMPlexMono-latin-400.woff2', weight: '400' },
+    { path: '../assets/fonts/ledger/IBMPlexMono-latin-500.woff2', weight: '500' },
+  ],
   variable: '--font-fl-mono',
   display: 'swap',
 })

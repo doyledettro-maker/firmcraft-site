@@ -76,7 +76,7 @@ const sections = [
     id: 'ongoing-support',
     title: 'Ongoing support',
     body: [
-      'For a defined period after implementation, Firmcraft remains closely involved — resolving issues, adjusting configuration in response to real use, and confirming that the measured outcomes match what was projected during the assessment.',
+      'For a defined period after implementation, Firmcraft remains closely involved: resolving issues, adjusting configuration in response to real use, and confirming that the measured outcomes match what was projected during the assessment.',
       'Results are reported against the measurements taken before the work began.',
       <>
         Beyond that period, clients generally move to ongoing managed services. These cover the
@@ -157,8 +157,8 @@ export default function HowWeWorkPage() {
           <div className="wrap">
             <div className="how-cta">
               <h2>Start a conversation</h2>
-              <Link className="btn brass lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn brass lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

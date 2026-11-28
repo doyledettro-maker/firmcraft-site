@@ -39,9 +39,9 @@ export default function ForSmallBusinessPage() {
               <h2>What it does</h2>
               <p>
                 The capability operates within the tools a business already uses for day-to-day
-                communication. It handles routine administrative work — drafting and issuing
+                communication. It handles routine administrative work, such as drafting and issuing
                 documents, managing correspondence, scheduling, and following up on outstanding
-                items — and connects to the systems the business already relies on.
+                items, and connects to the systems the business already relies on.
               </p>
               <p>
                 It is operated by Firmcraft rather than installed and handed over. Configuration,
@@ -73,8 +73,8 @@ export default function ForSmallBusinessPage() {
           <div className="wrap">
             <div className="cta-end">
               <h2>Start a conversation</h2>
-              <Link className="btn navy lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn navy lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

@@ -9,6 +9,8 @@ type Props = {
   items: NavItem[]
   current?: string
   marketing?: boolean
+  ctaHref?: string
+  ctaLabel?: string
 }
 
 function normalizeCurrent(href: string, current?: string) {
@@ -17,7 +19,13 @@ function normalizeCurrent(href: string, current?: string) {
   return href === `/${current}`
 }
 
-export function MobileMenu({ items, current, marketing = false }: Props) {
+export function MobileMenu({
+  items,
+  current,
+  marketing = false,
+  ctaHref = '/diagnostic',
+  ctaLabel = 'Book a call',
+}: Props) {
   const [open, setOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -80,7 +88,7 @@ export function MobileMenu({ items, current, marketing = false }: Props) {
         role="dialog"
         aria-modal="false"
         hidden={!open}
-        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--color-line)] bg-[rgba(244,246,250,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
+        className={`absolute left-0 right-0 top-16 origin-top overflow-hidden border-b border-[var(--color-line)] bg-[rgba(245,247,243,0.98)] backdrop-blur-[14px] transition-[max-height,opacity] duration-200 ease-out ${
           open ? 'max-h-[640px] opacity-100' : 'pointer-events-none max-h-0 opacity-0'
         }`}
       >
@@ -117,11 +125,11 @@ export function MobileMenu({ items, current, marketing = false }: Props) {
             )
           })}
           <a
-            href="/contact"
+            href={ctaHref}
             onClick={() => setOpen(false)}
             className={`btn ${marketing ? 'navy' : 'primary'} mt-3 w-full justify-center`}
           >
-            Contact Firmcraft
+            {ctaLabel}
           </a>
         </nav>
       </div>

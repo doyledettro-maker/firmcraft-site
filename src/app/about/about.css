@@ -57,9 +57,9 @@
 .hermes-block{background:var(--color-console);color:var(--color-inverse);border-radius:22px;padding:48px 56px;display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center;position:relative;overflow:hidden}
 .hermes-block::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 700px 380px at 0% 50%,rgba(44,107,240,.20),transparent 60%);pointer-events:none}
 .hermes-block > *{position:relative;z-index:1}
-.hermes-block .eyebrow{color:#7DA7FF}
+.hermes-block .eyebrow{color:#9FC9B2}
 .hermes-block h2{font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:-.024em;line-height:1.05;margin:12px 0 18px;color:#fff;text-wrap:balance}
-.hermes-block h2 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:#7DA7FF;letter-spacing:-.018em}
+.hermes-block h2 em{font-family:var(--font-display);font-style:italic;font-weight:500;color:#9FC9B2;letter-spacing:-.018em}
 .hermes-block p{font-size:15px;line-height:1.65;color:var(--color-inverse-2);margin:0 0 18px;max-width:520px}
 .hermes-spec{display:flex;flex-direction:column;gap:1px;background:var(--color-line-console);border-radius:14px;overflow:hidden;border:1px solid var(--color-line-console)}
 .hermes-spec .r{padding:18px 22px;background:var(--color-console-2);display:grid;grid-template-columns:120px 1fr;gap:18px;align-items:baseline}

@@ -76,7 +76,7 @@ export default function AdvisoryPage() {
               <p>
                 Advisory work begins with establishing that picture: what is running, what it
                 costs, what it produces, and where it creates exposure. From there the work is a
-                series of decisions — what to retain, what to replace, what to build, and what to
+                series of decisions: what to retain, what to replace, what to build, and what to
                 stop. The output is a roadmap that an executive team can fund and a finance
                 function can defend.
               </p>
@@ -141,8 +141,8 @@ export default function AdvisoryPage() {
               </p>
               <p>
                 This includes operating assistants inside the tools leadership and staff already
-                use for day-to-day work — handling correspondence, scheduling, document preparation,
-                and follow-up on outstanding items — so that the capability is available where the
+                use for day-to-day work, such as handling correspondence, scheduling, document preparation,
+                and follow-up on outstanding items, so that the capability is available where the
                 work happens rather than in a separate system someone has to remember to open.
               </p>
             </div>
@@ -222,8 +222,8 @@ export default function AdvisoryPage() {
             <div className="cta-end">
               <h2>Start a conversation</h2>
               <p>An initial conversation carries no cost and no obligation.</p>
-              <Link className="btn navy lg" href="/contact">
-                Contact Firmcraft
+              <Link className="btn navy lg" href="/diagnostic">
+                Book a call
               </Link>
             </div>
           </div>

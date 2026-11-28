@@ -17,7 +17,8 @@ import './home-ledger.css'
  *      source and your own admin access, so it never depends on one person."),
  *      used in the private equity list and in the controls list.
  *   2. The four answers under "Questions buyers ask."
- * Client results use only the wording already on /work.
+ *   3. The founding-client note beside the Diagnostic.
+ * Century Dental and Rumble Bee figures were supplied by Doyle (Nov 28, 2026).
  */
 
 // Fonts are bundled (latin subset, SIL Open Font License) rather than fetched
@@ -46,12 +47,11 @@ const mono = localFont({
 export const metadata: Metadata = {
   title: { absolute: 'Firmcraft | AI advisory, build and managed services' },
   description:
-    'Firmcraft designs, builds and runs AI inside the systems your business already depends on, starting from a measured baseline and led by a principal with more than twenty years in ERP and finance systems.',
+    'AI designed, built and run inside your ERP and finance stack for mid-size companies, from a measured baseline, by a principal trained in public accounting with more than twenty years in ERP and finance systems.',
   alternates: { canonical: '/' },
 }
 
-const CONTINUITY =
-  'Every system ships with its documentation, its source and your own admin access, so it never depends on one person.'
+const CONTINUITY_SHORT = 'Documentation, source and your own admin access ship with every system.'
 
 const NAV = [
   { label: 'Diagnostic', href: '#diagnostic' },
@@ -101,15 +101,14 @@ export default function HomePage() {
           <div className="fl-wrap">
             <div className="fl-hero" id="top">
               <div className="fl-hero-copy">
-                <span className="fl-label">AI advisory, build and managed services</span>
+                <span className="fl-label">Mid-size companies running an ERP</span>
                 <h1>
                   AI that shows up in the <span className="fl-uline">P&amp;L.</span>
                 </h1>
                 <p className="fl-lede">
-                  Firmcraft designs, builds and runs AI inside the systems your business already
-                  depends on. Every engagement starts from a measured baseline and is led by a
-                  principal trained in public accounting, with more than twenty years in ERP and
-                  finance systems.
+                  For the CFO, controller and leadership team: AI designed, built and run inside
+                  your ERP and finance stack, from a measured baseline, by a principal trained in
+                  public accounting.
                 </p>
                 <div className="fl-ctas">
                   <a className="fl-btn fl-primary" href="/contact" data-cta>
@@ -120,8 +119,8 @@ export default function HomePage() {
                   </a>
                 </div>
                 <p className="fl-for">
-                  For <a href="#doors">owners</a>, <a href="#doors">CFOs and controllers</a>, and{' '}
-                  <a href="#pe">private equity</a>.
+                  For <a href="#doors">CFOs and controllers</a>, <a href="#pe">private equity</a>,
+                  and <a href="#doors">owners of smaller businesses</a>.
                 </p>
               </div>
 
@@ -133,41 +132,6 @@ export default function HomePage() {
                   <span>Founder and Principal</span>
                 </figcaption>
               </figure>
-
-              <div className="fl-ledger" aria-label="Engagement ledger">
-                <div className="fl-ledger-top">
-                  <h3>Engagement ledger</h3>
-                  <a className="fl-link" href="#results">
-                    Before and after
-                  </a>
-                </div>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Result</th>
-                      <th>Client</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td className="fl-result">Capacity tripled</td>
-                      <td>Rumble Bee Tree Service</td>
-                    </tr>
-                    <tr>
-                      <td className="fl-result">Two staff freed for their core roles</td>
-                      <td>Century Dental of Huntley</td>
-                    </tr>
-                  </tbody>
-                  <tfoot>
-                    <tr>
-                      <td>Software resold by Firmcraft</td>
-                      <td>
-                        <span className="fl-total">None</span>
-                      </td>
-                    </tr>
-                  </tfoot>
-                </table>
-              </div>
 
               <div className="fl-proof" aria-label="Founder record">
                 <div className="fl-cell">
@@ -190,6 +154,11 @@ export default function HomePage() {
                   <b>150-country ERP program</b>
                   <span className="fl-d">Senior finance architect</span>
                 </div>
+                <div className="fl-cell">
+                  <span className="fl-num">20+ years</span>
+                  <b>ERP and finance systems</b>
+                  <span className="fl-d">From owner-led businesses to multinationals</span>
+                </div>
               </div>
             </div>
           </div>
@@ -201,27 +170,30 @@ export default function HomePage() {
               </div>
               <div className="fl-doors">
                 <article className="fl-door">
-                  <span className="fl-label">Owners</span>
-                  <h3>&ldquo;My people are buried in admin.&rdquo;</h3>
-                  <p>Quotes, contracts and invoices, handed to an AI agent you run from your phone.</p>
-                  <a className="fl-link" href="#diagnostic">
-                    Talk about your business
-                  </a>
-                </article>
-                <article className="fl-door">
-                  <span className="fl-label">CFOs and controllers</span>
+                  <span className="fl-label">Mid-size companies on an ERP</span>
                   <h3>&ldquo;I need AI I can defend to an auditor.&rdquo;</h3>
-                  <p>Automation on your system of record, with approvals, logs and a measured baseline.</p>
+                  <p>Automation on your ERP and finance stack, with approvals, logs and a measured baseline.</p>
                   <a className="fl-link" href="#controls">
                     See the controls
                   </a>
                 </article>
                 <article className="fl-door">
-                  <span className="fl-label">Private equity</span>
+                  <span className="fl-label">PE operating partners</span>
                   <h3>&ldquo;Every portfolio company is doing this differently.&rdquo;</h3>
                   <p>One comparable review of AI cost, exposure and opportunity.</p>
                   <a className="fl-link" href="#pe">
                     See the portfolio review
+                  </a>
+                </article>
+                <article className="fl-door">
+                  <span className="fl-label">Owners of smaller businesses</span>
+                  <h3>&ldquo;My people are buried in admin.&rdquo;</h3>
+                  <p>
+                    Quotes, contracts and invoices, handed to an AI agent you run from your phone.
+                    Same principal, same measured baseline.
+                  </p>
+                  <a className="fl-link" href="/contact">
+                    Talk about your business
                   </a>
                 </article>
               </div>
@@ -233,10 +205,21 @@ export default function HomePage() {
               <div>
                 <span className="fl-label">Every engagement begins here</span>
                 <h2>The first step.</h2>
-                <p className="fl-intro">
-                  A fixed-scope review of what you run today, what it costs and what it actually
-                  does, ending in a written finding.
-                </p>
+                {/* PROPOSED COPY, awaiting Doyle's OK: founding-client note. No results or prices implied. */}
+                <div
+                  className="fl-founding"
+                  data-proposed-copy="founding-client note, awaiting Doyle's OK"
+                >
+                  <span className="fl-label">Founding clients</span>
+                  <p>
+                    Firmcraft is taking on its first mid-size companies running an ERP. Founding
+                    clients work directly with the principal, start with the Diagnostic, and help
+                    shape how the method is applied to larger finance teams.
+                  </p>
+                  <a className="fl-link" href="/contact">
+                    Ask about a founding-client Diagnostic
+                  </a>
+                </div>
                 <div className="fl-ctas">
                   <a className="fl-btn fl-primary" href="/contact" data-cta>
                     Book a 30-minute call
@@ -262,7 +245,10 @@ export default function HomePage() {
                 <dl className="fl-terms">
                   <div>
                     <dt>Scope</dt>
-                    <dd>What you run today, what it costs, and what it actually does.</dd>
+                    <dd>
+                      AI tools and spend across your ERP or the systems you run: what runs, what it
+                      costs, and what it actually does.
+                    </dd>
                   </div>
                   <div>
                     <dt>Form</dt>
@@ -289,7 +275,7 @@ export default function HomePage() {
                   <li>
                     <span className="fl-num">03</span>
                     <span>
-                      <b>Data exposure and controls review</b>
+                      <b>Data exposure and controls review</b>, including what leaves your ERP
                     </span>
                   </li>
                   <li>
@@ -333,31 +319,37 @@ export default function HomePage() {
                 <h2>Results, stated plainly.</h2>
               </div>
               <div className="fl-results">
+                <p className="fl-label fl-rgroup">Small-business engagements</p>
                 <article className="fl-case">
-                  <span className="fl-tag">Client engagement</span>
-                  <span className="fl-metric">3x</span>
+                  <span className="fl-tag">Field services business</span>
+                  <div>
+                    <span className="fl-metric">3x</span>
+                    <span className="fl-mlab">capacity for revenue work</span>
+                  </div>
                   <h3>Rumble Bee Tree Service</h3>
                   <dl className="fl-ba">
                     <div className="fl-b">
                       <dt>Before</dt>
                       <dd>
-                        The owner divided his time among tree work, administration and
-                        hand-delivering contracts. Most of the business ran on paper.
+                        The owner split his week between tree work, paperwork and hand-delivering
+                        contracts.
                       </dd>
                     </div>
                     <div className="fl-a">
                       <dt>After</dt>
                       <dd>
-                        Quotes, contracts and invoicing run electronically through an AI agent the
-                        owner uses from his phone. He reports that the company&rsquo;s capacity has
-                        tripled.
+                        Quotes, contracts and invoices run electronically through an AI agent on his
+                        phone. Capacity for revenue-generating activity tripled.
                       </dd>
                     </div>
                   </dl>
                 </article>
                 <article className="fl-case">
-                  <span className="fl-tag">Capability building</span>
-                  <span className="fl-metric">2 staff</span>
+                  <span className="fl-tag">Dental practice, capability building</span>
+                  <div>
+                    <span className="fl-metric">$160k</span>
+                    <span className="fl-mlab">a year in hiring avoided</span>
+                  </div>
                   <h3>Dr. Sarah Carlson, Century Dental of Huntley</h3>
                   <dl className="fl-ba">
                     <div className="fl-b">
@@ -367,21 +359,27 @@ export default function HomePage() {
                     <div className="fl-a">
                       <dt>After</dt>
                       <dd>
-                        Firmcraft introduced her to the practical use of AI, and she automated the
-                        practice&rsquo;s reimbursement work herself. Both staff members returned to
-                        the work their roles are meant for.
+                        Once Firmcraft introduced practical AI, Dr. Carlson automated it herself. Both
+                        staff returned to their core roles, so the practice did not have to hire 2
+                        people to fill the gap, about $160k a year. Cash from insurance
+                        reimbursements now arrives 20 days sooner.
                       </dd>
                     </div>
                   </dl>
                 </article>
+                <p className="fl-label fl-rgroup">Built by the founder</p>
+                <article className="fl-case fl-feature">
+                  <span className="fl-tag">Designed and run as CTO, in a regulated industry</span>
+                  <h3>AI-PSM</h3>
+                  <p>
+                    Agentic AI for refinery process safety: deterministic rules, approval by a
+                    qualified person, and a full audit trail.
+                  </p>
+                  <Link className="fl-link" href="/work">
+                    See selected work
+                  </Link>
+                </article>
               </div>
-              <p className="fl-built">
-                <b>Built by the founder:</b> AI-PSM, agentic AI for refinery process safety, as CTO;
-                and Predictium, a software business run with full automation.{' '}
-                <Link className="fl-link" href="/work">
-                  See selected work
-                </Link>
-              </p>
             </div>
           </section>
 
@@ -524,7 +522,7 @@ export default function HomePage() {
                   <div className="fl-sub" data-proposed-copy="continuity line, awaiting Doyle's OK">
                     <span className="fl-acct">3400</span>
                     <h3>Continuity</h3>
-                    <p>{CONTINUITY}</p>
+                    <p>{CONTINUITY_SHORT}</p>
                   </div>
                 </div>
               </div>
@@ -556,10 +554,7 @@ export default function HomePage() {
                   <b>One principal</b>
                   <span>
                     The same person across every company, so lessons carry from one to the next.
-                    {/* PROPOSED COPY, awaiting Doyle's OK: continuity line. */}
-                    <span className="fl-keep" data-proposed-copy="continuity line, awaiting Doyle's OK">
-                      {CONTINUITY}
-                    </span>
+                    Continuity is covered in control 3400.
                   </span>
                 </li>
               </ul>
@@ -591,7 +586,7 @@ export default function HomePage() {
                     <span className="fl-num">2.</span>Which systems do you work with?
                   </h3>
                   <p>
-                    Any system of record: an ERP, a dealer or practice management system, or
+                    Any ERP or finance stack, a dealer or practice management system, or
                     equivalent, including one you are replatforming. Firmcraft is not tied to one
                     vendor.
                   </p>
@@ -671,8 +666,8 @@ export default function HomePage() {
               <div>
                 <h2>Start with the numbers.</h2>
                 <p>
-                  A first conversation carries no cost and no obligation. If AI is not the right
-                  investment for the problem you describe, you will hear that directly.
+                  A first conversation carries no cost and no obligation. If AI is the wrong
+                  answer, you will hear that directly.
                 </p>
               </div>
               <a className="fl-btn fl-primary" href="/contact">
